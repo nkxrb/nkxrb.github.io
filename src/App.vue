@@ -1,10 +1,7 @@
 <template>
-	<!-- 顶部导航 -->
-	<nk-header></nk-header>
-	<!-- 主要内容区 -->
-	<main>
-		<router-view />
-	</main>
+  <div id="app">
+    <router-view />
+  </div>
 </template>
 
 <script lang="ts">
@@ -13,21 +10,21 @@ import { defineComponent } from "vue";
 import HelloWorld from "./components/HelloWorld.vue";
 
 export default defineComponent({
-	name: "App",
-	components: {
-		NkHeader,
-	},
+  name: "App",
+  components: {
+    NkHeader,
+  },
 });
 </script>
 
 <style>
-#app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	color: #2c3e50;
-}
-main {
-	padding: 15px 20px;
-}
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+  }
+  main {
+    padding: 15px 20px;
+  }
 </style>
