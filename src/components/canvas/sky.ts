@@ -2,6 +2,7 @@ import BaseCanvas from './BaseCanvas'
 class Sky extends BaseCanvas {
   constructor(el: HTMLCanvasElement) {
     super(el)
+    this.ctx && this.draw(this.ctx)
   }
 
   draw(ctx: CanvasRenderingContext2D) {
