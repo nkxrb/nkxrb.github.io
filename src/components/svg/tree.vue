@@ -75,7 +75,7 @@
               p-id="6613"></path>
 
         <g class="leaf-web"
-           @click="routeTo">
+           @click="routeTo('/docs/#css')">
 
           <path d="M789.453639 316.583869a3999.550951 3999.550951 0 0 0-15.670557 37.325639c52.240787 5.212328 73.870689-32.843541 66.417311-114.192787-30.594098 42.529574-102.987541 32.096525-76.128524 103.742951 17.16459-17.911607 25.38177-26.875803 25.38177-26.875803"
                 p-id="6613"></path>
@@ -124,11 +124,9 @@
 </template>
 <script script lang="ts">
 import { defineComponent } from "vue";
+import { routeTo } from "@/common/utils";
 export default defineComponent({
   setup() {
-    const routeTo = () => {
-      window.location.href = "/docs/";
-    };
     return {
       routeTo,
     };
