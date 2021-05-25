@@ -1,62 +1,95 @@
 <template>
   <div class="k-home">
-    <!-- 添加随时间变化的天空背景canvas -->
-    <sky></sky>
-    <h1>nkxrb's collection</h1>
+    <!-- 首页主要内容 -->
+    <div class="home-content">
+      <div class="logo">
+        <img src="../../assets/logo.png">
+      </div>
 
-    <div class="myworld">
-      <tree class="tree"></tree>
-      <people class="people"></people>
+      <div>
+        <ul>
+          <li>
+            <a>GITHUB</a>
+          </li>
+          <li>
+            <a>GITEE</a>
+          </li>
+          <li>
+            <a>CSDN</a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <ul>
+          <li>
+            <a>推荐</a>
+          </li>
+          <li>
+            <a>最新</a>
+          </li>
+          <li>
+            <a>技术</a>
+          </li>
+          <li>
+            <a>游戏</a>
+          </li>
+          <li>
+            <a>影音</a>
+          </li>
+          <li>
+            <a>生活</a>
+          </li>
+          <li>
+            <a>其他</a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <!-- 悬浮3d标签球，展示所掌握的各项技能标签，支持点击下钻 -->
-    <!-- <div class="ball-box">
-      <d-3-ball class="ball-web"
-                text="前端技术"
-                href="/fontweb"></d-3-ball>
-      <d-3-ball class="ball-clound"
-                text="云端技术"></d-3-ball>
-      <d-3-ball class="ball-sql"
-                text="数据库"></d-3-ball>
-      <d-3-ball class="ball-bt"
-                text="黑科技"></d-3-ball>
-      <d-3-ball class="ball-music"
-                text="音乐"></d-3-ball>
-      <d-3-ball class="ball-game"
-                text="游戏"></d-3-ball>
-      <d-3-ball class="ball-movie"
-                text="电影"></d-3-ball>
-      <d-3-ball class="ball-anime"
-                text="动漫"></d-3-ball>
-      <d-3-ball class="ball-picture"
-                text="相册"></d-3-ball>
-    </div> -->
+    <!-- room -->
+    <room />
 
+    <!-- 添加随时间变化的天空背景canvas -->
+    <!-- <sky></sky> -->
     <!-- 底部追逐奔跑动画 -->
     <!-- 右侧合适位置悬浮音乐播放按钮 -->
   </div>
 </template>
 <script script lang="ts">
-import { defineComponent } from "vue";
-import Sky from "@/components/canvas/sky.vue";
-import Tree from "@/components/svg/tree.vue";
-import People from "@/components/svg/people.vue";
-import D3Ball from "@/components/d3Ball/index.vue";
+import { defineComponent } from 'vue'
+import Room from '@/components/webgl/room/index.vue'
+import Sky from '@/components/canvas/sky.vue'
+import Tree from '@/components/svg/tree.vue'
+import People from '@/components/svg/people.vue'
+import D3Ball from '@/components/d3Ball/index.vue'
 export default defineComponent({
-  components: { Sky, D3Ball, Tree, People },
+  components: { Sky, D3Ball, Tree, People, Room },
   data() {
-    return {};
+    return {}
   },
-});
+})
 </script>
 <style lang="scss">
   .k-home {
-    position: absolute;
+    width: 100%;
+    min-height: 100vh;
     text-align: center;
-    overflow: hidden;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    background: url("../../assets/imgs/wood4.jpeg");
+  }
+  .home-content {
+    .logo {
+      border-radius: 100%;
+      overflow: hidden;
+      width: 6rem;
+      height: 6rem;
+      margin: 0 auto;
+      &:hover {
+        animation: rotate360 1.5s linear;
+      }
+      img {
+        width: 100%;
+      }
+    }
   }
   .ball-box {
     display: flex;

@@ -8,7 +8,6 @@ class BaseCanvas {
     el.style.position = 'fixed'
     el.style.top = '0'
     el.style.left = '0'
-    el.style.zIndex = '-1'
 
     this.width = el.width = document.body.offsetWidth;
     this.height = el.height = document.body.offsetHeight;

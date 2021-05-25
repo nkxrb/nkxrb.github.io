@@ -7,8 +7,8 @@
   <canvas ref="mooncanvas"></canvas>
 </template>
 <script script lang="ts">
-import { defineComponent, nextTick, ref, watchEffect } from "vue";
-import Sky from "./sky";
+import { defineComponent, nextTick, ref } from "vue";
+// import Sky from "./sky";
 import Moon from "./moon";
 import Star from "./star";
 export default defineComponent({
@@ -21,7 +21,7 @@ export default defineComponent({
       const moonEl = mooncanvas.value;
       const starEl = starcanvas.value;
       if (skyEl && moonEl && starEl) {
-        new Sky(skyEl);
+        // new Sky(skyEl);
         new Moon(moonEl);
         new Star(starEl);
       }

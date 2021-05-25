@@ -5,7 +5,6 @@
 <script lang="ts">
 import NkHeader from "@/components/NkHeader.vue";
 import { defineComponent } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
 
 export default defineComponent({
   name: "App",
