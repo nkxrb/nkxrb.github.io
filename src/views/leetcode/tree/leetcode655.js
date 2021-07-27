@@ -1,4 +1,4 @@
-const BTree = require('./treeNode.js')
+const BTree = require('./BTree.js')
 
 /**
  * 在一个 m*n 的二维字符串数组中输出二叉树，并遵守以下规则：
@@ -11,7 +11,7 @@ const BTree = require('./treeNode.js')
  * 
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/print-binary-tree
- * @param {TreeNode} root
+ * @param {BTree} root
  * @return {string[][]}
  */
 const printTree = function (root) {

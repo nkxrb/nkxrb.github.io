@@ -1,3 +1,4 @@
+import './assets/css/global.scss'
 import './assets/css/animation.scss'
 
 import { createApp } from 'vue'

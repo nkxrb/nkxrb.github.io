@@ -1,72 +1,32 @@
 <template>
-  <div class="k-home">
-    <!-- 首页主要内容 -->
-    <div class="home-content">
-      <div class="logo">
-        <img src="../../assets/logo.png">
-      </div>
+  <div class="home">
+    <!-- 跑马灯效果 -->
+    <div>每一个不曾起舞的日子，都是对生命的辜负。秋风起兮木叶飞，吴江水兮鲈正肥。</div>
 
-      <div>
-        <ul>
-          <li>
-            <a>GITHUB</a>
-          </li>
-          <li>
-            <a>GITEE</a>
-          </li>
-          <li>
-            <a>CSDN</a>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <ul>
-          <li>
-            <a>推荐</a>
-          </li>
-          <li>
-            <a>最新</a>
-          </li>
-          <li>
-            <a>技术</a>
-          </li>
-          <li>
-            <a>游戏</a>
-          </li>
-          <li>
-            <a>影音</a>
-          </li>
-          <li>
-            <a>生活</a>
-          </li>
-          <li>
-            <a>其他</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- room -->
-    <room />
-
-    <!-- 添加随时间变化的天空背景canvas -->
-    <!-- <sky></sky> -->
-    <!-- 底部追逐奔跑动画 -->
-    <!-- 右侧合适位置悬浮音乐播放按钮 -->
+    <div v-for="(article, i) in articles"
+         class="article-item" />
   </div>
+  <!-- 添加随时间变化的天空背景canvas -->
+  <!-- <sky></sky> -->
+  <!-- 底部追逐奔跑动画 -->
+  <!-- 右侧合适位置悬浮音乐播放按钮 -->
 </template>
-<script script lang="ts">
+<script>
 import { defineComponent } from 'vue'
-import Room from '@/components/webgl/room/index.vue'
-import Sky from '@/components/canvas/sky.vue'
-import Tree from '@/components/svg/tree.vue'
-import People from '@/components/svg/people.vue'
-import D3Ball from '@/components/d3Ball/index.vue'
 export default defineComponent({
-  components: { Sky, D3Ball, Tree, People, Room },
-  data() {
-    return {}
-  },
+  setup () {
+    const articles = [
+      { name: '技术', path: '', pic: '' },
+      { name: '游戏' },
+      { name: '影音' },
+      { name: '画画' },
+      { name: '联系我' }
+    ]
+
+    return {
+      articles
+    }
+  }
 })
 </script>
 <style lang="scss">
@@ -74,7 +34,8 @@ export default defineComponent({
     width: 100%;
     min-height: 100vh;
     text-align: center;
-    background: url("../../assets/imgs/wood4.jpeg");
+    background: url("../../assets/imgs/banner1.jpg") no-repeat;
+    background-size: 100% 100%;
   }
   .home-content {
     .logo {

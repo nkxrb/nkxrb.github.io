@@ -16,6 +16,20 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'quotes': ['error', 'single'],//强制使用单引号
-    'semi': ['error', 'never']//强制不使用分号结尾
+    'semi': ['error', 'never'], //强制不使用分号结尾
+    'vue/max-attributes-per-line': ['error', {
+      'singleline': {
+        'max': 3,
+        'allowFirstLine': true
+      },
+      'multiline': {
+        'max': 1,
+        'allowFirstLine': true
+      }
+    }],
+    'vue/html-closing-bracket-newline': ['error', {
+      'singleline': 'never',
+      'multiline': 'never'
+    }]
   }
 }

@@ -1,11 +1,11 @@
 <template>
   <div ref="tagBall"
        class="tag-ball">
-    <a class="tag"
-       v-for="(item, i) in tags"
+    <a v-for="(item, i) in tags"
        :key="i"
        :ref="(el)=>{if(el)tagEls[i]=el}"
-       :href="item.href">{{item.name}}</a>
+       class="tag"
+       :href="item.href">{{ item.name }}</a>
   </div>
 </template>
 <script script lang="ts">
@@ -13,30 +13,30 @@ declare interface Tag {
   name: string;
   href: string;
 }
-import { init } from "./D3Tag";
-import { defineComponent, ref, onBeforeUpdate, nextTick } from "vue";
+import { init } from './D3Tag'
+import { defineComponent, ref, onBeforeUpdate, nextTick } from 'vue'
 export default defineComponent({
   props: {
     tags: { type: Array, required: true },
   },
   setup(props) {
-    const tagBallEl = ref<HTMLElement>();
-    const tagEls = ref<Array<HTMLElement>>([]);
+    const tagBallEl = ref<HTMLElement>()
+    const tagEls = ref<Array<HTMLElement>>([])
     // 确保在每次更新之前重置ref
     onBeforeUpdate(() => {
-      tagEls.value = [];
-    });
+      tagEls.value = []
+    })
 
     nextTick(() => {
-      tagBallEl.value && init(tagEls.value, tagBallEl.value);
-    });
+      tagBallEl.value && init(tagEls.value, tagBallEl.value)
+    })
 
     return {
       tagBallEl,
       tagEls,
-    };
+    }
   },
-});
+})
 </script>
 <style scoped>
   .tag-ball {
