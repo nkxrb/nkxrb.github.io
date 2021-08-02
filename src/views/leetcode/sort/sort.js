@@ -26,7 +26,13 @@ const selectSort = function (arr) {
  * 插入排序
  */
 const insertSort = function (arr) {
-
+  for (let i = 1; i < arr.length; i++) {
+    let curIdx = i
+    while (arr[curIdx] < arr[curIdx - 1]) {
+      swap(arr, curIdx, curIdx - 1)
+      curIdx--
+    }
+  }
 }
 
 /**
@@ -81,42 +87,69 @@ const quickSort = function (arr) {
 /**
  * 哈希排序
  */
-const hashSort = function () {
+const shellSort = function (arr) {
+  const insertSort = function (arr, gap) {
+    for (let i = gap; i < arr.length; i++) {
+      let curIdx = i
+      while (arr[curIdx] < arr[curIdx - gap]) {
+        swap(arr, curIdx, curIdx - gap)
+        curIdx -= gap
+      }
+    }
+  }
+
+  let gap = 1
+  while (gap <= arr.length) {
+    gap = gap * 3
+  }
+  while (gap > 0) {
+    insertSort(arr, gap)
+    gap = gap / 3
+  }
+
 
 }
 
 /**
  * 堆排序
  */
-const heapSort = function (array) {
-  let len = array.length
-  // initMaxHeap(arr, 0) // 初始化最大堆
-  for (let i = (len - 1) >> 1; i >= 0; i--) {
-    initMaxHeap(array, i) // 初始化最大堆
-  }
-
-  function initMaxHeap (arr, top) {
-    let left = top * 2 + 1
-    let right = top * 2 + 2
-    let max = left
-    if (left < len && arr[right] > arr[max]) {
-      max = right
+const heapSort = function (arr) {
+  // 初始化最大堆
+  for (let i = 1; i < arr.length; i++) {
+    let child = i
+    let parent = (child - 1) >> 1
+    while (child > 0 && arr[child] > arr[parent]) {
+      swap(arr, child, parent)
+      child = parent
+      parent = (child - 1) >> 1
     }
+  }
 
-    if (right < len && arr[max] > arr[top]) {
-      swap(arr, top, max) // 将最值放到顶点上
-      initMaxHeap(arr, max)
+  // 将顶堆元素与末尾元素交换，重置大顶堆
+  for (let i = arr.length - 1; i > 0; i--) {
+    swap(arr, 0, i)
+    // 交换后，顶堆元素不是最大值了，所以需要不断的向下移动，直到满足大顶堆的要求
+    let top = 0
+    while (top < i) {
+      let left = top * 2 + 1
+      let right = top * 2 + 2
+      let max = top
+      if (left < i && arr[left] > arr[max]) {
+        max = left
+      }
+      if (right < i && arr[right] > arr[max]) {
+        max = right
+      }
+      if (max !== top) {
+        swap(arr, max, top)
+        top = max
+      } else {
+        break
+      }
     }
-
   }
 
-  for (let i = len - 1; i > 0; i--) {
-    swap(array, 0, i)
-    // initMaxHeap(array, 0)
-    len--
-  }
-
-  return array
+  return arr
 
 }
 
@@ -126,9 +159,23 @@ const sort = {
   insertSort,
   bubbleSort,
   quickSort,
-  hashSort,
+  shellSort,
   heapSort
 }
 
-// module.exports = sort
-export default sort
+module.exports = sort
+// export default sort
+
+function test () {
+  let arr = [1, 2, 4, 7, 9, 7, 2, 45, 125, 0, 3, 0, -7, -1, -66, 0, 8, 9, 1, -1]
+  console.log('source', arr)
+
+  // shellSort(arr)
+  // insertSort(arr)
+  // selectSort(arr)
+  // bubbleSort(arr)
+  // quickSort(arr)
+  heapSort(arr)
+  console.log('res', arr)
+}
+test()
