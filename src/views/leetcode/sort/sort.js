@@ -107,7 +107,6 @@ const shellSort = function (arr) {
     gap = gap / 3
   }
 
-
 }
 
 /**
@@ -153,6 +152,38 @@ const heapSort = function (arr) {
 
 }
 
+const mergeSort = function (arr) {
+  let len = arr.length
+  if (len < 2) {
+    return arr
+  }
+  let mid = len >> 1
+  let left = arr.slice(0, mid)
+  let right = arr.slice(mid)
+  return merge(mergeSort(left), mergeSort(right))
+}
+
+function merge (left, right) {
+  let mergeSortArr = []
+  let leftIndex = 0
+  let rightIndex = 0
+  while (leftIndex < left.length && rightIndex < right.length) {
+    if (left[leftIndex] < right[rightIndex]) {
+      mergeSortArr.push(left[leftIndex++])
+    } else {
+      mergeSortArr.push(right[rightIndex++])
+    }
+  }
+  while (leftIndex < left.length) {
+    mergeSortArr.push(left[leftIndex++])
+  }
+  while (rightIndex < right.length) {
+    mergeSortArr.push(right[rightIndex++])
+  }
+
+  return mergeSortArr
+}
+
 
 const sort = {
   selectSort,
@@ -160,7 +191,8 @@ const sort = {
   bubbleSort,
   quickSort,
   shellSort,
-  heapSort
+  heapSort,
+  mergeSort
 }
 
 module.exports = sort
@@ -175,7 +207,8 @@ function test () {
   // selectSort(arr)
   // bubbleSort(arr)
   // quickSort(arr)
-  heapSort(arr)
+  // heapSort(arr)
+  arr = mergeSort(arr)
   console.log('res', arr)
 }
 test()

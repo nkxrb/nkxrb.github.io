@@ -38,8 +38,33 @@ const interValUpload = debounce(upload, 1000)
 //   interValUpload(str)
 // }, 100)
 
-interValUpload('vvv')
-interValUpload('bbb')
-interValUpload('uuu')
+// interValUpload('vvv')
+// interValUpload('bbb')
+// interValUpload('uuu')
 
+const add = (a, b, c) => {
+  console.log(a, b, b, c)
+  return a + b + c
+}
 
+const currying = function (fn, args) {
+
+  let _this = this
+  let len = fn.length // 此处获取的是原函数定义了多少参数
+  args = args || []
+
+  return function () {
+    let _args = Array.prototype.slice.call(arguments)
+    Array.prototype.push.apply(args, _args)
+    console.log(args)
+    if (args.length < len) {
+      return currying.call(_this, fn, args)
+    }
+
+    return fn.apply(_this, args)
+  }
+
+}
+
+let res = currying(add)(1)(2)(3)
+console.log(res)
