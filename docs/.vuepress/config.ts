@@ -3,11 +3,25 @@ import type { DefaultThemeOptions } from 'vuepress'
 
 export default defineUserConfig<DefaultThemeOptions>({
   lang: 'zh-cn',
-  title: 'nkxrb的博客',
+  title: 'nkxrb collection',
   description: '每一个不曾起舞的日子，都是对生命的辜负。',
   base: '/docs/',
   dest: '${sourceDir}/../dist/docs',
   themeConfig: {
+    home: '/',
     logo: '/images/logo.png',
+    repo: 'https://github.com/nkxrb/nkxrb.github.io',
+    repoLabel: 'GITHUB',
+    darkMode: true,
+    toggleSidebar: '护眼',
+    navbar: [
+      { text: '首页', link: '/' },
+      { text: '前端', link: '/front/' },
+      { text: '关于', link: '/about/' },
+    ]
   },
+  // theme: path.resolve(__dirname, './theme'),
+  define: {
+    __GLOBAL_FOO: 'foo'
+  }
 })
