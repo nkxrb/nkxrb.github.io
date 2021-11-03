@@ -18,7 +18,6 @@
 <script>
 import examples from '@/config/examples.json'
 import files from '@/config/files.json'
-import { importFile } from '@/utils/index'
 
 import { defineComponent, ref, nextTick, reactive } from 'vue'
 export default defineComponent({
@@ -27,10 +26,6 @@ export default defineComponent({
     const fileList = reactive(files)
     const leetcodeList = fileList.filter(t => t.category === 'leetcode')
     let source = ref('')
-    importFile(leetcodeList[0].path).then(res => {
-      console.log(res)
-      source.value = res.default.quickSort.toString()
-    })
     return {
       exampleList,
       source,

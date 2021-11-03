@@ -2,10 +2,6 @@ export const routeTo = (path: string) => {
   window.location.href = path;
 };
 
-export const importFile = (path: string) => {
-  return import(`../${path}`)
-}
-
 /**
  * 将单次执行的函数转换成一定时间间隔内，批量执行的函数
  * @param fn 要节流执行的函数
