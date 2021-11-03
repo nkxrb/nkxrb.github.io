@@ -6,8 +6,6 @@ test('test currying', () => {
   }
   const adder = utils.currying(add)
   let res = adder(1)(2)(3)
-  // let res = add(1, 2, 3)
-  console.log(res)
   expect(res).toBe(6)
 })
 
