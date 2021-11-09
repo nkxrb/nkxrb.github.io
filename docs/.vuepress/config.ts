@@ -16,7 +16,13 @@ export default defineUserConfig<DefaultThemeOptions>({
     toggleSidebar: '护眼',
     navbar: [
       { text: '首页', link: '/' },
-      { text: '前端', link: '/front/' },
+      {
+        text: '前端', link: '/front/', children: [
+          { text: '技能自查表', link: '/front/base.html' },
+          { text: 'nkxrb-tools', link: '/front/utils.html' },
+          { text: 'kidar-echarts', link: '/front/components/kidar-echarts.html' },
+        ]
+      },
       { text: '关于', link: '/about/' },
     ]
   },
