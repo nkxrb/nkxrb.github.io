@@ -1,3 +1,13 @@
+const rulesDirPlugin = require('eslint-plugin-rulesdir')
+rulesDirPlugin.RULES_DIR = 'custom_rules'
+
+const helloHHHH = 'hello'
+const HellOHHH = () => {
+
+}
+
+
+
 module.exports = {
   root: true,
   env: {
@@ -12,9 +22,11 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   },
+  plugins: ['rulesdir'],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'rulesdir/no-hello': 'warn',
     'quotes': ['error', 'single'],//强制使用单引号
     'semi': ['error', 'never'], //强制不使用分号结尾
     'vue/max-attributes-per-line': ['error', {

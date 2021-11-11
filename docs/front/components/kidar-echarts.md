@@ -35,7 +35,7 @@ kidar-vue-echarts为了解决这个问题，将大家常用的option进行收集
 
 ### 效果图预览
 
-<img src="images/kidar-echarts.png" alt="preview" style="zoom:200%;" />
+<img src="../../assets/kidar-echarts.png" alt="preview" style="zoom:200%;" />
 
 
 ### 涉及的技术
@@ -43,19 +43,11 @@ kidar-vue-echarts为了解决这个问题，将大家常用的option进行收集
 * vue2
 * typescript
 
-### 🚀 Getting started
-
-### Install
+### 安装 | Install
 
 ```bash
 npm install kidar-echarts
 ```
-
-### Development
-
-1. new .vue file
-2. copy these codes 
-3. run it
 
 ```vue
 <template>
@@ -83,7 +75,6 @@ export default {
 }
 </script>
 ```
-
 
 ### 添加自定义插件 Add Plugin 
 

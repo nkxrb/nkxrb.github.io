@@ -11,11 +11,12 @@ home: true
 
 ## 前端
 
-- [从入门到进阶 · 知识点自查](./front/base.md)
-- [JS工具nkxrb-tools](./front/utils.md)
-- [算法随笔](./front/leetcode.md)
-- [好用的echarts · kidar-echarts](./front/components/kidar-echarts.md)
-- [手写mini路由](./front/components/mini-router.md)
+- [基础 · 知识点自查](./front/base.md)
+- [工具 · nkxrb-tools](./front/utils.md)
+- [算法 · 随笔](./front/leetcode.md)
+- [组件 · kidar-echarts](./front/components/kidar-echarts.md)
+- [体验 · 自定义ESLint规则](./front/eslint.md)
+- [mini · mini路由](./front/components/mini-router.md)
 
 
 ## 数据库

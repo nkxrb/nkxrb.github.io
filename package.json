@@ -8,7 +8,8 @@
     "create": "nkxrb",
     "build": "vite build && vuepress build docs",
     "build:dev": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "lint": "eslint --cache"
   },
   "dependencies": {
     "echarts": "^5.1.2",
@@ -26,6 +27,7 @@
     "@vue/compiler-sfc": "^3.0.5",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.25.0",
+    "eslint-plugin-rulesdir": "^0.2.0",
     "eslint-plugin-vue": "^7.9.0",
     "nkxrb-tools": "0.0.6",
     "typescript": "^4.1.3",
