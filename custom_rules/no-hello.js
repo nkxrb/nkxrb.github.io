@@ -8,6 +8,7 @@ module.exports = {
   create (context) {
     return {
       Identifier (node) {
+        console.log(node)
         if (node.name.toLocaleLowerCase().indexOf('hello') > -1) {
           context.report({
             node,

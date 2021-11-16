@@ -9,7 +9,7 @@
     "build": "vite build && vuepress build docs",
     "build:dev": "vite build",
     "serve": "vite preview",
-    "lint": "eslint --cache"
+    "lint": "eslint --cache *.[ts|js|vue|json]"
   },
   "dependencies": {
     "echarts": "^5.1.2",
@@ -25,6 +25,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@vitejs/plugin-vue": "^1.1.5",
     "@vue/compiler-sfc": "^3.0.5",
+    "@vuepress/plugin-search": "^2.0.0-beta.27",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.25.0",
     "eslint-plugin-rulesdir": "^0.2.0",

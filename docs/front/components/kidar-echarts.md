@@ -1,3 +1,4 @@
+
 <h1 align="center">kidar-echarts 🍥 更简单的Echarts</h1>
 
 <p align="center">
@@ -13,9 +14,9 @@
 
 频繁的编写option很痛苦，属性多得记不住，总是需要查看文档来进行配置
 
-因此更贴合Vue使用者习惯的 kidar-vue-echarts 组件，将会给你带来更舒适的编码体验，减少了echarts的学习成本。
+因此更贴合Vue使用者习惯的 kidar-echarts 组件，将会给你带来更舒适的编码体验，减少了echarts的学习成本。
 
-kidar-vue-echarts为了解决这个问题，将大家常用的option进行收集封装，通过懒加载的方式展现，减少echarts配置的学习成本。
+kidar-echarts为了解决这个问题，将大家常用的option进行收集封装，通过懒加载的方式展现，减少echarts配置的学习成本。
 并且支持自定义option文件，并通过添加插件的方式导入，方便复用。同时你也可以寻找社区分享的好用的option进行安装使用，我们仅需要关注图表所需数据格式、维度，就能画出漂亮的图表了。
 
 ### Now

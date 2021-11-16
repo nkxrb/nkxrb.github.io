@@ -15,11 +15,12 @@
 - 图标的选择
 - 动画与交互，对用户体验的思考
 - CSS计算属性
+- tailwindcss、windicss
 
 [看详情点我《前端技能自查——CSS》](https://blog.csdn.net/kw023781/article/details/105602177)
 
 ### HTML
-- 语义标签的意义
+- [语义标签的意义](https://blog.csdn.net/kw023781/article/details/108288604)
 - 块元素、行元素、伪元素
 - 元素自带的特殊属性
 
@@ -29,6 +30,7 @@
 - 鼠标事件的处理
 - 图形放大缩小
 ### Canvas
+> 这里先推荐一个canvas库，很好用的。fabricjs, [官网](http://fabricjs.com/), [GitHub](https://github.com/fabricjs/fabric.js), [中文文档](https://github.com/Rookie-Birds/Fabric-Tutorial_zh-CN)
 - 简单的图形绘制
 - 像素比例，宽高、坐标计算
 - 定时器实现动画（循环：绘制-擦除-绘制）
@@ -47,7 +49,7 @@
 - JavaScript 程序执行顺序
 - 宏任务、微任务以及执行顺序
 - leetcode算法
-
+[前端技能自查——JavaScript](https://blog.csdn.net/kw023781/article/details/116606906)
 ### TypeScript
 - 类型推断
 - 泛型的使用

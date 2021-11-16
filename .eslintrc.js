@@ -1,13 +1,6 @@
 const rulesDirPlugin = require('eslint-plugin-rulesdir')
 rulesDirPlugin.RULES_DIR = 'custom_rules'
 
-const helloHHHH = 'hello'
-const HellOHHH = () => {
-
-}
-
-
-
 module.exports = {
   root: true,
   env: {
