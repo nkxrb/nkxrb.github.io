@@ -31,7 +31,6 @@ home: true
 - [服务熔断与服务降级](./java/服务熔断与服务降级.md)
 - [高并发与多线程](./java/高并发与多线程.md)
 - [关于“设计模式”的思考](./java/关于“设计模式”的思考.md)
-- [Dubbo使用问题汇总](./java/Dubbo使用问题汇总.md)
 - [Eureka-VS-Zookeeper](./java/Eureka-VS-Zookeeper.md)
 
 
