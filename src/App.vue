@@ -1,17 +1,20 @@
 <template>
   <nk-header :mini="mini" />
+  <kidar-echarts type="earth"
+                 style="height: 350px;width: 100%" />
   <main>
     <router-view />
   </main>
 </template>
 
 <script lang="ts">
+import { KidarEcharts } from 'kidar-echarts'
 import NkHeader from '@/components/layout/NkHeader.vue'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'App',
-  components: { NkHeader },
+  components: { NkHeader, KidarEcharts },
   data() {
     return {
       mini: false

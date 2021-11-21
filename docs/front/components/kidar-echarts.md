@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
- 具体可点击查看在线示例 ✨ <a href="https://kidarjs.github.io/kidar-vue-examples/">Live Demo</a>
+ 具体可点击查看在线示例 ✨ <a href="https://kidarjs.github.io/kidar-vue-examples/#/echartsplus/">Live Demo</a>
 </p>
 
 ### Why
@@ -21,7 +21,7 @@ kidar-echarts为了解决这个问题，将大家常用的option进行收集封�
 
 ### Now
 目前组件还再完善中，也欢迎大家点评，如果你觉得这个组件还不错，也欢迎贡献代码，扩充更多好看的plugin
-
+[makeapie](https://www.makeapie.com/explore.html),这个网站画的还不错，陆陆续续会集成过来
 ### 🔥 Features
 每个组件实例都是一个echarts，切换不同的echarts采用懒加载技术，更快更简单的实现不同图形的展示
 
@@ -36,13 +36,16 @@ kidar-echarts为了解决这个问题，将大家常用的option进行收集封�
 
 ### 效果图预览
 
-<img src="../../assets/kidar-echarts.png" alt="preview" style="zoom:200%;" />
+<img src="../../assets/dataScreen1.png" alt="preview" style="zoom:100%;" />
+<img src="../../assets/dataScreen1.png" alt="preview" style="zoom:100%;" />
 
 
 ### 涉及的技术
 * vite
-* vue2
+* vue-demi (使组件同时支持vue2、vue3)
 * typescript
+* echarts
+* echarts-gl
 
 ### 安装 | Install
 
@@ -81,11 +84,11 @@ export default {
 
 ```ts
 // main.ts
-import { KidarEcharts } from 'kidar-echarts'
+import { addPlugin } from 'kidar-echarts'
 
 import barX from "./plugins/barX";
 
-KidarEcharts.addPlugin(barX)
+addPlugin(barX)
 
 ```
 

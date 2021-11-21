@@ -5,13 +5,14 @@
  前端项目工程化后，有下面几个特点：
  - 开发流程清晰，易操作，自动化构建部署
  - 开发效率快，代码质量高
- - 模块化、组件化
+ - 模块化、组件化、规范化
 
 ### 初始搭建-脚手架
+ - 多子项目（monorepo + larn）
  - 确定主体框架（vue、react、angular...）
  - 打包工具（vite、webpack、rollup...）
  - css管理（windicss、less、scss...）
- - husky git提交规则校验
+ - husky + commitlint + lint-staged git提交规则校验
  - eslint 代码质量检测 （定制适合项目团队的编码规则）[自定义ESLint规则](./eslint.md)
  - 搭建mock服务
  - 配置环境变量，实现一套代码多环境运行
