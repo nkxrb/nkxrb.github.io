@@ -8,7 +8,7 @@
  - 模块化、组件化、规范化
 
 ### 初始搭建-脚手架
- - 多子项目（monorepo + larn）
+ - 多子项目（monorepo + larn + pnpm）
  - 确定主体框架（vue、react、angular...）
  - 打包工具（vite、webpack、rollup...）
  - css管理（windicss、less、scss...）
@@ -33,3 +33,11 @@
  - 考虑不同环境的处理
  - 安装依赖一致性，添加缓存提高安装速率
  - 生产监测，对性能差、访问频率高的页面进行优化提速
+
+
+### pnpm
+
+[pnpm](https://www.pnpm.cn/cli/publish) 比npm、yarn更好
+pnpm 
+- 通过软连接，解决了依赖重复占用磁盘空间的问题
+- 更干净的node_modules，避免了“幽灵依赖”的风险（同级的node_modules中只会有同级的package.json中声明了的依赖）

@@ -41,6 +41,7 @@
 ### JavaScript
 - typeof instanceof toString 类型判断
 - this的4种写法
+- 隐式转换 == 与 === 触发的逻辑
 - es6新特性的掌握情况
 - 变量的作用域
 - 原型链与继承的实现

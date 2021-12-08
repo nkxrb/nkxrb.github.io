@@ -1,5 +1,6 @@
 import { defineUserConfig } from 'vuepress'
 import type { DefaultThemeOptions } from 'vuepress'
+import path from 'path'
 
 export default defineUserConfig<DefaultThemeOptions>({
   lang: 'zh-cn',
@@ -7,6 +8,7 @@ export default defineUserConfig<DefaultThemeOptions>({
   description: '每一个不曾起舞的日子，都是对生命的辜负。',
   base: '/docs/',
   dest: '${sourceDir}/../dist/docs',
+  theme: path.resolve(__dirname, './theme'),
   themeConfig: {
     home: '/',
     logo: '/images/logo.png',
@@ -33,12 +35,12 @@ export default defineUserConfig<DefaultThemeOptions>({
       },
       {
         text: '服务端', link: '/java/', children: [
-          { text: '数据库设计', link: '/java/如何设计数据库表结构，多年实用经验汇总.html' },
+          { text: '数据库设计', link: '/java/数据库设计.html' },
           { text: 'Java编码规范', link: '/java/如何更优雅的编写Java代码.html' },
           { text: 'Linux常用命令', link: '/java/Linux常用命令.html' },
           { text: '熔断与降级', link: '/java/服务熔断与服务降级.html' },
           { text: '高并发与多线程', link: '/java/高并发与多线程.html' },
-          { text: '设计模式', link: '/java/关于“设计模式”的思考.html' },
+          { text: '设计模式', link: '/java/关于设计模式的思考.html' },
         ]
       },
       { text: '关于', link: '/about/' },

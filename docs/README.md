@@ -13,11 +13,11 @@ home: true
 
 - [基础 · 知识点自查](./front/base.md)
 - [基础 · 文档与教程](./front/docs.md)
-- [算法 · 随笔](./front/leetcode.md)
-- [开发 · 工程化](./front/project.md)
 - [工具 · nkxrb-tools](./front/utils.md)
 - [组件 · kidar-echarts](./front/components/kidar-echarts.md)
 - [组件 · kidar-drag](./front/components/kidar-drag.md)
+- [开发 · 工程化](./front/project.md)
+- [算法 · 随笔](./front/leetcode.md)
 - [开发 · 自定义ESLint规则](./front/eslint.md)
 - [mini · mini路由](./front/components/mini-router.md)
 - [动画 · demo](http://timoer.gitee.io/h5-demo/)

@@ -1,6 +1,12 @@
 ### 推荐好文
 labuladong的算法小抄 [GitHub](https://labuladong.github.io/algo/)  [Gitee](https://labuladong.gitee.io/algo/)
 
+### 刷题工具
+[nkxrb-leetcode](https://github.com/nkxrb/leetcode)
+- 运行环境node.js
+- 支持jest测试
+- 支持typescript
+
 ### 十大排序算法
 [排序算法-JS版](https://blog.csdn.net/kw023781/article/details/118384290)
 
