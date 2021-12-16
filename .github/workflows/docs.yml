@@ -1,4 +1,4 @@
-name: docs
+name: deploy page
 
 on:
   # 每当 push 到 master 分支时触发部署
@@ -8,44 +8,32 @@ on:
   workflow_dispatch:
 
 jobs:
-  docs:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 拉取最新代码
       - uses: actions/checkout@v2
         with:
-          # “最近更新时间” 等 git 日志相关信息，需要拉取全部提交记录
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           # 选择要使用的 node 版本
           node-version: '14'
 
-      # 缓存 node_modules
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: npm-cache
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
+      # 安装依赖
+      - name: Install pnpm
+        run: npm i -g pnpm
 
-      # 如果缓存没有命中，安装依赖
+      # 安装依赖
       - name: Install dependencies
-        if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: npm ci
-
-      # 运行构建脚本
-      # - name: Build Vue3.0 site
-      #   run: npm run build:dev
+        run: pnpm i
 
       # 运行文档构建脚本
-      - name: Build VuePress site
-        run: npm run docs:build
+      - name: Build VitePress site
+        run: pnpm run build
 
       # 查看 workflow 的文档来获取更多信息
       # @see https://github.com/crazy-max/ghaction-github-pages
@@ -54,7 +42,7 @@ jobs:
         with:
           # 部署到 gh-pages 分支
           target_branch: pages
-          # 部署目录为 VuePress 的默认输出目录
+          # 部署目录为 VitePress 的默认输出目录
           build_dir: dist
         env:
           # 此处需要配置自己GitHub仓库的secrets，添加TOKEN
