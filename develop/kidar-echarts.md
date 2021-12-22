@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
- 具体可点击查看在线文档 ✨ <a href="https://kidarjs.github.io/kidar-echarts">Live Demo</a>
+ 具体可点击查看在线文档 ✨ <a href="https://kidarjs.github.io/kidar-echarts">Live Doc</a>
 </p>
 
 ### 为什么选择KidarEcharts
@@ -39,13 +39,14 @@ KidarEcharts为了解决这个问题，将大家常用的option进行收集封�
 - [ ] 支持3D
 
 ### 效果图预览
-![大屏1](../../assets/dataScreen1.png)
-![大屏2](../../assets/dataScreen2.png)
+![大屏1](/images/dataScreen1.png)
+![大屏2](/images/dataScreen2.png)
 
 
 ### 涉及的技术
 * vite
 * vue-demi (使组件同时支持vue2、vue3)
+* react
 * typescript
 * echarts
 * echarts-gl

@@ -62,7 +62,7 @@ module.exports = {
 4. 如果你的编译器配置了eslint提示，当你用hello命名变量时，就会看到黄色的波浪线了
 
 5. 效果图
-<img src="../assets/eslint-hello.png" alt="preview" style="zoom:100%;" />
+<img src="/images/eslint-hello.png" alt="preview" style="zoom:100%;" />
 
 ## 自定义规则API
 
