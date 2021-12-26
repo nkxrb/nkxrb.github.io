@@ -1,9 +1,8 @@
-## ESLint
-
-### 自动格式修复eslint + vscode + vetur
+## vscode配置
+自动格式化修复eslint + vscode + vetur
 [vscode+vue+eslint统一风格配置](https://blog.csdn.net/kw023781/article/details/105825159)
 
-### 自定义ESLint规则
+## 自定义ESLint规则
 
 1. 安装eslint-plugin-rulesdir插件
 ```sh
@@ -64,7 +63,5 @@ module.exports = {
 5. 效果图
 <img src="/images/eslint-hello.png" alt="preview" style="zoom:100%;" />
 
-## 自定义规则API
-
-### Identifier
+## Identifier
 变量声明选择器，入参node(变量节点)

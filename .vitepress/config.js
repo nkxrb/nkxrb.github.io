@@ -26,5 +26,8 @@ module.exports = {
   },
   define: {
     __GLOBAL_FOO: 'foo'
+  },
+  markdown: {
+    config: (md) => { }
   }
 }
