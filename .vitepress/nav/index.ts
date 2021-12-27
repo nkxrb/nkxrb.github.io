@@ -2,6 +2,7 @@ import { generateSidebar } from './auto-generate-sidebar'
 
 const sidebars = [
   { text: '原创', children: generateSidebar('original') },
+  { text: '手写Vue', children: generateSidebar('mini-vue') },
   { text: '收录', children: generateSidebar('collection') },
   { text: '笔记', children: generateSidebar('note') },
   { text: '其他', children: generateSidebar('other') }
@@ -10,6 +11,7 @@ const sidebars = [
 const navbar = [
   { text: '首页', link: '/' },
   { text: '原创', link: '/original/' },
+  { text: '手写Vue', link: '/mini-vue/v0_0_1' },
   { text: '收录', link: '/collection/' },
   { text: '笔记', link: '/note/' },
   { text: '其他', link: '/other/' },
@@ -17,6 +19,7 @@ const navbar = [
 
 const sidebar = {
   '/original': sidebars,
+  '/mini-vue': sidebars,
   '/collection/': sidebars,
   '/note/': sidebars,
   '/other/': sidebars,
