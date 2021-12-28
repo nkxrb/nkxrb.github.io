@@ -8,7 +8,7 @@
 ## == 比较时，遵守的规则如下
 1. 当同类型比较时，对象比较的是引用，原始值比较的就是值
 2. 当不同类型比较时，会转换为相同类型，然后再比较
-    - Object会先调用toString, 再valueOf方法转换为string
+    - Object会先尝试调用valueOf来获取一个原始类型，如果valueOf返回的不是原始类型，再尝试调用toString来得到一个原始类型，依然失败，就会报错。
     - string 转为 number
     - boolean 转为 number, true=1, false=0
     - null == undefined 只有它两相等，与其他值比较均为false
