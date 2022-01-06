@@ -16,7 +16,6 @@ pageClass: about-page
   <Label name="KidarEcharts" link="/original/【开发】kidar-echarts"></Label>
   <Label name="KidarDrag" link="/original/【开发】kidar-drag"></Label>
   <Label name="Tools" link="/original/【开发】nkxrb-tools"></Label>
-  <Label name="算法笔记" link="/original/【技巧】算法笔记"></Label>
 </label-container>
 
 <label-container title="源码探究">
@@ -33,6 +32,7 @@ pageClass: about-page
 </label-container>
 
 <label-container title="知识随笔">
+  <Label name="算法笔记" link="/original/【技巧】算法笔记"></Label>
   <Label name="JS中的隐式转换逻辑" link="/note/JS中的隐式转换逻辑"></Label>
   <Label name="前端技能清单" link="/note/前端技能清单"></Label>
   <Label name="数据结构" link="/note/数据结构"></Label>
