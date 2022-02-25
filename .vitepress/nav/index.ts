@@ -18,8 +18,8 @@ const navbar = [
 ]
 
 const sidebar = {
-  '/original': sidebars,
-  '/mini-vue': sidebars,
+  '/original/index': sidebars,
+  '/mini-vue/v0_0_1': sidebars,
   '/collection/': sidebars,
   '/note/': sidebars,
   '/other/': sidebars,
