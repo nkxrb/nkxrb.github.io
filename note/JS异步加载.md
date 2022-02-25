@@ -1,6 +1,6 @@
 ## JS 异步加载方案
 
-### <script defer>
+### script defer
 
 等到 DOM 文档全部解析完才执行。 但只有 IE 能用
 
@@ -12,7 +12,7 @@
 </script>
 ```
 
-### <script async>
+### script async
 
 js 加载完就执行，只能加载外部脚本
 
