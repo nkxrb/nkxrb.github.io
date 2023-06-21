@@ -2,7 +2,7 @@
 lang: zh-CN
 title: 首页
 description: nkxrb收集的一些知识点，迷迷糊糊、奇奇怪怪！😜
-home: false
+layout: home
 pageClass: about-page
 ---
 

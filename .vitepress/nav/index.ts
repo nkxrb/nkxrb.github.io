@@ -1,11 +1,11 @@
 import { generateSidebar } from './auto-generate-sidebar'
 
-const sidebars = [
-  { text: '原创', children: generateSidebar('original') },
-  { text: '手写Vue', children: generateSidebar('mini-vue') },
-  { text: '收录', children: generateSidebar('collection') },
-  { text: '笔记', children: generateSidebar('note') },
-  { text: '其他', children: generateSidebar('other') }
+const sidebar = [
+  { text: '原创', items: generateSidebar('original') },
+  { text: '手写Vue', items: generateSidebar('mini-vue') },
+  { text: '收录', items: generateSidebar('collection') },
+  { text: '笔记', items: generateSidebar('note') },
+  { text: '其他', items: generateSidebar('other') }
 ]
 
 const navbar = [
@@ -17,13 +17,13 @@ const navbar = [
   { text: '其他', link: '/other/' },
 ]
 
-const sidebar = {
-  '/original/index': sidebars,
-  '/mini-vue/v0_0_1': sidebars,
-  '/collection/': sidebars,
-  '/note/': sidebars,
-  '/other/': sidebars,
-  '/': sidebars // 从前到后顺序匹配，必须放在最后
-}
+// const sidebar = {
+//   '/original/index': sidebars,
+//   '/mini-vue/v0_0_1': sidebars,
+//   '/collection/': sidebars,
+//   '/note/': sidebars,
+//   '/other/': sidebars,
+//   '/': sidebars // 从前到后顺序匹配，必须放在最后
+// }
 
 export { sidebar, navbar }
