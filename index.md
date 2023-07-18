@@ -6,7 +6,13 @@ layout: home
 pageClass: about-page
 ---
 
-<h1 align="center">nkxrb collection</h1>
+<script lang="ts" setup>
+import Home from './packages/gameEnigen/demo/home.vue'
+</script>
+
+<Home />
+
+<!-- <h1 align="center">nkxrb collection</h1>
 
 <h3 align="center">每一个不曾起舞的日子，都是对生命的辜负。</h3>
 
@@ -38,7 +44,7 @@ pageClass: about-page
   <Label name="数据结构" link="/note/数据结构"></Label>
   <Label name="兼容与适配记录" link="/note/兼容与适配记录"></Label>
   <Label name="Web性能优化实践" link="/note/Web性能优化实践"></Label>
-  <!-- <Label name="判断终端设备" link="/note/判断终端设备"></Label> -->
+  <Label name="判断终端设备" link="/note/判断终端设备"></Label>
 </label-container>
 <label-container title="优秀资源收录">
   <Label name="常用技术网站" link="/collection/常用技术网站"></Label>
@@ -47,4 +53,4 @@ pageClass: about-page
   <Label name="高并发与多线程" link="/collection/高并发与多线程"></Label>
   <Label name="Eureka" link="/collection/Eureka-VS-Zookeeper"></Label>
 </label-container>
-
+ -->
