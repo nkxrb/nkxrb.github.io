@@ -45,6 +45,17 @@ void main() {
 `
 
 // vec4(uvs.xyz, v_color.w)
+export const fsSource_points = `#version 300 es
+precision mediump float;
+in vec4 v_color;
+layout(location=0) out vec4 o_fragColor;
+
+void main() {
+  o_fragColor = v_color;
+}
+`
+
+// vec4(uvs.xyz, v_color.w)
 export const fsSource_color = `#version 300 es
 precision mediump float;
 in vec4 v_color;
@@ -87,11 +98,11 @@ void main() {
 `;
 
 // OpenGL ES 3.0 顶点着色器
-export const vsSource_text = `#version 300 es
+export const vsSource_texture = `#version 300 es
 precision mediump float;
 uniform mat4 projMt;
 layout(location=0) in vec3 a_position;
-layout(location=1) in vec2 a_texCoord;
+layout(location=2) in vec2 a_texCoord;
 out vec2 v_texCoord;
 
 void main() {
@@ -101,7 +112,7 @@ void main() {
 `
 
 // OpenGL ES 3.0片段着色器 texture(u_Sampler, normalize(v_texCoord));
-export const fsSource_text = `#version 300 es
+export const fsSource_texture = `#version 300 es
 #ifdef GL_ES
   precision mediump float;
 #endif

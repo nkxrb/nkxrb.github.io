@@ -1,12 +1,19 @@
 import {useWebglRender} from './useDraw'
 
 export const useRender = (canvas, options) => {
-  const {drawPoints, clearScene, drawText} = useWebglRender(canvas)
+  const { texImgUrl } = options
+  const {drawPoints, clearScene, drawText, updateBuffer, loadImgTexture} = useWebglRender(canvas)
   let i = 1;
   const renderAll = (points) => {
     // 
     clearScene();
-    drawPoints(points)
+    if(i === 1){
+      texImgUrl && loadImgTexture(texImgUrl)
+      drawPoints(points)
+      i = 2
+    }else{
+      updateBuffer(points)
+    }
     drawText([
       100, 100, 10, 0,0,
       180, 100, 10, 1,0,

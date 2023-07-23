@@ -2,12 +2,14 @@ import {useRender} from './render'
 import {useHandle} from './handle'
 import {useVoice} from './voice'
 
+/**
+ * 固定画布尺寸： 7200
+ */
 export interface KidarGEOption {
-
+  texImgUrl?: string,
 }
 
-export const useKidarGE = (canvas, data, options) => {
-  console.log(231)
+export const useKidarGE = (canvas, data, options: KidarGEOption) => {
   // 渲染初始化
   const { renderAll } = useRender(canvas, options);
   // 操作控制事件初始化
@@ -15,7 +17,7 @@ export const useKidarGE = (canvas, data, options) => {
   // 音效同步初始化
   const {} = useVoice();
 
-  const initGE = () => {
+  const onInit = () => {
     console.log('init')
   }
 
@@ -34,7 +36,7 @@ export const useKidarGE = (canvas, data, options) => {
   }
 
   return {
-    initGE,
+    onInit,
     onUpdate,
     updatePoints
   }

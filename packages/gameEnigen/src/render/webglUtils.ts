@@ -35,22 +35,29 @@ export const getContext = (canvas, type) => {
 }
 
 export const getSysInfo = (gl) => {
-  // 查询设备上支持的最大的 2D 纹理尺寸
-  const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-  // 大于零时，才能使用 vertex shaders 中的纹理
-  gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)
-  let vertexArray = gl.createVertexArray();
-  console.log(vertexArray.vertexAttributeBuffer)
-  return {
-    maxTextureSize
+  const ext = gl.getExtension('WEBGL_debug_renderer_info');
+  const info: any = {}
+  if(ext){
+    info.unmaskedVendorWebGL = gl.getParameter(ext.UNMASKED_VENDOR_WEBGL);
+    // 查询设备上支持的最大的 2D 纹理尺寸
+    info.version = gl.getParameter(gl.VERSION);
+    info.viewport = gl.getParameter(gl.VIEWPORT);
+    info.maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+    // 大于零时，才能使用 vertex shaders 中的纹理
+    info.maxVertexTextureImageUnits = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)
+    // let vertexArray = gl.createVertexArray();
+    
   }
+  console.log(info)
+  
+  return info
 }
 
 
 // 清空容器
 export const clear = (gl) => {
   // 使用完全不透明的黑色清除所有图像
-  gl.clearColor(1.0, 1.0, 1.0, 0);
+  gl.clearColor(0, 0, 0, 0);
   gl.clearDepth(1.0);                 // 清除所有的数据
   gl.enable(gl.DEPTH_TEST);           // 深度测试
   gl.depthFunc(gl.LEQUAL);  
