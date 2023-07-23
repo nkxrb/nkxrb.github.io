@@ -2,8 +2,8 @@
 // gl.LINE_STRIP: 绘制一个线条。即，绘制一系列线段，上一点连接下一点。
 // gl.LINE_LOOP: 绘制一个线圈。即，绘制一系列线段，上一点连接下一点，并且最后一点与第一个点相连。
 // gl.LINES: 绘制一系列单独线段。每两个点作为端点，线段之间不连接。
-// gl.TRIANGLE_STRIP：绘制一个三角带。
-// gl.TRIANGLE_FAN：绘制一个三角扇。
+// gl.TRIANGLE_STRIP: 绘制一个三角带。
+// gl.TRIANGLE_FAN: 绘制一个三角扇。
 // gl.TRIANGLES: 绘制一系列三角形。每三个点作为顶点。
 /**
  * gl_PointSize   float 点渲染模式，方形点区域渲染像素大小  

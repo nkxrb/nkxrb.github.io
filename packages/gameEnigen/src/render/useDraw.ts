@@ -10,17 +10,17 @@ export const useWebglRender = (canvas, type?) => {
   let {gl, w, h} = getContext(canvas, type);
   const aspect = w/h
   const project = getScreenMt(w, h)
-  const vao = gl.createVertexArray();
-  gl.bindVertexArray(vao);
+  // const vao = gl.createVertexArray();
+  // gl.bindVertexArray(vao);
 
   // 初始化渲染器1
-  const pointsProgram = initProgram(gl, vsSource_points, fsSource_points)
-  const vertexPosition = gl.getAttribLocation(pointsProgram, 'a_position')
-  const vertexSize = gl.getAttribLocation(pointsProgram, 'a_size')
-  const vertexColor = gl.getAttribLocation(pointsProgram, 'a_color')
-  const projMt = gl.getUniformLocation(pointsProgram, "projMt");
+  // const pointsProgram = initProgram(gl, vsSource_points, fsSource_points)
+  // const vertexPosition = gl.getAttribLocation(pointsProgram, 'a_position')
+  // const vertexSize = gl.getAttribLocation(pointsProgram, 'a_size')
+  // const vertexColor = gl.getAttribLocation(pointsProgram, 'a_color')
+  // const projMt = gl.getUniformLocation(pointsProgram, "projMt");
   
-  const positsBuffer = gl.createBuffer();
+  // const positsBuffer = gl.createBuffer();
 
   // 初始化渲染器2
   const textProgram = initProgram(gl, vsSource_texture, fsSource_texture)
@@ -30,12 +30,18 @@ export const useWebglRender = (canvas, type?) => {
   gl.enableVertexAttribArray(aPosition);
   gl.enableVertexAttribArray(aTexCoord);
   const textBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, textBuffer);
+  gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 20, 0);
+  gl.vertexAttribPointer(aTexCoord, 2, gl.FLOAT, false, 20, 12);
+  gl.useProgram(textProgram);
+  gl.uniformMatrix4fv(textProjMt, false, new Float32Array(project));
 
   const clearScene = () => {
     clear(gl)
   }
 
   const setTexture = (texImage) => {
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     // 将图像数据上传到WebGL
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -47,6 +53,7 @@ export const useWebglRender = (canvas, type?) => {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.bindTexture(gl.TEXTURE_2D, texture);
+    
   }
 
   const loadImgTexture = (imgSrc) => {
@@ -57,30 +64,40 @@ export const useWebglRender = (canvas, type?) => {
     img.src = imgSrc;
   }
 
+  const drawTriangle = (points) => {
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length/5);
+  }
+
+  const drawCircle = (points) => {
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, points.length/5);
+  }
+
   const drawPoints = (points) => {
     if(!points || points.length === 0) return
     // console.log(points.length)
-    gl.bindBuffer(gl.ARRAY_BUFFER, positsBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(vertexPosition);
-    gl.enableVertexAttribArray(vertexSize);
-    gl.enableVertexAttribArray(vertexColor);
-    // 3*4 + 4*4 = 28
-    gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 32, 0);
-    gl.vertexAttribPointer(vertexSize, 1, gl.FLOAT, false, 32, 12);
-    gl.vertexAttribPointer(vertexColor, 4, gl.FLOAT, false, 32, 16);
-    gl.useProgram(pointsProgram);
-    gl.uniformMatrix4fv(projMt, false, new Float32Array(project));
+    // gl.bindBuffer(gl.ARRAY_BUFFER, positsBuffer);
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+    // gl.enableVertexAttribArray(vertexPosition);
+    // gl.enableVertexAttribArray(vertexSize);
+    // gl.enableVertexAttribArray(vertexColor);
+    // // 3*4 + 4*4 = 28
+    // gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 32, 0);
+    // gl.vertexAttribPointer(vertexSize, 1, gl.FLOAT, false, 32, 12);
+    // gl.vertexAttribPointer(vertexColor, 4, gl.FLOAT, false, 32, 16);
+    // gl.useProgram(pointsProgram);
+    // gl.uniformMatrix4fv(projMt, false, new Float32Array(project));
     gl.drawArrays(gl.POINTS, 0, points.length/8);
   }
 
   const updateBuffer = (points) => {
     // gl.bindBuffer(gl.ARRAY_BUFFER, positsBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 32, 0);
-    gl.vertexAttribPointer(vertexSize, 1, gl.FLOAT, false, 32, 12);
-    gl.vertexAttribPointer(vertexColor, 4, gl.FLOAT, false, 32, 16);
-    gl.useProgram(pointsProgram);
+    // gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 32, 0);
+    // gl.vertexAttribPointer(vertexSize, 1, gl.FLOAT, false, 32, 12);
+    // gl.vertexAttribPointer(vertexColor, 4, gl.FLOAT, false, 32, 16);
+    // gl.useProgram(pointsProgram);
     // gl.bindVertexArray(vao);
     gl.drawArrays(gl.POINTS, 0, points.length/8);
   }
@@ -118,15 +135,13 @@ export const useWebglRender = (canvas, type?) => {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
-  const updateText = () => {
-    
-  }
-
   return {
     KidarGL,
     ctx: gl,
     clearScene,
     loadImgTexture,
+    drawTriangle,
+    drawCircle,
     drawPoints,
     updateBuffer,
     drawText,

@@ -5,7 +5,7 @@
 import {ref, watch} from 'vue';
 import { useKidarGE } from '../src/core';
 import { getCircle } from './startScene';
-import bg from './bg1.jpg';
+import bg from './tex.png';
 
 const homeRef = ref(); 
 
@@ -17,6 +17,14 @@ const player = [
       250, 200,10, 30.0, 0.8,0.2,0.3,1,
       350, 200,10, 20.0, 0.9,0.2,0.3,1,
     ]
+const data = [
+  100, 100, 10, 0, 1,
+  114, 100, 10, 0.03, 1,
+  100, 120, 10, 0, 0.96,
+  114, 120, 10, 0.03, 0.96,
+]
+
+const n0 = [0,1,0.03,1,0,0.96,0.03,0.96]
 
 watch(homeRef, ()=>{
   const {onInit, onUpdate} = useKidarGE(homeRef.value, [], {
@@ -45,9 +53,9 @@ watch(homeRef, ()=>{
 
   let i = 0
   onUpdate((updatePoints)=>{
-    player[24] += Math.cos(i*Math.PI / 180) * 10
-    player[25] += Math.sin(i*Math.PI / 180) * 10
-    const points = getCircle(i, i+30, 50)
+    // player[24] += Math.cos(i*Math.PI / 180) * 10
+    // player[25] += Math.sin(i*Math.PI / 180) * 10
+    // const points = getCircle(i, i+30, 50)
 
     i+=10
     if(i>=360){
@@ -55,7 +63,7 @@ watch(homeRef, ()=>{
     }
     
     
-    updatePoints(player)
+    updatePoints(data)
   })
 })
 
