@@ -6,9 +6,9 @@ export const useRender = (canvas, options) => {
 
   texImgUrl && loadImgTexture(texImgUrl)
 
-  const renderAll = (points) => {
+  const renderAll = (points, transparentPoints) => {
     clearScene();
-    drawTriangle(points)
+    drawTriangle(points, transparentPoints)
   }
 
   return {

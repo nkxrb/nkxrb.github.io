@@ -13,7 +13,7 @@ export const useKidarGE = (canvas, data, options: KidarGEOption) => {
   // 渲染初始化
   const { renderAll } = useRender(canvas, options);
   // 操作控制事件初始化
-  const { points, initPoints, updatePoints, status, start, stop } = useHandle();
+  const { points, transparentPoints, initPoints, updatePoints, status, start, stop } = useHandle();
   // 音效同步初始化
   const {} = useVoice();
 
@@ -29,7 +29,7 @@ export const useKidarGE = (canvas, data, options: KidarGEOption) => {
         if(callback){
           callback(updatePoints)
         }
-        renderAll(points);
+        renderAll(points, transparentPoints);
       }
       onUpdate(callback)
     })

@@ -11,6 +11,8 @@ export interface PointItem {
 export const useHandle = () => {
   // 顶点集合
   const points: number[] = [];
+  const transparentPoints: number[] = [];
+
   // UI弹窗合计，先进后出。
   const dialogList = [];
   const status = {
@@ -29,9 +31,11 @@ export const useHandle = () => {
     status.loading = false;
   }
 
-  const updatePoints = (data: number[]) => {
-    points.length = 0
+  const updatePoints = (data: number[], transparentData: number[]) => {
+    points.length = 0;
     points.push(...data);
+    transparentPoints.length = 0;
+    transparentPoints.push(...transparentData);
   }
 
   const start = () => status.action = true;
@@ -44,6 +48,7 @@ export const useHandle = () => {
   return {
     status,
     points,
+    transparentPoints,
     start,
     stop,
     initPoints,

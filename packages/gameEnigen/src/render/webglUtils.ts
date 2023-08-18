@@ -10,7 +10,7 @@ export const getContext = (canvas, type) => {
   if(type){
     CTX = canvas.getContext(type)
   }else if(canvas){
-    CTX = canvas.getContext('webgl2')
+    CTX = canvas.getContext('webgl2', { alpha: true })
     if(!CTX){
       CTX = canvas.getContext('webgl')
     }
@@ -59,10 +59,46 @@ export const clear = (gl) => {
   // 使用完全不透明的黑色清除所有图像
   gl.clearColor(0, 0, 0, 0);
   gl.clearDepth(1.0);                 // 清除所有的数据
-  gl.enable(gl.DEPTH_TEST);           // 深度测试
+  // gl.enable(gl.DEPTH_TEST);           // 深度测试
   gl.depthFunc(gl.LEQUAL);  
+  // gl.depthMask(true);
   // 用上面指定的颜色清除缓冲区
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+}
+
+const cacheTexture = () => {
+  // const buffer = gl.createBuffer();
+  // gl.bindBuffer(gl.PIXEL_UNPACK_BUFFER, buffer);
+  // // 将像素数据绑定到缓冲区对象
+  // gl.bufferData(gl.PIXEL_UNPACK_BUFFER, texImage, gl.STATIC_DRAW);
+
+  // 解绑缓冲区对象
+  // gl.bindBuffer(gl.PIXEL_UNPACK_BUFFER, null);
+}
+
+export const setTexture = (gl, texImage) => {
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+  gl.enable(gl.BLEND);
+  gl.blendEquationSeparate(gl.FUNC_ADD, gl.FUNC_ADD);
+  // gl.blendFunc(gl.ONE, gl.ZERO);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  // gl.blendColor(0, 0, 1, 1);
+  // gl.depthMask(false);
+  
+  // 将图像数据上传到WebGL
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  // 将画布内容作为纹理绑定到WebGL矩形上
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,  1024, 1024, 0, gl.RGBA, gl.UNSIGNED_BYTE, texImage);
+  // 设置纹理的缩放填充方式
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  // 解绑纹理对象
+  // gl.bindTexture(gl.TEXTURE_2D, null);
+  
 }
 
 export const loadShader = (gl, type, source) => {

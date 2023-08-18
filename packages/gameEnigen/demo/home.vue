@@ -4,7 +4,7 @@
 <script lang="ts" setup>
 import {ref, watch} from 'vue';
 import { useKidarGE } from '../src/core';
-import { getCircle } from './startScene';
+import { getNumber } from './startScene';
 import bg from './tex.png';
 
 const homeRef = ref(); 
@@ -17,14 +17,28 @@ const player = [
       250, 200,10, 30.0, 0.8,0.2,0.3,1,
       350, 200,10, 20.0, 0.9,0.2,0.3,1,
     ]
-const data = [
+const all = [
+  100, 500, 10, 0, 0,
+  500, 500, 10, 1, 0,
   100, 100, 10, 0, 1,
-  114, 100, 10, 0.03, 1,
-  100, 120, 10, 0, 0.96,
-  114, 120, 10, 0.03, 0.96,
+  500, 100, 10, 1, 1,
 ]
 
-const n0 = [0,1,0.03,1,0,0.96,0.03,0.96]
+const dialog = [
+  100, 100, 10, 0.01, 0.01,
+  100, 100, 10, 0.01, 0.01,
+  300, 100, 10, 0.01, 0.01,
+  100, 450, 10, 0.01, 0.01,
+  300, 450, 10, 0.01, 0.01,
+  300, 450, 10, 0.01, 0.01,
+  110, 110, 1, 0.02, 0.01,
+  290, 110, 1, 0.05, 0.01,
+  110, 440, 1, 0.05, 0.01,
+  290, 440, 1, 0.05, 0.02,
+  290, 440, 1, 0.05, 0.02,
+]
+
+const data = getNumber(100, 200, 11023456789);
 
 watch(homeRef, ()=>{
   const {onInit, onUpdate} = useKidarGE(homeRef.value, [], {
@@ -57,13 +71,18 @@ watch(homeRef, ()=>{
     // player[25] += Math.sin(i*Math.PI / 180) * 10
     // const points = getCircle(i, i+30, 50)
 
-    i+=10
-    if(i>=360){
+    i+=1
+    if(i>=36000){
       i=0
     }
+
+    const data = getNumber(120, 200, i);
     
     
-    updatePoints(data)
+    updatePoints([
+      ...dialog,
+      ...all,
+    ], [...data, ...getNumber(120, 300, 9876543210)])
   })
 })
 

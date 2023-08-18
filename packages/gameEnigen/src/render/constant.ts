@@ -124,3 +124,12 @@ void main() {
   o_fragColor = texture(u_Sampler, v_texCoord);
 }
 `;
+
+/**
+ * vec4 c = texture(u_Sampler, v_texCoord);
+  if(c.a == 0.0){
+    discard;
+  }else{
+    o_fragColor = texture(u_Sampler, v_texCoord);
+  }
+ */

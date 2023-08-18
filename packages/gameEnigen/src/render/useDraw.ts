@@ -1,5 +1,5 @@
 import { 
-  getContext, initProgram, initPositionBuffer,
+  getContext, initProgram, initPositionBuffer, setTexture,
   clear, getTextCanvas, getScreenMt
 } from './webglUtils'
 import {vsSource_points, fsSource_points, vsSource_texture, fsSource_texture} from './constant'
@@ -40,33 +40,28 @@ export const useWebglRender = (canvas, type?) => {
     clear(gl)
   }
 
-  const setTexture = (texImage) => {
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    // 将图像数据上传到WebGL
-    const texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    // 将画布内容作为纹理绑定到WebGL矩形上
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texImage);
-    // 设置纹理的缩放填充方式
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    
+  const setTextureImage = (texImage) => {
+    setTexture(gl, texImage)
   }
 
   const loadImgTexture = (imgSrc) => {
     const img = new Image();
     img.onload = () => {
-      setTexture(img)
+      setTextureImage(img)
     }
     img.src = imgSrc;
   }
 
-  const drawTriangle = (points) => {
+  const drawTriangle = (points, transparentPoints) => {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length/5);
+    
+    if(transparentPoints){
+      gl.depthMask(false);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(transparentPoints), gl.STATIC_DRAW);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, transparentPoints.length/5);
+      gl.depthMask(true);
+    }
   }
 
   const drawCircle = (points) => {
@@ -128,7 +123,7 @@ export const useWebglRender = (canvas, type?) => {
     const textCanvas = getTextCanvas(text)
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     // 将图像数据上传到WebGL
-    setTexture(textCanvas)
+    setTexture(gl, textCanvas)
 
     gl.useProgram(textProgram);
     gl.uniformMatrix4fv(textProjMt, false, new Float32Array(project));
@@ -140,6 +135,7 @@ export const useWebglRender = (canvas, type?) => {
     ctx: gl,
     clearScene,
     loadImgTexture,
+    setTextureImage,
     drawTriangle,
     drawCircle,
     drawPoints,
