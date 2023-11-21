@@ -2,10 +2,11 @@
   <canvas ref="homeRef" class="home-canvas"></canvas>
 </template>
 <script lang="ts" setup>
-import {ref, watch} from 'vue';
+import {nextTick, onMounted, ref, watch} from 'vue';
 import { useKidarGE } from '../src/core';
 import { getNumber } from './startScene';
 import bg from './tex.png';
+import { getCube } from '../src/render/useShape';
 
 const homeRef = ref(); 
 
@@ -40,30 +41,19 @@ const dialog = [
 
 const data = getNumber(100, 200, 11023456789);
 
-watch(homeRef, ()=>{
-  const {onInit, onUpdate} = useKidarGE(homeRef.value, [], {
+
+const init = () => {
+  const {onInit, onUpdate, } = useKidarGE(homeRef.value, [], {
     texImgUrl: bg
   })
+
+  const cube = getCube(100, 200, 0, 200)
 
   // 创建开始游戏界面场景
   // 轻微渐变色背景 + 开始按钮 + 互动动画 + 动画小元素
 
   // init();
   const bgImg = '';
-  const startDialog = {
-    menus: [
-      {
-        name: '开始游戏',
-        event: () => {
-
-        }
-      },
-      {
-        name: '游戏设置',
-        event: () => {}
-      }
-    ]
-  }
 
   let i = 0
   onUpdate((updatePoints)=>{
@@ -79,10 +69,13 @@ watch(homeRef, ()=>{
     const data = getNumber(120, 200, i);
     
     
-    updatePoints([
-      ...dialog,
-      ...all,
-    ], [...data, ...getNumber(120, 300, 9876543210)])
+    updatePoints([...cube.points], [...data])
+  })
+}
+
+onMounted(()=>{
+  nextTick(()=>{
+    init()
   })
 })
 

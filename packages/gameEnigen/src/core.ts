@@ -22,6 +22,7 @@ export const useKidarGE = (canvas, data, options: KidarGEOption) => {
   }
 
   initPoints(data);
+  let arr: any = [];
 
   const onUpdate = (callback) => {
     window.requestAnimationFrame(()=>{
@@ -29,6 +30,11 @@ export const useKidarGE = (canvas, data, options: KidarGEOption) => {
         if(callback){
           callback(updatePoints)
         }
+        arr = []
+        // while(arr.length < 20000000){
+        //   arr.push({id: arr.length})
+        // }
+        console.log(new Date().getTime())
         renderAll(points, transparentPoints);
       }
       onUpdate(callback)

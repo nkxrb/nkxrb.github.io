@@ -195,3 +195,37 @@ export const cobArray = (float32Array, uint8Array) => {
 // console.log('buff', buffer)
   return buffer
 }
+
+
+// 获取旋转平移缩放变化矩阵, 分别绕z,y,x轴旋转
+export const transformMt = (options) => {
+  const {
+    rx=0,ry=0,rz=0, // 旋转角度
+    ox=0,oy=0,oz=0, // 距离原点偏移量
+    mx=0,my=0,mz=0  // 平移数
+  } = options
+  const cos = (d)=>Math.cos(d*Math.PI / 180);
+  const sin = (d)=>Math.sin(d*Math.PI / 180);
+  const m11 = cos(ry)*cos(rz)
+  const m12 = -cos(ry)*sin(rz)
+  const m13 = sin(ry)
+  
+  const m21 = cos(rz)*sin(ry)*sin(rx)+sin(rz)*cos(rx)
+  const m22 = cos(rz)*cos(rx)-sin(rz)*sin(ry)*sin(rx)
+  const m23 = -sin(rx)*cos(ry)
+  
+  const m31 = sin(rz)*sin(rx)-cos(rz)*sin(ry)*cos(rx)
+  const m32 = sin(rz)*sin(ry)*cos(rx)+sin(rx)*cos(rz)
+  const m33 = cos(rx)*cos(ry)
+  // const r = x
+  const ovx = -m11*ox - m12*oy - m13*oz + ox;
+  const ovy = -m21*ox - m22*oy - m23*oz + oy;
+  const ovz = -m31*ox - m32*oy - m33*oz + oz;
+
+  return [
+    m11, m12, m13, ovx + mx,     
+    m21, m22, m23, ovy + my,   
+    m31, m32, m33, ovz + mz,   
+    0,     0,   0,   1        
+  ];
+}
