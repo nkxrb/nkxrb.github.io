@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitepress'
 import { navbar, sidebar } from './nav/index'
+import wasm from "vite-plugin-wasm";
+import topLevelAwait from "vite-plugin-top-level-await";
 
 const BASE = '/'
 
@@ -38,6 +40,12 @@ export default defineConfig({
   // define: {
   //   __GLOBAL_FOO: 'foo'
   // },
+  vite:{
+    plugins: [
+      wasm(),
+      topLevelAwait()
+    ],
+  },
   markdown: {
     config: (md) => { }
   }

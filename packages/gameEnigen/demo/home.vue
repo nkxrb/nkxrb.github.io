@@ -7,8 +7,11 @@ import { useKidarGE } from '../src/core';
 import { getNumber } from './startScene';
 import bg from './tex.png';
 import { getCube } from '../src/render/useShape';
+import { greet, read_file } from '@kidar/kidar_tools';
 
 const homeRef = ref(); 
+// greet('rust-wasm');
+read_file('../src/core')
 
 const player = [
       100, 0,8, 30.0, 0.1,0.2,0.3,1,
@@ -69,13 +72,13 @@ const init = () => {
     const data = getNumber(120, 200, i);
     
     
-    updatePoints([...cube.points], [...data])
+    // updatePoints([...cube.points], [...data])
   })
 }
 
 onMounted(()=>{
   nextTick(()=>{
-    init()
+    // init()
   })
 })
 
