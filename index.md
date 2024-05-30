@@ -6,13 +6,13 @@ layout: home
 pageClass: about-page
 ---
 
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 import Home from './packages/gameEnigen/demo/home.vue'
 </script>
 
-<Home />
+<Home /> -->
 
-<!-- <h1 align="center">nkxrb collection</h1>
+<h1 align="center">nkxrb collection</h1>
 
 <h3 align="center">每一个不曾起舞的日子，都是对生命的辜负。</h3>
 
@@ -53,4 +53,4 @@ import Home from './packages/gameEnigen/demo/home.vue'
   <Label name="高并发与多线程" link="/collection/高并发与多线程"></Label>
   <Label name="Eureka" link="/collection/Eureka-VS-Zookeeper"></Label>
 </label-container>
- -->
+
