@@ -1,7 +1,7 @@
-import { defineConfig } from 'vitepress'
-import { navbar, sidebar } from './nav/index'
-import wasm from "vite-plugin-wasm";
 import topLevelAwait from "vite-plugin-top-level-await";
+import wasm from "vite-plugin-wasm";
+import { defineConfig } from 'vitepress';
+import { navbar, sidebar } from './nav/index';
 
 const BASE = '/'
 
@@ -41,6 +41,9 @@ export default defineConfig({
   //   __GLOBAL_FOO: 'foo'
   // },
   vite:{
+    server: {
+      port: 12900
+    },
     plugins: [
       wasm(),
       topLevelAwait()
