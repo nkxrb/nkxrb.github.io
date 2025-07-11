@@ -11,6 +11,7 @@ const sidebar = [
 const navbar = [
   { text: '首页', link: '/' },
   { text: '原创', link: '/original/' },
+  { text: '常用工具', link: '/tools/' },
   { text: '手写Vue', link: '/mini-vue/v0_0_1' },
   { text: '收录', link: '/collection/' },
   { text: '笔记', link: '/note/' },
@@ -26,4 +27,4 @@ const navbar = [
 //   '/': sidebars // 从前到后顺序匹配，必须放在最后
 // }
 
-export { sidebar, navbar }
+export { navbar, sidebar }
