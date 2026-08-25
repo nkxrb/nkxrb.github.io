@@ -106,6 +106,14 @@
 
       <div class="journey-divider" aria-hidden="true"><span /><i /><span /></div>
 
+      <LifeInsights
+        :profile="profile"
+        :records="recordsData"
+        :growth-stages="growthStagesData"
+        :diaper-usage="diaperUsageData"
+        :today="today"
+      />
+
       <section class="dashboard-section vaccine-section" aria-labelledby="vaccine-title">
         <header class="section-heading section-heading--vaccines">
           <div>
@@ -225,6 +233,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import avatarUrl from '../../../../life/assets/avatar.jpg'
+import LifeInsights from '../life-insights/LifeInsights.vue'
 import {
   ensureLifeData,
   lifeData,
@@ -268,6 +277,9 @@ const profile = computed(() => lifeData.value?.profile ?? emptyProfile)
 const anchorsData = computed(() => lifeData.value?.anchors ?? [])
 const milestonesData = computed(() => lifeData.value?.milestones ?? [])
 const vaccinesData = computed(() => lifeData.value?.vaccines ?? [])
+const recordsData = computed(() => lifeData.value?.records ?? [])
+const growthStagesData = computed(() => lifeData.value?.growthStages ?? [])
+const diaperUsageData = computed(() => lifeData.value?.diaperUsage ?? [])
 const birthDate = computed(() => parseDate(profile.value.birth_date))
 const today = ref(startOfDay(new Date()))
 const defaultCompletedIds = computed(() => vaccinesData.value

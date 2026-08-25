@@ -44,6 +44,22 @@ export interface LifeVaccine {
   detail: string
 }
 
+export interface LifeGrowthStage {
+  id: string
+  label: string
+  start_month: number
+  end_month: number
+  theme: string
+  body: string
+  vision: string
+  motor: string[]
+  social: string[]
+  feeding: string
+  sleep: string
+  care: string[]
+  watch: string[]
+}
+
 export interface LifeRecordEntry {
   time: string
   note: string
@@ -55,12 +71,23 @@ export interface LifeRecordDay {
   entries: LifeRecordEntry[]
 }
 
+export interface LifeDiaperUsage {
+  date: string
+  size: string
+  used_count?: number
+  opened_count?: number
+  remaining_count?: number
+  note?: string
+}
+
 export interface LifeData {
   profile: LifeProfile
   anchors: LifeAnchor[]
   milestones: LifeMilestone[]
   vaccines: LifeVaccine[]
   records: LifeRecordDay[]
+  growthStages: LifeGrowthStage[]
+  diaperUsage: LifeDiaperUsage[]
 }
 
 interface ApiSecretConfig {
@@ -306,16 +333,27 @@ async function fetchGiteeJson<T>(fileName: string) {
   return JSON.parse(decodeBase64Utf8(payload.content)) as T
 }
 
+async function fetchOptionalGiteeJson<T>(fileName: string, fallback: T) {
+  try {
+    return await fetchGiteeJson<T>(fileName)
+  } catch (error) {
+    if (error instanceof Error && error.message.includes(`${fileName} 404`)) return fallback
+    throw error
+  }
+}
+
 async function loadLifeData() {
-  const [profile, anchors, milestones, vaccines, records] = await Promise.all([
+  const [profile, anchors, milestones, vaccines, records, growthStages, diaperUsage] = await Promise.all([
     fetchGiteeJson<LifeProfile>('profile.json'),
     fetchGiteeJson<LifeAnchor[]>('anchors.json'),
     fetchGiteeJson<LifeMilestone[]>('milestones.json'),
     fetchGiteeJson<LifeVaccine[]>('vaccines.json'),
-    fetchGiteeJson<LifeRecordDay[]>('newborn-records.json')
+    fetchGiteeJson<LifeRecordDay[]>('newborn-records.json'),
+    fetchGiteeJson<LifeGrowthStage[]>('growth-stages.json'),
+    fetchOptionalGiteeJson<LifeDiaperUsage[]>('diaper-usage.json', [])
   ])
 
-  return { profile, anchors, milestones, vaccines, records }
+  return { profile, anchors, milestones, vaccines, records, growthStages, diaperUsage }
 }
 
 export async function ensureLifeData(options: { force?: boolean } = {}) {
