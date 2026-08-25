@@ -10,6 +10,7 @@ const sidebar = [
 
 const navbar = [
   { text: '首页', link: '/' },
+  { text: '一生时光', link: '/life/' },
   { text: '原创', link: '/original/' },
   { text: '常用工具', link: '/tools/' },
   { text: '手写Vue', link: '/mini-vue/v0_0_1' },
