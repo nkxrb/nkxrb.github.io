@@ -1,6 +1,20 @@
 <template>
   <main class="life-app">
-    <section
+    <div v-if="isDataLoading" class="life-loading" role="status">
+      <strong>正在同步家庭数据</strong>
+      <span>通过 Gitee 数据仓库读取最新记录</span>
+    </div>
+    <div v-else-if="dataError" class="life-loading life-loading--error" role="alert">
+      <strong>数据加载失败</strong>
+      <span>{{ dataError }}</span>
+      <form v-if="isSecretRequired" class="life-secret-form" @submit.prevent="submitDataSecret">
+        <input v-model="dataSecret" type="password" placeholder="数据访问密钥" autocomplete="current-password">
+        <button type="submit">同步</button>
+      </form>
+      <button type="button" @click="reloadData">重试</button>
+    </div>
+    <template v-else>
+      <section
       class="hero"
       :class="{ 'is-flipping': isFlipping }"
       aria-label="生命时光总览"
@@ -204,19 +218,27 @@
         </section>
       </div>
     </Transition>
+    </template>
   </main>
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import anchorsData from '../../../../life/data/anchors.json'
-import milestonesData from '../../../../life/data/milestones.json'
-import profileData from '../../../../life/data/profile.json'
-import vaccinesData from '../../../../life/data/vaccines.json'
 import avatarUrl from '../../../../life/assets/avatar.jpg'
+import {
+  ensureLifeData,
+  lifeData,
+  lifeDataError,
+  lifeDataLoading,
+  lifeDataSecretRequired,
+  setLifeDataSecret,
+  type LifeAnchor,
+  type LifeProfile,
+  type LifeVaccine
+} from '../life-data'
 
-type Anchor = typeof anchorsData[number]
-type Vaccine = typeof vaccinesData[number]
+type Anchor = LifeAnchor
+type Vaccine = LifeVaccine
 type VaccineStatus = 'completed' | 'overdue' | 'pending'
 
 interface VaccineRow extends Vaccine {
@@ -231,13 +253,27 @@ interface VaccineRow extends Vaccine {
 }
 
 const DAY_MS = 86_400_000
-const profile = profileData
-const birthDate = parseDate(profile.birth_date)
+const emptyProfile: LifeProfile = {
+  name: '',
+  birth_date: '1970-01-01',
+  birth_time: '',
+  avatar: '',
+  bazi: [],
+  bazi_labels: [],
+  vaccine_grace_days: 30,
+  storage_key: 'life-dashboard-vaccine-completions',
+  version: ''
+}
+const profile = computed(() => lifeData.value?.profile ?? emptyProfile)
+const anchorsData = computed(() => lifeData.value?.anchors ?? [])
+const milestonesData = computed(() => lifeData.value?.milestones ?? [])
+const vaccinesData = computed(() => lifeData.value?.vaccines ?? [])
+const birthDate = computed(() => parseDate(profile.value.birth_date))
 const today = ref(startOfDay(new Date()))
-const defaultCompletedIds = vaccinesData
+const defaultCompletedIds = computed(() => vaccinesData.value
   .filter(hasActualDate)
-  .map(vaccine => vaccine.id)
-const completedIds = ref<Set<number>>(new Set(defaultCompletedIds))
+  .map(vaccine => vaccine.id))
+const completedIds = ref<Set<number>>(new Set())
 const isFlipping = ref(false)
 const showConfetti = ref(false)
 const toastMessage = ref('')
@@ -245,11 +281,16 @@ const sheetVaccine = ref<VaccineRow | null>(null)
 const infoVaccine = ref<VaccineRow | null>(null)
 const importInput = ref<HTMLInputElement | null>(null)
 const highlightedId = ref<number | null>(null)
+const dataSecret = ref('')
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined
 let flipTimer: ReturnType<typeof setTimeout> | undefined
 let confettiTimer: ReturnType<typeof setTimeout> | undefined
 let highlightTimer: ReturnType<typeof setTimeout> | undefined
+
+const isDataLoading = computed(() => lifeDataLoading.value && !lifeData.value)
+const dataError = computed(() => !lifeData.value ? lifeDataError.value : '')
+const isSecretRequired = computed(() => lifeDataSecretRequired.value)
 
 function parseDate(value: string) {
   const [year, month, day] = value.split('-').map(Number)
@@ -307,13 +348,13 @@ function nextAnnualDate(date: Date, reference: Date) {
     : new Date(reference.getFullYear() + 1, date.getMonth(), date.getDate())
 }
 
-const totalDays = computed(() => Math.max(0, dayDiff(today.value, birthDate)))
+const totalDays = computed(() => Math.max(0, dayDiff(today.value, birthDate.value)))
 const ageText = computed(() => {
-  const age = preciseAge(birthDate, today.value)
+  const age = preciseAge(birthDate.value, today.value)
   return `${age.years}岁 ${age.months}个月 ${age.days}天`
 })
 
-const anchorCards = computed(() => anchorsData.map((anchor: Anchor) => {
+const anchorCards = computed(() => anchorsData.value.map((anchor: Anchor) => {
   const date = parseDate(anchor.date)
   const days = Math.max(0, dayDiff(today.value, date))
 
@@ -349,16 +390,16 @@ const anchorCards = computed(() => anchorsData.map((anchor: Anchor) => {
   }
 }))
 
-const visibleMilestones = computed(() => milestonesData.map(item => ({
+const visibleMilestones = computed(() => milestonesData.value.map(item => ({
   ...item,
   isFuture: parseDate(item.date) > today.value
 })))
 
-const vaccineRows = computed<VaccineRow[]>(() => vaccinesData.map((vaccine: Vaccine) => {
-  const date = addMonths(birthDate, vaccine.offset_months)
+const vaccineRows = computed<VaccineRow[]>(() => vaccinesData.value.map((vaccine: Vaccine) => {
+  const date = addMonths(birthDate.value, vaccine.offset_months)
   const daysUntil = dayDiff(date, today.value)
   const completed = completedIds.value.has(vaccine.id)
-  const overdue = !completed && daysUntil < -profile.vaccine_grace_days
+  const overdue = !completed && daysUntil < -profile.value.vaccine_grace_days
   const status: VaccineStatus = completed ? 'completed' : overdue ? 'overdue' : 'pending'
   const statusMeta = {
     completed: { label: '已完成', icon: '✓' },
@@ -383,7 +424,7 @@ const completedCount = computed(() => vaccineRows.value.filter(item => item.stat
 const nextReminder = computed(() => {
   const incomplete = vaccineRows.value.filter(item => item.status !== 'completed')
   const overdue = incomplete.filter(item => item.status === 'overdue')
-  const next = incomplete.find(item => item.daysUntil >= -profile.vaccine_grace_days)
+  const next = incomplete.find(item => item.daysUntil >= -profile.value.vaccine_grace_days)
 
   if (overdue.length) {
     const item = overdue[0]
@@ -455,7 +496,7 @@ function closeSheet() {
 }
 
 function saveCompleted() {
-  localStorage.setItem(profile.storage_key, JSON.stringify([...completedIds.value].sort((a, b) => a - b)))
+  localStorage.setItem(profile.value.storage_key, JSON.stringify([...completedIds.value].sort((a, b) => a - b)))
 }
 
 function confirmStatusChange() {
@@ -477,7 +518,7 @@ function confirmStatusChange() {
 function exportMarks() {
   const payload = {
     app: '一生时光 · 健康守护板',
-    version: profile.version,
+    version: profile.value.version,
     exported_at: new Date().toISOString(),
     completed_vaccine_ids: [...completedIds.value].sort((a, b) => a - b)
   }
@@ -502,7 +543,7 @@ async function importMarks(event: Event) {
   try {
     const payload = JSON.parse(await file.text())
     if (!Array.isArray(payload.completed_vaccine_ids)) throw new Error('invalid data')
-    const validIds = new Set(vaccinesData.map(item => item.id))
+    const validIds = new Set(vaccinesData.value.map(item => item.id))
     const restored = payload.completed_vaccine_ids
       .map(Number)
       .filter((id: number) => Number.isInteger(id) && validIds.has(id))
@@ -526,16 +567,38 @@ function confettiStyle(piece: number) {
   }
 }
 
-onMounted(() => {
+function restoreCompletedIds() {
+  const nextIds = new Set(defaultCompletedIds.value)
   try {
-    const stored = localStorage.getItem(profile.storage_key)
+    const stored = localStorage.getItem(profile.value.storage_key)
     if (stored !== null) {
       const saved = JSON.parse(stored)
-      if (Array.isArray(saved)) completedIds.value = new Set(saved.map(Number).filter(Number.isInteger))
+      if (Array.isArray(saved)) {
+        completedIds.value = new Set(saved.map(Number).filter(Number.isInteger))
+        return
+      }
     }
   } catch {
-    localStorage.removeItem(profile.storage_key)
+    localStorage.removeItem(profile.value.storage_key)
   }
+
+  completedIds.value = nextIds
+}
+
+async function reloadData() {
+  await ensureLifeData({ force: true })
+  if (lifeData.value) restoreCompletedIds()
+}
+
+async function submitDataSecret() {
+  await setLifeDataSecret(dataSecret.value)
+  if (lifeData.value) restoreCompletedIds()
+}
+
+onMounted(async () => {
+  await ensureLifeData()
+  if (!lifeData.value) return
+  restoreCompletedIds()
 
   if (totalDays.value > 0 && totalDays.value % 100 === 0) {
     const celebrationKey = `life-dashboard-celebration-${toIsoDate(today.value)}`

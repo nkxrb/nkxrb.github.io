@@ -1,6 +1,20 @@
 <template>
   <main class="calendar-app">
-    <header class="calendar-hero">
+    <div v-if="isDataLoading" class="calendar-loading" role="status">
+      <strong>正在同步成长日历</strong>
+      <span>通过 Gitee 数据仓库读取最新记录</span>
+    </div>
+    <div v-else-if="dataError" class="calendar-loading calendar-loading--error" role="alert">
+      <strong>数据加载失败</strong>
+      <span>{{ dataError }}</span>
+      <form v-if="isSecretRequired" class="calendar-secret-form" @submit.prevent="submitDataSecret">
+        <input v-model="dataSecret" type="password" placeholder="数据访问密钥" autocomplete="current-password">
+        <button type="submit">同步</button>
+      </form>
+      <button type="button" @click="reloadData">重试</button>
+    </div>
+    <template v-else>
+      <header class="calendar-hero">
       <a href="/life/" class="back-link"><span aria-hidden="true">←</span> 守护板</a>
       <img :src="avatarUrl" :alt="`${profile.name}的头像`">
       <div>
@@ -86,33 +100,62 @@
         </div>
       </section>
     </div>
-    <footer class="calendar-footer">原始家庭记录静态保存于本页面 · 日期星期由浏览器自动计算</footer>
+    <footer class="calendar-footer">原始家庭记录由 Gitee 数据仓库同步 · 日期星期由浏览器自动计算</footer>
+    </template>
   </main>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import avatarUrl from '../../../../life/assets/avatar.jpg'
-import milestonesData from '../../../../life/data/milestones.json'
-import recordsData from '../../../../life/data/newborn-records.json'
-import profile from '../../../../life/data/profile.json'
+import {
+  ensureLifeData,
+  lifeData,
+  lifeDataError,
+  lifeDataLoading,
+  lifeDataSecretRequired,
+  setLifeDataSecret,
+  type LifeMilestone,
+  type LifeProfile,
+  type LifeRecordDay,
+  type LifeRecordEntry
+} from '../life-data'
 
-type Entry = typeof recordsData[number]['entries'][number]
+type Entry = LifeRecordEntry
 
 const weekNames = ['一', '二', '三', '四', '五', '六', '日']
-const availableMonths = [...new Set(recordsData.map(day => day.date.slice(0, 7)))].sort()
-const latestRecord = recordsData[recordsData.length - 1]
-const selectedDate = ref(latestRecord.date)
-const [initialYear, initialMonth] = latestRecord.date.split('-').map(Number)
-const activeYear = ref(initialYear)
-const activeMonth = ref(initialMonth - 1)
+const emptyProfile: LifeProfile = {
+  name: '',
+  birth_date: '1970-01-01',
+  birth_time: '',
+  avatar: '',
+  bazi: [],
+  bazi_labels: [],
+  vaccine_grace_days: 30,
+  storage_key: 'life-dashboard-vaccine-completions',
+  version: ''
+}
+const profile = computed(() => lifeData.value?.profile ?? emptyProfile)
+const recordsData = computed<LifeRecordDay[]>(() => lifeData.value?.records ?? [])
+const milestonesData = computed<LifeMilestone[]>(() => lifeData.value?.milestones ?? [])
+const selectedDate = ref('')
+const activeYear = ref(0)
+const activeMonth = ref(0)
+const dataSecret = ref('')
+const isDataLoading = computed(() => lifeDataLoading.value && !lifeData.value)
+const dataError = computed(() => !lifeData.value ? lifeDataError.value : '')
+const isSecretRequired = computed(() => lifeDataSecretRequired.value)
 
-const recordMap = new Map(recordsData.map(day => [day.date, day.entries]))
-const milestoneMap = new Map<string, typeof milestonesData>()
-milestonesData.forEach(item => {
-  const list = milestoneMap.get(item.date) || []
-  list.push(item)
-  milestoneMap.set(item.date, list)
+const availableMonths = computed(() => [...new Set(recordsData.value.map(day => day.date.slice(0, 7)))].sort())
+const recordMap = computed(() => new Map(recordsData.value.map(day => [day.date, day.entries])))
+const milestoneMap = computed(() => {
+  const map = new Map<string, LifeMilestone[]>()
+  milestonesData.value.forEach(item => {
+    const list = map.get(item.date) || []
+    list.push(item)
+    map.set(item.date, list)
+  })
+  return map
 })
 
 function parseDate(value: string) {
@@ -130,44 +173,48 @@ function dayDiff(later: Date, earlier: Date) {
 
 const todayIso = toIso(new Date())
 const currentMonthKey = computed(() => `${activeYear.value}-${String(activeMonth.value + 1).padStart(2, '0')}`)
-const currentMonthIndex = computed(() => availableMonths.indexOf(currentMonthKey.value))
+const currentMonthIndex = computed(() => availableMonths.value.indexOf(currentMonthKey.value))
 const canGoPrevious = computed(() => currentMonthIndex.value > 0)
-const canGoNext = computed(() => currentMonthIndex.value >= 0 && currentMonthIndex.value < availableMonths.length - 1)
-const monthRecordCount = computed(() => recordsData
+const canGoNext = computed(() => currentMonthIndex.value >= 0 && currentMonthIndex.value < availableMonths.value.length - 1)
+const monthRecordCount = computed(() => recordsData.value
   .filter(day => day.date.startsWith(currentMonthKey.value))
   .reduce((sum, day) => sum + day.entries.length, 0))
 
 const calendarCells = computed(() => {
+  if (!selectedDate.value) return []
   const first = new Date(activeYear.value, activeMonth.value, 1)
   const mondayIndex = (first.getDay() + 6) % 7
   const gridStart = new Date(activeYear.value, activeMonth.value, 1 - mondayIndex)
   return Array.from({ length: 42 }, (_, index) => {
     const date = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + index)
     const iso = toIso(date)
-    const count = recordMap.get(iso)?.length || 0
+    const count = recordMap.value.get(iso)?.length || 0
     const weekday = new Intl.DateTimeFormat('zh-CN', { weekday: 'long' }).format(date)
     return {
       key: iso,
       iso,
       day: date.getDate(),
       count,
-      special: milestoneMap.has(iso),
+      special: milestoneMap.value.has(iso),
       inMonth: date.getMonth() === activeMonth.value,
       ariaLabel: `${date.getMonth() + 1}月${date.getDate()}日，${weekday}${count ? `，${count}条记录` : ''}`
     }
   })
 })
 
-const selectedEntries = computed<Entry[]>(() => recordMap.get(selectedDate.value) || [])
-const selectedMilestones = computed(() => milestoneMap.get(selectedDate.value) || [])
+const selectedEntries = computed<Entry[]>(() => recordMap.value.get(selectedDate.value) || [])
+const selectedMilestones = computed(() => milestoneMap.value.get(selectedDate.value) || [])
 const selectedDateLabel = computed(() => {
+  if (!selectedDate.value) return { date: '', weekday: '' }
   const date = parseDate(selectedDate.value)
   return {
     date: `${date.getMonth() + 1}月${date.getDate()}日`,
     weekday: new Intl.DateTimeFormat('zh-CN', { weekday: 'long' }).format(date)
   }
 })
-const selectedLifeDay = computed(() => Math.max(1, dayDiff(parseDate(selectedDate.value), parseDate(profile.birth_date)) + 1))
+const selectedLifeDay = computed(() => selectedDate.value
+  ? Math.max(1, dayDiff(parseDate(selectedDate.value), parseDate(profile.value.birth_date)) + 1)
+  : 1)
 const dailySummary = computed(() => selectedEntries.value.reduce((summary, entry) => {
   if (/母乳|奶粉/.test(entry.note)) summary.feeding += 1
   if (/大便|屎/.test(entry.note)) summary.stool += 1
@@ -182,13 +229,41 @@ function selectDate(iso: string) {
 
 function moveMonth(direction: number) {
   const targetIndex = currentMonthIndex.value + direction
-  if (targetIndex < 0 || targetIndex >= availableMonths.length) return
-  const [year, month] = availableMonths[targetIndex].split('-').map(Number)
+  if (targetIndex < 0 || targetIndex >= availableMonths.value.length) return
+  const [year, month] = availableMonths.value[targetIndex].split('-').map(Number)
   activeYear.value = year
   activeMonth.value = month - 1
-  const monthRecords = recordsData.filter(day => day.date.startsWith(availableMonths[targetIndex]))
+  const monthRecords = recordsData.value.filter(day => day.date.startsWith(availableMonths.value[targetIndex]))
   if (monthRecords.length) selectedDate.value = monthRecords[monthRecords.length - 1].date
 }
+
+function syncInitialSelection(records: LifeRecordDay[]) {
+  if (!records.length) return
+  if (selectedDate.value && recordMap.value.has(selectedDate.value)) return
+
+  const latestRecord = records[records.length - 1]
+  selectedDate.value = latestRecord.date
+  const [year, month] = latestRecord.date.split('-').map(Number)
+  activeYear.value = year
+  activeMonth.value = month - 1
+}
+
+async function reloadData() {
+  await ensureLifeData({ force: true })
+  syncInitialSelection(recordsData.value)
+}
+
+async function submitDataSecret() {
+  await setLifeDataSecret(dataSecret.value)
+  syncInitialSelection(recordsData.value)
+}
+
+watch(recordsData, syncInitialSelection)
+
+onMounted(async () => {
+  await ensureLifeData()
+  syncInitialSelection(recordsData.value)
+})
 </script>
 
 <style scoped src="./life-calendar.css"></style>

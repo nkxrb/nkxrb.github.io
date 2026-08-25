@@ -16,6 +16,69 @@
   font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
+.calendar-loading {
+  display: flex;
+  min-height: 100vh;
+  padding: 24px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.calendar-loading strong {
+  color: var(--forest);
+  font-family: Georgia, 'Noto Serif SC', serif;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.calendar-loading span {
+  max-width: 280px;
+  font-size: 12px;
+}
+
+.calendar-loading button {
+  min-width: 92px;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 999px;
+  margin-top: 8px;
+  color: white;
+  background: var(--green-deep);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.calendar-secret-form {
+  display: flex;
+  width: min(100%, 320px);
+  margin-top: 6px;
+  gap: 8px;
+}
+
+.calendar-secret-form input {
+  min-width: 0;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgb(22 63 58 / 14%);
+  border-radius: 999px;
+  flex: 1;
+  color: var(--forest);
+  background: rgb(255 254 249 / 88%);
+  font-size: 12px;
+}
+
+.calendar-secret-form button {
+  margin-top: 0;
+}
+
+.calendar-loading--error strong {
+  color: #c7563f;
+}
+
 .calendar-hero {
   position: relative;
   display: flex;

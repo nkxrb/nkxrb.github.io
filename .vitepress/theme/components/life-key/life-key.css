@@ -1,0 +1,129 @@
+:global(html) {
+  background: #f7f5ee;
+}
+
+:global(body) {
+  margin: 0;
+}
+
+:global(*) {
+  box-sizing: border-box;
+}
+
+.life-key-page {
+  --forest: #163f3a;
+  --green: #2a9d8f;
+  --green-deep: #1f776e;
+  --gold: #e9c46a;
+  --muted: #6f817d;
+  display: grid;
+  min-height: 100vh;
+  padding: 24px;
+  place-items: center;
+  color: var(--forest);
+  background:
+    radial-gradient(circle at 12% 12%, rgb(42 157 143 / 11%), transparent 23rem),
+    linear-gradient(180deg, #f4f0e5 0, #f7f5ee 100%);
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.life-key-panel {
+  width: min(100%, 420px);
+  padding: 30px 24px;
+  border: 1px solid rgb(22 63 58 / 10%);
+  border-radius: 6px;
+  background: rgb(255 254 249 / 84%);
+  box-shadow: 0 18px 52px rgb(22 63 58 / 8%);
+}
+
+.life-key-panel p {
+  margin: 0;
+  color: var(--gold);
+  font: 500 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .18em;
+}
+
+.life-key-panel h1 {
+  margin: 8px 0 24px;
+  font-family: Georgia, 'Noto Serif SC', serif;
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.life-key-panel form {
+  display: grid;
+  gap: 14px;
+}
+
+.life-key-panel label,
+.life-key-panel label span {
+  display: block;
+}
+
+.life-key-panel label span {
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.life-key-panel input {
+  width: 100%;
+  height: 42px;
+  padding: 0 13px;
+  border: 1px solid rgb(22 63 58 / 14%);
+  border-radius: 4px;
+  color: var(--forest);
+  background: white;
+  font-size: 14px;
+}
+
+.life-key-panel button,
+.life-key-actions a {
+  display: inline-flex;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 4px;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: var(--green-deep);
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.life-key-panel button:disabled {
+  opacity: .6;
+  cursor: default;
+}
+
+.life-key-actions {
+  display: flex;
+  margin-top: 14px;
+  gap: 10px;
+}
+
+.life-key-actions button {
+  color: var(--green-deep);
+  background: #dcefe9;
+}
+
+.life-key-message {
+  display: block;
+  margin-top: 16px;
+  color: var(--green-deep);
+  font-size: 12px;
+}
+
+.life-key-message.is-error {
+  color: #c7563f;
+}
+
+.life-key-panel small {
+  display: block;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
