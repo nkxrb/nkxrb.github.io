@@ -2,7 +2,7 @@
   <main class="life-app">
     <div v-if="isDataLoading" class="life-loading" role="status">
       <strong>正在载入家庭数据</strong>
-      <span>有密钥时读取 Gitee 最新数据，否则读取 life/data 静态数据</span>
+      <span>有密钥时同步最新数据，否则读取本地静态数据</span>
     </div>
     <div v-else-if="dataError" class="life-loading life-loading--error" role="alert">
       <strong>数据加载失败</strong>
@@ -26,14 +26,10 @@
         <i v-for="piece in 18" :key="piece" :style="confettiStyle(piece)" />
       </div>
 
-      <a class="hero__back" href="/" aria-label="返回站点首页" @click.stop>
-        <span aria-hidden="true">←</span>
-        <span>返回</span>
-      </a>
       <img class="hero__avatar" :src="avatarUrl" :alt="`${profile.name}的头像`">
       <p class="hero__eyebrow">{{ profile.name }} · LIFETIME</p>
       <div class="hero__number" aria-live="polite">{{ formatNumber(totalDays) }}</div>
-      <p class="hero__unit">来到世界的第 {{ formatNumber(totalDays + 1) }} 天</p>
+      <p class="hero__unit">{{ nameInterpretation }}</p>
       <div class="hero__rule"><span /></div>
       <p class="hero__age">生于 {{ formatDate(birthDate) }} {{ profile.birth_time }} · 现年 {{ ageText }}</p>
       <p class="hero__hint"><span aria-hidden="true">⌁</span> 轻触数字，重温这一刻</p>
@@ -45,10 +41,19 @@
           <span>生辰八字</span>
           <strong>四柱留印 · 岁月作笺</strong>
         </div>
-        <div class="bazi-grid">
-          <div v-for="(pillar, index) in profile.bazi" :key="pillar">
-            <span>{{ profile.bazi_labels[index] }}</span>
-            <strong>{{ pillar }}</strong>
+        <div class="identity-card__details">
+          <div class="bazi-grid">
+            <div v-for="(pillar, index) in profile.bazi" :key="pillar">
+              <span>{{ profile.bazi_labels[index] }}</span>
+              <strong>{{ pillar }}</strong>
+            </div>
+          </div>
+          <div class="five-elements" aria-label="五行属性">
+            <div v-for="item in fiveElementRows" :key="item.name">
+              <span>{{ item.name }}</span>
+              <strong>{{ item.count }}</strong>
+              <i :style="{ width: `${item.width}%` }" />
+            </div>
           </div>
         </div>
       </section>
@@ -274,7 +279,7 @@ import {
   lifeDataLoading,
   lifeDataSecretRequired,
   setLifeDataSecret,
-  updateVaccineRecordsToGitee,
+  updateVaccineRecordsToRemote,
   type LifeAnchor,
   type LifeVaccineRecords,
   type LifeProfile,
@@ -405,6 +410,48 @@ const totalDays = computed(() => Math.max(0, dayDiff(today.value, birthDate.valu
 const ageText = computed(() => {
   const age = preciseAge(birthDate.value, today.value)
   return `${age.years}岁 ${age.months}个月 ${age.days}天`
+})
+const nameInterpretation = computed(() => {
+  const name = profile.value.name || '王翊安'
+  if (name === '王翊安') return '翊有翱翔九天之志，安有健康无忧之福。'
+  return `${name}，愿一生舒展从容，平安有光。`
+})
+const fiveElementRows = computed(() => {
+  const elementMap: Record<string, string> = {
+    甲: '木',
+    乙: '木',
+    寅: '木',
+    卯: '木',
+    丙: '火',
+    丁: '火',
+    巳: '火',
+    午: '火',
+    戊: '土',
+    己: '土',
+    辰: '土',
+    戌: '土',
+    丑: '土',
+    未: '土',
+    庚: '金',
+    辛: '金',
+    申: '金',
+    酉: '金',
+    壬: '水',
+    癸: '水',
+    亥: '水',
+    子: '水'
+  }
+  const counts = { 木: 0, 火: 0, 土: 0, 金: 0, 水: 0 }
+  for (const char of profile.value.bazi.join('')) {
+    const element = elementMap[char] as keyof typeof counts | undefined
+    if (element) counts[element] += 1
+  }
+  const maxCount = Math.max(1, ...Object.values(counts))
+  return (Object.keys(counts) as Array<keyof typeof counts>).map(name => ({
+    name,
+    count: counts[name],
+    width: Math.max(8, counts[name] / maxCount * 100)
+  }))
 })
 
 const anchorCards = computed(() => anchorsData.value.map((anchor: Anchor) => {
@@ -576,7 +623,7 @@ function currentVaccineRecords(nextIds = completedIds.value, nextOptionalIds = s
 
 async function saveVaccineRecords(records: LifeVaccineRecords, successMessage: string) {
   if (!canEditMarks.value) return
-  await updateVaccineRecordsToGitee(records)
+  await updateVaccineRecordsToRemote(records)
   restoreVaccineState()
   showToast(successMessage)
 }
@@ -591,7 +638,7 @@ async function confirmStatusChange() {
   try {
     await saveVaccineRecords(
       currentVaccineRecords(nextIds),
-      wasCompleted ? '已撤销完成标记' : '已写入接种记录'
+      wasCompleted ? '已撤销完成标记' : '更新成功'
     )
     completedIds.value = nextIds
     if (!wasCompleted) {
@@ -601,7 +648,7 @@ async function confirmStatusChange() {
     }
     closeSheet()
   } catch {
-    showToast('Gitee 写入失败，请稍后重试')
+    showToast('更新失败')
   }
 }
 
@@ -668,7 +715,7 @@ async function toggleOptionalVaccine(id: number) {
   try {
     await saveVaccineRecords(currentVaccineRecords(completedIds.value, nextOptionalIds), '自费疫苗选择已更新')
   } catch {
-    showToast('Gitee 写入失败，请稍后重试')
+    showToast('更新失败')
   }
 }
 

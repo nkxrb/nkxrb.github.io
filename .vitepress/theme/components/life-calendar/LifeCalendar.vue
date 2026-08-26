@@ -2,7 +2,7 @@
   <main class="calendar-app">
     <div v-if="isDataLoading" class="calendar-loading" role="status">
       <strong>正在载入成长日历</strong>
-      <span>有密钥时读取 Gitee 最新记录，否则读取 life/data 静态记录</span>
+      <span>有密钥时同步最新记录，否则读取本地静态记录</span>
     </div>
     <div v-else-if="dataError" class="calendar-loading calendar-loading--error" role="alert">
       <strong>数据加载失败</strong>
@@ -72,13 +72,13 @@
             <strong>{{ selectedEntries.length }}<small>条记录</small></strong>
           </header>
 
-          <section v-if="canEditRecords" class="record-editor" aria-label="新增记录">
+          <section v-if="canEditRecords" class="record-editor" aria-label="添加记录">
             <header>
               <div>
                 <span>{{ editingRecord ? 'EDIT RECORD' : 'NEW RECORD' }}</span>
-                <strong>{{ editingRecord ? '编辑照护记录' : '新增照护记录' }}</strong>
+                <strong>{{ editingRecord ? '修改照护记录' : '添加记录' }}</strong>
               </div>
-              <em>{{ pendingRecordCount ? `待同步 ${pendingRecordCount} 条` : '写入 Gitee' }}</em>
+              <em>{{ pendingSyncCount ? `待同步 ${pendingSyncCount} 条` : '实时保存' }}</em>
             </header>
 
             <div class="record-fields">
@@ -104,6 +104,21 @@
               </label>
             </div>
 
+            <div class="record-fields record-fields--growth">
+              <label>
+                <span>体重 斤</span>
+                <input v-model.number="recordForm.weight_jin" type="number" min="0" step="0.1" inputmode="decimal">
+              </label>
+              <label>
+                <span>身高 cm</span>
+                <input v-model.number="recordForm.height_cm" type="number" min="0" step="0.1" inputmode="decimal">
+              </label>
+              <label>
+                <span>头围 cm</span>
+                <input v-model.number="recordForm.head_circumference_cm" type="number" min="0" step="0.1" inputmode="decimal">
+              </label>
+            </div>
+
             <label class="record-note">
               <span>备注</span>
               <textarea v-model="recordForm.note" rows="3" placeholder="奶量、状态、地点或其他补充"></textarea>
@@ -111,11 +126,11 @@
 
             <div class="editor-actions">
               <button type="button" class="editor-primary" :disabled="isSavingRecord" @click="saveRecord">
-                {{ isSavingRecord ? '写入中' : editingRecord ? '保存修改' : '保存记录' }}
+                {{ isSavingRecord ? '保存中' : editingRecord ? '更新记录' : '添加记录' }}
               </button>
-              <button v-if="editingRecord" type="button" :disabled="isSavingRecord" @click="cancelEditing">取消编辑</button>
-              <button type="button" :disabled="!pendingRecordCount || isSavingRecord" @click="flushPendingRecords">补写待同步</button>
-              <button type="button" :disabled="!pendingRecordCount || isSavingRecord" @click="clearPendingRecords">清空待同步</button>
+              <button v-if="editingRecord" type="button" :disabled="isSavingRecord" @click="cancelEditing">取消修改</button>
+              <button type="button" :disabled="!pendingSyncCount || isSavingRecord" @click="flushPendingRecords">补写待同步</button>
+              <button type="button" :disabled="!pendingSyncCount || isSavingRecord" @click="clearPendingRecords">清空待同步</button>
             </div>
           </section>
 
@@ -133,6 +148,14 @@
             <div><span>护理/营养</span><strong>{{ dailySummary.care }}</strong></div>
           </div>
 
+          <div v-if="selectedMeasurements.length" class="day-measurements">
+            <article v-for="item in selectedMeasurements" :key="item.local_id || item.date">
+              <span>生长数据</span>
+              <strong>{{ formatMeasurement(item) }}</strong>
+              <small v-if="item.note">{{ item.note }}</small>
+            </article>
+          </div>
+
           <ol v-if="selectedEntries.length" class="record-timeline">
             <li
               v-for="(entry, index) in selectedEntries"
@@ -144,21 +167,21 @@
               <div class="record-timeline__content">
                 <p>{{ entry.note }}<small v-if="entry.source === 'pending'">待同步</small></p>
                 <div v-if="canEditRecords" class="record-row-actions">
-                  <button type="button" :disabled="isSavingRecord" @click="startEditing(entry)">编辑</button>
+                  <button type="button" :disabled="isSavingRecord" @click="startEditing(entry)">修改</button>
                   <button type="button" :disabled="isSavingRecord" @click="deleteRecord(entry)">删除</button>
                 </div>
               </div>
             </li>
           </ol>
-          <div v-else class="empty-day">
+          <div v-if="!selectedEntries.length && !selectedMeasurements.length" class="empty-day">
             <span aria-hidden="true">☁</span>
             <strong>这一天还没有日记</strong>
-            <p>{{ canEditRecords ? '可以在上方新增照护记录。' : '请选择带绿色标记的日期查看记录。' }}</p>
+            <p>{{ canEditRecords ? '可以在上方添加记录。' : '请选择带绿色标记的日期查看记录。' }}</p>
           </div>
         </section>
       </div>
 
-      <footer class="calendar-footer">原始家庭记录来自 life/data 静态数据 · 新增记录优先写入 Gitee</footer>
+      <footer class="calendar-footer">原始家庭记录来自本地静态数据 · 新增记录实时同步</footer>
 
       <Transition name="calendar-toast">
         <div v-if="toastMessage" class="calendar-toast" role="status">{{ toastMessage }}</div>
@@ -171,9 +194,9 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import avatarUrl from '../../../../life/assets/avatar.jpg'
 import {
-  appendLifeRecordToGitee,
-  appendLifeRecordsToGitee,
-  deleteLifeRecordFromGitee,
+  appendLifeRecordToRemote,
+  appendLifeRecordsToRemote,
+  deleteLifeRecordFromRemote,
   ensureLifeData,
   hasLifeDataSecret,
   lifeData,
@@ -181,7 +204,9 @@ import {
   lifeDataLoading,
   lifeDataSecretRequired,
   setLifeDataSecret,
-  updateLifeRecordInGitee,
+  updateLifeRecordInRemote,
+  upsertBodyMeasurementToRemote,
+  type LifeBodyMeasurement,
   type LifeMilestone,
   type LifeProfile,
   type LifeRecordCategory,
@@ -203,6 +228,7 @@ interface EditingRecord {
 }
 
 const PENDING_RECORDS_KEY = 'life-calendar-pending-records-v1'
+const PENDING_MEASUREMENTS_KEY = 'life-body-measurements-pending-v1'
 const weekNames = ['一', '二', '三', '四', '五', '六', '日']
 const recordOptions: RecordOption[] = [
   { id: 'breastfeeding', label: '母乳' },
@@ -212,6 +238,11 @@ const recordOptions: RecordOption[] = [
   { id: 'clothes', label: '换洗衣服' },
   { id: 'bath', label: '洗澡' },
   { id: 'vaccine', label: '打疫苗' },
+  { id: 'sleep', label: '睡眠' },
+  { id: 'food', label: '辅食' },
+  { id: 'teeth', label: '出牙' },
+  { id: 'medicine', label: '用药' },
+  { id: 'play', label: '游戏互动' },
   { id: 'special', label: '其他特殊事件' }
 ]
 const categoryPatterns: Record<LifeRecordCategory, RegExp> = {
@@ -222,6 +253,11 @@ const categoryPatterns: Record<LifeRecordCategory, RegExp> = {
   clothes: /换洗衣服|换衣服/,
   bath: /洗澡|擦洗/,
   vaccine: /打疫苗|疫苗|接种/,
+  sleep: /睡眠|夜醒|小睡|入睡/,
+  food: /辅食|过敏|米粉|食材/,
+  teeth: /出牙|流口水|牙龈|涂氟/,
+  medicine: /用药|发热|咳嗽|维生素|AD|钙/,
+  play: /游戏|互动|亲子|发声|回应/,
   special: /特殊|脐带|发热|生病|医院/
 }
 const emptyProfile: LifeProfile = {
@@ -238,6 +274,7 @@ const emptyProfile: LifeProfile = {
 
 const profile = computed(() => lifeData.value?.profile ?? emptyProfile)
 const staticRecordsData = computed<LifeRecordDay[]>(() => lifeData.value?.records ?? [])
+const staticMeasurementsData = computed<LifeBodyMeasurement[]>(() => lifeData.value?.bodyMeasurements ?? [])
 const milestonesData = computed<LifeMilestone[]>(() => lifeData.value?.milestones ?? [])
 const selectedDate = ref('')
 const activeYear = ref(0)
@@ -245,6 +282,7 @@ const activeMonth = ref(0)
 const dataSecret = ref('')
 const canEditRecords = ref(false)
 const pendingRecords = ref<LifeRecordDay[]>([])
+const pendingMeasurements = ref<LifeBodyMeasurement[]>([])
 const toastMessage = ref('')
 const isSavingRecord = ref(false)
 const editingRecord = ref<EditingRecord | null>(null)
@@ -252,6 +290,9 @@ const recordForm = reactive({
   date: '',
   time: '',
   categories: [] as LifeRecordCategory[],
+  weight_jin: undefined as number | undefined,
+  height_cm: undefined as number | undefined,
+  head_circumference_cm: undefined as number | undefined,
   note: ''
 })
 
@@ -265,7 +306,13 @@ const recordsData = computed<LifeRecordDay[]>(() => mergeRecordDays(
   staticRecordsData.value,
   canEditRecords.value ? pendingRecords.value : []
 ))
+const measurementsData = computed<LifeBodyMeasurement[]>(() => mergeMeasurements(
+  staticMeasurementsData.value,
+  canEditRecords.value ? pendingMeasurements.value : []
+))
 const pendingRecordCount = computed(() => pendingRecords.value.reduce((sum, day) => sum + day.entries.length, 0))
+const pendingMeasurementCount = computed(() => pendingMeasurements.value.length)
+const pendingSyncCount = computed(() => pendingRecordCount.value + pendingMeasurementCount.value)
 const availableMonths = computed(() => {
   const months = new Set(recordsData.value.map(day => day.date.slice(0, 7)))
   if (canEditRecords.value) months.add(todayIso.slice(0, 7))
@@ -324,6 +371,13 @@ function mergeRecordDays(staticRecords: LifeRecordDay[], draftRecords: LifeRecor
     .sort((a, b) => a.date.localeCompare(b.date))
 }
 
+function mergeMeasurements(staticMeasurements: LifeBodyMeasurement[], draftMeasurements: LifeBodyMeasurement[]) {
+  const map = new Map<string, LifeBodyMeasurement>()
+  for (const item of staticMeasurements) map.set(item.date, { ...item, source: 'static' })
+  for (const item of draftMeasurements) map.set(item.date, { ...item, source: 'pending' })
+  return [...map.values()].sort((a, b) => a.date.localeCompare(b.date))
+}
+
 const currentMonthKey = computed(() => `${activeYear.value}-${String(activeMonth.value + 1).padStart(2, '0')}`)
 const currentMonthIndex = computed(() => availableMonths.value.indexOf(currentMonthKey.value))
 const canGoPrevious = computed(() => currentMonthIndex.value > 0)
@@ -355,6 +409,7 @@ const calendarCells = computed(() => {
 })
 
 const selectedEntries = computed<Entry[]>(() => recordMap.value.get(selectedDate.value) || [])
+const selectedMeasurements = computed(() => measurementsData.value.filter(item => item.date === selectedDate.value))
 const selectedMilestones = computed(() => milestoneMap.value.get(selectedDate.value) || [])
 const selectedDateLabel = computed(() => {
   if (!selectedDate.value) return { date: '', weekday: '' }
@@ -440,8 +495,30 @@ function restorePendingRecords() {
   }
 }
 
+function restorePendingMeasurements() {
+  if (!canEditRecords.value) {
+    pendingMeasurements.value = []
+    return
+  }
+
+  try {
+    const stored = localStorage.getItem(PENDING_MEASUREMENTS_KEY)
+    const parsed = stored ? JSON.parse(stored) : []
+    pendingMeasurements.value = Array.isArray(parsed)
+      ? parsed.filter(item => typeof item?.date === 'string')
+      : []
+  } catch {
+    localStorage.removeItem(PENDING_MEASUREMENTS_KEY)
+    pendingMeasurements.value = []
+  }
+}
+
 function savePendingRecords() {
   localStorage.setItem(PENDING_RECORDS_KEY, JSON.stringify(pendingRecords.value))
+}
+
+function savePendingMeasurements() {
+  localStorage.setItem(PENDING_MEASUREMENTS_KEY, JSON.stringify(pendingMeasurements.value))
 }
 
 function upsertPendingRecord(date: string, entry: LifeRecordEntry) {
@@ -455,6 +532,11 @@ function upsertPendingRecord(date: string, entry: LifeRecordEntry) {
 
   pendingRecords.value = nextRecords.sort((a, b) => a.date.localeCompare(b.date))
   savePendingRecords()
+}
+
+function upsertPendingMeasurement(measurement: LifeBodyMeasurement) {
+  pendingMeasurements.value = mergeMeasurements(pendingMeasurements.value, [measurement])
+  savePendingMeasurements()
 }
 
 function replacePendingRecord(locator: LifeRecordLocator, nextDate: string, nextEntry: LifeRecordEntry) {
@@ -519,22 +601,78 @@ function stripCategoryLabels(note: string, categories: LifeRecordCategory[]) {
     .join('，')
 }
 
+function numberValue(value: unknown) {
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined
+}
+
+function roundMeasurement(value: number, digits = 1) {
+  const ratio = 10 ** digits
+  return Math.round(value * ratio) / ratio
+}
+
+function measurementWeightJin(item: LifeBodyMeasurement) {
+  if (typeof item.weight_jin === 'number') return item.weight_jin
+  if (typeof item.weight_kg === 'number') return roundMeasurement(item.weight_kg * 2, 1)
+  return undefined
+}
+
+function buildMeasurementParts() {
+  return [
+    typeof numberValue(recordForm.weight_jin) === 'number' ? `体重${numberValue(recordForm.weight_jin)}斤` : '',
+    typeof numberValue(recordForm.height_cm) === 'number' ? `身高${numberValue(recordForm.height_cm)}cm` : '',
+    typeof numberValue(recordForm.head_circumference_cm) === 'number' ? `头围${numberValue(recordForm.head_circumference_cm)}cm` : ''
+  ].filter(Boolean)
+}
+
+function buildBodyMeasurement(date: string, time: string, note: string): LifeBodyMeasurement | null {
+  const weightJin = numberValue(recordForm.weight_jin)
+  const heightCm = numberValue(recordForm.height_cm)
+  const headCircumferenceCm = numberValue(recordForm.head_circumference_cm)
+  if (
+    typeof weightJin !== 'number' &&
+    typeof heightCm !== 'number' &&
+    typeof headCircumferenceCm !== 'number'
+  ) return null
+
+  return {
+    date,
+    time,
+    ...(typeof weightJin === 'number' ? { weight_jin: roundMeasurement(weightJin, 1) } : {}),
+    ...(typeof heightCm === 'number' ? { height_cm: roundMeasurement(heightCm, 1) } : {}),
+    ...(typeof headCircumferenceCm === 'number' ? { head_circumference_cm: roundMeasurement(headCircumferenceCm, 1) } : {}),
+    ...(note ? { note } : {}),
+    created_at: editingRecord.value ? undefined : new Date().toISOString(),
+    local_id: editingRecord.value?.locator.local_id ? `measure-${editingRecord.value.locator.local_id}` : `measure-${Date.now()}`
+  }
+}
+
+function formatMeasurement(item: LifeBodyMeasurement) {
+  return [
+    typeof measurementWeightJin(item) === 'number' ? `体重${measurementWeightJin(item)}斤` : '',
+    typeof item.height_cm === 'number' ? `身高${item.height_cm}cm` : '',
+    typeof item.head_circumference_cm === 'number' ? `头围${item.head_circumference_cm}cm` : ''
+  ].filter(Boolean).join(' / ')
+}
+
 function buildRecordEntry() {
   const date = recordForm.date || selectedDate.value || todayIso
   const time = recordForm.time || currentTime()
   const labels = recordForm.categories
     .map(category => recordOptions.find(option => option.id === category)?.label)
     .filter((label): label is string => Boolean(label))
-  const note = [...labels, recordForm.note.trim()].filter(Boolean).join('，')
+  const noteText = recordForm.note.trim()
+  const measurementParts = buildMeasurementParts()
+  const note = [...labels, ...measurementParts, noteText].filter(Boolean).join('，')
 
   if (!date || !time || !note) return null
 
   return {
     date,
+    measurement: buildBodyMeasurement(date, time, noteText),
     entry: {
       time,
       note,
-      special: recordForm.categories.includes('special') || recordForm.categories.includes('vaccine'),
+      special: recordForm.categories.includes('special') || recordForm.categories.includes('vaccine') || recordForm.categories.includes('medicine'),
       categories: [...recordForm.categories],
       created_at: editingRecord.value ? undefined : new Date().toISOString(),
       local_id: editingRecord.value?.locator.local_id || `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
@@ -545,6 +683,9 @@ function buildRecordEntry() {
 function resetRecordForm() {
   recordForm.time = currentTime()
   recordForm.categories = []
+  recordForm.weight_jin = undefined
+  recordForm.height_cm = undefined
+  recordForm.head_circumference_cm = undefined
   recordForm.note = ''
 }
 
@@ -555,24 +696,29 @@ function cancelEditing() {
 }
 
 async function flushPendingRecords() {
-  if (!canEditRecords.value || !pendingRecordCount.value || isSavingRecord.value) return
+  if (!canEditRecords.value || !pendingSyncCount.value || isSavingRecord.value) return
 
   isSavingRecord.value = true
   try {
     await syncPendingRecords()
   } catch {
-    showToast('Gitee 暂不可用，待同步记录已保留')
+    showToast('同步失败，待同步记录已保留')
   } finally {
     isSavingRecord.value = false
   }
 }
 
 async function syncPendingRecords() {
-  await appendLifeRecordsToGitee(pendingRecords.value)
+  if (pendingRecords.value.length) await appendLifeRecordsToRemote(pendingRecords.value)
+  for (const item of pendingMeasurements.value) {
+    await upsertBodyMeasurementToRemote(item)
+  }
   pendingRecords.value = []
+  pendingMeasurements.value = []
   localStorage.removeItem(PENDING_RECORDS_KEY)
+  localStorage.removeItem(PENDING_MEASUREMENTS_KEY)
   syncInitialSelection(recordsData.value)
-  showToast('待同步记录已写入 Gitee')
+  showToast('待同步记录已同步')
 }
 
 async function saveRecord() {
@@ -581,7 +727,7 @@ async function saveRecord() {
     showToast('请至少选择一个事件或填写备注')
     return
   }
-  const { date, entry } = payload
+  const { date, entry, measurement } = payload
 
   isSavingRecord.value = true
   if (editingRecord.value) {
@@ -591,14 +737,15 @@ async function saveRecord() {
         replacePendingRecord(currentEditing.locator, date, entry)
         showToast('待同步记录已修改')
       } else {
-        await updateLifeRecordInGitee(currentEditing.locator, date, entry)
-        showToast('记录已更新')
+        await updateLifeRecordInRemote(currentEditing.locator, date, entry)
       }
+      if (measurement) await upsertBodyMeasurementToRemote(measurement)
+      showToast('更新成功')
       selectDate(date)
       setActiveMonthFromIso(date)
       cancelEditing()
     } catch {
-      showToast('记录更新失败，请刷新后重试')
+      showToast('更新失败')
     } finally {
       isSavingRecord.value = false
     }
@@ -606,24 +753,26 @@ async function saveRecord() {
   }
 
   try {
-    await appendLifeRecordToGitee(date, entry)
+    if (measurement) await upsertBodyMeasurementToRemote(measurement)
+    await appendLifeRecordToRemote(date, entry)
     selectDate(date)
     setActiveMonthFromIso(date)
     resetRecordForm()
-    showToast('记录已写入 Gitee')
-    if (pendingRecordCount.value) {
+    showToast('添加成功')
+    if (pendingSyncCount.value) {
       try {
         await syncPendingRecords()
       } catch {
-        showToast('记录已写入 Gitee，待同步记录稍后重试')
+        showToast('添加成功')
       }
     }
   } catch {
     upsertPendingRecord(date, entry)
+    if (measurement) upsertPendingMeasurement(measurement)
     selectDate(date)
     setActiveMonthFromIso(date)
     resetRecordForm()
-    showToast('Gitee 写入失败，已暂存待同步')
+    showToast('添加失败，已暂存')
   } finally {
     isSavingRecord.value = false
   }
@@ -639,6 +788,9 @@ function startEditing(entry: LifeRecordEntry) {
   recordForm.date = selectedDate.value || todayIso
   recordForm.time = entry.time.match(/^\d{1,2}:\d{2}/)?.[0] || currentTime()
   recordForm.categories = [...categories]
+  recordForm.weight_jin = undefined
+  recordForm.height_cm = undefined
+  recordForm.head_circumference_cm = undefined
   recordForm.note = stripCategoryLabels(entry.note, categories)
 }
 
@@ -653,7 +805,7 @@ async function deleteRecord(entry: LifeRecordEntry) {
       removePendingRecord(locator)
       showToast('待同步记录已删除')
     } else {
-      await deleteLifeRecordFromGitee(locator)
+      await deleteLifeRecordFromRemote(locator)
       showToast('记录已删除')
     }
     if (editingRecord.value && recordMatches(locator.date, locator, editingRecord.value.locator)) cancelEditing()
@@ -665,10 +817,12 @@ async function deleteRecord(entry: LifeRecordEntry) {
 }
 
 function clearPendingRecords() {
-  if (!pendingRecordCount.value) return
+  if (!pendingSyncCount.value) return
   if (!window.confirm('清空待同步记录？')) return
   pendingRecords.value = []
+  pendingMeasurements.value = []
   localStorage.removeItem(PENDING_RECORDS_KEY)
+  localStorage.removeItem(PENDING_MEASUREMENTS_KEY)
   syncInitialSelection(recordsData.value)
   showToast('待同步记录已清空')
 }
@@ -682,6 +836,7 @@ async function submitDataSecret() {
   await setLifeDataSecret(dataSecret.value)
   canEditRecords.value = hasLifeDataSecret()
   restorePendingRecords()
+  restorePendingMeasurements()
   syncInitialSelection(recordsData.value)
   void flushPendingRecords()
 }
@@ -693,6 +848,7 @@ onMounted(async () => {
   recordForm.date = todayIso
   recordForm.time = currentTime()
   restorePendingRecords()
+  restorePendingMeasurements()
   await ensureLifeData()
   syncInitialSelection(recordsData.value)
   void flushPendingRecords()

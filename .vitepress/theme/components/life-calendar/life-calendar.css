@@ -328,6 +328,11 @@ a {
   gap: 10px;
 }
 
+.record-fields--growth {
+  margin-top: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .record-fields label,
 .record-note {
   display: grid;
@@ -455,6 +460,39 @@ a {
 .day-summary span { color: var(--muted); font-size: 8px; }
 .day-summary strong { margin-top: 2px; color: var(--green-deep); font: 500 18px/1.2 ui-monospace, monospace; }
 
+.day-measurements {
+  display: grid;
+  margin-top: 12px;
+  gap: 8px;
+}
+
+.day-measurements article {
+  padding: 12px;
+  border: 1px solid rgb(42 157 143 / 12%);
+  border-radius: 2px 12px 2px 2px;
+  background: rgb(220 239 233 / 30%);
+}
+
+.day-measurements span,
+.day-measurements small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.day-measurements strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--forest);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.day-measurements small {
+  margin-top: 5px;
+  font-size: 10px;
+}
+
 .record-timeline { padding: 0; margin: 0; list-style: none; }
 .record-timeline li { display: grid; min-height: 42px; grid-template-columns: 82px 17px 1fr; }
 .record-timeline time { padding-top: 2px; color: var(--green-deep); font: 500 9px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
@@ -535,7 +573,7 @@ a {
   .day-cell { font-size: 12px; }
   .day-panel { min-height: 610px; }
   .event-picker { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .editor-actions { grid-template-columns: minmax(0, 1.2fr) minmax(0, .9fr) minmax(0, .9fr); }
+  .editor-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 @media (max-width: 390px) {

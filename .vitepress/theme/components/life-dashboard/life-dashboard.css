@@ -168,29 +168,6 @@ a {
   animation-delay: -5s;
 }
 
-.hero__back {
-  position: absolute;
-  top: max(24px, env(safe-area-inset-top));
-  left: 22px;
-  display: inline-flex;
-  padding: 8px 12px;
-  border: 1px solid rgb(255 255 255 / 22%);
-  border-radius: 999px;
-  gap: 6px;
-  align-items: center;
-  color: rgb(255 255 255 / 80%);
-  background: rgb(5 33 30 / 16%);
-  font-size: 12px;
-  letter-spacing: .08em;
-  text-decoration: none;
-  backdrop-filter: blur(8px);
-}
-
-.hero__back:hover {
-  color: white;
-  border-color: rgb(255 255 255 / 40%);
-}
-
 .hero__eyebrow,
 .section-kicker {
   margin: 0;
@@ -319,6 +296,11 @@ a {
   font-weight: 500;
 }
 
+.identity-card__details {
+  display: grid;
+  gap: 12px;
+}
+
 .bazi-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -350,6 +332,39 @@ a {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: .12em;
+}
+
+.five-elements {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.five-elements div {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+}
+
+.five-elements span {
+  color: var(--muted);
+  font-size: 9px;
+  text-align: center;
+}
+
+.five-elements strong {
+  color: var(--forest);
+  font: 600 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-align: center;
+}
+
+.five-elements i {
+  display: block;
+  min-width: 8px;
+  height: 3px;
+  border-radius: 999px;
+  margin: 0 auto;
+  background: var(--green);
 }
 
 .dashboard-section {
@@ -1295,11 +1310,6 @@ a {
 @media (min-width: 720px) {
   .hero {
     min-height: 660px;
-  }
-
-  .hero__back {
-    top: 30px;
-    left: 34px;
   }
 
   .dashboard-section {

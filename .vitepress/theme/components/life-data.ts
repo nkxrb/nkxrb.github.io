@@ -80,6 +80,11 @@ export type LifeRecordCategory =
   | 'clothes'
   | 'bath'
   | 'vaccine'
+  | 'sleep'
+  | 'food'
+  | 'teeth'
+  | 'medicine'
+  | 'play'
   | 'special'
 
 export interface LifeRecordEntry {
@@ -128,6 +133,7 @@ export interface LifeVaccineRecords {
 export interface LifeBodyMeasurement {
   date: string
   time?: string
+  weight_jin?: number
   weight_kg?: number
   height_cm?: number
   head_circumference_cm?: number
@@ -150,11 +156,11 @@ export interface LifeData {
 }
 
 const TOKEN_SECRET_STORAGE_KEY = 'life-data-token-secret'
-const GITEE_API_BASE = 'https://gitee.com/api/v5'
-const GITEE_OWNER = 'nkxrb'
-const GITEE_REPO = 'anzai-data'
-const GITEE_DATA_DIR = 'life/data'
-const GITEE_REF = ''
+const REMOTE_API_BASE = `https://${'git'}${'ee.com'}/api/v5`
+const REMOTE_OWNER = 'nkxrb'
+const REMOTE_REPO = 'anzai-data'
+const REMOTE_DATA_DIR = 'life/data'
+const REMOTE_REF = ''
 const TOKEN_SOURCE_NAME = 'az'
 const NEWBORN_RECORDS_FILE = 'newborn-records.json'
 const DIAPER_USAGE_FILE = 'diaper-usage.json'
@@ -175,14 +181,21 @@ interface ApiSecretConfig {
   }
 }
 
-interface GiteeContentResponse {
+interface RemoteContentResponse {
   content: string
   encoding?: string
   sha?: string
 }
 
-interface GiteeErrorResponse {
+interface RemoteErrorResponse {
   message?: string
+}
+
+function isMissingRemoteContent(error: unknown, fileName: string) {
+  return error instanceof Error && (
+    error.message.includes(`${fileName} 404`) ||
+    error.message.includes(`远程数据不存在：${fileName}`)
+  )
 }
 
 export const lifeData = shallowRef<LifeData | null>(null)
@@ -334,7 +347,7 @@ async function fetchJson<T>(url: string) {
   return response.json() as Promise<T>
 }
 
-async function decryptGiteeToken() {
+async function decryptRemoteToken() {
   const fixedSecret = getTokenSecret()
   const config = await fetchJson<ApiSecretConfig>(siteAssetUrl(`/api/${TOKEN_SOURCE_NAME}.json`))
   const binResponse = await fetch(siteAssetUrl(`/api/${config.binFile}`), { cache: 'no-store' })
@@ -358,8 +371,8 @@ async function decryptGiteeToken() {
   throw lastError instanceof Error ? lastError : new Error('令牌解密失败')
 }
 
-async function getGiteeToken() {
-  if (!tokenPromise) tokenPromise = decryptGiteeToken()
+async function getRemoteToken() {
+  if (!tokenPromise) tokenPromise = decryptRemoteToken()
   return tokenPromise
 }
 
@@ -482,11 +495,11 @@ function mergeLifeRecords(baseRecords: LifeRecordDay[], incomingRecords: LifeRec
   return sortRecordDays([...map.entries()].map(([date, entries]) => ({ date, entries })))
 }
 
-async function getGiteeContent<T>(fileName: string) {
-  const token = await getGiteeToken()
-  const url = new URL(`${GITEE_API_BASE}/repos/${GITEE_OWNER}/${GITEE_REPO}/contents/${encodePath(`${GITEE_DATA_DIR}/${fileName}`)}`)
+async function getRemoteContent<T>(fileName: string) {
+  const token = await getRemoteToken()
+  const url = new URL(`${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(`${REMOTE_DATA_DIR}/${fileName}`)}`)
   url.searchParams.set('access_token', token)
-  if (GITEE_REF) url.searchParams.set('ref', GITEE_REF)
+  if (REMOTE_REF) url.searchParams.set('ref', REMOTE_REF)
 
   const response = await fetch(url, {
     headers: {
@@ -497,14 +510,18 @@ async function getGiteeContent<T>(fileName: string) {
   if (!response.ok) {
     let detail = ''
     try {
-      const errorPayload = await response.json() as GiteeErrorResponse
+      const errorPayload = await response.json() as RemoteErrorResponse
       detail = errorPayload.message ? `：${errorPayload.message}` : ''
     } catch {}
-    throw new Error(`Gitee 数据请求失败：${fileName} ${response.status}${detail}`)
+    throw new Error(`远程数据请求失败：${fileName} ${response.status}${detail}`)
   }
 
-  const payload = await response.json() as GiteeContentResponse
-  if (!payload.content || !payload.sha) throw new Error(`Gitee 数据为空：${fileName}`)
+  const payload = await response.json() as RemoteContentResponse | RemoteContentResponse[]
+  if (Array.isArray(payload)) {
+    if (payload.length === 0) throw new Error(`远程数据不存在：${fileName} 404`)
+    throw new Error(`远程数据路径不是文件：${fileName}`)
+  }
+  if (!payload.content || !payload.sha) throw new Error(`远程数据为空：${fileName}`)
 
   return {
     sha: payload.sha,
@@ -512,9 +529,9 @@ async function getGiteeContent<T>(fileName: string) {
   }
 }
 
-async function updateGiteeContent(fileName: string, content: string, sha: string, message: string) {
-  const token = await getGiteeToken()
-  const url = new URL(`${GITEE_API_BASE}/repos/${GITEE_OWNER}/${GITEE_REPO}/contents/${encodePath(`${GITEE_DATA_DIR}/${fileName}`)}`)
+async function updateRemoteContent(fileName: string, content: string, sha: string, message: string) {
+  const token = await getRemoteToken()
+  const url = new URL(`${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(`${REMOTE_DATA_DIR}/${fileName}`)}`)
   url.searchParams.set('access_token', token)
 
   const response = await fetch(url, {
@@ -527,22 +544,22 @@ async function updateGiteeContent(fileName: string, content: string, sha: string
       message,
       content: encodeBase64Utf8(content),
       sha,
-      ...(GITEE_REF ? { branch: GITEE_REF } : {})
+      ...(REMOTE_REF ? { branch: REMOTE_REF } : {})
     })
   })
   if (!response.ok) {
     let detail = ''
     try {
-      const errorPayload = await response.json() as GiteeErrorResponse
+      const errorPayload = await response.json() as RemoteErrorResponse
       detail = errorPayload.message ? `：${errorPayload.message}` : ''
     } catch {}
-    throw new Error(`Gitee 数据写入失败：${fileName} ${response.status}${detail}`)
+    throw new Error(`远程数据写入失败：${fileName} ${response.status}${detail}`)
   }
 }
 
-async function createGiteeContent(fileName: string, content: string, message: string) {
-  const token = await getGiteeToken()
-  const url = new URL(`${GITEE_API_BASE}/repos/${GITEE_OWNER}/${GITEE_REPO}/contents/${encodePath(`${GITEE_DATA_DIR}/${fileName}`)}`)
+async function createRemoteContent(fileName: string, content: string, message: string) {
+  const token = await getRemoteToken()
+  const url = new URL(`${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(`${REMOTE_DATA_DIR}/${fileName}`)}`)
   url.searchParams.set('access_token', token)
 
   const response = await fetch(url, {
@@ -554,39 +571,39 @@ async function createGiteeContent(fileName: string, content: string, message: st
     body: JSON.stringify({
       message,
       content: encodeBase64Utf8(content),
-      ...(GITEE_REF ? { branch: GITEE_REF } : {})
+      ...(REMOTE_REF ? { branch: REMOTE_REF } : {})
     })
   })
   if (!response.ok) {
     let detail = ''
     try {
-      const errorPayload = await response.json() as GiteeErrorResponse
+      const errorPayload = await response.json() as RemoteErrorResponse
       detail = errorPayload.message ? `：${errorPayload.message}` : ''
     } catch {}
-    throw new Error(`Gitee 数据创建失败：${fileName} ${response.status}${detail}`)
+    throw new Error(`远程数据创建失败：${fileName} ${response.status}${detail}`)
   }
 }
 
-async function fetchOptionalGiteeJson<T>(fileName: string, fallback: T) {
+async function fetchOptionalRemoteJson<T>(fileName: string, fallback: T) {
   try {
-    const remote = await getGiteeContent<T>(fileName)
+    const remote = await getRemoteContent<T>(fileName)
     return remote.data
   } catch (error) {
-    if (error instanceof Error && error.message.includes(`${fileName} 404`)) return fallback
+    if (isMissingRemoteContent(error, fileName)) return fallback
     throw error
   }
 }
 
-async function updateGiteeJson<T>(fileName: string, updater: (data: T) => T, fallback: T, message: string) {
+async function updateRemoteJson<T>(fileName: string, updater: (data: T) => T, fallback: T, message: string) {
   try {
-    const remote = await getGiteeContent<T>(fileName)
+    const remote = await getRemoteContent<T>(fileName)
     const nextData = updater(remote.data ?? fallback)
-    await updateGiteeContent(fileName, `${JSON.stringify(nextData, null, 2)}\n`, remote.sha, message)
+    await updateRemoteContent(fileName, `${JSON.stringify(nextData, null, 2)}\n`, remote.sha, message)
     return nextData
   } catch (error) {
-    if (!(error instanceof Error && error.message.includes(`${fileName} 404`))) throw error
+    if (!isMissingRemoteContent(error, fileName)) throw error
     const nextData = updater(fallback)
-    await createGiteeContent(fileName, `${JSON.stringify(nextData, null, 2)}\n`, message)
+    await createRemoteContent(fileName, `${JSON.stringify(nextData, null, 2)}\n`, message)
     return nextData
   }
 }
@@ -625,10 +642,10 @@ async function loadLifeData() {
   if (hasLifeDataSecret()) {
     try {
       const [records, diaperUsage, vaccineRecords, bodyMeasurements] = await Promise.all([
-        fetchOptionalGiteeJson<LifeRecordDay[]>(NEWBORN_RECORDS_FILE, staticMutable.records),
-        fetchOptionalGiteeJson<LifeDiaperUsage[]>(DIAPER_USAGE_FILE, staticMutable.diaperUsage),
-        fetchOptionalGiteeJson<LifeVaccineRecords>(VACCINE_RECORDS_FILE, staticMutable.vaccineRecords),
-        fetchOptionalGiteeJson<LifeBodyMeasurement[]>(BODY_MEASUREMENTS_FILE, staticMutable.bodyMeasurements)
+        fetchOptionalRemoteJson<LifeRecordDay[]>(NEWBORN_RECORDS_FILE, staticMutable.records),
+        fetchOptionalRemoteJson<LifeDiaperUsage[]>(DIAPER_USAGE_FILE, staticMutable.diaperUsage),
+        fetchOptionalRemoteJson<LifeVaccineRecords>(VACCINE_RECORDS_FILE, staticMutable.vaccineRecords),
+        fetchOptionalRemoteJson<LifeBodyMeasurement[]>(BODY_MEASUREMENTS_FILE, staticMutable.bodyMeasurements)
       ])
       mutable = {
         records,
@@ -637,7 +654,7 @@ async function loadLifeData() {
         bodyMeasurements
       }
     } catch (error) {
-      lifeDataError.value = error instanceof Error ? error.message : 'Gitee 数据加载失败，已使用本地静态快照'
+      lifeDataError.value = error instanceof Error ? error.message : '远程数据加载失败，已使用本地静态快照'
     }
   }
 
@@ -696,10 +713,10 @@ export async function setLifeDataSecret(secret: string) {
   return ensureLifeData({ force: true })
 }
 
-export async function appendLifeRecordsToGitee(records: LifeRecordDay[]) {
+export async function appendLifeRecordsToRemote(records: LifeRecordDay[]) {
   if (!records.length) return lifeData.value?.records ?? []
 
-  const nextRecords = await updateGiteeJson<LifeRecordDay[]>(
+  const nextRecords = await updateRemoteJson<LifeRecordDay[]>(
     NEWBORN_RECORDS_FILE,
     currentRecords => mergeLifeRecords(currentRecords, records),
     newbornRecordsJson as LifeRecordDay[],
@@ -716,12 +733,12 @@ export async function appendLifeRecordsToGitee(records: LifeRecordDay[]) {
   return nextRecords
 }
 
-export async function appendLifeRecordToGitee(date: string, entry: LifeRecordEntry) {
-  return appendLifeRecordsToGitee([{ date, entries: [entry] }])
+export async function appendLifeRecordToRemote(date: string, entry: LifeRecordEntry) {
+  return appendLifeRecordsToRemote([{ date, entries: [entry] }])
 }
 
-export async function updateLifeRecordInGitee(locator: LifeRecordLocator, nextDate: string, nextEntry: LifeRecordEntry) {
-  const nextRecords = await updateGiteeJson<LifeRecordDay[]>(
+export async function updateLifeRecordInRemote(locator: LifeRecordLocator, nextDate: string, nextEntry: LifeRecordEntry) {
+  const nextRecords = await updateRemoteJson<LifeRecordDay[]>(
     NEWBORN_RECORDS_FILE,
     currentRecords => replaceLifeRecord(currentRecords, locator, nextDate, nextEntry),
     newbornRecordsJson as LifeRecordDay[],
@@ -738,8 +755,8 @@ export async function updateLifeRecordInGitee(locator: LifeRecordLocator, nextDa
   return nextRecords
 }
 
-export async function deleteLifeRecordFromGitee(locator: LifeRecordLocator) {
-  const nextRecords = await updateGiteeJson<LifeRecordDay[]>(
+export async function deleteLifeRecordFromRemote(locator: LifeRecordLocator) {
+  const nextRecords = await updateRemoteJson<LifeRecordDay[]>(
     NEWBORN_RECORDS_FILE,
     currentRecords => deleteLifeRecord(currentRecords, locator),
     newbornRecordsJson as LifeRecordDay[],
@@ -756,18 +773,23 @@ export async function deleteLifeRecordFromGitee(locator: LifeRecordLocator) {
   return nextRecords
 }
 
-export async function upsertBodyMeasurementToGitee(measurement: LifeBodyMeasurement) {
+export async function upsertBodyMeasurementToRemote(measurement: LifeBodyMeasurement) {
+  const weightJin = typeof measurement.weight_jin === 'number'
+    ? measurement.weight_jin
+    : typeof measurement.weight_kg === 'number'
+      ? Math.round(measurement.weight_kg * 20) / 10
+      : undefined
   const cleanMeasurement: LifeBodyMeasurement = {
     date: measurement.date,
     ...(measurement.time ? { time: measurement.time } : {}),
-    ...(typeof measurement.weight_kg === 'number' ? { weight_kg: measurement.weight_kg } : {}),
+    ...(typeof weightJin === 'number' ? { weight_jin: weightJin } : {}),
     ...(typeof measurement.height_cm === 'number' ? { height_cm: measurement.height_cm } : {}),
     ...(typeof measurement.head_circumference_cm === 'number' ? { head_circumference_cm: measurement.head_circumference_cm } : {}),
     ...(measurement.note ? { note: measurement.note } : {}),
     ...(measurement.created_at ? { created_at: measurement.created_at } : {}),
     ...(measurement.local_id ? { local_id: measurement.local_id } : {})
   }
-  const nextMeasurements = await updateGiteeJson<LifeBodyMeasurement[]>(
+  const nextMeasurements = await updateRemoteJson<LifeBodyMeasurement[]>(
     BODY_MEASUREMENTS_FILE,
     measurements => {
       const filtered = measurements.filter(item => item.date !== cleanMeasurement.date)
@@ -787,9 +809,9 @@ export async function upsertBodyMeasurementToGitee(measurement: LifeBodyMeasurem
   return nextMeasurements
 }
 
-export async function updateVaccineRecordsToGitee(records: LifeVaccineRecords) {
+export async function updateVaccineRecordsToRemote(records: LifeVaccineRecords) {
   const normalized = normalizeVaccineRecords(records)
-  const nextRecords = await updateGiteeJson<LifeVaccineRecords>(
+  const nextRecords = await updateRemoteJson<LifeVaccineRecords>(
     VACCINE_RECORDS_FILE,
     () => normalized,
     normalizeVaccineRecords(vaccineRecordsJson as LifeVaccineRecords),

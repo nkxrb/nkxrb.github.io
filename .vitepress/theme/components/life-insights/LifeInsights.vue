@@ -88,25 +88,6 @@
       </article>
     </div>
 
-    <section v-if="canEdit" class="measurement-editor" aria-label="记录身高体重">
-      <header class="mini-heading">
-        <span>BODY DATA</span>
-        <strong>{{ pendingMeasurementCount ? `待同步 ${pendingMeasurementCount} 条` : '写入 Gitee' }}</strong>
-      </header>
-      <div class="measurement-grid">
-        <label><span>日期</span><input v-model="measureForm.date" type="date"></label>
-        <label><span>体重 kg</span><input v-model.number="measureForm.weight_kg" type="number" min="0" step="0.01" inputmode="decimal"></label>
-        <label><span>身高 cm</span><input v-model.number="measureForm.height_cm" type="number" min="0" step="0.1" inputmode="decimal"></label>
-        <label><span>头围 cm</span><input v-model.number="measureForm.head_circumference_cm" type="number" min="0" step="0.1" inputmode="decimal"></label>
-      </div>
-      <textarea v-model="measureForm.note" rows="2" placeholder="测量状态或备注"></textarea>
-      <div class="measurement-actions">
-        <button type="button" :disabled="isSavingMeasurement" @click="saveMeasurement">{{ isSavingMeasurement ? '写入中' : '保存生长数据' }}</button>
-        <button type="button" :disabled="!pendingMeasurementCount || isSavingMeasurement" @click="flushPendingMeasurements">补写待同步</button>
-      </div>
-      <p v-if="measurementMessage" class="chart-note">{{ measurementMessage }}</p>
-    </section>
-
     <div class="chart-grid">
       <article class="chart-panel chart-panel--wide">
         <div class="mini-heading">
@@ -136,7 +117,7 @@
           />
         </svg>
         <div class="chart-legend">
-          <span><i class="is-weight" />体重</span>
+          <span><i class="is-weight" />体重（斤）</span>
           <span><i class="is-height" />身高</span>
         </div>
       </article>
@@ -247,7 +228,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed } from 'vue'
 import type {
   LifeBodyMeasurement,
   LifeDiaperUsage,
@@ -255,7 +236,6 @@ import type {
   LifeProfile,
   LifeRecordDay
 } from '../life-data'
-import { upsertBodyMeasurementToGitee } from '../life-data'
 
 interface DailyCareStat {
   date: string
@@ -292,8 +272,6 @@ const CHART_LEFT = 28
 const CHART_RIGHT = 344
 const CHART_TOP = 18
 const CHART_BOTTOM = 126
-const PENDING_MEASUREMENTS_KEY = 'life-body-measurements-pending-v1'
-
 const markers: Marker[] = [
   { label: '追视人脸', category: '视力', startMonth: 0, endMonth: 2 },
   { label: '俯卧抬头', category: '大运动', startMonth: 1, endMonth: 4 },
@@ -308,17 +286,6 @@ const markers: Marker[] = [
   { label: '跑跳探索', category: '大运动', startMonth: 18, endMonth: 24 },
   { label: '简单假装游戏', category: '认知社交', startMonth: 18, endMonth: 24 }
 ]
-
-const measureForm = reactive<LifeBodyMeasurement>({
-  date: toIsoDate(new Date()),
-  weight_kg: undefined,
-  height_cm: undefined,
-  head_circumference_cm: undefined,
-  note: ''
-})
-const pendingMeasurements = ref<LifeBodyMeasurement[]>([])
-const isSavingMeasurement = ref(false)
-const measurementMessage = ref('')
 
 const moreItems = [
   { kicker: 'SLEEP', title: '睡眠与夜醒', detail: '记录夜睡、小睡、入睡方式和夜醒次数，和喂养、出牙、运动发展一起观察。' },
@@ -365,10 +332,9 @@ const nextMarkerLabel = computed(() => {
 })
 
 const diaperUsageByDate = computed(() => new Map(props.diaperUsage.map(item => [item.date, item])))
-const allMeasurements = computed(() => mergeMeasurements(props.bodyMeasurements, props.canEdit ? pendingMeasurements.value : []))
+const allMeasurements = computed(() => mergeMeasurements(props.bodyMeasurements))
 const recentMeasurements = computed(() => allMeasurements.value.slice(-24))
 const latestMeasurement = computed(() => allMeasurements.value.at(-1))
-const pendingMeasurementCount = computed(() => pendingMeasurements.value.length)
 const dailyStats = computed<DailyCareStat[]>(() => props.records
   .map(day => {
     let stool = 0
@@ -438,13 +404,13 @@ const measurementSummary = computed(() => {
   const item = latestMeasurement.value
   if (!item) return '暂无身高体重记录'
   const parts = [
-    typeof item.weight_kg === 'number' ? `${item.weight_kg}kg` : '',
+    typeof measurementWeightJin(item) === 'number' ? `${measurementWeightJin(item)}斤` : '',
     typeof item.height_cm === 'number' ? `${item.height_cm}cm` : '',
     typeof item.head_circumference_cm === 'number' ? `头围${item.head_circumference_cm}cm` : ''
   ].filter(Boolean)
   return `${item.date} · ${parts.join(' / ')}`
 })
-const weightPoints = computed(() => measurementPoints('weight_kg'))
+const weightPoints = computed(() => measurementPoints('weight_jin'))
 const heightPoints = computed(() => measurementPoints('height_cm'))
 const weightLine = computed(() => weightPoints.value.map(point => `${point.x},${point.y}`).join(' '))
 const heightLine = computed(() => heightPoints.value.map(point => `${point.x},${point.y}`).join(' '))
@@ -452,10 +418,6 @@ const heightLine = computed(() => heightPoints.value.map(point => `${point.x},${
 function parseDate(value: string) {
   const [year, month, day] = value.split('-').map(Number)
   return new Date(year, month - 1, day)
-}
-
-function toIsoDate(date: Date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 }
 
 function dayDiff(later: Date, earlier: Date) {
@@ -505,17 +467,26 @@ function barItems(key: keyof Pick<DailyCareStat, 'breastfeeding' | 'diaper'>) {
   })
 }
 
-function mergeMeasurements(base: LifeBodyMeasurement[], pending: LifeBodyMeasurement[]) {
+function mergeMeasurements(base: LifeBodyMeasurement[]) {
   const map = new Map<string, LifeBodyMeasurement>()
   for (const item of base) map.set(item.date, { ...item, source: 'static' })
-  for (const item of pending) map.set(item.date, { ...item, source: 'pending' })
   return [...map.values()].sort((a, b) => a.date.localeCompare(b.date))
 }
 
-function measurementPoints(key: keyof Pick<LifeBodyMeasurement, 'weight_kg' | 'height_cm'>) {
-  const items = recentMeasurements.value.filter(item => typeof item[key] === 'number')
+function measurementWeightJin(item: LifeBodyMeasurement) {
+  if (typeof item.weight_jin === 'number') return item.weight_jin
+  if (typeof item.weight_kg === 'number') return Math.round(item.weight_kg * 20) / 10
+  return undefined
+}
+
+function measurementValue(item: LifeBodyMeasurement, key: 'weight_jin' | 'height_cm') {
+  return key === 'weight_jin' ? measurementWeightJin(item) : item.height_cm
+}
+
+function measurementPoints(key: 'weight_jin' | 'height_cm') {
+  const items = recentMeasurements.value.filter(item => typeof measurementValue(item, key) === 'number')
   if (!items.length) return []
-  const values = items.map(item => item[key] as number)
+  const values = items.map(item => measurementValue(item, key) as number)
   const minValue = Math.min(...values)
   const maxValue = Math.max(...values)
   const span = Math.max(0.1, maxValue - minValue)
@@ -524,93 +495,8 @@ function measurementPoints(key: keyof Pick<LifeBodyMeasurement, 'weight_kg' | 'h
   return items.map((item, index) => ({
     date: item.date,
     x: Math.round((CHART_LEFT + step * index) * 10) / 10,
-    y: Math.round((CHART_BOTTOM - ((item[key] as number) - minValue) / span * (CHART_BOTTOM - CHART_TOP)) * 10) / 10
+    y: Math.round((CHART_BOTTOM - ((measurementValue(item, key) as number) - minValue) / span * (CHART_BOTTOM - CHART_TOP)) * 10) / 10
   }))
-}
-
-function restorePendingMeasurements() {
-  if (!props.canEdit) return
-  try {
-    const stored = localStorage.getItem(PENDING_MEASUREMENTS_KEY)
-    const parsed = stored ? JSON.parse(stored) : []
-    pendingMeasurements.value = Array.isArray(parsed)
-      ? parsed.filter(item => typeof item?.date === 'string')
-      : []
-  } catch {
-    localStorage.removeItem(PENDING_MEASUREMENTS_KEY)
-    pendingMeasurements.value = []
-  }
-}
-
-function savePendingMeasurements() {
-  localStorage.setItem(PENDING_MEASUREMENTS_KEY, JSON.stringify(pendingMeasurements.value))
-}
-
-function upsertPendingMeasurement(measurement: LifeBodyMeasurement) {
-  pendingMeasurements.value = mergeMeasurements(pendingMeasurements.value, [measurement])
-  savePendingMeasurements()
-}
-
-async function syncPendingMeasurements() {
-  for (const item of pendingMeasurements.value) {
-    await upsertBodyMeasurementToGitee(item)
-  }
-  pendingMeasurements.value = []
-  localStorage.removeItem(PENDING_MEASUREMENTS_KEY)
-  measurementMessage.value = '待同步生长数据已写入 Gitee'
-}
-
-async function flushPendingMeasurements() {
-  if (!props.canEdit || !pendingMeasurementCount.value || isSavingMeasurement.value) return
-  isSavingMeasurement.value = true
-  try {
-    await syncPendingMeasurements()
-  } catch {
-    measurementMessage.value = 'Gitee 暂不可用，待同步生长数据已保留'
-  } finally {
-    isSavingMeasurement.value = false
-  }
-}
-
-async function saveMeasurement() {
-  if (!props.canEdit || isSavingMeasurement.value) return
-  const measurement: LifeBodyMeasurement = {
-    date: measureForm.date || toIsoDate(props.today),
-    ...(typeof measureForm.weight_kg === 'number' ? { weight_kg: measureForm.weight_kg } : {}),
-    ...(typeof measureForm.height_cm === 'number' ? { height_cm: measureForm.height_cm } : {}),
-    ...(typeof measureForm.head_circumference_cm === 'number' ? { head_circumference_cm: measureForm.head_circumference_cm } : {}),
-    ...(measureForm.note ? { note: measureForm.note } : {}),
-    created_at: new Date().toISOString(),
-    local_id: `measure-${Date.now()}`
-  }
-
-  if (
-    typeof measurement.weight_kg !== 'number' &&
-    typeof measurement.height_cm !== 'number' &&
-    typeof measurement.head_circumference_cm !== 'number'
-  ) {
-    measurementMessage.value = '请至少填写一项生长数据'
-    return
-  }
-
-  isSavingMeasurement.value = true
-  try {
-    await upsertBodyMeasurementToGitee(measurement)
-    measurementMessage.value = '生长数据已写入 Gitee'
-    measureForm.note = ''
-    if (pendingMeasurementCount.value) {
-      try {
-        await syncPendingMeasurements()
-      } catch {
-        measurementMessage.value = '生长数据已写入 Gitee，待同步数据稍后重试'
-      }
-    }
-  } catch {
-    upsertPendingMeasurement(measurement)
-    measurementMessage.value = 'Gitee 写入失败，已暂存待同步'
-  } finally {
-    isSavingMeasurement.value = false
-  }
 }
 
 function inferDiaperSize(dateValue?: string) {
@@ -632,16 +518,6 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
 }
 
-onMounted(() => {
-  restorePendingMeasurements()
-  void flushPendingMeasurements()
-})
-
-watch(() => props.canEdit, canEdit => {
-  if (!canEdit) return
-  restorePendingMeasurements()
-  void flushPendingMeasurements()
-})
 </script>
 
 <style scoped src="./life-insights.css"></style>

@@ -20,7 +20,7 @@
         <a href="/life/">打开守护板</a>
       </div>
       <span v-if="message" class="life-key-message" :class="{ 'is-error': isError }">{{ message }}</span>
-      <small>密钥仅保存在当前浏览器 localStorage 中，用于读取最新数据和写入编辑操作。</small>
+      <small>密钥仅保存在当前浏览器 localStorage 中，用于同步最新数据和修改记录。</small>
     </section>
   </main>
 </template>

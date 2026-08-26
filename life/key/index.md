@@ -1,6 +1,6 @@
 ---
 title: 一生时光数据密钥
-description: 保存一生时光数据访问与编辑密钥
+description: 保存一生时光数据访问与修改密钥
 layout: false
 sidebar: false
 aside: false
