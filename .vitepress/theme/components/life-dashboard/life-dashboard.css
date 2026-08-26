@@ -729,6 +729,36 @@ a {
   text-align: right;
 }
 
+.optional-vaccine-picker {
+  display: flex;
+  margin: 0 0 16px;
+  overflow-x: auto;
+  gap: 8px;
+  scrollbar-width: none;
+}
+
+.optional-vaccine-picker::-webkit-scrollbar {
+  display: none;
+}
+
+.optional-vaccine-picker button {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgb(42 157 143 / 14%);
+  border-radius: 999px;
+  flex: 0 0 auto;
+  color: var(--green-deep);
+  background: rgb(220 239 233 / 42%);
+  font-size: 11px;
+}
+
+.optional-vaccine-picker button.is-selected {
+  border-color: transparent;
+  color: white;
+  background: var(--green-deep);
+  box-shadow: 0 8px 18px rgb(31 119 110 / 16%);
+}
+
 .vaccine-timeline {
   padding: 0;
   margin: 0;
@@ -849,6 +879,18 @@ a {
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.vaccine-row__content strong em {
+  display: inline-flex;
+  padding: 2px 5px;
+  border-radius: 999px;
+  margin-left: 6px;
+  color: #9a6f13;
+  background: var(--gold-soft);
+  font-size: 9px;
+  font-style: normal;
+  vertical-align: 1px;
 }
 
 .vaccine-row__content time {
@@ -1101,6 +1143,51 @@ a {
   font-size: 9px;
 }
 
+.vaccine-precautions {
+  display: grid;
+  padding: 16px 0 2px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.vaccine-precautions article {
+  padding: 12px;
+  border-radius: 2px 14px 2px 2px;
+  background: rgb(220 239 233 / 34%);
+}
+
+.vaccine-precautions span {
+  color: var(--green-deep);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.vaccine-precautions ul {
+  padding: 0;
+  margin: 7px 0 0;
+  list-style: none;
+}
+
+.vaccine-precautions li {
+  position: relative;
+  padding-left: 12px;
+  margin-top: 6px;
+  color: #536863;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.vaccine-precautions li::before {
+  position: absolute;
+  top: .65em;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  content: '';
+  background: var(--gold);
+}
+
 .action-sheet__handle {
   width: 36px;
   height: 4px;
@@ -1317,6 +1404,10 @@ a {
     padding-right: 7px;
     padding-left: 7px;
     font-size: 9px;
+  }
+
+  .vaccine-precautions {
+    grid-template-columns: 1fr;
   }
 }
 

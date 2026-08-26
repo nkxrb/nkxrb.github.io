@@ -1,4 +1,13 @@
 import { shallowRef } from 'vue'
+import anchorsJson from '../../../life/data/anchors.json'
+import bodyMeasurementsJson from '../../../life/data/body-measurements.json'
+import diaperUsageJson from '../../../life/data/diaper-usage.json'
+import growthStagesJson from '../../../life/data/growth-stages.json'
+import milestonesJson from '../../../life/data/milestones.json'
+import newbornRecordsJson from '../../../life/data/newborn-records.json'
+import profileJson from '../../../life/data/profile.json'
+import vaccineRecordsJson from '../../../life/data/vaccine-records.json'
+import vaccinesJson from '../../../life/data/vaccines.json'
 
 export interface LifeProfile {
   name: string
@@ -37,11 +46,14 @@ export interface LifeVaccine {
   age: string
   offset_months: number
   actual_date?: string
+  funding?: 'free' | 'self_paid'
   type: string
   technology: string
   route: string
   desc: string
   detail: string
+  before?: string[]
+  after?: string[]
 }
 
 export interface LifeGrowthStage {
@@ -60,15 +72,37 @@ export interface LifeGrowthStage {
   watch: string[]
 }
 
+export type LifeRecordCategory =
+  | 'breastfeeding'
+  | 'stool'
+  | 'urine'
+  | 'diaper'
+  | 'clothes'
+  | 'bath'
+  | 'vaccine'
+  | 'special'
+
 export interface LifeRecordEntry {
   time: string
   note: string
   special?: boolean
+  categories?: LifeRecordCategory[]
+  source?: 'static' | 'pending'
+  created_at?: string
+  local_id?: string
 }
 
 export interface LifeRecordDay {
   date: string
   entries: LifeRecordEntry[]
+}
+
+export interface LifeRecordLocator {
+  date: string
+  time: string
+  note: string
+  special?: boolean
+  local_id?: string
 }
 
 export interface LifeDiaperUsage {
@@ -80,15 +114,55 @@ export interface LifeDiaperUsage {
   note?: string
 }
 
+export interface LifeVaccineCompletion {
+  id: number
+  actual_date: string
+  note?: string
+}
+
+export interface LifeVaccineRecords {
+  selected_optional_ids: number[]
+  completions: LifeVaccineCompletion[]
+}
+
+export interface LifeBodyMeasurement {
+  date: string
+  time?: string
+  weight_kg?: number
+  height_cm?: number
+  head_circumference_cm?: number
+  note?: string
+  created_at?: string
+  local_id?: string
+  source?: 'static' | 'pending'
+}
+
 export interface LifeData {
   profile: LifeProfile
   anchors: LifeAnchor[]
   milestones: LifeMilestone[]
   vaccines: LifeVaccine[]
+  vaccineRecords: LifeVaccineRecords
   records: LifeRecordDay[]
   growthStages: LifeGrowthStage[]
   diaperUsage: LifeDiaperUsage[]
+  bodyMeasurements: LifeBodyMeasurement[]
 }
+
+const TOKEN_SECRET_STORAGE_KEY = 'life-data-token-secret'
+const GITEE_API_BASE = 'https://gitee.com/api/v5'
+const GITEE_OWNER = 'nkxrb'
+const GITEE_REPO = 'anzai-data'
+const GITEE_DATA_DIR = 'life/data'
+const GITEE_REF = ''
+const TOKEN_SOURCE_NAME = 'az'
+const NEWBORN_RECORDS_FILE = 'newborn-records.json'
+const DIAPER_USAGE_FILE = 'diaper-usage.json'
+const VACCINE_RECORDS_FILE = 'vaccine-records.json'
+const BODY_MEASUREMENTS_FILE = 'body-measurements.json'
+const DEFAULT_KDF_ITERATIONS = 310000
+const encoder = new TextEncoder()
+const decoder = new TextDecoder()
 
 interface ApiSecretConfig {
   sourceName: string
@@ -111,24 +185,13 @@ interface GiteeErrorResponse {
   message?: string
 }
 
-const GITEE_API_BASE = 'https://gitee.com/api/v5'
-const GITEE_OWNER = 'nkxrb'
-const GITEE_REPO = 'anzai-data'
-const GITEE_DATA_DIR = 'life/data'
-const GITEE_REF = ''
-const TOKEN_SOURCE_NAME = 'az'
-const TOKEN_SECRET_STORAGE_KEY = 'life-data-token-secret'
-const DEFAULT_KDF_ITERATIONS = 310000
-const encoder = new TextEncoder()
-const decoder = new TextDecoder()
-
 export const lifeData = shallowRef<LifeData | null>(null)
 export const lifeDataLoading = shallowRef(true)
 export const lifeDataError = shallowRef('')
 export const lifeDataSecretRequired = shallowRef(false)
 
-let tokenPromise: Promise<string> | null = null
 let dataPromise: Promise<LifeData | null> | null = null
+let tokenPromise: Promise<string> | null = null
 let runtimeTokenSecret = ''
 
 function siteAssetUrl(path: string) {
@@ -306,7 +369,120 @@ function decodeBase64Utf8(value: string) {
   return decoder.decode(bytes)
 }
 
-async function fetchGiteeJson<T>(fileName: string) {
+function encodeBase64Utf8(value: string) {
+  const bytes = encoder.encode(value)
+  let binary = ''
+  const chunkSize = 0x8000
+  for (let index = 0; index < bytes.length; index += chunkSize) {
+    binary += String.fromCharCode(...bytes.slice(index, index + chunkSize))
+  }
+  return btoa(binary)
+}
+
+function cleanRecordEntry(entry: LifeRecordEntry): LifeRecordEntry {
+  return {
+    time: entry.time,
+    note: entry.note,
+    ...(entry.special ? { special: true } : {}),
+    ...(entry.categories?.length ? { categories: entry.categories } : {}),
+    ...(entry.created_at ? { created_at: entry.created_at } : {}),
+    ...(entry.local_id ? { local_id: entry.local_id } : {})
+  }
+}
+
+function recordIdentity(date: string, entry: LifeRecordEntry) {
+  return entry.local_id || `${date}|${entry.time}|${entry.note}|${entry.special ? '1' : '0'}`
+}
+
+function recordMatches(date: string, entry: LifeRecordEntry, locator: LifeRecordLocator) {
+  if (date !== locator.date) return false
+  if (locator.local_id || entry.local_id) return entry.local_id === locator.local_id
+  return entry.time === locator.time &&
+    entry.note === locator.note &&
+    Boolean(entry.special) === Boolean(locator.special)
+}
+
+function entrySortMinutes(entry: LifeRecordEntry) {
+  const match = entry.time.match(/^(\d{1,2}):(\d{2})/)
+  if (!match) return Number.POSITIVE_INFINITY
+  return Number(match[1]) * 60 + Number(match[2])
+}
+
+function sortRecordDays(records: LifeRecordDay[]) {
+  return [...records]
+    .map(day => ({
+      date: day.date,
+      entries: [...day.entries]
+        .map(cleanRecordEntry)
+        .sort((a, b) => entrySortMinutes(a) - entrySortMinutes(b) || a.time.localeCompare(b.time, 'zh-CN'))
+    }))
+    .sort((a, b) => a.date.localeCompare(b.date))
+}
+
+function replaceLifeRecord(records: LifeRecordDay[], locator: LifeRecordLocator, nextDate: string, nextEntry: LifeRecordEntry) {
+  let found = false
+  const nextRecords = records.map(day => {
+    const remainingEntries: LifeRecordEntry[] = []
+    for (const entry of day.entries) {
+      if (recordMatches(day.date, entry, locator)) {
+        found = true
+        continue
+      }
+      remainingEntries.push(entry)
+    }
+    return { date: day.date, entries: remainingEntries }
+  }).filter(day => day.entries.length > 0)
+
+  if (!found) throw new Error('原记录未找到，请刷新后重试')
+
+  const targetDay = nextRecords.find(day => day.date === nextDate)
+  if (targetDay) {
+    targetDay.entries.push(nextEntry)
+  } else {
+    nextRecords.push({ date: nextDate, entries: [nextEntry] })
+  }
+
+  return sortRecordDays(nextRecords)
+}
+
+function deleteLifeRecord(records: LifeRecordDay[], locator: LifeRecordLocator) {
+  let found = false
+  const nextRecords = records.map(day => ({
+    date: day.date,
+    entries: day.entries.filter(entry => {
+      const matched = recordMatches(day.date, entry, locator)
+      if (matched) found = true
+      return !matched
+    })
+  })).filter(day => day.entries.length > 0)
+
+  if (!found) throw new Error('原记录未找到，请刷新后重试')
+  return sortRecordDays(nextRecords)
+}
+
+function mergeLifeRecords(baseRecords: LifeRecordDay[], incomingRecords: LifeRecordDay[]) {
+  const map = new Map<string, LifeRecordEntry[]>()
+  const seen = new Set<string>()
+  const addEntry = (date: string, entry: LifeRecordEntry) => {
+    const key = recordIdentity(date, entry)
+    if (seen.has(key)) return
+    seen.add(key)
+    const entries = map.get(date) || []
+    entries.push(cleanRecordEntry(entry))
+    map.set(date, entries)
+  }
+
+  for (const day of baseRecords) {
+    for (const entry of day.entries) addEntry(day.date, entry)
+  }
+  for (const day of incomingRecords) {
+    for (const entry of day.entries) addEntry(day.date, entry)
+  }
+
+  return sortRecordDays([...map.entries()].map(([date, entries]) => ({ date, entries })))
+}
+
+async function getGiteeContent<T>(fileName: string) {
   const token = await getGiteeToken()
   const url = new URL(`${GITEE_API_BASE}/repos/${GITEE_OWNER}/${GITEE_REPO}/contents/${encodePath(`${GITEE_DATA_DIR}/${fileName}`)}`)
   url.searchParams.set('access_token', token)
@@ -328,47 +504,169 @@ async function fetchGiteeJson<T>(fileName: string) {
   }
 
   const payload = await response.json() as GiteeContentResponse
-  if (!payload.content) throw new Error(`Gitee 数据为空：${fileName}`)
+  if (!payload.content || !payload.sha) throw new Error(`Gitee 数据为空：${fileName}`)
 
-  return JSON.parse(decodeBase64Utf8(payload.content)) as T
+  return {
+    sha: payload.sha,
+    data: JSON.parse(decodeBase64Utf8(payload.content)) as T
+  }
+}
+
+async function updateGiteeContent(fileName: string, content: string, sha: string, message: string) {
+  const token = await getGiteeToken()
+  const url = new URL(`${GITEE_API_BASE}/repos/${GITEE_OWNER}/${GITEE_REPO}/contents/${encodePath(`${GITEE_DATA_DIR}/${fileName}`)}`)
+  url.searchParams.set('access_token', token)
+
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      message,
+      content: encodeBase64Utf8(content),
+      sha,
+      ...(GITEE_REF ? { branch: GITEE_REF } : {})
+    })
+  })
+  if (!response.ok) {
+    let detail = ''
+    try {
+      const errorPayload = await response.json() as GiteeErrorResponse
+      detail = errorPayload.message ? `：${errorPayload.message}` : ''
+    } catch {}
+    throw new Error(`Gitee 数据写入失败：${fileName} ${response.status}${detail}`)
+  }
+}
+
+async function createGiteeContent(fileName: string, content: string, message: string) {
+  const token = await getGiteeToken()
+  const url = new URL(`${GITEE_API_BASE}/repos/${GITEE_OWNER}/${GITEE_REPO}/contents/${encodePath(`${GITEE_DATA_DIR}/${fileName}`)}`)
+  url.searchParams.set('access_token', token)
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      message,
+      content: encodeBase64Utf8(content),
+      ...(GITEE_REF ? { branch: GITEE_REF } : {})
+    })
+  })
+  if (!response.ok) {
+    let detail = ''
+    try {
+      const errorPayload = await response.json() as GiteeErrorResponse
+      detail = errorPayload.message ? `：${errorPayload.message}` : ''
+    } catch {}
+    throw new Error(`Gitee 数据创建失败：${fileName} ${response.status}${detail}`)
+  }
 }
 
 async function fetchOptionalGiteeJson<T>(fileName: string, fallback: T) {
   try {
-    return await fetchGiteeJson<T>(fileName)
+    const remote = await getGiteeContent<T>(fileName)
+    return remote.data
   } catch (error) {
     if (error instanceof Error && error.message.includes(`${fileName} 404`)) return fallback
     throw error
   }
 }
 
-async function loadLifeData() {
-  const [profile, anchors, milestones, vaccines, records, growthStages, diaperUsage] = await Promise.all([
-    fetchGiteeJson<LifeProfile>('profile.json'),
-    fetchGiteeJson<LifeAnchor[]>('anchors.json'),
-    fetchGiteeJson<LifeMilestone[]>('milestones.json'),
-    fetchGiteeJson<LifeVaccine[]>('vaccines.json'),
-    fetchGiteeJson<LifeRecordDay[]>('newborn-records.json'),
-    fetchGiteeJson<LifeGrowthStage[]>('growth-stages.json'),
-    fetchOptionalGiteeJson<LifeDiaperUsage[]>('diaper-usage.json', [])
-  ])
+async function updateGiteeJson<T>(fileName: string, updater: (data: T) => T, fallback: T, message: string) {
+  try {
+    const remote = await getGiteeContent<T>(fileName)
+    const nextData = updater(remote.data ?? fallback)
+    await updateGiteeContent(fileName, `${JSON.stringify(nextData, null, 2)}\n`, remote.sha, message)
+    return nextData
+  } catch (error) {
+    if (!(error instanceof Error && error.message.includes(`${fileName} 404`))) throw error
+    const nextData = updater(fallback)
+    await createGiteeContent(fileName, `${JSON.stringify(nextData, null, 2)}\n`, message)
+    return nextData
+  }
+}
 
-  return { profile, anchors, milestones, vaccines, records, growthStages, diaperUsage }
+function normalizeVaccineRecords(records: LifeVaccineRecords): LifeVaccineRecords {
+  return {
+    selected_optional_ids: Array.isArray(records.selected_optional_ids)
+      ? records.selected_optional_ids.map(Number).filter(Number.isInteger)
+      : [],
+    completions: Array.isArray(records.completions)
+      ? records.completions
+        .filter(item => Number.isInteger(Number(item.id)) && typeof item.actual_date === 'string')
+        .map(item => ({ id: Number(item.id), actual_date: item.actual_date, ...(item.note ? { note: item.note } : {}) }))
+      : []
+  }
+}
+
+function mergeVaccineRecords(vaccines: LifeVaccine[], records: LifeVaccineRecords) {
+  const completionMap = new Map(records.completions.map(item => [item.id, item.actual_date]))
+  return vaccines.map(vaccine => ({
+    ...vaccine,
+    ...(completionMap.has(vaccine.id) ? { actual_date: completionMap.get(vaccine.id) } : {})
+  }))
+}
+
+async function loadLifeData() {
+  const staticVaccineRecords = normalizeVaccineRecords(vaccineRecordsJson as LifeVaccineRecords)
+  const staticMutable = {
+    records: newbornRecordsJson as LifeRecordDay[],
+    diaperUsage: diaperUsageJson as LifeDiaperUsage[],
+    vaccineRecords: staticVaccineRecords,
+    bodyMeasurements: bodyMeasurementsJson as LifeBodyMeasurement[]
+  }
+  let mutable = staticMutable
+
+  if (hasLifeDataSecret()) {
+    try {
+      const [records, diaperUsage, vaccineRecords, bodyMeasurements] = await Promise.all([
+        fetchOptionalGiteeJson<LifeRecordDay[]>(NEWBORN_RECORDS_FILE, staticMutable.records),
+        fetchOptionalGiteeJson<LifeDiaperUsage[]>(DIAPER_USAGE_FILE, staticMutable.diaperUsage),
+        fetchOptionalGiteeJson<LifeVaccineRecords>(VACCINE_RECORDS_FILE, staticMutable.vaccineRecords),
+        fetchOptionalGiteeJson<LifeBodyMeasurement[]>(BODY_MEASUREMENTS_FILE, staticMutable.bodyMeasurements)
+      ])
+      mutable = {
+        records,
+        diaperUsage,
+        vaccineRecords: normalizeVaccineRecords(vaccineRecords),
+        bodyMeasurements
+      }
+    } catch (error) {
+      lifeDataError.value = error instanceof Error ? error.message : 'Gitee 数据加载失败，已使用本地静态快照'
+    }
+  }
+
+  return {
+    profile: profileJson as LifeProfile,
+    anchors: anchorsJson as LifeAnchor[],
+    milestones: milestonesJson as LifeMilestone[],
+    vaccines: mergeVaccineRecords(vaccinesJson as LifeVaccine[], mutable.vaccineRecords),
+    vaccineRecords: mutable.vaccineRecords,
+    records: sortRecordDays(mutable.records),
+    growthStages: growthStagesJson as LifeGrowthStage[],
+    diaperUsage: mutable.diaperUsage,
+    bodyMeasurements: mutable.bodyMeasurements
+  }
 }
 
 export async function ensureLifeData(options: { force?: boolean } = {}) {
   if (lifeData.value && !options.force) return lifeData.value
-  if (options.force) tokenPromise = null
   if (!dataPromise || options.force) {
     lifeDataLoading.value = true
     lifeDataError.value = ''
+    lifeDataSecretRequired.value = false
     dataPromise = loadLifeData()
       .then(data => {
         lifeData.value = data
         return data
       })
       .catch(error => {
-        lifeDataError.value = error instanceof Error ? error.message : 'Gitee 数据加载失败'
+        lifeDataError.value = error instanceof Error ? error.message : '静态数据加载失败'
         return null
       })
       .finally(() => {
@@ -382,9 +680,8 @@ export async function ensureLifeData(options: { force?: boolean } = {}) {
 export async function setLifeDataSecret(secret: string) {
   runtimeTokenSecret = secret.trim()
   tokenPromise = null
-  dataPromise = null
   lifeDataError.value = ''
-  lifeDataSecretRequired.value = !runtimeTokenSecret
+  lifeDataSecretRequired.value = false
 
   if (typeof window !== 'undefined') {
     try {
@@ -399,6 +696,117 @@ export async function setLifeDataSecret(secret: string) {
   return ensureLifeData({ force: true })
 }
 
+export async function appendLifeRecordsToGitee(records: LifeRecordDay[]) {
+  if (!records.length) return lifeData.value?.records ?? []
+
+  const nextRecords = await updateGiteeJson<LifeRecordDay[]>(
+    NEWBORN_RECORDS_FILE,
+    currentRecords => mergeLifeRecords(currentRecords, records),
+    newbornRecordsJson as LifeRecordDay[],
+    `chore(life): update newborn records`
+  )
+
+  if (lifeData.value) {
+    lifeData.value = {
+      ...lifeData.value,
+      records: nextRecords
+    }
+  }
+
+  return nextRecords
+}
+
+export async function appendLifeRecordToGitee(date: string, entry: LifeRecordEntry) {
+  return appendLifeRecordsToGitee([{ date, entries: [entry] }])
+}
+
+export async function updateLifeRecordInGitee(locator: LifeRecordLocator, nextDate: string, nextEntry: LifeRecordEntry) {
+  const nextRecords = await updateGiteeJson<LifeRecordDay[]>(
+    NEWBORN_RECORDS_FILE,
+    currentRecords => replaceLifeRecord(currentRecords, locator, nextDate, nextEntry),
+    newbornRecordsJson as LifeRecordDay[],
+    `chore(life): edit newborn record`
+  )
+
+  if (lifeData.value) {
+    lifeData.value = {
+      ...lifeData.value,
+      records: nextRecords
+    }
+  }
+
+  return nextRecords
+}
+
+export async function deleteLifeRecordFromGitee(locator: LifeRecordLocator) {
+  const nextRecords = await updateGiteeJson<LifeRecordDay[]>(
+    NEWBORN_RECORDS_FILE,
+    currentRecords => deleteLifeRecord(currentRecords, locator),
+    newbornRecordsJson as LifeRecordDay[],
+    `chore(life): delete newborn record`
+  )
+
+  if (lifeData.value) {
+    lifeData.value = {
+      ...lifeData.value,
+      records: nextRecords
+    }
+  }
+
+  return nextRecords
+}
+
+export async function upsertBodyMeasurementToGitee(measurement: LifeBodyMeasurement) {
+  const cleanMeasurement: LifeBodyMeasurement = {
+    date: measurement.date,
+    ...(measurement.time ? { time: measurement.time } : {}),
+    ...(typeof measurement.weight_kg === 'number' ? { weight_kg: measurement.weight_kg } : {}),
+    ...(typeof measurement.height_cm === 'number' ? { height_cm: measurement.height_cm } : {}),
+    ...(typeof measurement.head_circumference_cm === 'number' ? { head_circumference_cm: measurement.head_circumference_cm } : {}),
+    ...(measurement.note ? { note: measurement.note } : {}),
+    ...(measurement.created_at ? { created_at: measurement.created_at } : {}),
+    ...(measurement.local_id ? { local_id: measurement.local_id } : {})
+  }
+  const nextMeasurements = await updateGiteeJson<LifeBodyMeasurement[]>(
+    BODY_MEASUREMENTS_FILE,
+    measurements => {
+      const filtered = measurements.filter(item => item.date !== cleanMeasurement.date)
+      return [...filtered, cleanMeasurement].sort((a, b) => a.date.localeCompare(b.date))
+    },
+    bodyMeasurementsJson as LifeBodyMeasurement[],
+    `chore(life): update body measurements`
+  )
+
+  if (lifeData.value) {
+    lifeData.value = {
+      ...lifeData.value,
+      bodyMeasurements: nextMeasurements
+    }
+  }
+
+  return nextMeasurements
+}
+
+export async function updateVaccineRecordsToGitee(records: LifeVaccineRecords) {
+  const normalized = normalizeVaccineRecords(records)
+  const nextRecords = await updateGiteeJson<LifeVaccineRecords>(
+    VACCINE_RECORDS_FILE,
+    () => normalized,
+    normalizeVaccineRecords(vaccineRecordsJson as LifeVaccineRecords),
+    `chore(life): update vaccine records`
+  )
+
+  if (lifeData.value) {
+    lifeData.value = {
+      ...lifeData.value,
+      vaccineRecords: nextRecords,
+      vaccines: mergeVaccineRecords(vaccinesJson as LifeVaccine[], nextRecords)
+    }
+  }
+
+  return nextRecords
+}
+
 export function hasLifeDataSecret() {
   return Boolean(readStoredTokenSecret())
 }
@@ -406,10 +814,8 @@ export function hasLifeDataSecret() {
 export function clearLifeDataSecret() {
   runtimeTokenSecret = ''
   tokenPromise = null
-  dataPromise = null
-  lifeData.value = null
   lifeDataError.value = ''
-  lifeDataSecretRequired.value = true
+  lifeDataSecretRequired.value = false
 
   if (typeof window !== 'undefined') {
     try {

@@ -1,8 +1,8 @@
 <template>
   <main class="life-app">
     <div v-if="isDataLoading" class="life-loading" role="status">
-      <strong>正在同步家庭数据</strong>
-      <span>通过 Gitee 数据仓库读取最新记录</span>
+      <strong>正在载入家庭数据</strong>
+      <span>有密钥时读取 Gitee 最新数据，否则读取 life/data 静态数据</span>
     </div>
     <div v-else-if="dataError" class="life-loading life-loading--error" role="alert">
       <strong>数据加载失败</strong>
@@ -111,6 +111,8 @@
         :records="recordsData"
         :growth-stages="growthStagesData"
         :diaper-usage="diaperUsageData"
+        :body-measurements="bodyMeasurementsData"
+        :can-edit="canEditMarks"
         :today="today"
       />
 
@@ -134,6 +136,18 @@
 
         <p class="timeline-help">轻触疫苗名称查看说明，轻触右侧状态完成标记</p>
 
+        <div v-if="optionalVaccines.length && canEditMarks" class="optional-vaccine-picker" aria-label="自费疫苗选择">
+          <button
+            v-for="vaccine in optionalVaccines"
+            :key="vaccine.id"
+            type="button"
+            :class="{ 'is-selected': selectedOptionalIds.has(vaccine.id) }"
+            @click="toggleOptionalVaccine(vaccine.id)"
+          >
+            {{ vaccine.name.replace('（自费', '（').replace('·第1剂', '') }}
+          </button>
+        </div>
+
         <ol class="vaccine-timeline">
           <li
             v-for="row in vaccineRows"
@@ -153,11 +167,12 @@
             </div>
             <div class="vaccine-row__rail" aria-hidden="true"><span /></div>
             <div class="vaccine-row__content">
-              <strong>{{ row.name }}</strong>
+              <strong>{{ row.name }}<em v-if="row.funding === 'self_paid'">自费</em></strong>
               <time v-if="row.status === 'completed' && row.actualDateIso" :datetime="row.actualDateIso">已于 {{ formatDate(row.actualDateIso) }} 接种</time>
               <time v-else :datetime="row.dateIso">建议 {{ formatDate(row.dateIso) }}</time>
             </div>
             <button
+              v-if="canEditMarks"
               class="status-pill"
               :class="`status-pill--${row.status}`"
               type="button"
@@ -166,13 +181,16 @@
             >
               <span aria-hidden="true">{{ row.statusIcon }}</span>{{ row.statusLabel }}
             </button>
+            <span v-else class="status-pill" :class="`status-pill--${row.status}`">
+              <span aria-hidden="true">{{ row.statusIcon }}</span>{{ row.statusLabel }}
+            </span>
           </li>
         </ol>
       </section>
 
       <footer class="dashboard-footer">
         <p><span aria-hidden="true">⌂</span> 建议将本页面添加至主屏幕，随时查看</p>
-        <div class="data-tools">
+        <div v-if="canEditMarks" class="data-tools">
           <button type="button" @click="exportMarks">导出标记数据</button>
           <span aria-hidden="true">·</span>
           <button type="button" @click="chooseImport">导入恢复</button>
@@ -222,6 +240,20 @@
             <span>详细介绍</span>
             <p>{{ infoVaccine.detail }}</p>
           </div>
+          <div class="vaccine-precautions">
+            <article>
+              <span>接种前</span>
+              <ul>
+                <li v-for="item in vaccineBeforeNotes(infoVaccine)" :key="item">{{ item }}</li>
+              </ul>
+            </article>
+            <article>
+              <span>接种后</span>
+              <ul>
+                <li v-for="item in vaccineAfterNotes(infoVaccine)" :key="item">{{ item }}</li>
+              </ul>
+            </article>
+          </div>
           <p class="medical-note">信息仅作家庭记录与通识参考，疫苗产品、禁忌、剂次和接种日期请以接种证及当地门诊医嘱为准。</p>
         </section>
       </div>
@@ -236,12 +268,15 @@ import avatarUrl from '../../../../life/assets/avatar.jpg'
 import LifeInsights from '../life-insights/LifeInsights.vue'
 import {
   ensureLifeData,
+  hasLifeDataSecret,
   lifeData,
   lifeDataError,
   lifeDataLoading,
   lifeDataSecretRequired,
   setLifeDataSecret,
+  updateVaccineRecordsToGitee,
   type LifeAnchor,
+  type LifeVaccineRecords,
   type LifeProfile,
   type LifeVaccine
 } from '../life-data'
@@ -276,10 +311,14 @@ const emptyProfile: LifeProfile = {
 const profile = computed(() => lifeData.value?.profile ?? emptyProfile)
 const anchorsData = computed(() => lifeData.value?.anchors ?? [])
 const milestonesData = computed(() => lifeData.value?.milestones ?? [])
-const vaccinesData = computed(() => lifeData.value?.vaccines ?? [])
+const allVaccinesData = computed(() => lifeData.value?.vaccines ?? [])
+const vaccineRecordsData = computed<LifeVaccineRecords>(() => lifeData.value?.vaccineRecords ?? { selected_optional_ids: [], completions: [] })
+const optionalVaccines = computed(() => allVaccinesData.value.filter(vaccine => vaccine.funding === 'self_paid'))
+const vaccinesData = computed(() => allVaccinesData.value.filter(vaccine => vaccine.funding !== 'self_paid' || selectedOptionalIds.value.has(vaccine.id)))
 const recordsData = computed(() => lifeData.value?.records ?? [])
 const growthStagesData = computed(() => lifeData.value?.growthStages ?? [])
 const diaperUsageData = computed(() => lifeData.value?.diaperUsage ?? [])
+const bodyMeasurementsData = computed(() => lifeData.value?.bodyMeasurements ?? [])
 const birthDate = computed(() => parseDate(profile.value.birth_date))
 const today = ref(startOfDay(new Date()))
 const defaultCompletedIds = computed(() => vaccinesData.value
@@ -294,6 +333,8 @@ const infoVaccine = ref<VaccineRow | null>(null)
 const importInput = ref<HTMLInputElement | null>(null)
 const highlightedId = ref<number | null>(null)
 const dataSecret = ref('')
+const canEditMarks = ref(false)
+const selectedOptionalIds = ref<Set<number>>(new Set())
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined
 let flipTimer: ReturnType<typeof setTimeout> | undefined
@@ -500,6 +541,7 @@ function closeVaccineInfo() {
 }
 
 function openStatusSheet(row: VaccineRow) {
+  if (!canEditMarks.value) return
   sheetVaccine.value = row
 }
 
@@ -507,32 +549,69 @@ function closeSheet() {
   sheetVaccine.value = null
 }
 
-function saveCompleted() {
-  localStorage.setItem(profile.value.storage_key, JSON.stringify([...completedIds.value].sort((a, b) => a - b)))
+function vaccineBeforeNotes(vaccine: Vaccine) {
+  return vaccine.before?.length
+    ? vaccine.before
+    : ['携带接种证，如实告知近期发热、腹泻、过敏史和既往接种反应。', '急性病或明显不适时，是否延期接种以门诊医生评估为准。']
 }
 
-function confirmStatusChange() {
+function vaccineAfterNotes(vaccine: Vaccine) {
+  return vaccine.after?.length
+    ? vaccine.after
+    : ['接种后在现场留观30分钟。', '回家后观察体温、精神、吃奶和局部红肿，反应较重或持续异常应及时就医。']
+}
+
+function currentVaccineRecords(nextIds = completedIds.value, nextOptionalIds = selectedOptionalIds.value): LifeVaccineRecords {
+  const existingCompletionMap = new Map(vaccineRecordsData.value.completions.map(item => [item.id, item.actual_date]))
+  return {
+    selected_optional_ids: [...nextOptionalIds].sort((a, b) => a - b),
+    completions: [...nextIds]
+      .sort((a, b) => a - b)
+      .map(id => ({
+        id,
+        actual_date: existingCompletionMap.get(id) || toIsoDate(today.value)
+      }))
+  }
+}
+
+async function saveVaccineRecords(records: LifeVaccineRecords, successMessage: string) {
+  if (!canEditMarks.value) return
+  await updateVaccineRecordsToGitee(records)
+  restoreVaccineState()
+  showToast(successMessage)
+}
+
+async function confirmStatusChange() {
+  if (!canEditMarks.value) return
   if (!sheetVaccine.value) return
   const nextIds = new Set(completedIds.value)
   const wasCompleted = nextIds.has(sheetVaccine.value.id)
   wasCompleted ? nextIds.delete(sheetVaccine.value.id) : nextIds.add(sheetVaccine.value.id)
-  completedIds.value = nextIds
-  saveCompleted()
-  if (!wasCompleted) {
-    highlightedId.value = sheetVaccine.value.id
-    if (highlightTimer) clearTimeout(highlightTimer)
-    highlightTimer = setTimeout(() => { highlightedId.value = null }, 1100)
+
+  try {
+    await saveVaccineRecords(
+      currentVaccineRecords(nextIds),
+      wasCompleted ? '已撤销完成标记' : '已写入接种记录'
+    )
+    completedIds.value = nextIds
+    if (!wasCompleted) {
+      highlightedId.value = sheetVaccine.value.id
+      if (highlightTimer) clearTimeout(highlightTimer)
+      highlightTimer = setTimeout(() => { highlightedId.value = null }, 1100)
+    }
+    closeSheet()
+  } catch {
+    showToast('Gitee 写入失败，请稍后重试')
   }
-  showToast(wasCompleted ? '已撤销完成标记' : '已标记为完成 ✓')
-  closeSheet()
 }
 
 function exportMarks() {
+  if (!canEditMarks.value) return
   const payload = {
     app: '一生时光 · 健康守护板',
     version: profile.value.version,
     exported_at: new Date().toISOString(),
-    completed_vaccine_ids: [...completedIds.value].sort((a, b) => a - b)
+    vaccine_records: currentVaccineRecords()
   }
   const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }))
   const link = document.createElement('a')
@@ -544,24 +623,27 @@ function exportMarks() {
 }
 
 function chooseImport() {
+  if (!canEditMarks.value) return
   importInput.value?.click()
 }
 
 async function importMarks(event: Event) {
+  if (!canEditMarks.value) return
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
   if (!file) return
 
   try {
     const payload = JSON.parse(await file.text())
-    if (!Array.isArray(payload.completed_vaccine_ids)) throw new Error('invalid data')
+    const sourceIds = Array.isArray(payload.completed_vaccine_ids)
+      ? payload.completed_vaccine_ids
+      : payload.vaccine_records?.completions?.map((item: { id: number }) => item.id)
+    if (!Array.isArray(sourceIds)) throw new Error('invalid data')
     const validIds = new Set(vaccinesData.value.map(item => item.id))
-    const restored = payload.completed_vaccine_ids
+    const restored = sourceIds
       .map(Number)
       .filter((id: number) => Number.isInteger(id) && validIds.has(id))
-    completedIds.value = new Set(restored)
-    saveCompleted()
-    showToast(`已恢复 ${restored.length} 条接种标记`)
+    await saveVaccineRecords(currentVaccineRecords(new Set(restored)), `已恢复 ${restored.length} 条接种标记`)
   } catch {
     showToast('导入失败：请选择本页面导出的 JSON 文件')
   } finally {
@@ -579,38 +661,43 @@ function confettiStyle(piece: number) {
   }
 }
 
-function restoreCompletedIds() {
-  const nextIds = new Set(defaultCompletedIds.value)
+async function toggleOptionalVaccine(id: number) {
+  if (!canEditMarks.value) return
+  const nextOptionalIds = new Set(selectedOptionalIds.value)
+  nextOptionalIds.has(id) ? nextOptionalIds.delete(id) : nextOptionalIds.add(id)
   try {
-    const stored = localStorage.getItem(profile.value.storage_key)
-    if (stored !== null) {
-      const saved = JSON.parse(stored)
-      if (Array.isArray(saved)) {
-        completedIds.value = new Set(saved.map(Number).filter(Number.isInteger))
-        return
-      }
-    }
+    await saveVaccineRecords(currentVaccineRecords(completedIds.value, nextOptionalIds), '自费疫苗选择已更新')
   } catch {
-    localStorage.removeItem(profile.value.storage_key)
+    showToast('Gitee 写入失败，请稍后重试')
   }
+}
 
+function restoreVaccineState() {
+  const nextIds = new Set(defaultCompletedIds.value)
+  selectedOptionalIds.value = new Set(vaccineRecordsData.value.selected_optional_ids)
+  if (!canEditMarks.value) {
+    completedIds.value = nextIds
+    return
+  }
   completedIds.value = nextIds
 }
 
 async function reloadData() {
   await ensureLifeData({ force: true })
-  if (lifeData.value) restoreCompletedIds()
+  if (lifeData.value) restoreVaccineState()
 }
 
 async function submitDataSecret() {
   await setLifeDataSecret(dataSecret.value)
-  if (lifeData.value) restoreCompletedIds()
+  canEditMarks.value = hasLifeDataSecret()
+  if (lifeData.value) restoreVaccineState()
 }
 
 onMounted(async () => {
+  canEditMarks.value = hasLifeDataSecret()
   await ensureLifeData()
   if (!lifeData.value) return
-  restoreCompletedIds()
+  restoreVaccineState()
 
   if (totalDays.value > 0 && totalDays.value % 100 === 0) {
     const celebrationKey = `life-dashboard-celebration-${toIsoDate(today.value)}`

@@ -20,7 +20,7 @@
         <a href="/life/">打开守护板</a>
       </div>
       <span v-if="message" class="life-key-message" :class="{ 'is-error': isError }">{{ message }}</span>
-      <small>密钥仅保存在当前浏览器 localStorage 中，本页面不在站点导航中展示。</small>
+      <small>密钥仅保存在当前浏览器 localStorage 中，用于读取最新数据和写入编辑操作。</small>
     </section>
   </main>
 </template>
@@ -36,7 +36,7 @@ const isSaving = ref(false)
 
 onMounted(() => {
   if (hasLifeDataSecret()) {
-    message.value = '本机已保存数据访问密钥'
+    message.value = '本机已保存数据密钥'
     isError.value = false
   }
 })
@@ -53,7 +53,7 @@ async function saveSecret() {
   message.value = ''
   try {
     const data = await setLifeDataSecret(value)
-    message.value = data ? '密钥已保存，数据同步成功' : '密钥已保存，但数据同步失败，请检查密钥或令牌权限'
+    message.value = data ? '密钥已保存，数据同步成功' : '密钥已保存，但数据同步失败'
     isError.value = !data
   } finally {
     isSaving.value = false
