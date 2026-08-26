@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "serve": "vitepress serve"
+    "serve": "vitepress serve",
+    "life:data:check": "node scripts/sync-life-data.mjs --check",
+    "life:data:sync": "node scripts/sync-life-data.mjs --sync --commit",
+    "life:data:sync:push": "node scripts/sync-life-data.mjs --sync --commit --push"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
