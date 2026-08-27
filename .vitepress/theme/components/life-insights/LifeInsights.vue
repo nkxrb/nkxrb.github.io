@@ -208,23 +208,6 @@
   </section>
 
   <div class="journey-divider" aria-hidden="true"><span /><i /><span /></div>
-
-  <section class="dashboard-section growth-more-section" aria-labelledby="growth-more-title">
-    <header class="section-heading">
-      <div>
-        <p class="section-kicker">NEXT DATA</p>
-        <h2 id="growth-more-title">可继续纳入的信息</h2>
-      </div>
-      <p class="section-note">把阶段、照护和健康线索放到一张表里</p>
-    </header>
-    <div class="more-grid">
-      <article v-for="item in moreItems" :key="item.title">
-        <span>{{ item.kicker }}</span>
-        <strong>{{ item.title }}</strong>
-        <p>{{ item.detail }}</p>
-      </article>
-    </div>
-  </section>
 </template>
 
 <script setup lang="ts">

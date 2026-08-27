@@ -366,6 +366,76 @@ a {
   background: var(--green);
 }
 
+.quick-record {
+  display: grid;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgb(22 63 58 / 8%);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  background:
+    linear-gradient(90deg, rgb(220 239 233 / 56%), rgb(255 254 249 / 64%)),
+    rgb(255 254 249 / 58%);
+}
+
+.quick-record span,
+.quick-record strong,
+.quick-record p {
+  display: block;
+}
+
+.quick-record div {
+  min-width: 0;
+}
+
+.quick-record div > span {
+  color: var(--green-deep);
+  font: 600 9px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .18em;
+}
+
+.quick-record strong {
+  margin-top: 4px;
+  color: var(--forest);
+  font-family: Georgia, 'Noto Serif SC', serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.quick-record p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.quick-record__button {
+  display: inline-flex;
+  width: min(100%, 180px);
+  max-width: 100%;
+  min-width: 104px;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgb(31 119 110 / 14%);
+  border-radius: 3px 14px 3px 3px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: white;
+  background: var(--green-deep);
+  box-shadow: 0 10px 24px rgb(31 119 110 / 16%);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.quick-record__button span {
+  transition: transform .2s ease;
+}
+
+.quick-record__button:hover span {
+  transform: translateX(3px);
+}
+
 .dashboard-section {
   padding: 76px 24px 66px;
 }
@@ -1323,6 +1393,11 @@ a {
     align-items: center;
   }
 
+  .quick-record {
+    padding-right: 44px;
+    padding-left: 44px;
+  }
+
   .anchor-carousel {
     grid-auto-columns: minmax(280px, 338px);
     grid-template-columns: repeat(auto-fit, minmax(280px, 338px));
@@ -1377,6 +1452,17 @@ a {
   .dashboard-section {
     padding-right: 18px;
     padding-left: 18px;
+  }
+
+  .quick-record {
+    padding: 16px 18px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .quick-record__button {
+    width: 100%;
   }
 
   .section-heading {

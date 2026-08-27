@@ -61,6 +61,17 @@
         </div>
       </section>
 
+      <section class="quick-record" aria-label="快速添加记录">
+        <div>
+          <span>DAILY RECORD</span>
+          <strong>{{ canEditMarks ? '添加记录' : '进入成长日历' }}</strong>
+          <p>{{ canEditMarks ? '快速记录喂养、睡眠、体重、身高和备注' : '保存密钥后可添加照护与成长记录' }}</p>
+        </div>
+        <a class="quick-record__button" href="/life/calendar/#record-editor">
+          {{ canEditMarks ? '添加记录' : '打开日历' }} <span aria-hidden="true">→</span>
+        </a>
+      </section>
+
       <section class="dashboard-section anchor-section" aria-labelledby="anchor-title">
         <header class="section-heading">
           <div>

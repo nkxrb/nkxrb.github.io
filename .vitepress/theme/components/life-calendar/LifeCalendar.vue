@@ -72,7 +72,7 @@
             <strong>{{ selectedEntries.length }}<small>条记录</small></strong>
           </header>
 
-          <section v-if="canEditRecords" class="record-editor" aria-label="添加记录">
+          <section v-if="canEditRecords" id="record-editor" class="record-editor" aria-label="添加记录">
             <header>
               <div>
                 <span>{{ editingRecord ? 'EDIT RECORD' : 'NEW RECORD' }}</span>
