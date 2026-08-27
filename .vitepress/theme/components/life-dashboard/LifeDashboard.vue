@@ -22,6 +22,7 @@
       @click="flipDays"
     >
       <canvas ref="skyCanvas" class="hero__sky" aria-hidden="true" />
+      <canvas ref="lifeCanvas" class="hero__life" aria-hidden="true" />
       <div v-if="showConfetti" class="confetti" aria-hidden="true">
         <i v-for="piece in 18" :key="piece" :style="confettiStyle(piece)" />
       </div>
@@ -377,6 +378,7 @@ const canEditMarks = ref(false)
 const selectedOptionalIds = ref<Set<number>>(new Set())
 const initialSkyDate = new Date()
 const skyCanvas = ref<HTMLCanvasElement | null>(null)
+const lifeCanvas = ref<HTMLCanvasElement | null>(null)
 const skyPhase = ref<SkyPhase>(getSkyPhase(initialSkyDate))
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined
@@ -387,6 +389,7 @@ let skyFrame: number | undefined
 let skyResizeFrame: number | undefined
 let skyLastDraw = 0
 let skyContext: CanvasRenderingContext2D | null = null
+let lifeContext: CanvasRenderingContext2D | null = null
 let skyLunarDay = getLunarDay(initialSkyDate)
 let skyOrb: SkyOrb = getSkyOrb(initialSkyDate, skyPhase.value, skyLunarDay)
 let skyTimer: ReturnType<typeof setInterval> | undefined
@@ -790,6 +793,10 @@ function shortestHourDistance(hour: number, target: number) {
   return ((hour - target + 36) % 24) - 12
 }
 
+function sceneGroundY(height: number) {
+  return height - clamp(height * .09, 58, 82)
+}
+
 function getSkyOrb(date: Date, phase: SkyPhase, lunarDay: number): SkyOrb {
   const hour = hourOfDay(date)
   if (phase === 'night') {
@@ -926,6 +933,121 @@ function drawMoon(ctx: CanvasRenderingContext2D, x: number, y: number, radius: n
   ctx.restore()
 }
 
+function drawLeaf(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, rotate: number, color: string) {
+  ctx.save()
+  ctx.translate(x, y)
+  ctx.rotate(rotate)
+  ctx.fillStyle = color
+  ctx.beginPath()
+  ctx.ellipse(0, 0, radius * 1.25, radius, 0, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+}
+
+function drawFoliage(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number, sway: number, colors: string[]) {
+  const blobs = [
+    [-18, 0, 18, 14, colors[0]],
+    [2, -10, 22, 17, colors[1]],
+    [21, 2, 17, 14, colors[0]],
+    [-2, 12, 24, 15, colors[2]],
+    [-28, 13, 12, 9, colors[1]],
+    [30, 15, 11, 8, colors[2]]
+  ] as const
+
+  ctx.save()
+  ctx.translate(x, y)
+  ctx.rotate(sway * .003)
+  ctx.filter = `blur(${Math.max(.2, scale * .35)}px)`
+  for (const [dx, dy, rx, ry, color] of blobs) {
+    ctx.fillStyle = color
+    ctx.beginPath()
+    ctx.ellipse(dx * scale, dy * scale, rx * scale, ry * scale, 0, 0, Math.PI * 2)
+    ctx.fill()
+  }
+  ctx.restore()
+}
+
+function drawSapling(ctx: CanvasRenderingContext2D, width: number, height: number, ageDays: number, time: number) {
+  const growth = clamp(ageDays / 1600, .06, 1)
+  const baseX = clamp(width * .18, 58, 118)
+  const baseY = sceneGroundY(height) - 8
+  const treeHeight = 40 + growth * 92
+  const sway = Math.sin(time * .0018 + ageDays * .17) * (1.1 + growth * 2.4)
+  const windPulse = Math.max(0, Math.sin(time * .00042 + ageDays * .09)) ** 8 * 6
+  const topX = baseX + sway + windPulse * .6
+  const topY = baseY - treeHeight
+  const night = skyPhase.value === 'night'
+  const trunkColor = night ? 'rgba(80, 71, 57, .72)' : 'rgba(97, 75, 48, .76)'
+  const branchColor = night ? 'rgba(92, 83, 66, .56)' : 'rgba(102, 78, 50, .62)'
+  const leafColors = night
+    ? ['rgba(72, 118, 99, .42)', 'rgba(93, 143, 111, .38)', 'rgba(53, 96, 86, .36)']
+    : ['rgba(58, 128, 83, .54)', 'rgba(91, 151, 93, .5)', 'rgba(44, 104, 78, .46)']
+
+  ctx.save()
+  ctx.lineCap = 'round'
+  ctx.lineJoin = 'round'
+  ctx.strokeStyle = trunkColor
+  ctx.lineWidth = 2.8 + growth * 3.4
+  ctx.beginPath()
+  ctx.moveTo(baseX, baseY)
+  ctx.bezierCurveTo(baseX - 5, baseY - treeHeight * .34, baseX + 7, baseY - treeHeight * .68, topX, topY)
+  ctx.stroke()
+
+  ctx.strokeStyle = branchColor
+  ctx.lineWidth = 1.2 + growth * 1.8
+  ctx.beginPath()
+  ctx.moveTo(baseX, baseY - treeHeight * .43)
+  ctx.quadraticCurveTo(baseX - 24 * growth, baseY - treeHeight * .62, baseX - 34 * growth + sway, baseY - treeHeight * .78)
+  ctx.moveTo(baseX + 2, baseY - treeHeight * .52)
+  ctx.quadraticCurveTo(baseX + 26 * growth, baseY - treeHeight * .68, baseX + 40 * growth + sway, baseY - treeHeight * .84)
+  ctx.moveTo(baseX + 1, baseY - treeHeight * .68)
+  ctx.quadraticCurveTo(baseX - 12 * growth, baseY - treeHeight * .82, topX - 6 * growth, topY + 7 * growth)
+  ctx.stroke()
+
+  if (growth < .16) {
+    ctx.strokeStyle = branchColor
+    ctx.lineWidth = 1.1
+    ctx.beginPath()
+    ctx.moveTo(topX - 1, topY + 12)
+    ctx.lineTo(topX - 10, topY + 3)
+    ctx.moveTo(topX + 1, topY + 9)
+    ctx.lineTo(topX + 11, topY)
+    ctx.stroke()
+    drawLeaf(ctx, topX - 12, topY + 1, 5.2, -.68 + sway * .015, leafColors[1])
+    drawLeaf(ctx, topX + 12, topY - 2, 5.8, .46 + sway * .015, leafColors[0])
+    drawLeaf(ctx, topX + 1, topY - 11, 4.8, -.08, leafColors[1])
+  } else {
+    const canopyScale = .72 + growth * .82
+    drawFoliage(ctx, topX, topY + 8 * growth, canopyScale, sway, leafColors)
+    if (growth > .42) {
+      drawFoliage(ctx, baseX - 24 * growth + sway, baseY - treeHeight * .7, canopyScale * .54, sway, leafColors)
+      drawFoliage(ctx, baseX + 31 * growth + sway, baseY - treeHeight * .76, canopyScale * .5, sway, leafColors)
+    }
+  }
+
+  ctx.fillStyle = night ? 'rgba(6, 22, 29, .22)' : 'rgba(21, 62, 55, .12)'
+  ctx.beginPath()
+  ctx.ellipse(baseX + 5, baseY + 4, 31 + growth * 26, 6 + growth * 2, 0, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+}
+
+function drawLifeScene(time = 0) {
+  const canvas = lifeCanvas.value
+  const ctx = canvas ? lifeContext || (lifeContext = canvas.getContext('2d')) : null
+  if (!canvas || !ctx) return
+
+  const width = canvas.clientWidth
+  const height = canvas.clientHeight
+  if (!width || !height) return
+
+  const dpr = canvas.width / width
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+  ctx.clearRect(0, 0, width, height)
+
+  drawSapling(ctx, width, height, totalDays.value, time)
+}
+
 function drawSky(time = 0) {
   const canvas = skyCanvas.value
   const ctx = canvas ? skyContext || (skyContext = canvas.getContext('2d')) : null
@@ -997,7 +1119,8 @@ function drawSky(time = 0) {
 
 function resizeSkyCanvas() {
   const canvas = skyCanvas.value
-  if (!canvas) return
+  const life = lifeCanvas.value
+  if (!canvas || !life) return
   const rect = canvas.getBoundingClientRect()
   const dpr = Math.min(window.devicePixelRatio || 1, SKY_DPR_LIMIT)
   const width = Math.max(1, Math.round(rect.width * dpr))
@@ -1006,7 +1129,12 @@ function resizeSkyCanvas() {
     canvas.width = width
     canvas.height = height
   }
+  if (life.width !== width || life.height !== height) {
+    life.width = width
+    life.height = height
+  }
   drawSky(performance.now())
+  drawLifeScene(performance.now())
 }
 
 function requestSkyResize() {
@@ -1035,6 +1163,7 @@ function startSkyAnimation() {
     }
     if (time - skyLastDraw >= SKY_FRAME_MS) {
       drawSky(time)
+      drawLifeScene(time)
       skyLastDraw = time
     }
     skyFrame = requestAnimationFrame(tick)
@@ -1058,7 +1187,7 @@ function handleSkyVisibility() {
 }
 
 function startSky() {
-  if (!skyCanvas.value) return
+  if (!skyCanvas.value || !lifeCanvas.value) return
   isSkyVisible = true
   updateSkyPhase()
   if (!skyResizeObserver) {
@@ -1091,6 +1220,7 @@ function stopSky() {
   skyIntersectionObserver?.disconnect()
   skyIntersectionObserver = undefined
   skyContext = null
+  lifeContext = null
   if (isSkyVisibilityListenerBound) {
     document.removeEventListener('visibilitychange', handleSkyVisibility)
     isSkyVisibilityListenerBound = false
