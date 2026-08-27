@@ -17,11 +17,11 @@
       <section
       class="hero"
       :class="{ 'is-flipping': isFlipping }"
+      :style="skyTextStyle"
       aria-label="生命时光总览"
       @click="flipDays"
     >
-      <div class="hero__glow hero__glow--one" />
-      <div class="hero__glow hero__glow--two" />
+      <canvas ref="skyCanvas" class="hero__sky" aria-hidden="true" />
       <div v-if="showConfetti" class="confetti" aria-hidden="true">
         <i v-for="piece in 18" :key="piece" :style="confettiStyle(piece)" />
       </div>
@@ -31,7 +31,10 @@
       <div class="hero__number" aria-live="polite">{{ formatNumber(totalDays) }}</div>
       <p class="hero__unit">{{ nameInterpretation }}</p>
       <div class="hero__rule"><span /></div>
-      <p class="hero__age">生于 {{ formatDate(birthDate) }} {{ profile.birth_time }} · 现年 {{ ageText }}</p>
+      <p class="hero__age">
+        <span>生于 {{ formatDate(birthDate) }} {{ profile.birth_time }}</span>
+        <span>现年 {{ ageText }}</span>
+      </p>
       <p class="hero__hint"><span aria-hidden="true">⌁</span> 轻触数字，重温这一刻</p>
     </section>
 
@@ -289,6 +292,7 @@ import {
 type Anchor = LifeAnchor
 type Vaccine = LifeVaccine
 type VaccineStatus = 'completed' | 'overdue' | 'pending'
+type SkyPhase = 'sunrise' | 'day' | 'sunset' | 'afterglow' | 'night'
 
 interface VaccineRow extends Vaccine {
   date: Date
@@ -301,7 +305,27 @@ interface VaccineRow extends Vaccine {
   urgent: boolean
 }
 
+interface SkyConfig {
+  top: string
+  mid: string
+  bottom: string
+  sunColor: string
+  glowColor: string
+  cloudColor: string
+  hillColor: string
+  starAlpha: number
+}
+
+interface SkyOrb {
+  x: number
+  y: number
+  radius: number
+}
+
 const DAY_MS = 86_400_000
+const SKY_FRAME_MS = 42
+const SKY_CHECK_MS = 60_000
+const SKY_DPR_LIMIT = 2
 const emptyProfile: LifeProfile = {
   name: '',
   birth_date: '1970-01-01',
@@ -340,15 +364,164 @@ const highlightedId = ref<number | null>(null)
 const dataSecret = ref('')
 const canEditMarks = ref(false)
 const selectedOptionalIds = ref<Set<number>>(new Set())
+const initialSkyDate = new Date()
+const skyCanvas = ref<HTMLCanvasElement | null>(null)
+const skyPhase = ref<SkyPhase>(getSkyPhase(initialSkyDate))
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined
 let flipTimer: ReturnType<typeof setTimeout> | undefined
 let confettiTimer: ReturnType<typeof setTimeout> | undefined
 let highlightTimer: ReturnType<typeof setTimeout> | undefined
+let skyFrame: number | undefined
+let skyResizeFrame: number | undefined
+let skyLastDraw = 0
+let skyContext: CanvasRenderingContext2D | null = null
+let skyLunarDay = getLunarDay(initialSkyDate)
+let skyOrb: SkyOrb = getSkyOrb(initialSkyDate, skyPhase.value, skyLunarDay)
+let skyTimer: ReturnType<typeof setInterval> | undefined
+let skyResizeObserver: ResizeObserver | undefined
+let skyIntersectionObserver: IntersectionObserver | undefined
+let isSkyVisible = true
+let isSkyVisibilityListenerBound = false
 
 const isDataLoading = computed(() => lifeDataLoading.value && !lifeData.value)
 const dataError = computed(() => !lifeData.value ? lifeDataError.value : '')
 const isSecretRequired = computed(() => lifeDataSecretRequired.value)
+
+const skyConfigs: Record<SkyPhase, SkyConfig> = {
+  sunrise: {
+    top: '#bfe3f8',
+    mid: '#f6c57c',
+    bottom: '#fff3d5',
+    sunColor: '#ffd67d',
+    glowColor: 'rgba(255, 176, 88, .44)',
+    cloudColor: 'rgba(255, 247, 225, .72)',
+    hillColor: 'rgba(91, 145, 135, .22)',
+    starAlpha: 0
+  },
+  day: {
+    top: '#a9ddfb',
+    mid: '#dff3ff',
+    bottom: '#f5f1d7',
+    sunColor: '#ffe493',
+    glowColor: 'rgba(255, 219, 118, .34)',
+    cloudColor: 'rgba(255, 255, 255, .64)',
+    hillColor: 'rgba(71, 154, 139, .18)',
+    starAlpha: 0
+  },
+  sunset: {
+    top: '#95c7e8',
+    mid: '#f2b872',
+    bottom: '#f8d2a1',
+    sunColor: '#ffbe60',
+    glowColor: 'rgba(235, 123, 68, .42)',
+    cloudColor: 'rgba(255, 232, 197, .58)',
+    hillColor: 'rgba(111, 118, 110, .24)',
+    starAlpha: 0
+  },
+  afterglow: {
+    top: '#314b7d',
+    mid: '#9e6aa1',
+    bottom: '#f0a86e',
+    sunColor: '#ffd188',
+    glowColor: 'rgba(255, 137, 91, .34)',
+    cloudColor: 'rgba(255, 218, 186, .32)',
+    hillColor: 'rgba(31, 56, 74, .36)',
+    starAlpha: .28
+  },
+  night: {
+    top: '#07172f',
+    mid: '#10284a',
+    bottom: '#274466',
+    sunColor: '#e8f1ff',
+    glowColor: 'rgba(149, 189, 255, .24)',
+    cloudColor: 'rgba(198, 218, 238, .16)',
+    hillColor: 'rgba(5, 24, 37, .44)',
+    starAlpha: .82
+  }
+}
+
+const skyStars = Array.from({ length: 44 }, (_, index) => ({
+  x: ((index * 37) % 101) / 100,
+  y: (8 + ((index * 53) % 50)) / 100,
+  r: .7 + (index % 3) * .32,
+  phase: index * .63
+}))
+
+const skyClouds = [
+  { x: .12, y: .27, scale: .72, speed: 7 },
+  { x: .58, y: .2, scale: .58, speed: 5 },
+  { x: .82, y: .42, scale: .84, speed: 4 },
+  { x: .3, y: .54, scale: .52, speed: 3 }
+]
+
+const moonMarks = [
+  { x: -.28, y: -.18, r: .12, alpha: .11 },
+  { x: .18, y: -.08, r: .08, alpha: .08 },
+  { x: -.05, y: .26, r: .16, alpha: .07 },
+  { x: .32, y: .22, r: .1, alpha: .06 },
+  { x: -.38, y: .18, r: .07, alpha: .08 }
+]
+
+const skyTextColors: Record<SkyPhase, Record<string, string>> = {
+  sunrise: {
+    '--hero-text': '#263f4f',
+    '--hero-number': '#b86424',
+    '--hero-kicker': 'rgb(38 63 79 / 74%)',
+    '--hero-muted': 'rgb(38 63 79 / 66%)',
+    '--hero-soft': 'rgb(38 63 79 / 44%)',
+    '--hero-rule': 'rgb(184 100 36 / 24%)',
+    '--hero-accent': '#d69439',
+    '--hero-shadow': 'rgb(184 100 36 / 18%)',
+    '--hero-avatar-shadow': 'rgb(38 63 79 / 16%)'
+  },
+  day: {
+    '--hero-text': '#163f3a',
+    '--hero-number': '#24769b',
+    '--hero-kicker': 'rgb(36 118 155 / 74%)',
+    '--hero-muted': 'rgb(22 63 58 / 64%)',
+    '--hero-soft': 'rgb(22 63 58 / 42%)',
+    '--hero-rule': 'rgb(36 118 155 / 24%)',
+    '--hero-accent': '#e7bd4e',
+    '--hero-shadow': 'rgb(36 118 155 / 16%)',
+    '--hero-avatar-shadow': 'rgb(36 118 155 / 16%)'
+  },
+  sunset: {
+    '--hero-text': '#2f3e46',
+    '--hero-number': '#a66f24',
+    '--hero-kicker': 'rgb(47 62 70 / 74%)',
+    '--hero-muted': 'rgb(47 62 70 / 66%)',
+    '--hero-soft': 'rgb(47 62 70 / 44%)',
+    '--hero-rule': 'rgb(166 111 36 / 25%)',
+    '--hero-accent': '#d19a3a',
+    '--hero-shadow': 'rgb(166 111 36 / 18%)',
+    '--hero-avatar-shadow': 'rgb(47 62 70 / 16%)'
+  },
+  afterglow: {
+    '--hero-text': '#22324a',
+    '--hero-number': '#ddc46f',
+    '--hero-kicker': 'rgb(227 215 166 / 78%)',
+    '--hero-muted': 'rgb(244 240 221 / 74%)',
+    '--hero-soft': 'rgb(244 240 221 / 50%)',
+    '--hero-rule': 'rgb(227 215 166 / 28%)',
+    '--hero-accent': '#e3d7a6',
+    '--hero-shadow': 'rgb(19 40 73 / 22%)',
+    '--hero-avatar-shadow': 'rgb(19 40 73 / 22%)'
+  },
+  night: {
+    '--hero-text': '#edf5ff',
+    '--hero-number': '#c9dcff',
+    '--hero-kicker': 'rgb(201 220 255 / 78%)',
+    '--hero-muted': 'rgb(237 245 255 / 74%)',
+    '--hero-soft': 'rgb(237 245 255 / 50%)',
+    '--hero-rule': 'rgb(201 220 255 / 26%)',
+    '--hero-accent': '#d7e6ff',
+    '--hero-shadow': 'rgb(0 13 32 / 35%)',
+    '--hero-avatar-shadow': 'rgb(0 13 32 / 34%)'
+  }
+}
+
+const skyTextStyle = computed(() => skyTextColors[skyPhase.value])
 
 function parseDate(value: string) {
   const [year, month, day] = value.split('-').map(Number)
@@ -564,6 +737,355 @@ function formatDate(value: string | Date, short = false) {
   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
 }
 
+function getSkyPhase(date: Date): SkyPhase {
+  const hour = date.getHours() + date.getMinutes() / 60
+  if (hour >= 5.5 && hour < 8) return 'sunrise'
+  if (hour >= 8 && hour < 16.75) return 'day'
+  if (hour >= 16.75 && hour < 18.75) return 'sunset'
+  if (hour >= 18.75 && hour < 20.25) return 'afterglow'
+  return 'night'
+}
+
+function getLunarDay(date: Date) {
+  try {
+    const dayPart = new Intl.DateTimeFormat('zh-CN-u-ca-chinese', { day: 'numeric' })
+      .formatToParts(date)
+      .find(part => part.type === 'day')
+    const day = Number(dayPart?.value)
+    if (Number.isInteger(day) && day >= 1 && day <= 30) return day
+  } catch {
+    // Fall back to a synodic-month approximation if the browser lacks Chinese calendar data.
+  }
+
+  const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14)
+  const synodicMonth = 29.530588853
+  const days = (date.getTime() - knownNewMoon) / DAY_MS
+  return Math.floor(((days % synodicMonth) + synodicMonth) % synodicMonth) + 1
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value))
+}
+
+function hourOfDay(date: Date) {
+  return date.getHours() + date.getMinutes() / 60 + date.getSeconds() / 3600
+}
+
+function timeProgress(hour: number, start: number, end: number) {
+  return clamp((hour - start) / (end - start), 0, 1)
+}
+
+function shortestHourDistance(hour: number, target: number) {
+  return ((hour - target + 36) % 24) - 12
+}
+
+function getSkyOrb(date: Date, phase: SkyPhase, lunarDay: number): SkyOrb {
+  const hour = hourOfDay(date)
+  if (phase === 'night') {
+    const moonTransitHour = (12 + (lunarDay - 1) * 24 / 29.530588853) % 24
+    const delta = shortestHourDistance(hour, moonTransitHour)
+    return {
+      x: clamp(.72 + delta * .04, .14, .82),
+      y: clamp(.12 + Math.pow(Math.min(1, Math.abs(delta) / 7), 1.45) * .48, .1, .68),
+      radius: 14
+    }
+  }
+
+  if (phase === 'sunrise') {
+    const progress = timeProgress(hour, 5.5, 8)
+    return {
+      x: .14 + progress * .24,
+      y: .76 - Math.sin(progress * Math.PI / 2) * .34,
+      radius: 38 + progress * 2
+    }
+  }
+
+  if (phase === 'day') {
+    const progress = timeProgress(hour, 8, 16.75)
+    return {
+      x: .36 + progress * .34,
+      y: .42 - Math.sin(progress * Math.PI) * .22,
+      radius: 38
+    }
+  }
+
+  if (phase === 'sunset') {
+    const progress = timeProgress(hour, 16.75, 18.75)
+    return {
+      x: .7 + progress * .18,
+      y: .42 + progress * .32,
+      radius: 40
+    }
+  }
+
+  const progress = timeProgress(hour, 18.75, 20.25)
+  return {
+    x: .88 + progress * .08,
+    y: .78 + progress * .1,
+    radius: 34
+  }
+}
+
+function drawCloud(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number, color: string) {
+  const puffs = [
+    [-44, 16, 34, 13, .55],
+    [-14, 4, 36, 18, .72],
+    [24, 7, 43, 19, .65],
+    [52, 18, 30, 12, .36],
+    [0, 21, 70, 16, .45],
+    [-72, 22, 22, 8, .2],
+    [78, 20, 24, 8, .18]
+  ]
+
+  ctx.save()
+  ctx.filter = `blur(${5 * scale}px)`
+  for (const [dx, dy, rx, ry, alpha] of puffs) {
+    ctx.globalAlpha = alpha
+    ctx.fillStyle = color
+    ctx.beginPath()
+    ctx.ellipse(x + dx * scale, y + dy * scale, rx * scale, ry * scale, 0, 0, Math.PI * 2)
+    ctx.fill()
+  }
+  ctx.restore()
+}
+
+function drawMoon(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, lunarDay: number) {
+  const phase = Math.min(.99, Math.max(.01, (lunarDay - 1) / 29.530588853))
+  const illumination = (1 - Math.cos(phase * Math.PI * 2)) / 2
+  const curve = Math.cos(phase * Math.PI * 2)
+  const glow = ctx.createRadialGradient(x, y, 0, x, y, radius * 3.4)
+  glow.addColorStop(0, 'rgba(210, 226, 247, .24)')
+  glow.addColorStop(1, 'rgba(210, 226, 247, 0)')
+
+  ctx.fillStyle = glow
+  ctx.beginPath()
+  ctx.arc(x, y, radius * 3.4, 0, Math.PI * 2)
+  ctx.fill()
+
+  ctx.save()
+  ctx.translate(x, y)
+
+  const moonBase = ctx.createRadialGradient(-radius * .28, -radius * .35, radius * .1, 0, 0, radius)
+  moonBase.addColorStop(0, '#dce5ee')
+  moonBase.addColorStop(.68, '#bdcadb')
+  moonBase.addColorStop(1, '#899bb4')
+
+  ctx.fillStyle = 'rgba(20, 43, 70, .5)'
+  ctx.beginPath()
+  ctx.arc(0, 0, radius, 0, Math.PI * 2)
+  ctx.fill()
+
+  ctx.fillStyle = moonBase
+  ctx.beginPath()
+  if (illumination > .94) {
+    ctx.arc(0, 0, radius, 0, Math.PI * 2)
+  } else if (illumination < .06) {
+    ctx.ellipse(0, 0, radius * .08, radius, 0, -Math.PI / 2, Math.PI / 2)
+  } else if (phase <= .5) {
+    ctx.moveTo(0, -radius)
+    ctx.arc(0, 0, radius, -Math.PI / 2, Math.PI / 2)
+    ctx.ellipse(0, 0, Math.abs(curve) * radius, radius, 0, Math.PI / 2, -Math.PI / 2, curve >= 0)
+  } else {
+    ctx.moveTo(0, -radius)
+    ctx.arc(0, 0, radius, -Math.PI / 2, Math.PI / 2, true)
+    ctx.ellipse(0, 0, Math.abs(curve) * radius, radius, 0, Math.PI / 2, -Math.PI / 2, curve <= 0)
+  }
+  ctx.closePath()
+  ctx.fill()
+
+  ctx.clip()
+  for (const mark of moonMarks) {
+    ctx.globalAlpha = mark.alpha
+    ctx.fillStyle = '#8798ad'
+    ctx.beginPath()
+    ctx.ellipse(mark.x * radius, mark.y * radius, mark.r * radius * 1.35, mark.r * radius, -.35, 0, Math.PI * 2)
+    ctx.fill()
+  }
+  ctx.globalAlpha = 1
+
+  const shade = ctx.createLinearGradient(-radius, -radius, radius, radius)
+  shade.addColorStop(0, 'rgba(255, 255, 255, .14)')
+  shade.addColorStop(.48, 'rgba(255, 255, 255, 0)')
+  shade.addColorStop(1, 'rgba(30, 54, 84, .16)')
+  ctx.fillStyle = shade
+  ctx.beginPath()
+  ctx.arc(0, 0, radius, 0, Math.PI * 2)
+  ctx.fill()
+
+  ctx.restore()
+}
+
+function drawSky(time = 0) {
+  const canvas = skyCanvas.value
+  const ctx = canvas ? skyContext || (skyContext = canvas.getContext('2d')) : null
+  if (!canvas || !ctx) return
+
+  const width = canvas.clientWidth
+  const height = canvas.clientHeight
+  if (!width || !height) return
+
+  const config = skyConfigs[skyPhase.value]
+  const dpr = canvas.width / width
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+  ctx.clearRect(0, 0, width, height)
+
+  const sky = ctx.createLinearGradient(0, 0, 0, height)
+  sky.addColorStop(0, config.top)
+  sky.addColorStop(.52, config.mid)
+  sky.addColorStop(1, config.bottom)
+  ctx.fillStyle = sky
+  ctx.fillRect(0, 0, width, height)
+
+  const x = width * skyOrb.x
+  const y = height * skyOrb.y
+  const radius = skyOrb.radius
+  const glow = ctx.createRadialGradient(x, y, 0, x, y, radius * 4.8)
+  glow.addColorStop(0, config.glowColor)
+  glow.addColorStop(1, 'rgba(255, 255, 255, 0)')
+  ctx.fillStyle = glow
+  ctx.beginPath()
+  ctx.arc(x, y, radius * 4.8, 0, Math.PI * 2)
+  ctx.fill()
+
+  if (skyPhase.value === 'night') {
+    drawMoon(ctx, x, y, radius, skyLunarDay)
+  } else {
+    ctx.fillStyle = config.sunColor
+    ctx.beginPath()
+    ctx.arc(x, y, radius, 0, Math.PI * 2)
+    ctx.fill()
+  }
+
+  if (config.starAlpha) {
+    for (const star of skyStars) {
+      const alpha = config.starAlpha * (.62 + Math.sin(time * .002 + star.phase) * .2)
+      ctx.globalAlpha = Math.max(.16, alpha)
+      ctx.fillStyle = '#ffffff'
+      ctx.beginPath()
+      ctx.arc(width * star.x, height * star.y, star.r, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    ctx.globalAlpha = 1
+  }
+
+  for (const cloud of skyClouds) {
+    const drift = (time * .001 * cloud.speed) % (width + 260)
+    const cloudX = (width * cloud.x + drift) % (width + 260) - 130
+    drawCloud(ctx, cloudX, height * cloud.y, cloud.scale, config.cloudColor)
+  }
+
+  ctx.fillStyle = config.hillColor
+  ctx.beginPath()
+  ctx.moveTo(0, height)
+  ctx.bezierCurveTo(width * .2, height * .9, width * .42, height * .95, width * .62, height * .87)
+  ctx.bezierCurveTo(width * .78, height * .8, width * .9, height * .9, width, height * .84)
+  ctx.lineTo(width, height)
+  ctx.closePath()
+  ctx.fill()
+}
+
+function resizeSkyCanvas() {
+  const canvas = skyCanvas.value
+  if (!canvas) return
+  const rect = canvas.getBoundingClientRect()
+  const dpr = Math.min(window.devicePixelRatio || 1, SKY_DPR_LIMIT)
+  const width = Math.max(1, Math.round(rect.width * dpr))
+  const height = Math.max(1, Math.round(rect.height * dpr))
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width
+    canvas.height = height
+  }
+  drawSky(performance.now())
+}
+
+function requestSkyResize() {
+  if (skyResizeFrame) return
+  skyResizeFrame = requestAnimationFrame(() => {
+    skyResizeFrame = undefined
+    resizeSkyCanvas()
+  })
+}
+
+function updateSkyPhase() {
+  const now = new Date()
+  const nextPhase = getSkyPhase(now)
+  if (nextPhase !== skyPhase.value) skyPhase.value = nextPhase
+  skyLunarDay = getLunarDay(now)
+  skyOrb = getSkyOrb(now, skyPhase.value, skyLunarDay)
+  drawSky(performance.now())
+}
+
+function startSkyAnimation() {
+  if (skyFrame || !isSkyVisible || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  const tick = (time: number) => {
+    if (document.hidden || !isSkyVisible) {
+      skyFrame = undefined
+      return
+    }
+    if (time - skyLastDraw >= SKY_FRAME_MS) {
+      drawSky(time)
+      skyLastDraw = time
+    }
+    skyFrame = requestAnimationFrame(tick)
+  }
+  skyFrame = requestAnimationFrame(tick)
+}
+
+function stopSkyAnimation() {
+  if (!skyFrame) return
+  cancelAnimationFrame(skyFrame)
+  skyFrame = undefined
+}
+
+function handleSkyVisibility() {
+  if (document.hidden || !isSkyVisible) {
+    stopSkyAnimation()
+    return
+  }
+  updateSkyPhase()
+  startSkyAnimation()
+}
+
+function startSky() {
+  if (!skyCanvas.value) return
+  isSkyVisible = true
+  updateSkyPhase()
+  if (!skyResizeObserver) {
+    skyResizeObserver = new ResizeObserver(requestSkyResize)
+    skyResizeObserver.observe(skyCanvas.value)
+  }
+  if (!skyIntersectionObserver) {
+    skyIntersectionObserver = new IntersectionObserver(([entry]) => {
+      isSkyVisible = entry.isIntersecting
+      handleSkyVisibility()
+    }, { threshold: 0 })
+    skyIntersectionObserver.observe(skyCanvas.value)
+  }
+  if (!skyTimer) skyTimer = setInterval(updateSkyPhase, SKY_CHECK_MS)
+  if (!isSkyVisibilityListenerBound) {
+    document.addEventListener('visibilitychange', handleSkyVisibility)
+    isSkyVisibilityListenerBound = true
+  }
+  startSkyAnimation()
+}
+
+function stopSky() {
+  stopSkyAnimation()
+  if (skyResizeFrame) cancelAnimationFrame(skyResizeFrame)
+  if (skyTimer) clearInterval(skyTimer)
+  skyResizeFrame = undefined
+  skyTimer = undefined
+  skyResizeObserver?.disconnect()
+  skyResizeObserver = undefined
+  skyIntersectionObserver?.disconnect()
+  skyIntersectionObserver = undefined
+  skyContext = null
+  if (isSkyVisibilityListenerBound) {
+    document.removeEventListener('visibilitychange', handleSkyVisibility)
+    isSkyVisibilityListenerBound = false
+  }
+}
+
 function flipDays() {
   isFlipping.value = false
   if (flipTimer) clearTimeout(flipTimer)
@@ -731,13 +1253,19 @@ function restoreVaccineState() {
 
 async function reloadData() {
   await ensureLifeData({ force: true })
-  if (lifeData.value) restoreVaccineState()
+  if (lifeData.value) {
+    restoreVaccineState()
+    void nextTick(startSky)
+  }
 }
 
 async function submitDataSecret() {
   await setLifeDataSecret(dataSecret.value)
   canEditMarks.value = hasLifeDataSecret()
-  if (lifeData.value) restoreVaccineState()
+  if (lifeData.value) {
+    restoreVaccineState()
+    void nextTick(startSky)
+  }
 }
 
 onMounted(async () => {
@@ -745,6 +1273,7 @@ onMounted(async () => {
   await ensureLifeData()
   if (!lifeData.value) return
   restoreVaccineState()
+  void nextTick(startSky)
 
   if (totalDays.value > 0 && totalDays.value % 100 === 0) {
     const celebrationKey = `life-dashboard-celebration-${toIsoDate(today.value)}`
@@ -761,6 +1290,7 @@ onBeforeUnmount(() => {
   if (flipTimer) clearTimeout(flipTimer)
   if (confettiTimer) clearTimeout(confettiTimer)
   if (highlightTimer) clearTimeout(highlightTimer)
+  stopSky()
 })
 </script>
 
