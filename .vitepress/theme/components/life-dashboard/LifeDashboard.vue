@@ -837,7 +837,7 @@ function getSkyOrb(date: Date, phase: SkyPhase, lunarDay: number): SkyOrb {
     const progress = timeProgress(hour, 5.5, 8)
     return {
       x: .1 + progress * .24,
-      y: .68 - Math.sin(progress * Math.PI / 2) * .51,
+      y: .78 - Math.sin(progress * Math.PI / 2) * .61,
       radius: 13 + progress * 2
     }
   }
@@ -868,15 +868,19 @@ function getSkyOrb(date: Date, phase: SkyPhase, lunarDay: number): SkyOrb {
   }
 }
 
-function getSunStyle(date: Date, phase: SkyPhase): SunStyle {
+function getSunStyle(date: Date, phase: SkyPhase, sunYRatio: number): SunStyle {
   const hour = hourOfDay(date)
+  const horizonRatio = .8
+  const horizonAngle = Math.atan2(Math.max(0, horizonRatio - sunYRatio), .55) * 180 / Math.PI
+  const redShift = 1 - clamp((horizonAngle - 8) / 16, 0, 1)
 
   if (phase === 'sunrise') {
     const progress = timeProgress(hour, 5.5, 8)
+    const warmLowSun = redShift > .42 && progress < .7
     return {
-      center: progress < .38 ? '#FFB84D' : '#FFD166',
-      edge: progress < .38 ? '#FF8C38' : '#FF9F43',
-      glow: progress < .38 ? 'rgba(255, 142, 86, .24)' : 'rgba(255, 190, 104, .18)',
+      center: warmLowSun ? '#FFB84D' : '#FFF9CC',
+      edge: warmLowSun ? '#FF8C38' : '#FFD166',
+      glow: warmLowSun ? 'rgba(255, 142, 86, .22)' : 'rgba(255, 249, 204, .14)',
       glowScale: 4.1 - progress * .55,
       diskAlpha: .76 + progress * .12,
       hazeAlpha: .16 + progress * .04,
@@ -900,14 +904,15 @@ function getSunStyle(date: Date, phase: SkyPhase): SunStyle {
 
   if (phase === 'sunset') {
     const progress = timeProgress(hour, 16.75, 18.75)
+    const isNearHorizon = redShift > .45
     return {
-      center: progress < .45 ? '#FFD166' : '#FF8038',
-      edge: progress < .45 ? '#FF9F43' : '#E2532C',
-      glow: progress < .45 ? 'rgba(255, 159, 67, .22)' : 'rgba(226, 83, 44, .28)',
+      center: isNearHorizon ? '#FF8038' : '#FFD166',
+      edge: isNearHorizon ? '#E2532C' : '#FF9F43',
+      glow: isNearHorizon ? 'rgba(226, 83, 44, .26)' : 'rgba(255, 209, 102, .16)',
       glowScale: 3.9 + progress * .72,
       diskAlpha: .82 - progress * .14,
-      hazeAlpha: .18 + progress * .12,
-      softness: 1.35 + progress * .35
+      hazeAlpha: .16 + redShift * .16,
+      softness: 1.2 + redShift * .55
     }
   }
 
@@ -1070,9 +1075,10 @@ function drawLandscape(ctx: CanvasRenderingContext2D, width: number, height: num
   const origin = riverOrigin(width, height)
   const nearY = riverNearY(height)
   const night = skyPhase.value === 'night'
-  const farHill = night ? 'rgba(7, 25, 41, .28)' : 'rgba(76, 139, 131, .13)'
-  const nearHill = config.hillColor
-  const bank = night ? 'rgba(4, 20, 32, .5)' : 'rgba(44, 114, 95, .18)'
+  const farHill = night ? 'rgba(7, 25, 41, .28)' : 'rgba(76, 139, 131, .16)'
+  const nearGrass = night ? 'rgba(11, 39, 38, .46)' : 'rgba(70, 146, 78, .34)'
+  const grassLight = night ? 'rgba(29, 70, 60, .3)' : 'rgba(122, 178, 88, .32)'
+  const bank = night ? 'rgba(4, 20, 32, .5)' : 'rgba(62, 132, 82, .34)'
   const bankShade = night ? 'rgba(2, 14, 23, .22)' : 'rgba(18, 88, 78, .1)'
 
   ctx.fillStyle = farHill
@@ -1103,9 +1109,11 @@ function drawLandscape(ctx: CanvasRenderingContext2D, width: number, height: num
   ctx.fillStyle = river
   ctx.beginPath()
   ctx.moveTo(origin.x - width * .014, origin.y)
-  ctx.bezierCurveTo(width * .5, height * .85, width * .44, height * .91, width * .31, nearY)
+  ctx.bezierCurveTo(width * .63, height * .84, width * .5, height * .88, width * .44, height * .91)
+  ctx.bezierCurveTo(width * .38, height * .94, width * .35, height * .97, width * .28, nearY)
   ctx.lineTo(width * .72, nearY)
-  ctx.bezierCurveTo(width * .64, height * .92, width * .62, height * .86, origin.x + width * .016, origin.y)
+  ctx.bezierCurveTo(width * .61, height * .96, width * .72, height * .9, width * .62, height * .86)
+  ctx.bezierCurveTo(width * .56, height * .83, width * .61, height * .81, origin.x + width * .016, origin.y)
   ctx.closePath()
   ctx.fill()
 
@@ -1114,11 +1122,14 @@ function drawLandscape(ctx: CanvasRenderingContext2D, width: number, height: num
   ctx.lineWidth = 1
   ctx.beginPath()
   ctx.moveTo(origin.x - width * .012, origin.y + 2)
-  ctx.bezierCurveTo(width * .49, height * .86, width * .45, height * .91, width * .36, nearY - 6)
+  ctx.bezierCurveTo(width * .6, height * .84, width * .48, height * .89, width * .43, height * .92)
+  ctx.bezierCurveTo(width * .36, height * .96, width * .34, height * .98, width * .32, nearY - 5)
   ctx.moveTo(origin.x + width * .012, origin.y + 2)
-  ctx.bezierCurveTo(width * .61, height * .86, width * .62, height * .91, width * .68, nearY - 5)
+  ctx.bezierCurveTo(width * .56, height * .84, width * .69, height * .88, width * .62, height * .92)
+  ctx.bezierCurveTo(width * .58, height * .95, width * .66, height * .98, width * .68, nearY - 5)
   ctx.moveTo(origin.x, origin.y + 3)
-  ctx.bezierCurveTo(width * .56, height * .86, width * .54, height * .92, width * .52, nearY - 9)
+  ctx.bezierCurveTo(width * .62, height * .85, width * .5, height * .9, width * .52, height * .94)
+  ctx.bezierCurveTo(width * .54, height * .97, width * .5, height * .99, width * .49, nearY - 8)
   ctx.stroke()
 
   ctx.strokeStyle = night ? 'rgba(185, 216, 238, .08)' : 'rgba(255, 251, 230, .14)'
@@ -1127,19 +1138,28 @@ function drawLandscape(ctx: CanvasRenderingContext2D, width: number, height: num
     const t = (i + 1) / 5
     const rippleY = origin.y + (nearY - origin.y) * t
     const rippleW = width * (.02 + t * .1)
-    const rippleX = width * (.56 - t * .04)
+    const rippleX = width * (.57 + Math.sin(t * Math.PI * 2.1) * .07 - t * .05)
     ctx.beginPath()
     ctx.moveTo(rippleX - rippleW, rippleY)
     ctx.quadraticCurveTo(rippleX, rippleY + 2, rippleX + rippleW, rippleY - 1)
     ctx.stroke()
   }
 
-  ctx.fillStyle = nearHill
+  ctx.fillStyle = grassLight
+  ctx.beginPath()
+  ctx.moveTo(0, height)
+  ctx.lineTo(0, height * .85)
+  ctx.bezierCurveTo(width * .18, height * .78, width * .38, height * .86, origin.x - width * .04, origin.y - 2)
+  ctx.bezierCurveTo(width * .44, height * .85, width * .28, height * .92, width * .16, height)
+  ctx.closePath()
+  ctx.fill()
+
+  ctx.fillStyle = nearGrass
   ctx.beginPath()
   ctx.moveTo(0, height)
   ctx.lineTo(0, height * .89)
-  ctx.bezierCurveTo(width * .18, height * .83, width * .36, height * .9, origin.x - width * .03, origin.y + 3)
-  ctx.bezierCurveTo(width * .44, height * .88, width * .34, height * .95, width * .24, height)
+  ctx.bezierCurveTo(width * .2, height * .82, width * .35, height * .9, origin.x - width * .05, origin.y + 6)
+  ctx.bezierCurveTo(width * .39, height * .89, width * .32, height * .96, width * .24, height)
   ctx.closePath()
   ctx.fill()
 
@@ -1147,8 +1167,8 @@ function drawLandscape(ctx: CanvasRenderingContext2D, width: number, height: num
   ctx.beginPath()
   ctx.moveTo(width, height)
   ctx.lineTo(width, height * .84)
-  ctx.bezierCurveTo(width * .82, height * .81, width * .7, height * .86, origin.x + width * .03, origin.y + 3)
-  ctx.bezierCurveTo(width * .64, height * .9, width * .74, height * .95, width * .84, height)
+  ctx.bezierCurveTo(width * .8, height * .78, width * .69, height * .87, origin.x + width * .05, origin.y + 6)
+  ctx.bezierCurveTo(width * .66, height * .9, width * .76, height * .95, width * .86, height)
   ctx.closePath()
   ctx.fill()
 
@@ -1156,6 +1176,23 @@ function drawLandscape(ctx: CanvasRenderingContext2D, width: number, height: num
   ctx.beginPath()
   ctx.ellipse(width * .24, nearY - 28, width * .18, 8, -.05, 0, Math.PI * 2)
   ctx.fill()
+
+  const grassStroke = night ? 'rgba(87, 132, 101, .28)' : 'rgba(52, 132, 72, .36)'
+  ctx.strokeStyle = grassStroke
+  ctx.lineWidth = 1
+  for (let i = 0; i < 18; i += 1) {
+    const side = i % 2 === 0 ? -1 : 1
+    const t = (i % 9) / 8
+    const gx = side < 0
+      ? width * (.08 + t * .34)
+      : width * (.72 + t * .22)
+    const gy = nearY - 56 + Math.sin(i * 1.7) * 7 + t * 34
+    const blade = 4 + (i % 4)
+    ctx.beginPath()
+    ctx.moveTo(gx, gy)
+    ctx.quadraticCurveTo(gx + side * 2, gy - blade, gx + side * 5, gy - blade * 2)
+    ctx.stroke()
+  }
 }
 
 function drawLeaf(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, rotate: number, color: string) {
@@ -1309,7 +1346,7 @@ function drawSky(time = 0) {
     ctx.fill()
     drawMoon(ctx, x, y, radius, skyLunarDay)
   } else {
-    drawSun(ctx, x, y, radius, getSunStyle(new Date(), skyPhase.value), skyPhase.value)
+    drawSun(ctx, x, y, radius, getSunStyle(new Date(), skyPhase.value, skyOrb.y), skyPhase.value)
   }
 
   if (config.starAlpha) {
