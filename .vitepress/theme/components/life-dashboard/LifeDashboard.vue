@@ -334,6 +334,16 @@ interface SkyOrb {
   radius: number
 }
 
+interface SunStyle {
+  center: string
+  edge: string
+  glow: string
+  glowScale: number
+  diskAlpha: number
+  hazeAlpha: number
+  softness: number
+}
+
 const DAY_MS = 86_400_000
 const SKY_FRAME_MS = 42
 const SKY_CHECK_MS = 60_000
@@ -793,8 +803,22 @@ function shortestHourDistance(hour: number, target: number) {
   return ((hour - target + 36) % 24) - 12
 }
 
-function sceneGroundY(height: number) {
-  return height - clamp(height * .09, 58, 82)
+function riverOrigin(width: number, height: number) {
+  return {
+    x: width * .58,
+    y: height * .8
+  }
+}
+
+function riverNearY(height: number) {
+  return height - clamp(height * .035, 22, 34)
+}
+
+function treeBankPoint(width: number, height: number) {
+  return {
+    x: clamp(width * .23, 68, 126),
+    y: riverNearY(height) - clamp(height * .09, 50, 68)
+  }
 }
 
 function getSkyOrb(date: Date, phase: SkyPhase, lunarDay: number): SkyOrb {
@@ -812,35 +836,89 @@ function getSkyOrb(date: Date, phase: SkyPhase, lunarDay: number): SkyOrb {
   if (phase === 'sunrise') {
     const progress = timeProgress(hour, 5.5, 8)
     return {
-      x: .14 + progress * .24,
-      y: .76 - Math.sin(progress * Math.PI / 2) * .34,
-      radius: 38 + progress * 2
+      x: .1 + progress * .24,
+      y: .68 - Math.sin(progress * Math.PI / 2) * .51,
+      radius: 13 + progress * 2
     }
   }
 
   if (phase === 'day') {
     const progress = timeProgress(hour, 8, 16.75)
     return {
-      x: .36 + progress * .34,
-      y: .42 - Math.sin(progress * Math.PI) * .22,
-      radius: 38
+      x: .25 + progress * .5,
+      y: .18 - Math.sin(progress * Math.PI) * .12,
+      radius: 15
     }
   }
 
   if (phase === 'sunset') {
     const progress = timeProgress(hour, 16.75, 18.75)
     return {
-      x: .7 + progress * .18,
-      y: .42 + progress * .32,
-      radius: 40
+      x: .76 + progress * .18,
+      y: .18 + progress * .5,
+      radius: 15 - progress * 2
     }
   }
 
   const progress = timeProgress(hour, 18.75, 20.25)
   return {
-    x: .88 + progress * .08,
-    y: .78 + progress * .1,
-    radius: 34
+    x: .94 + progress * .08,
+    y: .72 + progress * .08,
+    radius: 13
+  }
+}
+
+function getSunStyle(date: Date, phase: SkyPhase): SunStyle {
+  const hour = hourOfDay(date)
+
+  if (phase === 'sunrise') {
+    const progress = timeProgress(hour, 5.5, 8)
+    return {
+      center: progress < .38 ? '#FFB84D' : '#FFD166',
+      edge: progress < .38 ? '#FF8C38' : '#FF9F43',
+      glow: progress < .38 ? 'rgba(255, 142, 86, .24)' : 'rgba(255, 190, 104, .18)',
+      glowScale: 4.1 - progress * .55,
+      diskAlpha: .76 + progress * .12,
+      hazeAlpha: .16 + progress * .04,
+      softness: 1.15
+    }
+  }
+
+  if (phase === 'day') {
+    const progress = timeProgress(hour, 8, 16.75)
+    const noonStrength = Math.sin(progress * Math.PI)
+    return {
+      center: noonStrength > .58 ? '#FFFDF5' : '#FFF9CC',
+      edge: noonStrength > .58 ? '#FFF9CC' : '#FFD166',
+      glow: `rgba(255, 249, 204, ${(.08 + noonStrength * .055).toFixed(3)})`,
+      glowScale: 2.8 + noonStrength * .22,
+      diskAlpha: .72 + noonStrength * .18,
+      hazeAlpha: .07 + noonStrength * .04,
+      softness: .55
+    }
+  }
+
+  if (phase === 'sunset') {
+    const progress = timeProgress(hour, 16.75, 18.75)
+    return {
+      center: progress < .45 ? '#FFD166' : '#FF8038',
+      edge: progress < .45 ? '#FF9F43' : '#E2532C',
+      glow: progress < .45 ? 'rgba(255, 159, 67, .22)' : 'rgba(226, 83, 44, .28)',
+      glowScale: 3.9 + progress * .72,
+      diskAlpha: .82 - progress * .14,
+      hazeAlpha: .18 + progress * .12,
+      softness: 1.35 + progress * .35
+    }
+  }
+
+  return {
+    center: '#E06030',
+    edge: '#B84C34',
+    glow: 'rgba(224, 96, 48, .18)',
+    glowScale: 3.3,
+    diskAlpha: .5,
+    hazeAlpha: .16,
+    softness: 1.8
   }
 }
 
@@ -933,6 +1011,153 @@ function drawMoon(ctx: CanvasRenderingContext2D, x: number, y: number, radius: n
   ctx.restore()
 }
 
+function drawSun(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, style: SunStyle, phase: SkyPhase) {
+  const isLowSun = phase === 'sunrise' || phase === 'sunset' || phase === 'afterglow'
+  const hazeRadius = radius * style.glowScale
+
+  ctx.save()
+  ctx.translate(x, y)
+  ctx.globalCompositeOperation = 'screen'
+
+  ctx.save()
+  ctx.globalAlpha = style.hazeAlpha
+  ctx.scale(isLowSun ? 1.9 : 1.28, isLowSun ? .52 : .88)
+  const airGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, hazeRadius)
+  airGlow.addColorStop(0, style.glow)
+  airGlow.addColorStop(.42, style.glow)
+  airGlow.addColorStop(1, 'rgba(255, 255, 255, 0)')
+  ctx.fillStyle = airGlow
+  ctx.beginPath()
+  ctx.arc(0, 0, hazeRadius, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+
+  const bloom = ctx.createRadialGradient(0, 0, radius * .15, 0, 0, radius * 1.8)
+  bloom.addColorStop(0, isLowSun ? 'rgba(255, 184, 77, .28)' : 'rgba(255, 253, 245, .24)')
+  bloom.addColorStop(.55, style.glow)
+  bloom.addColorStop(1, 'rgba(255, 255, 255, 0)')
+  ctx.fillStyle = bloom
+  ctx.beginPath()
+  ctx.arc(0, 0, radius * 1.8, 0, Math.PI * 2)
+  ctx.fill()
+
+  ctx.globalCompositeOperation = 'source-over'
+  ctx.globalAlpha = style.diskAlpha
+  ctx.filter = `blur(${style.softness}px)`
+  const disk = ctx.createRadialGradient(-radius * .26, -radius * .3, radius * .1, 0, 0, radius)
+  disk.addColorStop(0, isLowSun ? style.center : '#FFFDF5')
+  disk.addColorStop(.34, style.center)
+  disk.addColorStop(1, style.edge)
+  ctx.fillStyle = disk
+  ctx.beginPath()
+  ctx.arc(0, 0, radius, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.filter = 'none'
+
+  ctx.globalAlpha = isLowSun ? .2 : .14
+  const core = ctx.createRadialGradient(0, 0, 0, 0, 0, radius * .82)
+  core.addColorStop(0, isLowSun ? 'rgba(255, 184, 77, .74)' : 'rgba(255, 253, 245, .95)')
+  core.addColorStop(1, isLowSun ? 'rgba(255, 184, 77, 0)' : 'rgba(255, 253, 245, 0)')
+  ctx.fillStyle = core
+  ctx.beginPath()
+  ctx.arc(0, 0, radius * .82, 0, Math.PI * 2)
+  ctx.fill()
+
+  ctx.restore()
+}
+
+function drawLandscape(ctx: CanvasRenderingContext2D, width: number, height: number, config: SkyConfig) {
+  const origin = riverOrigin(width, height)
+  const nearY = riverNearY(height)
+  const night = skyPhase.value === 'night'
+  const farHill = night ? 'rgba(7, 25, 41, .28)' : 'rgba(76, 139, 131, .13)'
+  const nearHill = config.hillColor
+  const bank = night ? 'rgba(4, 20, 32, .5)' : 'rgba(44, 114, 95, .18)'
+  const bankShade = night ? 'rgba(2, 14, 23, .22)' : 'rgba(18, 88, 78, .1)'
+
+  ctx.fillStyle = farHill
+  ctx.beginPath()
+  ctx.moveTo(0, height * .86)
+  ctx.bezierCurveTo(width * .18, height * .76, width * .38, height * .84, width * .56, height * .78)
+  ctx.bezierCurveTo(width * .72, height * .72, width * .9, height * .82, width, height * .76)
+  ctx.lineTo(width, height)
+  ctx.lineTo(0, height)
+  ctx.closePath()
+  ctx.fill()
+
+  const river = ctx.createLinearGradient(origin.x, origin.y, width * .48, nearY)
+  if (night) {
+    river.addColorStop(0, 'rgba(118, 158, 190, .24)')
+    river.addColorStop(.58, 'rgba(56, 105, 145, .36)')
+    river.addColorStop(1, 'rgba(25, 68, 108, .48)')
+  } else if (skyPhase.value === 'sunset' || skyPhase.value === 'afterglow' || skyPhase.value === 'sunrise') {
+    river.addColorStop(0, 'rgba(255, 204, 143, .24)')
+    river.addColorStop(.45, 'rgba(103, 178, 190, .42)')
+    river.addColorStop(1, 'rgba(55, 142, 174, .56)')
+  } else {
+    river.addColorStop(0, 'rgba(226, 249, 255, .3)')
+    river.addColorStop(.56, 'rgba(126, 205, 224, .46)')
+    river.addColorStop(1, 'rgba(62, 164, 200, .58)')
+  }
+
+  ctx.fillStyle = river
+  ctx.beginPath()
+  ctx.moveTo(origin.x - width * .014, origin.y)
+  ctx.bezierCurveTo(width * .5, height * .85, width * .44, height * .91, width * .31, nearY)
+  ctx.lineTo(width * .72, nearY)
+  ctx.bezierCurveTo(width * .64, height * .92, width * .62, height * .86, origin.x + width * .016, origin.y)
+  ctx.closePath()
+  ctx.fill()
+
+  const riverShine = night ? 'rgba(205, 225, 245, .16)' : 'rgba(255, 255, 255, .36)'
+  ctx.strokeStyle = riverShine
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo(origin.x - width * .012, origin.y + 2)
+  ctx.bezierCurveTo(width * .49, height * .86, width * .45, height * .91, width * .36, nearY - 6)
+  ctx.moveTo(origin.x + width * .012, origin.y + 2)
+  ctx.bezierCurveTo(width * .61, height * .86, width * .62, height * .91, width * .68, nearY - 5)
+  ctx.moveTo(origin.x, origin.y + 3)
+  ctx.bezierCurveTo(width * .56, height * .86, width * .54, height * .92, width * .52, nearY - 9)
+  ctx.stroke()
+
+  ctx.strokeStyle = night ? 'rgba(185, 216, 238, .08)' : 'rgba(255, 251, 230, .14)'
+  ctx.lineWidth = 1
+  for (let i = 0; i < 4; i += 1) {
+    const t = (i + 1) / 5
+    const rippleY = origin.y + (nearY - origin.y) * t
+    const rippleW = width * (.02 + t * .1)
+    const rippleX = width * (.56 - t * .04)
+    ctx.beginPath()
+    ctx.moveTo(rippleX - rippleW, rippleY)
+    ctx.quadraticCurveTo(rippleX, rippleY + 2, rippleX + rippleW, rippleY - 1)
+    ctx.stroke()
+  }
+
+  ctx.fillStyle = nearHill
+  ctx.beginPath()
+  ctx.moveTo(0, height)
+  ctx.lineTo(0, height * .89)
+  ctx.bezierCurveTo(width * .18, height * .83, width * .36, height * .9, origin.x - width * .03, origin.y + 3)
+  ctx.bezierCurveTo(width * .44, height * .88, width * .34, height * .95, width * .24, height)
+  ctx.closePath()
+  ctx.fill()
+
+  ctx.fillStyle = bank
+  ctx.beginPath()
+  ctx.moveTo(width, height)
+  ctx.lineTo(width, height * .84)
+  ctx.bezierCurveTo(width * .82, height * .81, width * .7, height * .86, origin.x + width * .03, origin.y + 3)
+  ctx.bezierCurveTo(width * .64, height * .9, width * .74, height * .95, width * .84, height)
+  ctx.closePath()
+  ctx.fill()
+
+  ctx.fillStyle = bankShade
+  ctx.beginPath()
+  ctx.ellipse(width * .24, nearY - 28, width * .18, 8, -.05, 0, Math.PI * 2)
+  ctx.fill()
+}
+
 function drawLeaf(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, rotate: number, color: string) {
   ctx.save()
   ctx.translate(x, y)
@@ -969,8 +1194,9 @@ function drawFoliage(ctx: CanvasRenderingContext2D, x: number, y: number, scale:
 
 function drawSapling(ctx: CanvasRenderingContext2D, width: number, height: number, ageDays: number, time: number) {
   const growth = clamp(ageDays / 1600, .06, 1)
-  const baseX = clamp(width * .18, 58, 118)
-  const baseY = sceneGroundY(height) - 8
+  const bankPoint = treeBankPoint(width, height)
+  const baseX = bankPoint.x
+  const baseY = bankPoint.y
   const treeHeight = 40 + growth * 92
   const sway = Math.sin(time * .0018 + ageDays * .17) * (1.1 + growth * 2.4)
   const windPulse = Math.max(0, Math.sin(time * .00042 + ageDays * .09)) ** 8 * 6
@@ -1025,9 +1251,9 @@ function drawSapling(ctx: CanvasRenderingContext2D, width: number, height: numbe
     }
   }
 
-  ctx.fillStyle = night ? 'rgba(6, 22, 29, .22)' : 'rgba(21, 62, 55, .12)'
+  ctx.fillStyle = night ? 'rgba(6, 22, 29, .24)' : 'rgba(21, 62, 55, .14)'
   ctx.beginPath()
-  ctx.ellipse(baseX + 5, baseY + 4, 31 + growth * 26, 6 + growth * 2, 0, 0, Math.PI * 2)
+  ctx.ellipse(baseX + 8, baseY + 5, 29 + growth * 22, 5 + growth * 2, 0, 0, Math.PI * 2)
   ctx.fill()
   ctx.restore()
 }
@@ -1072,21 +1298,18 @@ function drawSky(time = 0) {
   const x = width * skyOrb.x
   const y = height * skyOrb.y
   const radius = skyOrb.radius
-  const glow = ctx.createRadialGradient(x, y, 0, x, y, radius * 4.8)
-  glow.addColorStop(0, config.glowColor)
-  glow.addColorStop(1, 'rgba(255, 255, 255, 0)')
-  ctx.fillStyle = glow
-  ctx.beginPath()
-  ctx.arc(x, y, radius * 4.8, 0, Math.PI * 2)
-  ctx.fill()
 
   if (skyPhase.value === 'night') {
+    const glow = ctx.createRadialGradient(x, y, 0, x, y, radius * 4.8)
+    glow.addColorStop(0, config.glowColor)
+    glow.addColorStop(1, 'rgba(255, 255, 255, 0)')
+    ctx.fillStyle = glow
+    ctx.beginPath()
+    ctx.arc(x, y, radius * 4.8, 0, Math.PI * 2)
+    ctx.fill()
     drawMoon(ctx, x, y, radius, skyLunarDay)
   } else {
-    ctx.fillStyle = config.sunColor
-    ctx.beginPath()
-    ctx.arc(x, y, radius, 0, Math.PI * 2)
-    ctx.fill()
+    drawSun(ctx, x, y, radius, getSunStyle(new Date(), skyPhase.value), skyPhase.value)
   }
 
   if (config.starAlpha) {
@@ -1107,14 +1330,7 @@ function drawSky(time = 0) {
     drawCloud(ctx, cloudX, height * cloud.y, cloud.scale, config.cloudColor)
   }
 
-  ctx.fillStyle = config.hillColor
-  ctx.beginPath()
-  ctx.moveTo(0, height)
-  ctx.bezierCurveTo(width * .2, height * .9, width * .42, height * .95, width * .62, height * .87)
-  ctx.bezierCurveTo(width * .78, height * .8, width * .9, height * .9, width, height * .84)
-  ctx.lineTo(width, height)
-  ctx.closePath()
-  ctx.fill()
+  drawLandscape(ctx, width, height, config)
 }
 
 function resizeSkyCanvas() {
