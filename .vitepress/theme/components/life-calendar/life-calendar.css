@@ -129,6 +129,7 @@ a {
 .calendar-hero > div {
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 
 .calendar-hero p {
@@ -145,6 +146,7 @@ a {
   font-size: clamp(24px, 5vw, 36px);
   font-weight: 500;
   letter-spacing: .04em;
+  overflow-wrap: anywhere;
 }
 
 .calendar-hero > div > span {
@@ -168,6 +170,7 @@ a {
 .calendar-shell {
   display: grid;
   width: min(100%, 1080px);
+  min-width: 0;
   padding: 28px 18px 58px;
   margin: 0 auto;
   grid-template-columns: 1fr;
@@ -176,6 +179,9 @@ a {
 
 .month-panel,
 .day-panel {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: 22px;
   border: 1px solid rgb(22 63 58 / 9%);
   border-radius: 3px 25px 3px 3px;
@@ -274,12 +280,14 @@ a {
   border-bottom: 1px dashed rgb(22 63 58 / 13%);
   align-items: flex-end;
   justify-content: space-between;
+  gap: 12px;
 }
 
+.day-heading > div { min-width: 0; }
 .day-heading p { margin: 0; color: var(--green-deep); font-size: 10px; letter-spacing: .12em; }
 .day-heading h2 { margin: 4px 0 2px; font-family: Georgia, 'Noto Serif SC', serif; font-size: 27px; font-weight: 500; }
 .day-heading div > span { color: var(--muted); font-size: 9px; }
-.day-heading > strong { color: var(--green-deep); font: 500 36px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.day-heading > strong { flex: 0 0 auto; color: var(--green-deep); font: 500 36px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .day-heading > strong small { display: block; margin-top: 5px; color: var(--muted); font: 9px/1 sans-serif; text-align: right; }
 
 .record-editor {
@@ -293,12 +301,14 @@ a {
 
 .quick-date-strip {
   display: grid;
+  max-width: 100%;
   padding: 14px 0 2px;
   margin: 0 -4px 12px;
-  grid-auto-columns: minmax(58px, 1fr);
+  grid-auto-columns: 58px;
   grid-auto-flow: column;
   gap: 7px;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
 }
 
@@ -361,6 +371,10 @@ a {
   gap: 12px;
 }
 
+.record-editor header > div {
+  min-width: 0;
+}
+
 .record-editor header span,
 .record-editor header strong,
 .record-editor header em {
@@ -407,6 +421,7 @@ a {
 .record-fields label,
 .record-note {
   display: grid;
+  min-width: 0;
   gap: 6px;
   color: var(--muted);
   font-size: 9px;
@@ -564,18 +579,19 @@ a {
   font-size: 10px;
 }
 
-.record-timeline { padding: 0; margin: 0; list-style: none; }
-.record-timeline li { display: grid; min-height: 42px; grid-template-columns: 82px 17px 1fr; }
+.record-timeline { min-width: 0; padding: 0; margin: 0; list-style: none; }
+.record-timeline li { display: grid; min-width: 0; min-height: 42px; grid-template-columns: 82px 17px minmax(0, 1fr); }
 .record-timeline time { padding-top: 2px; color: var(--green-deep); font: 500 9px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .record-timeline li > span { position: relative; }
 .record-timeline li > span::before { position: absolute; top: 6px; bottom: -6px; left: 50%; width: 1px; content: ''; background: rgb(42 157 143 / 19%); }
 .record-timeline li:last-child > span::before { display: none; }
 .record-timeline li > span::after { position: absolute; top: 4px; left: 50%; width: 7px; height: 7px; border: 2px solid #fffdf8; border-radius: 50%; content: ''; background: var(--green); box-shadow: 0 0 0 1px var(--green); transform: translateX(-50%); }
 .record-timeline li.is-special > span::after { background: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
-.record-timeline p { padding: 0 0 17px 10px; margin: 0; color: #526762; font-size: 11px; line-height: 1.5; }
+.record-timeline p { min-width: 0; padding: 0 0 17px 10px; margin: 0; overflow-wrap: anywhere; color: #526762; font-size: 11px; line-height: 1.5; }
 .record-timeline li.is-local time { color: #b98123; }
 .record-timeline li.is-local > span::after { background: #e9a23b; box-shadow: 0 0 0 1px #e9a23b; }
 .record-timeline p small { display: inline-flex; margin-left: 6px; color: #b98123; font-size: 8px; white-space: nowrap; }
+.record-timeline__content { min-width: 0; }
 .record-timeline__content p { padding-bottom: 7px; }
 .record-row-actions {
   display: flex;
