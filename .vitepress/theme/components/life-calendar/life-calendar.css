@@ -287,6 +287,72 @@ a {
   border-bottom: 1px dashed rgb(22 63 58 / 13%);
 }
 
+.day-panel {
+  order: -1;
+}
+
+.quick-date-strip {
+  display: grid;
+  padding: 14px 0 2px;
+  margin: 0 -4px 12px;
+  grid-auto-columns: minmax(58px, 1fr);
+  grid-auto-flow: column;
+  gap: 7px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.quick-date-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.quick-date-strip button {
+  display: grid;
+  min-width: 58px;
+  min-height: 70px;
+  padding: 8px 5px;
+  border: 1px solid rgb(42 157 143 / 12%);
+  border-radius: 2px 12px 2px 2px;
+  place-items: center;
+  color: #62726e;
+  background: rgb(220 239 233 / 26%);
+}
+
+.quick-date-strip span,
+.quick-date-strip strong,
+.quick-date-strip small {
+  display: block;
+}
+
+.quick-date-strip span {
+  font-size: 8px;
+}
+
+.quick-date-strip strong {
+  color: var(--forest);
+  font: 600 18px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.quick-date-strip small {
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.quick-date-strip button.is-today {
+  border-color: rgb(233 196 106 / 42%);
+}
+
+.quick-date-strip button.is-selected {
+  color: white;
+  background: var(--green-deep);
+  box-shadow: 0 8px 20px rgb(31 119 110 / 16%);
+}
+
+.quick-date-strip button.is-selected strong,
+.quick-date-strip button.is-selected small {
+  color: rgb(255 255 255 / 84%);
+}
+
 .record-editor header {
   display: flex;
   margin-bottom: 14px;
@@ -331,6 +397,11 @@ a {
 .record-fields--growth {
   margin-top: 12px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.record-fields--feeding {
+  margin-top: 12px;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .record-fields label,
@@ -570,6 +641,7 @@ a {
 @media (min-width: 820px) {
   .calendar-shell { padding: 44px 32px 70px; grid-template-columns: minmax(420px, .9fr) minmax(380px, 1.1fr); align-items: start; }
   .month-panel, .day-panel { padding: 28px; }
+  .day-panel { order: 0; }
   .day-cell { font-size: 12px; }
   .day-panel { min-height: 610px; }
   .event-picker { grid-template-columns: repeat(4, minmax(0, 1fr)); }

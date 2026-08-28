@@ -446,6 +446,120 @@ a {
   transform: translateX(3px);
 }
 
+.daily-calendar {
+  padding: 18px 24px 22px;
+  border-bottom: 1px solid rgb(22 63 58 / 8%);
+  background: rgb(255 254 249 / 54%);
+}
+
+.daily-calendar header {
+  display: flex;
+  margin-bottom: 13px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.daily-calendar header span,
+.daily-calendar header strong {
+  display: block;
+}
+
+.daily-calendar header span {
+  color: var(--green-deep);
+  font: 600 9px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .18em;
+}
+
+.daily-calendar header strong {
+  margin-top: 3px;
+  color: var(--forest);
+  font-family: Georgia, 'Noto Serif SC', serif;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.daily-calendar header a {
+  color: var(--green-deep);
+  font-size: 11px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.daily-calendar__strip {
+  display: grid;
+  grid-auto-columns: minmax(72px, 1fr);
+  grid-auto-flow: column;
+  gap: 9px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.daily-calendar__strip::-webkit-scrollbar {
+  display: none;
+}
+
+.daily-calendar__day {
+  display: grid;
+  min-height: 94px;
+  padding: 10px 8px;
+  border: 1px solid rgb(42 157 143 / 12%);
+  border-radius: 2px 14px 2px 2px;
+  align-content: center;
+  gap: 3px;
+  color: #5e716b;
+  background: rgb(220 239 233 / 28%);
+  text-align: center;
+  text-decoration: none;
+}
+
+.daily-calendar__day span,
+.daily-calendar__day strong,
+.daily-calendar__day small,
+.daily-calendar__day em {
+  display: block;
+}
+
+.daily-calendar__day span {
+  font-size: 9px;
+}
+
+.daily-calendar__day strong {
+  color: var(--forest);
+  font: 600 22px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.daily-calendar__day small {
+  color: var(--green-deep);
+  font-size: 10px;
+}
+
+.daily-calendar__day em {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 8px;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.daily-calendar__day.is-today {
+  border-color: rgb(233 196 106 / 46%);
+  background: rgb(255 243 212 / 62%);
+}
+
+.daily-calendar__day.is-special {
+  background: rgb(255 243 212 / 74%);
+}
+
+.daily-calendar__day.is-vaccine {
+  background: rgb(253 233 226 / 74%);
+}
+
+.daily-calendar__day.is-record {
+  background: rgb(220 239 233 / 52%);
+}
+
 .dashboard-section {
   padding: 76px 24px 66px;
 }

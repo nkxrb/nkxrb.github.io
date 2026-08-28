@@ -92,6 +92,8 @@ export interface LifeRecordEntry {
   note: string
   special?: boolean
   categories?: LifeRecordCategory[]
+  duration_minutes?: number
+  ended_at?: string
   source?: 'static' | 'pending'
   created_at?: string
   local_id?: string
@@ -398,6 +400,8 @@ function cleanRecordEntry(entry: LifeRecordEntry): LifeRecordEntry {
     note: entry.note,
     ...(entry.special ? { special: true } : {}),
     ...(entry.categories?.length ? { categories: entry.categories } : {}),
+    ...(typeof entry.duration_minutes === 'number' ? { duration_minutes: entry.duration_minutes } : {}),
+    ...(entry.ended_at ? { ended_at: entry.ended_at } : {}),
     ...(entry.created_at ? { created_at: entry.created_at } : {}),
     ...(entry.local_id ? { local_id: entry.local_id } : {})
   }

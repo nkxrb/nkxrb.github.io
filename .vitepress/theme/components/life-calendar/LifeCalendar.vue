@@ -72,6 +72,20 @@
             <strong>{{ selectedEntries.length }}<small>条记录</small></strong>
           </header>
 
+          <div class="quick-date-strip" aria-label="近日日历">
+            <button
+              v-for="day in quickDateCells"
+              :key="day.iso"
+              type="button"
+              :class="{ 'is-selected': day.iso === selectedDate, 'is-today': day.iso === todayIso }"
+              @click="selectDate(day.iso)"
+            >
+              <span>{{ day.label }}</span>
+              <strong>{{ day.day }}</strong>
+              <small>{{ day.hint }}</small>
+            </button>
+          </div>
+
           <section v-if="canEditRecords" id="record-editor" class="record-editor" aria-label="添加记录">
             <header>
               <div>
@@ -101,6 +115,13 @@
               >
                 <input v-model="recordForm.categories" type="checkbox" :value="option.id">
                 <span>{{ option.label }}</span>
+              </label>
+            </div>
+
+            <div v-if="isBreastfeedingSelected" class="record-fields record-fields--feeding">
+              <label>
+                <span>母乳时长 分钟</span>
+                <input v-model.number="recordForm.breastfeeding_duration_minutes" type="number" min="1" step="1" inputmode="numeric" placeholder="可补填">
               </label>
             </div>
 
@@ -290,6 +311,7 @@ const recordForm = reactive({
   date: '',
   time: '',
   categories: [] as LifeRecordCategory[],
+  breastfeeding_duration_minutes: undefined as number | undefined,
   weight_jin: undefined as number | undefined,
   height_cm: undefined as number | undefined,
   head_circumference_cm: undefined as number | undefined,
@@ -338,6 +360,12 @@ function toIso(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 }
 
+function initialDateFromUrl() {
+  if (typeof window === 'undefined') return ''
+  const value = new URLSearchParams(window.location.search).get('date') || ''
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : ''
+}
+
 function currentTime() {
   const now = new Date()
   return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
@@ -351,6 +379,43 @@ function entrySortMinutes(entry: LifeRecordEntry) {
   const match = entry.time.match(/^(\d{1,2}):(\d{2})/)
   if (!match) return Number.POSITIVE_INFINITY
   return Number(match[1]) * 60 + Number(match[2])
+}
+
+function timeToMinutes(value: string) {
+  const match = value.match(/^(\d{1,2}):(\d{2})/)
+  if (!match) return undefined
+  return Number(match[1]) * 60 + Number(match[2])
+}
+
+function minutesToTime(value: number) {
+  const minutes = ((Math.round(value) % 1440) + 1440) % 1440
+  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
+}
+
+function minutesSinceTodayTime(value: string) {
+  const start = timeToMinutes(value)
+  if (typeof start !== 'number') return undefined
+  const now = new Date()
+  const current = now.getHours() * 60 + now.getMinutes()
+  return current >= start ? current - start : current + 1440 - start
+}
+
+function durationFromEntry(entry: LifeRecordEntry, date: string) {
+  if (typeof entry.duration_minutes === 'number' && Number.isFinite(entry.duration_minutes)) {
+    return Math.max(1, Math.round(entry.duration_minutes))
+  }
+  const explicit = entry.note.match(/母乳\s*(\d{1,3})\s*分钟/)
+  if (explicit) return Number(explicit[1])
+  if (date === todayIso && (entry.categories?.includes('breastfeeding') || /母乳/.test(entry.note))) {
+    return minutesSinceTodayTime(entry.time)
+  }
+  return undefined
+}
+
+function endTimeFromDuration(startTime: string, duration: number | undefined) {
+  const start = timeToMinutes(startTime)
+  if (typeof start !== 'number' || typeof duration !== 'number') return undefined
+  return minutesToTime(start + duration)
 }
 
 function sortEntries(entries: LifeRecordEntry[]) {
@@ -411,6 +476,21 @@ const calendarCells = computed(() => {
 const selectedEntries = computed<Entry[]>(() => recordMap.value.get(selectedDate.value) || [])
 const selectedMeasurements = computed(() => measurementsData.value.filter(item => item.date === selectedDate.value))
 const selectedMilestones = computed(() => milestoneMap.value.get(selectedDate.value) || [])
+const isBreastfeedingSelected = computed(() => recordForm.categories.includes('breastfeeding'))
+const quickDateCells = computed(() => Array.from({ length: 7 }, (_, index) => {
+  const date = new Date()
+  date.setDate(date.getDate() + index - 3)
+  const iso = toIso(date)
+  const count = recordMap.value.get(iso)?.length || 0
+  const milestoneCount = milestoneMap.value.get(iso)?.length || 0
+  const offset = index - 3
+  return {
+    iso,
+    day: date.getDate(),
+    label: offset === 0 ? '今天' : offset === -1 ? '昨天' : offset === 1 ? '明天' : `${date.getMonth() + 1}/${date.getDate()}`,
+    hint: milestoneCount ? `${milestoneCount} 特别` : count ? `${count} 条` : '空'
+  }
+}))
 const selectedDateLabel = computed(() => {
   if (!selectedDate.value) return { date: '', weekday: '' }
   const date = parseDate(selectedDate.value)
@@ -438,6 +518,7 @@ function setActiveMonthFromIso(iso: string) {
 
 function selectDate(iso: string) {
   selectedDate.value = iso
+  setActiveMonthFromIso(iso)
   if (canEditRecords.value) recordForm.date = iso
 }
 
@@ -456,7 +537,7 @@ function moveMonth(direction: number) {
 }
 
 function syncInitialSelection(records: LifeRecordDay[]) {
-  if (selectedDate.value && (canEditRecords.value || recordMap.value.has(selectedDate.value))) return
+  if (selectedDate.value) return
 
   const latestRecord = records[records.length - 1]
   const targetDate = canEditRecords.value ? todayIso : latestRecord?.date
@@ -595,14 +676,25 @@ function stripCategoryLabels(note: string, categories: LifeRecordCategory[]) {
     .map(category => recordOptions.find(option => option.id === category)?.label)
     .filter(Boolean))
   return note
+    .replace(/母乳\s*\d{1,3}\s*分钟/g, '')
+    .replace(/体重\d+(?:\.\d+)?斤/g, '')
+    .replace(/身高\d+(?:\.\d+)?cm/g, '')
+    .replace(/头围\d+(?:\.\d+)?cm/g, '')
     .split(/[，,]/)
     .map(part => part.trim())
+    .filter(Boolean)
     .filter(part => !labels.has(part))
     .join('，')
 }
 
 function numberValue(value: unknown) {
   return typeof value === 'number' && Number.isFinite(value) ? value : undefined
+}
+
+function durationValue(value: unknown) {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0
+    ? Math.round(value)
+    : undefined
 }
 
 function roundMeasurement(value: number, digits = 1) {
@@ -657,9 +749,16 @@ function formatMeasurement(item: LifeBodyMeasurement) {
 function buildRecordEntry() {
   const date = recordForm.date || selectedDate.value || todayIso
   const time = recordForm.time || currentTime()
+  const breastfeedingDuration = recordForm.categories.includes('breastfeeding')
+    ? durationValue(recordForm.breastfeeding_duration_minutes)
+    : undefined
   const labels = recordForm.categories
+    .filter(category => category !== 'breastfeeding')
     .map(category => recordOptions.find(option => option.id === category)?.label)
     .filter((label): label is string => Boolean(label))
+  if (recordForm.categories.includes('breastfeeding')) {
+    labels.unshift(typeof breastfeedingDuration === 'number' ? `母乳${breastfeedingDuration}分钟` : '母乳')
+  }
   const noteText = recordForm.note.trim()
   const measurementParts = buildMeasurementParts()
   const note = [...labels, ...measurementParts, noteText].filter(Boolean).join('，')
@@ -674,6 +773,10 @@ function buildRecordEntry() {
       note,
       special: recordForm.categories.includes('special') || recordForm.categories.includes('vaccine') || recordForm.categories.includes('medicine'),
       categories: [...recordForm.categories],
+      ...(typeof breastfeedingDuration === 'number' ? {
+        duration_minutes: breastfeedingDuration,
+        ended_at: endTimeFromDuration(time, breastfeedingDuration)
+      } : {}),
       created_at: editingRecord.value ? undefined : new Date().toISOString(),
       local_id: editingRecord.value?.locator.local_id || `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
     } as LifeRecordEntry
@@ -683,6 +786,7 @@ function buildRecordEntry() {
 function resetRecordForm() {
   recordForm.time = currentTime()
   recordForm.categories = []
+  recordForm.breastfeeding_duration_minutes = undefined
   recordForm.weight_jin = undefined
   recordForm.height_cm = undefined
   recordForm.head_circumference_cm = undefined
@@ -788,6 +892,9 @@ function startEditing(entry: LifeRecordEntry) {
   recordForm.date = selectedDate.value || todayIso
   recordForm.time = entry.time.match(/^\d{1,2}:\d{2}/)?.[0] || currentTime()
   recordForm.categories = [...categories]
+  recordForm.breastfeeding_duration_minutes = categories.includes('breastfeeding')
+    ? durationFromEntry(entry, selectedDate.value)
+    : undefined
   recordForm.weight_jin = undefined
   recordForm.height_cm = undefined
   recordForm.head_circumference_cm = undefined
@@ -845,7 +952,10 @@ watch(recordsData, syncInitialSelection)
 
 onMounted(async () => {
   canEditRecords.value = hasLifeDataSecret()
-  recordForm.date = todayIso
+  const initialDate = initialDateFromUrl() || todayIso
+  selectedDate.value = initialDate
+  setActiveMonthFromIso(initialDate)
+  recordForm.date = initialDate
   recordForm.time = currentTime()
   restorePendingRecords()
   restorePendingMeasurements()

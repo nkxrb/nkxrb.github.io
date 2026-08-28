@@ -40,6 +40,41 @@
     </section>
 
     <div class="dashboard-shell">
+      <section class="quick-record" aria-label="快速添加记录">
+        <div>
+          <span>DAILY RECORD</span>
+          <strong>{{ canEditMarks ? '添加记录' : '进入成长日历' }}</strong>
+          <p>{{ canEditMarks ? '快速记录喂养、睡眠、体重、身高和备注' : '保存密钥后可添加照护与成长记录' }}</p>
+        </div>
+        <a class="quick-record__button" href="/life/calendar/#record-editor">
+          {{ canEditMarks ? '添加记录' : '打开日历' }} <span aria-hidden="true">→</span>
+        </a>
+      </section>
+
+      <section class="daily-calendar" aria-label="近日日历">
+        <header>
+          <div>
+            <span>RECENT DAYS</span>
+            <strong>近日日程</strong>
+          </div>
+          <a href="/life/calendar/">全部日历</a>
+        </header>
+        <div class="daily-calendar__strip">
+          <a
+            v-for="day in dashboardDateCells"
+            :key="day.iso"
+            :href="day.href"
+            class="daily-calendar__day"
+            :class="[`is-${day.tone}`, { 'is-today': day.isToday }]"
+          >
+            <span>{{ day.label }}</span>
+            <strong>{{ day.day }}</strong>
+            <small>{{ day.hint }}</small>
+            <em>{{ day.meta }}</em>
+          </a>
+        </div>
+      </section>
+
       <section class="identity-card" aria-label="出生信息">
         <div class="identity-card__intro">
           <span>生辰八字</span>
@@ -60,17 +95,6 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <section class="quick-record" aria-label="快速添加记录">
-        <div>
-          <span>DAILY RECORD</span>
-          <strong>{{ canEditMarks ? '添加记录' : '进入成长日历' }}</strong>
-          <p>{{ canEditMarks ? '快速记录喂养、睡眠、体重、身高和备注' : '保存密钥后可添加照护与成长记录' }}</p>
-        </div>
-        <a class="quick-record__button" href="/life/calendar/#record-editor">
-          {{ canEditMarks ? '添加记录' : '打开日历' }} <span aria-hidden="true">→</span>
-        </a>
       </section>
 
       <section class="dashboard-section anchor-section" aria-labelledby="anchor-title">
@@ -334,6 +358,17 @@ interface SkyOrb {
   radius: number
 }
 
+interface DashboardDateCell {
+  iso: string
+  day: number
+  label: string
+  hint: string
+  meta: string
+  href: string
+  isToday: boolean
+  tone: 'normal' | 'record' | 'special' | 'vaccine'
+}
+
 interface SunStyle {
   center: string
   edge: string
@@ -573,6 +608,10 @@ function dayDiff(later: Date, earlier: Date) {
   return Math.round((laterUtc - earlierUtc) / DAY_MS)
 }
 
+function addDays(date: Date, days: number) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days)
+}
+
 function addMonths(date: Date, months: number) {
   const target = new Date(date.getFullYear(), date.getMonth() + months, 1)
   const lastDay = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate()
@@ -748,6 +787,27 @@ const nextReminder = computed(() => {
   return { tone: 'success', icon: '✓', label: '接种记录', title: '计划内疫苗均已标记', detail: '做得很好，请继续关注当地接种通知' }
 })
 
+const dashboardDateCells = computed<DashboardDateCell[]>(() => Array.from({ length: 7 }, (_, index) => {
+  const date = addDays(today.value, index - 2)
+  const iso = toIsoDate(date)
+  const recordCount = recordsData.value.find(day => day.date === iso)?.entries.length || 0
+  const milestone = milestonesData.value.find(item => item.date === iso)
+  const vaccine = vaccineRows.value.find(item => item.dateIso === iso && item.status !== 'completed')
+  const offset = index - 2
+  const tone: DashboardDateCell['tone'] = vaccine ? 'vaccine' : milestone ? 'special' : recordCount ? 'record' : 'normal'
+
+  return {
+    iso,
+    day: date.getDate(),
+    label: offset === 0 ? '今天' : offset === -1 ? '昨天' : offset === 1 ? '明天' : `${date.getMonth() + 1}/${date.getDate()}`,
+    hint: vaccine ? '疫苗' : milestone ? '特别' : recordCount ? `${recordCount} 条` : '待记录',
+    meta: vaccine ? vaccine.name : milestone ? milestone.title : recordCount ? '已记录' : '空白',
+    href: `/life/calendar/?date=${iso}#record-editor`,
+    isToday: iso === toIsoDate(today.value),
+    tone
+  }
+}))
+
 const sheetTitle = computed(() => sheetVaccine.value?.status === 'completed' ? '撤销已完成标记？' : '确认已接种吗？')
 const sheetActionText = computed(() => sheetVaccine.value?.status === 'completed' ? '撤销标记' : '确认已接种')
 
@@ -805,8 +865,8 @@ function shortestHourDistance(hour: number, target: number) {
 
 function riverOrigin(width: number, height: number) {
   return {
-    x: width * .58,
-    y: height * .8
+    x: width * .64,
+    y: height * .66
   }
 }
 
@@ -817,7 +877,7 @@ function riverNearY(height: number) {
 function treeBankPoint(width: number, height: number) {
   return {
     x: clamp(width * .23, 68, 126),
-    y: riverNearY(height) - clamp(height * .09, 50, 68)
+    y: riverNearY(height) - clamp(height * .105, 56, 76)
   }
 }
 
@@ -1081,11 +1141,67 @@ function drawLandscape(ctx: CanvasRenderingContext2D, width: number, height: num
   const bank = night ? 'rgba(4, 20, 32, .5)' : 'rgba(62, 132, 82, .34)'
   const bankShade = night ? 'rgba(2, 14, 23, .22)' : 'rgba(18, 88, 78, .1)'
 
-  ctx.fillStyle = farHill
+  const mountain = ctx.createLinearGradient(0, height * .55, 0, height)
+  mountain.addColorStop(0, farHill)
+  mountain.addColorStop(1, night ? 'rgba(8, 32, 43, .36)' : 'rgba(62, 128, 107, .22)')
+  ctx.fillStyle = mountain
   ctx.beginPath()
-  ctx.moveTo(0, height * .86)
-  ctx.bezierCurveTo(width * .18, height * .76, width * .38, height * .84, width * .56, height * .78)
-  ctx.bezierCurveTo(width * .72, height * .72, width * .9, height * .82, width, height * .76)
+  ctx.moveTo(0, height * .84)
+  ctx.lineTo(width * .08, height * .78)
+  ctx.lineTo(width * .14, height * .71)
+  ctx.lineTo(width * .2, height * .62)
+  ctx.lineTo(width * .27, height * .72)
+  ctx.lineTo(width * .34, height * .78)
+  ctx.lineTo(width * .4, height * .69)
+  ctx.lineTo(width * .46, height * .55)
+  ctx.lineTo(width * .53, height * .68)
+  ctx.lineTo(width * .59, height * .76)
+  ctx.lineTo(width * .65, height * .68)
+  ctx.lineTo(width * .71, height * .52)
+  ctx.lineTo(width * .79, height * .68)
+  ctx.lineTo(width * .86, height * .74)
+  ctx.lineTo(width * .93, height * .66)
+  ctx.lineTo(width, height * .6)
+  ctx.lineTo(width, height)
+  ctx.lineTo(0, height)
+  ctx.closePath()
+  ctx.fill()
+
+  ctx.fillStyle = night ? 'rgba(3, 18, 30, .16)' : 'rgba(41, 102, 92, .1)'
+  ctx.beginPath()
+  ctx.moveTo(width * .46, height * .55)
+  ctx.lineTo(width * .59, height * .76)
+  ctx.lineTo(width * .5, height * .84)
+  ctx.closePath()
+  ctx.moveTo(width * .71, height * .52)
+  ctx.lineTo(width * .86, height * .74)
+  ctx.lineTo(width * .75, height * .84)
+  ctx.closePath()
+  ctx.moveTo(width * .2, height * .62)
+  ctx.lineTo(width * .34, height * .78)
+  ctx.lineTo(width * .24, height * .83)
+  ctx.closePath()
+  ctx.fill()
+
+  ctx.strokeStyle = night ? 'rgba(200, 222, 231, .07)' : 'rgba(255, 255, 240, .13)'
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo(width * .12, height * .72)
+  ctx.lineTo(width * .2, height * .62)
+  ctx.lineTo(width * .28, height * .72)
+  ctx.moveTo(width * .4, height * .68)
+  ctx.lineTo(width * .46, height * .55)
+  ctx.lineTo(width * .54, height * .68)
+  ctx.moveTo(width * .64, height * .68)
+  ctx.lineTo(width * .71, height * .52)
+  ctx.lineTo(width * .8, height * .68)
+  ctx.stroke()
+
+  ctx.fillStyle = night ? 'rgba(9, 38, 50, .2)' : 'rgba(95, 158, 123, .2)'
+  ctx.beginPath()
+  ctx.moveTo(0, height * .9)
+  ctx.bezierCurveTo(width * .16, height * .79, width * .34, height * .87, width * .5, height * .78)
+  ctx.bezierCurveTo(width * .66, height * .69, width * .86, height * .83, width, height * .74)
   ctx.lineTo(width, height)
   ctx.lineTo(0, height)
   ctx.closePath()
