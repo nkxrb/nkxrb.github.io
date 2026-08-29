@@ -86,74 +86,18 @@
             </button>
           </div>
 
-          <section v-if="canEditRecords" id="record-editor" class="record-editor" aria-label="添加记录">
-            <header>
-              <div>
-                <span>{{ editingRecord ? 'EDIT RECORD' : 'NEW RECORD' }}</span>
-                <strong>{{ editingRecord ? '修改照护记录' : '添加记录' }}</strong>
-              </div>
-              <em>{{ pendingSyncCount ? `待同步 ${pendingSyncCount} 条` : '实时保存' }}</em>
-            </header>
-
-            <div class="record-fields">
-              <label>
-                <span>日期</span>
-                <input v-model="recordForm.date" type="date">
-              </label>
-              <label>
-                <span>时间</span>
-                <input v-model="recordForm.time" type="time">
-              </label>
-            </div>
-
-            <div class="event-picker" aria-label="事件类型">
-              <label
-                v-for="option in recordOptions"
-                :key="option.id"
-                class="event-chip"
-                :class="{ 'is-checked': recordForm.categories.includes(option.id) }"
-              >
-                <input v-model="recordForm.categories" type="checkbox" :value="option.id">
-                <span>{{ option.label }}</span>
-              </label>
-            </div>
-
-            <div v-if="isBreastfeedingSelected" class="record-fields record-fields--feeding">
-              <label>
-                <span>母乳时长 分钟</span>
-                <input v-model.number="recordForm.breastfeeding_duration_minutes" type="number" min="1" step="1" inputmode="numeric" placeholder="可补填">
-              </label>
-            </div>
-
-            <div class="record-fields record-fields--growth">
-              <label>
-                <span>体重 斤</span>
-                <input v-model.number="recordForm.weight_jin" type="number" min="0" step="0.1" inputmode="decimal">
-              </label>
-              <label>
-                <span>身高 cm</span>
-                <input v-model.number="recordForm.height_cm" type="number" min="0" step="0.1" inputmode="decimal">
-              </label>
-              <label>
-                <span>头围 cm</span>
-                <input v-model.number="recordForm.head_circumference_cm" type="number" min="0" step="0.1" inputmode="decimal">
-              </label>
-            </div>
-
-            <label class="record-note">
-              <span>备注</span>
-              <textarea v-model="recordForm.note" rows="3" placeholder="奶量、状态、地点或其他补充"></textarea>
-            </label>
-
-            <div class="editor-actions">
-              <button type="button" class="editor-primary" :disabled="isSavingRecord" @click="saveRecord">
-                {{ isSavingRecord ? '保存中' : editingRecord ? '更新记录' : '添加记录' }}
-              </button>
-              <button v-if="editingRecord" type="button" :disabled="isSavingRecord" @click="cancelEditing">取消修改</button>
-              <button type="button" :disabled="!pendingSyncCount || isSavingRecord" @click="flushPendingRecords">补写待同步</button>
-              <button type="button" :disabled="!pendingSyncCount || isSavingRecord" @click="clearPendingRecords">清空待同步</button>
-            </div>
-          </section>
+          <div v-if="canEditRecords" id="record-editor" class="record-entry-bar">
+            <button type="button" class="record-entry-bar__primary" @click="openNewRecordModal">添加记录</button>
+            <span>{{ pendingSyncCount ? `待同步 ${pendingSyncCount} 条` : '实时保存' }}</span>
+            <button
+              v-if="pendingSyncCount"
+              type="button"
+              :disabled="isSavingRecord"
+              @click="flushPendingRecords"
+            >
+              补写
+            </button>
+          </div>
 
           <div v-if="selectedMilestones.length" class="day-milestones">
             <article v-for="item in selectedMilestones" :key="item.id">
@@ -197,12 +141,94 @@
           <div v-if="!selectedEntries.length && !selectedMeasurements.length" class="empty-day">
             <span aria-hidden="true">☁</span>
             <strong>这一天还没有日记</strong>
-            <p>{{ canEditRecords ? '可以在上方添加记录。' : '请选择带绿色标记的日期查看记录。' }}</p>
+            <p>{{ canEditRecords ? '可以点击添加记录。' : '请选择带绿色标记的日期查看记录。' }}</p>
           </div>
         </section>
       </div>
 
       <footer class="calendar-footer">原始家庭记录来自本地静态数据 · 新增记录实时同步</footer>
+
+      <Teleport to="body">
+        <Transition name="record-modal">
+          <div
+            v-if="isRecordModalOpen"
+            class="record-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="record-modal-title"
+            @click.self="closeRecordModal"
+          >
+            <section class="record-editor record-editor--modal" aria-label="添加记录">
+              <header>
+                <div>
+                  <span>{{ editingRecord ? 'EDIT RECORD' : 'NEW RECORD' }}</span>
+                  <strong id="record-modal-title">{{ editingRecord ? '修改照护记录' : '添加记录' }}</strong>
+                </div>
+                <button type="button" class="record-modal__close" aria-label="关闭" @click="closeRecordModal">×</button>
+              </header>
+
+              <div class="record-fields">
+                <label>
+                  <span>日期</span>
+                  <input v-model="recordForm.date" type="date">
+                </label>
+                <label>
+                  <span>时间</span>
+                  <input v-model="recordForm.time" type="time">
+                </label>
+              </div>
+
+              <div class="event-picker" aria-label="事件类型">
+                <label
+                  v-for="option in recordOptions"
+                  :key="option.id"
+                  class="event-chip"
+                  :class="{ 'is-checked': recordForm.categories.includes(option.id) }"
+                >
+                  <input v-model="recordForm.categories" type="checkbox" :value="option.id">
+                  <span>{{ option.label }}</span>
+                </label>
+              </div>
+
+              <div v-if="isBreastfeedingSelected" class="record-fields record-fields--feeding">
+                <label>
+                  <span>母乳时长 分钟</span>
+                  <input v-model.number="recordForm.breastfeeding_duration_minutes" type="number" min="1" step="1" inputmode="numeric" placeholder="可补填">
+                </label>
+              </div>
+
+              <div class="record-fields record-fields--growth">
+                <label>
+                  <span>体重 斤</span>
+                  <input v-model.number="recordForm.weight_jin" type="number" min="0" step="0.1" inputmode="decimal">
+                </label>
+                <label>
+                  <span>身高 cm</span>
+                  <input v-model.number="recordForm.height_cm" type="number" min="0" step="0.1" inputmode="decimal">
+                </label>
+                <label>
+                  <span>头围 cm</span>
+                  <input v-model.number="recordForm.head_circumference_cm" type="number" min="0" step="0.1" inputmode="decimal">
+                </label>
+              </div>
+
+              <label class="record-note">
+                <span>备注</span>
+                <textarea v-model="recordForm.note" rows="3" placeholder="奶量、状态、地点或其他补充"></textarea>
+              </label>
+
+              <div class="editor-actions">
+                <button type="button" class="editor-primary" :disabled="isSavingRecord" @click="saveRecord">
+                  {{ isSavingRecord ? '保存中' : editingRecord ? '更新记录' : '添加记录' }}
+                </button>
+                <button v-if="editingRecord" type="button" :disabled="isSavingRecord" @click="cancelEditing">取消修改</button>
+                <button type="button" :disabled="!pendingSyncCount || isSavingRecord" @click="flushPendingRecords">补写待同步</button>
+                <button type="button" :disabled="!pendingSyncCount || isSavingRecord" @click="clearPendingRecords">清空待同步</button>
+              </div>
+            </section>
+          </div>
+        </Transition>
+      </Teleport>
 
       <Transition name="calendar-toast">
         <div v-if="toastMessage" class="calendar-toast" role="status">{{ toastMessage }}</div>
@@ -306,6 +332,7 @@ const pendingRecords = ref<LifeRecordDay[]>([])
 const pendingMeasurements = ref<LifeBodyMeasurement[]>([])
 const toastMessage = ref('')
 const isSavingRecord = ref(false)
+const isRecordModalOpen = ref(false)
 const editingRecord = ref<EditingRecord | null>(null)
 const recordForm = reactive({
   date: '',
@@ -319,6 +346,7 @@ const recordForm = reactive({
 })
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined
+let previousBodyOverflow = ''
 
 const todayIso = toIso(new Date())
 const isDataLoading = computed(() => lifeDataLoading.value && !lifeData.value)
@@ -687,6 +715,14 @@ function stripCategoryLabels(note: string, categories: LifeRecordCategory[]) {
     .join('，')
 }
 
+function measurementValuesFromNote(note: string) {
+  return {
+    weight_jin: Number(note.match(/体重(\d+(?:\.\d+)?)斤/)?.[1]),
+    height_cm: Number(note.match(/身高(\d+(?:\.\d+)?)cm/)?.[1]),
+    head_circumference_cm: Number(note.match(/头围(\d+(?:\.\d+)?)cm/)?.[1])
+  }
+}
+
 function numberValue(value: unknown) {
   return typeof value === 'number' && Number.isFinite(value) ? value : undefined
 }
@@ -793,10 +829,30 @@ function resetRecordForm() {
   recordForm.note = ''
 }
 
+function openNewRecordModal() {
+  editingRecord.value = null
+  resetRecordForm()
+  recordForm.date = selectedDate.value || todayIso
+  isRecordModalOpen.value = true
+}
+
+function closeRecordModal() {
+  if (isSavingRecord.value) return
+  editingRecord.value = null
+  resetRecordForm()
+  recordForm.date = selectedDate.value || todayIso
+  isRecordModalOpen.value = false
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' && isRecordModalOpen.value) closeRecordModal()
+}
+
 function cancelEditing() {
   editingRecord.value = null
   resetRecordForm()
   recordForm.date = selectedDate.value || todayIso
+  isRecordModalOpen.value = false
 }
 
 async function flushPendingRecords() {
@@ -862,6 +918,7 @@ async function saveRecord() {
     selectDate(date)
     setActiveMonthFromIso(date)
     resetRecordForm()
+    isRecordModalOpen.value = false
     showToast('添加成功')
     if (pendingSyncCount.value) {
       try {
@@ -876,6 +933,7 @@ async function saveRecord() {
     selectDate(date)
     setActiveMonthFromIso(date)
     resetRecordForm()
+    isRecordModalOpen.value = false
     showToast('添加失败，已暂存')
   } finally {
     isSavingRecord.value = false
@@ -885,6 +943,7 @@ async function saveRecord() {
 function startEditing(entry: LifeRecordEntry) {
   if (!canEditRecords.value || isSavingRecord.value) return
   const categories = entry.categories?.length ? entry.categories : inferCategories(entry.note)
+  const measurementValues = measurementValuesFromNote(entry.note)
   editingRecord.value = {
     locator: recordLocator(selectedDate.value, entry),
     source: entry.source
@@ -895,10 +954,11 @@ function startEditing(entry: LifeRecordEntry) {
   recordForm.breastfeeding_duration_minutes = categories.includes('breastfeeding')
     ? durationFromEntry(entry, selectedDate.value)
     : undefined
-  recordForm.weight_jin = undefined
-  recordForm.height_cm = undefined
-  recordForm.head_circumference_cm = undefined
+  recordForm.weight_jin = numberValue(measurementValues.weight_jin)
+  recordForm.height_cm = numberValue(measurementValues.height_cm)
+  recordForm.head_circumference_cm = numberValue(measurementValues.head_circumference_cm)
   recordForm.note = stripCategoryLabels(entry.note, categories)
+  isRecordModalOpen.value = true
 }
 
 async function deleteRecord(entry: LifeRecordEntry) {
@@ -945,12 +1005,28 @@ async function submitDataSecret() {
   restorePendingRecords()
   restorePendingMeasurements()
   syncInitialSelection(recordsData.value)
+  if (canEditRecords.value && window.location.hash === '#record-editor') openNewRecordModal()
   void flushPendingRecords()
 }
 
 watch(recordsData, syncInitialSelection)
 
+watch(isBreastfeedingSelected, selected => {
+  if (!selected) recordForm.breastfeeding_duration_minutes = undefined
+})
+
+watch(isRecordModalOpen, value => {
+  if (typeof document === 'undefined') return
+  if (value) {
+    previousBodyOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = previousBodyOverflow
+  }
+})
+
 onMounted(async () => {
+  window.addEventListener('keydown', handleKeydown)
   canEditRecords.value = hasLifeDataSecret()
   const initialDate = initialDateFromUrl() || todayIso
   selectedDate.value = initialDate
@@ -961,11 +1037,14 @@ onMounted(async () => {
   restorePendingMeasurements()
   await ensureLifeData()
   syncInitialSelection(recordsData.value)
+  if (canEditRecords.value && window.location.hash === '#record-editor') openNewRecordModal()
   void flushPendingRecords()
 })
 
 onBeforeUnmount(() => {
   if (toastTimer) clearTimeout(toastTimer)
+  window.removeEventListener('keydown', handleKeydown)
+  if (typeof document !== 'undefined') document.body.style.overflow = previousBodyOverflow
 })
 </script>
 

@@ -865,8 +865,8 @@ function shortestHourDistance(hour: number, target: number) {
 
 function riverOrigin(width: number, height: number) {
   return {
-    x: width * .64,
-    y: height * .66
+    x: width * .52,
+    y: height * .62
   }
 }
 
@@ -876,8 +876,8 @@ function riverNearY(height: number) {
 
 function treeBankPoint(width: number, height: number) {
   return {
-    x: clamp(width * .23, 68, 126),
-    y: riverNearY(height) - clamp(height * .105, 56, 76)
+    x: clamp(width * .76, 124, width - 58),
+    y: riverNearY(height) - clamp(height * .06, 36, 52)
   }
 }
 
@@ -1135,178 +1135,215 @@ function drawLandscape(ctx: CanvasRenderingContext2D, width: number, height: num
   const origin = riverOrigin(width, height)
   const nearY = riverNearY(height)
   const night = skyPhase.value === 'night'
-  const farHill = night ? 'rgba(7, 25, 41, .28)' : 'rgba(76, 139, 131, .16)'
-  const nearGrass = night ? 'rgba(11, 39, 38, .46)' : 'rgba(70, 146, 78, .34)'
-  const grassLight = night ? 'rgba(29, 70, 60, .3)' : 'rgba(122, 178, 88, .32)'
-  const bank = night ? 'rgba(4, 20, 32, .5)' : 'rgba(62, 132, 82, .34)'
-  const bankShade = night ? 'rgba(2, 14, 23, .22)' : 'rgba(18, 88, 78, .1)'
+  const ink = night ? '24, 52, 67' : '53, 121, 105'
+  const farInk = night ? '70, 95, 110' : '126, 178, 163'
+  const water = night ? '100, 145, 176' : '119, 199, 211'
+  const grass = night ? '31, 80, 63' : '132, 186, 82'
+  const lightGrass = night ? '54, 94, 72' : '185, 217, 96'
 
-  const mountain = ctx.createLinearGradient(0, height * .55, 0, height)
-  mountain.addColorStop(0, farHill)
-  mountain.addColorStop(1, night ? 'rgba(8, 32, 43, .36)' : 'rgba(62, 128, 107, .22)')
-  ctx.fillStyle = mountain
-  ctx.beginPath()
-  ctx.moveTo(0, height * .84)
-  ctx.lineTo(width * .08, height * .78)
-  ctx.lineTo(width * .14, height * .71)
-  ctx.lineTo(width * .2, height * .62)
-  ctx.lineTo(width * .27, height * .72)
-  ctx.lineTo(width * .34, height * .78)
-  ctx.lineTo(width * .4, height * .69)
-  ctx.lineTo(width * .46, height * .55)
-  ctx.lineTo(width * .53, height * .68)
-  ctx.lineTo(width * .59, height * .76)
-  ctx.lineTo(width * .65, height * .68)
-  ctx.lineTo(width * .71, height * .52)
-  ctx.lineTo(width * .79, height * .68)
-  ctx.lineTo(width * .86, height * .74)
-  ctx.lineTo(width * .93, height * .66)
-  ctx.lineTo(width, height * .6)
-  ctx.lineTo(width, height)
-  ctx.lineTo(0, height)
-  ctx.closePath()
-  ctx.fill()
-
-  ctx.fillStyle = night ? 'rgba(3, 18, 30, .16)' : 'rgba(41, 102, 92, .1)'
-  ctx.beginPath()
-  ctx.moveTo(width * .46, height * .55)
-  ctx.lineTo(width * .59, height * .76)
-  ctx.lineTo(width * .5, height * .84)
-  ctx.closePath()
-  ctx.moveTo(width * .71, height * .52)
-  ctx.lineTo(width * .86, height * .74)
-  ctx.lineTo(width * .75, height * .84)
-  ctx.closePath()
-  ctx.moveTo(width * .2, height * .62)
-  ctx.lineTo(width * .34, height * .78)
-  ctx.lineTo(width * .24, height * .83)
-  ctx.closePath()
-  ctx.fill()
-
-  ctx.strokeStyle = night ? 'rgba(200, 222, 231, .07)' : 'rgba(255, 255, 240, .13)'
-  ctx.lineWidth = 1
-  ctx.beginPath()
-  ctx.moveTo(width * .12, height * .72)
-  ctx.lineTo(width * .2, height * .62)
-  ctx.lineTo(width * .28, height * .72)
-  ctx.moveTo(width * .4, height * .68)
-  ctx.lineTo(width * .46, height * .55)
-  ctx.lineTo(width * .54, height * .68)
-  ctx.moveTo(width * .64, height * .68)
-  ctx.lineTo(width * .71, height * .52)
-  ctx.lineTo(width * .8, height * .68)
-  ctx.stroke()
-
-  ctx.fillStyle = night ? 'rgba(9, 38, 50, .2)' : 'rgba(95, 158, 123, .2)'
-  ctx.beginPath()
-  ctx.moveTo(0, height * .9)
-  ctx.bezierCurveTo(width * .16, height * .79, width * .34, height * .87, width * .5, height * .78)
-  ctx.bezierCurveTo(width * .66, height * .69, width * .86, height * .83, width, height * .74)
-  ctx.lineTo(width, height)
-  ctx.lineTo(0, height)
-  ctx.closePath()
-  ctx.fill()
-
-  const river = ctx.createLinearGradient(origin.x, origin.y, width * .48, nearY)
-  if (night) {
-    river.addColorStop(0, 'rgba(118, 158, 190, .24)')
-    river.addColorStop(.58, 'rgba(56, 105, 145, .36)')
-    river.addColorStop(1, 'rgba(25, 68, 108, .48)')
-  } else if (skyPhase.value === 'sunset' || skyPhase.value === 'afterglow' || skyPhase.value === 'sunrise') {
-    river.addColorStop(0, 'rgba(255, 204, 143, .24)')
-    river.addColorStop(.45, 'rgba(103, 178, 190, .42)')
-    river.addColorStop(1, 'rgba(55, 142, 174, .56)')
-  } else {
-    river.addColorStop(0, 'rgba(226, 249, 255, .3)')
-    river.addColorStop(.56, 'rgba(126, 205, 224, .46)')
-    river.addColorStop(1, 'rgba(62, 164, 200, .58)')
+  function noise(seed: number) {
+    const value = Math.sin(seed * 12.9898 + 78.233) * 43758.5453
+    return value - Math.floor(value)
   }
 
-  ctx.fillStyle = river
-  ctx.beginPath()
-  ctx.moveTo(origin.x - width * .014, origin.y)
-  ctx.bezierCurveTo(width * .63, height * .84, width * .5, height * .88, width * .44, height * .91)
-  ctx.bezierCurveTo(width * .38, height * .94, width * .35, height * .97, width * .28, nearY)
-  ctx.lineTo(width * .72, nearY)
-  ctx.bezierCurveTo(width * .61, height * .96, width * .72, height * .9, width * .62, height * .86)
-  ctx.bezierCurveTo(width * .56, height * .83, width * .61, height * .81, origin.x + width * .016, origin.y)
-  ctx.closePath()
-  ctx.fill()
-
-  const riverShine = night ? 'rgba(205, 225, 245, .16)' : 'rgba(255, 255, 255, .36)'
-  ctx.strokeStyle = riverShine
-  ctx.lineWidth = 1
-  ctx.beginPath()
-  ctx.moveTo(origin.x - width * .012, origin.y + 2)
-  ctx.bezierCurveTo(width * .6, height * .84, width * .48, height * .89, width * .43, height * .92)
-  ctx.bezierCurveTo(width * .36, height * .96, width * .34, height * .98, width * .32, nearY - 5)
-  ctx.moveTo(origin.x + width * .012, origin.y + 2)
-  ctx.bezierCurveTo(width * .56, height * .84, width * .69, height * .88, width * .62, height * .92)
-  ctx.bezierCurveTo(width * .58, height * .95, width * .66, height * .98, width * .68, nearY - 5)
-  ctx.moveTo(origin.x, origin.y + 3)
-  ctx.bezierCurveTo(width * .62, height * .85, width * .5, height * .9, width * .52, height * .94)
-  ctx.bezierCurveTo(width * .54, height * .97, width * .5, height * .99, width * .49, nearY - 8)
-  ctx.stroke()
-
-  ctx.strokeStyle = night ? 'rgba(185, 216, 238, .08)' : 'rgba(255, 251, 230, .14)'
-  ctx.lineWidth = 1
-  for (let i = 0; i < 4; i += 1) {
-    const t = (i + 1) / 5
-    const rippleY = origin.y + (nearY - origin.y) * t
-    const rippleW = width * (.02 + t * .1)
-    const rippleX = width * (.57 + Math.sin(t * Math.PI * 2.1) * .07 - t * .05)
+  function traceRidge(points: Array<{ x: number, y: number }>) {
     ctx.beginPath()
-    ctx.moveTo(rippleX - rippleW, rippleY)
-    ctx.quadraticCurveTo(rippleX, rippleY + 2, rippleX + rippleW, rippleY - 1)
-    ctx.stroke()
+    ctx.moveTo(points[0].x, points[0].y)
+    for (let index = 1; index < points.length - 1; index += 1) {
+      const current = points[index]
+      const next = points[index + 1]
+      ctx.quadraticCurveTo(current.x, current.y, (current.x + next.x) / 2, (current.y + next.y) / 2)
+    }
+    const last = points[points.length - 1]
+    ctx.lineTo(last.x, last.y)
   }
 
-  ctx.fillStyle = grassLight
+  function paintLayer(
+    points: Array<{ x: number, y: number }>,
+    bottomY: number,
+    fillTop: string,
+    fillBottom: string,
+    lineColor: string,
+    lineAlpha: number
+  ) {
+    const layerFill = ctx.createLinearGradient(0, Math.min(...points.map(point => point.y)), 0, bottomY)
+    layerFill.addColorStop(0, fillTop)
+    layerFill.addColorStop(.72, fillBottom)
+    layerFill.addColorStop(1, 'rgba(255, 255, 255, 0)')
+
+    traceRidge(points)
+    ctx.lineTo(width * 1.08, bottomY)
+    ctx.lineTo(width * -.08, bottomY)
+    ctx.closePath()
+    ctx.fillStyle = layerFill
+    ctx.fill()
+
+    ctx.save()
+    ctx.globalAlpha = lineAlpha
+    ctx.strokeStyle = lineColor
+    ctx.lineWidth = 1
+    traceRidge(points)
+    ctx.stroke()
+    ctx.restore()
+  }
+
+  function paintContour(points: Array<{ x: number, y: number }>, offset: number, alpha: number, light = false) {
+    ctx.save()
+    ctx.globalAlpha = alpha
+    ctx.strokeStyle = light
+      ? night ? 'rgba(210, 228, 222, .32)' : 'rgba(248, 252, 218, .56)'
+      : night ? 'rgba(7, 30, 43, .38)' : 'rgba(45, 113, 91, .34)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(points[0].x, points[0].y + offset)
+    for (let index = 1; index < points.length - 1; index += 1) {
+      const current = points[index]
+      const next = points[index + 1]
+      ctx.quadraticCurveTo(current.x, current.y + offset, (current.x + next.x) / 2, (current.y + next.y) / 2 + offset)
+    }
+    ctx.stroke()
+    ctx.restore()
+  }
+
+  function paintStream(points: Array<{ x: number, y: number, w: number }>) {
+    const streamFill = ctx.createLinearGradient(origin.x, origin.y, width * .52, nearY)
+    if (night) {
+      streamFill.addColorStop(0, `rgba(${water}, .18)`)
+      streamFill.addColorStop(.55, `rgba(${water}, .34)`)
+      streamFill.addColorStop(1, 'rgba(42, 92, 130, .5)')
+    } else {
+      streamFill.addColorStop(0, 'rgba(238, 254, 255, .5)')
+      streamFill.addColorStop(.44, `rgba(${water}, .58)`)
+      streamFill.addColorStop(1, 'rgba(78, 178, 205, .7)')
+    }
+
+    ctx.beginPath()
+    ctx.moveTo(points[0].x - points[0].w, points[0].y)
+    for (let index = 1; index < points.length - 1; index += 1) {
+      const current = points[index]
+      const next = points[index + 1]
+      ctx.quadraticCurveTo(current.x - current.w, current.y, (current.x + next.x) / 2 - (current.w + next.w) / 2, (current.y + next.y) / 2)
+    }
+    const last = points[points.length - 1]
+    ctx.lineTo(last.x - last.w, last.y)
+    ctx.lineTo(last.x + last.w, last.y)
+    for (let index = points.length - 2; index > 0; index -= 1) {
+      const current = points[index]
+      const prev = points[index - 1]
+      ctx.quadraticCurveTo(current.x + current.w, current.y, (current.x + prev.x) / 2 + (current.w + prev.w) / 2, (current.y + prev.y) / 2)
+    }
+    ctx.lineTo(points[0].x + points[0].w, points[0].y)
+    ctx.closePath()
+    ctx.fillStyle = streamFill
+    ctx.fill()
+
+    ctx.strokeStyle = night ? 'rgba(215, 232, 238, .16)' : 'rgba(255, 255, 246, .56)'
+    ctx.lineWidth = 1
+    for (let index = 1; index < points.length; index += 1) {
+      const point = points[index]
+      const sparkleWidth = point.w * (1.4 + noise(index + 8) * 1.2)
+      ctx.beginPath()
+      ctx.moveTo(point.x - sparkleWidth * .5, point.y - point.w * .22)
+      ctx.quadraticCurveTo(point.x, point.y + 1, point.x + sparkleWidth * .5, point.y - point.w * .12)
+      ctx.stroke()
+    }
+  }
+
+  const farMountains = [
+    { x: width * -.08, y: height * .69 },
+    { x: width * .1, y: height * .64 },
+    { x: width * .24, y: height * .57 },
+    { x: width * .39, y: height * .5 },
+    { x: width * .51, y: height * .58 },
+    { x: width * .64, y: height * .48 },
+    { x: width * .78, y: height * .59 },
+    { x: width * .93, y: height * .55 },
+    { x: width * 1.08, y: height * .62 }
+  ]
+  const backHills = [
+    { x: width * -.08, y: height * .8 },
+    { x: width * .18, y: height * .72 },
+    { x: width * .38, y: height * .75 },
+    { x: width * .54, y: height * .69 },
+    { x: width * .74, y: height * .73 },
+    { x: width * 1.08, y: height * .68 }
+  ]
+  const frontHills = [
+    { x: width * -.08, y: height * .9 },
+    { x: width * .16, y: height * .83 },
+    { x: width * .34, y: height * .87 },
+    { x: width * .55, y: height * .8 },
+    { x: width * .74, y: height * .86 },
+    { x: width * 1.08, y: height * .78 }
+  ]
+  const stream = [
+    { x: origin.x, y: origin.y, w: clamp(width * .006, 2, 5) },
+    { x: width * .45, y: height * .68, w: clamp(width * .009, 3, 7) },
+    { x: width * .56, y: height * .74, w: clamp(width * .014, 5, 11) },
+    { x: width * .35, y: height * .82, w: clamp(width * .026, 9, 22) },
+    { x: width * .64, y: height * .9, w: clamp(width * .044, 16, 40) },
+    { x: width * .46, y: nearY + 4, w: clamp(width * .1, 34, 86) }
+  ]
+
+  const farGlow = ctx.createRadialGradient(width * .52, height * .63, 0, width * .52, height * .63, width * .48)
+  farGlow.addColorStop(0, night ? 'rgba(176, 198, 210, .12)' : 'rgba(255, 252, 215, .2)')
+  farGlow.addColorStop(1, 'rgba(255, 255, 255, 0)')
+  ctx.fillStyle = farGlow
   ctx.beginPath()
-  ctx.moveTo(0, height)
-  ctx.lineTo(0, height * .85)
-  ctx.bezierCurveTo(width * .18, height * .78, width * .38, height * .86, origin.x - width * .04, origin.y - 2)
-  ctx.bezierCurveTo(width * .44, height * .85, width * .28, height * .92, width * .16, height)
-  ctx.closePath()
+  ctx.ellipse(width * .52, height * .64, width * .48, height * .16, 0, 0, Math.PI * 2)
   ctx.fill()
 
-  ctx.fillStyle = nearGrass
-  ctx.beginPath()
-  ctx.moveTo(0, height)
-  ctx.lineTo(0, height * .89)
-  ctx.bezierCurveTo(width * .2, height * .82, width * .35, height * .9, origin.x - width * .05, origin.y + 6)
-  ctx.bezierCurveTo(width * .39, height * .89, width * .32, height * .96, width * .24, height)
-  ctx.closePath()
-  ctx.fill()
+  paintLayer(
+    farMountains,
+    height * .82,
+    `rgba(${farInk}, ${night ? .16 : .18})`,
+    `rgba(${farInk}, ${night ? .08 : .1})`,
+    `rgba(${farInk}, ${night ? .22 : .24})`,
+    .55
+  )
+  paintContour(farMountains, 20, night ? .04 : .08, true)
 
-  ctx.fillStyle = bank
-  ctx.beginPath()
-  ctx.moveTo(width, height)
-  ctx.lineTo(width, height * .84)
-  ctx.bezierCurveTo(width * .8, height * .78, width * .69, height * .87, origin.x + width * .05, origin.y + 6)
-  ctx.bezierCurveTo(width * .66, height * .9, width * .76, height * .95, width * .86, height)
-  ctx.closePath()
-  ctx.fill()
+  paintLayer(
+    backHills,
+    height * .94,
+    `rgba(${lightGrass}, ${night ? .18 : .24})`,
+    `rgba(${grass}, ${night ? .18 : .2})`,
+    `rgba(${ink}, ${night ? .12 : .13})`,
+    .42
+  )
+  paintContour(backHills, 28, night ? .04 : .09, true)
 
-  ctx.fillStyle = bankShade
-  ctx.beginPath()
-  ctx.ellipse(width * .24, nearY - 28, width * .18, 8, -.05, 0, Math.PI * 2)
-  ctx.fill()
+  paintStream(stream)
 
-  const grassStroke = night ? 'rgba(87, 132, 101, .28)' : 'rgba(52, 132, 72, .36)'
-  ctx.strokeStyle = grassStroke
+  paintLayer(
+    frontHills,
+    height,
+    `rgba(${lightGrass}, ${night ? .24 : .42})`,
+    `rgba(${grass}, ${night ? .34 : .4})`,
+    `rgba(${ink}, ${night ? .18 : .18})`,
+    .55
+  )
+  paintContour(frontHills, 22, night ? .05 : .1, true)
+  paintContour(frontHills, 46, night ? .04 : .08)
+
+  ctx.fillStyle = config.hillColor
+  for (let index = 0; index < 14; index += 1) {
+    const t = index / 13
+    ctx.beginPath()
+    ctx.ellipse(width * (.06 + t * .88), nearY - 42 + Math.sin(index * 1.17) * 7 + t * 30, width * (.012 + (index % 4) * .005), 3, -.08, 0, Math.PI * 2)
+    ctx.fill()
+  }
+
+  ctx.strokeStyle = night ? 'rgba(121, 155, 119, .18)' : 'rgba(70, 137, 72, .28)'
   ctx.lineWidth = 1
-  for (let i = 0; i < 18; i += 1) {
-    const side = i % 2 === 0 ? -1 : 1
-    const t = (i % 9) / 8
-    const gx = side < 0
-      ? width * (.08 + t * .34)
-      : width * (.72 + t * .22)
-    const gy = nearY - 56 + Math.sin(i * 1.7) * 7 + t * 34
-    const blade = 4 + (i % 4)
+  for (let index = 0; index < 22; index += 1) {
+    const t = index / 21
+    const side = index % 2 === 0 ? -1 : 1
+    const gx = width * (.05 + t * .9)
+    const gy = nearY - 32 + Math.sin(index * 1.9) * 7 + (index % 5) * 6
     ctx.beginPath()
     ctx.moveTo(gx, gy)
-    ctx.quadraticCurveTo(gx + side * 2, gy - blade, gx + side * 5, gy - blade * 2)
+    ctx.quadraticCurveTo(gx + side * 3, gy - 6, gx + side * 8, gy - 12)
     ctx.stroke()
   }
 }

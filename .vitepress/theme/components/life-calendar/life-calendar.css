@@ -100,7 +100,7 @@ a {
   justify-content: center;
   gap: 20px;
   color: #f9f5ec;
-  background: linear-gradient(130deg, #153f39, #287f72);
+  background: linear-gradient(130deg, #1d8475, #40c4b0);
 }
 
 .calendar-hero::after {
@@ -223,7 +223,7 @@ a {
 .week-row {
   padding: 22px 0 8px;
   color: #8a9692;
-  font-size: 9px;
+  font-size: 10px;
   text-align: center;
 }
 
@@ -266,7 +266,7 @@ a {
   justify-content: flex-end;
   gap: 14px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 10px;
 }
 
 .calendar-legend span { display: inline-flex; align-items: center; gap: 5px; }
@@ -289,11 +289,6 @@ a {
 .day-heading div > span { color: var(--muted); font-size: 9px; }
 .day-heading > strong { flex: 0 0 auto; color: var(--green-deep); font: 500 36px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .day-heading > strong small { display: block; margin-top: 5px; color: var(--muted); font: 9px/1 sans-serif; text-align: right; }
-
-.record-editor {
-  padding: 18px 0;
-  border-bottom: 1px dashed rgb(22 63 58 / 13%);
-}
 
 .day-panel {
   order: -1;
@@ -363,6 +358,77 @@ a {
   color: rgb(255 255 255 / 84%);
 }
 
+.record-entry-bar {
+  display: flex;
+  min-width: 0;
+  padding: 14px 0 16px;
+  border-bottom: 1px dashed rgb(22 63 58 / 13%);
+  align-items: center;
+  gap: 10px;
+}
+
+.record-entry-bar span {
+  min-width: 0;
+  flex: 1;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.record-entry-bar button {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid rgb(31 119 110 / 14%);
+  border-radius: 999px;
+  color: var(--green-deep);
+  background: rgb(220 239 233 / 48%);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.record-entry-bar .record-entry-bar__primary {
+  border-color: transparent;
+  color: white;
+  background: var(--green-deep);
+  font-weight: 600;
+}
+
+.record-modal {
+  --forest: #163f3a;
+  --green: #2a9d8f;
+  --green-deep: #1f776e;
+  --green-soft: #dcefe9;
+  --gold: #e9c46a;
+  --paper: #f7f5ee;
+  --muted: #71817d;
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  display: grid;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  place-items: center;
+  color: var(--forest);
+  background: rgb(11 31 28 / 46%);
+  backdrop-filter: blur(8px);
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.record-editor {
+  width: min(100%, 520px);
+  max-height: calc(100vh - 32px);
+  padding: 18px;
+  overflow-y: auto;
+  border: 1px solid rgb(22 63 58 / 9%);
+  border-radius: 3px 22px 3px 3px;
+  color: var(--forest);
+  background: #fffef9;
+  box-shadow: 0 24px 70px rgb(11 31 28 / 24%);
+}
+
+.record-editor--modal {
+  overscroll-behavior: contain;
+}
+
 .record-editor header {
   display: flex;
   margin-bottom: 14px;
@@ -397,9 +463,24 @@ a {
 
 .record-editor header em {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 10px;
   font-style: normal;
   white-space: nowrap;
+}
+
+.record-modal__close {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid rgb(31 119 110 / 14%);
+  border-radius: 50%;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--green-deep);
+  background: rgb(220 239 233 / 42%);
+  font-size: 22px;
+  line-height: 1;
 }
 
 .record-fields {
@@ -424,7 +505,7 @@ a {
   min-width: 0;
   gap: 6px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 10px;
 }
 
 .record-fields input,
@@ -654,6 +735,26 @@ a {
   transform: translateY(8px);
 }
 
+.record-modal-enter-active,
+.record-modal-leave-active {
+  transition: opacity .18s ease;
+}
+
+.record-modal-enter-active .record-editor,
+.record-modal-leave-active .record-editor {
+  transition: transform .18s ease;
+}
+
+.record-modal-enter-from,
+.record-modal-leave-to {
+  opacity: 0;
+}
+
+.record-modal-enter-from .record-editor,
+.record-modal-leave-to .record-editor {
+  transform: translateY(10px);
+}
+
 @media (min-width: 820px) {
   .calendar-shell { padding: 44px 32px 70px; grid-template-columns: minmax(420px, .9fr) minmax(380px, 1.1fr); align-items: start; }
   .month-panel, .day-panel { padding: 28px; }
@@ -671,6 +772,8 @@ a {
   .month-panel, .day-panel { padding: 16px; }
   .record-timeline li { grid-template-columns: 72px 15px 1fr; }
   .record-fields { grid-template-columns: 1fr; }
+  .record-modal { padding-right: 10px; padding-left: 10px; align-items: end; }
+  .record-editor { max-height: calc(100vh - 20px); padding: 16px; }
   .event-chip { min-height: 40px; padding: 0 8px; font-size: 11px; }
 }
 
