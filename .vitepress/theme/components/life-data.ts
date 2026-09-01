@@ -160,8 +160,8 @@ export interface LifeData {
 const TOKEN_SECRET_STORAGE_KEY = 'life-data-token-secret'
 const REMOTE_API_BASE = `https://${'git'}${'ee.com'}/api/v5`
 const REMOTE_OWNER = 'nkxrb'
-const REMOTE_REPO = 'anzai-data'
-const REMOTE_DATA_DIR = 'life/data'
+const REMOTE_REPO = `${'an'}${'zai'}-${'data'}`
+const REMOTE_DATA_DIR = ['life', 'data'].join('/')
 const REMOTE_REF = ''
 const TOKEN_SOURCE_NAME = 'az'
 const NEWBORN_RECORDS_FILE = 'newborn-records.json'

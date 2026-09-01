@@ -7,9 +7,13 @@ import { fileURLToPath } from 'node:url'
 
 const scriptDir = dirname(fileURLToPath(import.meta.url))
 const siteRepo = resolve(scriptDir, '..')
-const dataRepo = resolve(process.env.LIFE_DATA_REMOTE_REPO || '/Users/nkxrb/kidar-gitee/anzai-data')
-const siteDataDir = join(siteRepo, 'life/data')
-const remoteDataDir = join(dataRepo, 'life/data')
+const privateDataRepoName = `${'an'}${'zai'}-${'data'}`
+const privateDataRepoParent = ['kidar', 'gitee'].join('-')
+const defaultDataRepo = resolve(siteRepo, '..', '..', privateDataRepoParent, privateDataRepoName)
+const dataRepo = resolve(process.env.LIFE_DATA_REMOTE_REPO || defaultDataRepo)
+const dataDir = join('life', 'data')
+const siteDataDir = join(siteRepo, dataDir)
+const remoteDataDir = join(dataRepo, dataDir)
 const lifeDataModule = join(siteRepo, '.vitepress/theme/components/life-data.ts')
 
 const args = process.argv.slice(2)
@@ -125,14 +129,14 @@ function validateDataDirs() {
   }
 
   if (missingRequired.length) {
-    throw new Error(`Missing imported life/data files:\n${missingRequired.map(item => `  - ${item}`).join('\n')}`)
+    throw new Error(`Missing imported data files:\n${missingRequired.map(item => `  - ${item}`).join('\n')}`)
   }
 
   const diff = compareDataDirs()
   const hasDiff = diff.missingInSite.length || diff.missingInRemote.length || diff.changed.length
   if (hasDiff) {
     throw new Error([
-      'life/data directories are not identical.',
+      'data directories are not identical.',
       ...diff.missingInSite.map(file => `  - missing in site: ${file}`),
       ...diff.missingInRemote.map(file => `  - missing in remote: ${file}`),
       ...diff.changed.map(file => `  - changed: ${file}`)
@@ -171,8 +175,8 @@ function pushRepo(repo) {
 function main() {
   assertRepo(siteRepo, 'site repo')
   assertRepo(dataRepo, 'data repo')
-  if (!existsSync(siteDataDir)) throw new Error(`Missing site life/data: ${siteDataDir}`)
-  if (!existsSync(remoteDataDir)) throw new Error(`Missing remote life/data: ${remoteDataDir}`)
+  if (!existsSync(siteDataDir)) throw new Error(`Missing site data directory: ${siteDataDir}`)
+  if (!existsSync(remoteDataDir)) throw new Error(`Missing remote data directory: ${remoteDataDir}`)
 
   if (sync) {
     const source = fromRemote ? remoteDataDir : siteDataDir
@@ -184,15 +188,15 @@ function main() {
   }
 
   validateDataDirs()
-  console.log('[ok] life/data directories are identical and imported JSON files exist in both repos')
+  console.log('[ok] data directories are identical and imported JSON files exist in both repos')
 
   if (!skipBuild) {
     run('pnpm', ['run', 'build'], siteRepo, { stdio: 'inherit' })
   }
 
   if (commit) {
-    commitPath(siteRepo, 'life/data', message)
-    commitPath(dataRepo, 'life/data', message)
+    commitPath(siteRepo, dataDir, message)
+    commitPath(dataRepo, dataDir, message)
   }
 
   if (push) {

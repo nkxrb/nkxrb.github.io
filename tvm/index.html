@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>TVM</title>
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">TV</span>
+          <span>TVM</span>
+        </div>
+        <label class="search-box" aria-label="检索视频">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+          </svg>
+          <input id="searchInput" type="search" autocomplete="off" placeholder="搜索片名、简介、分类" />
+        </label>
+        <button id="viewToggle" class="icon-button view-toggle" type="button" title="切换视图" aria-label="切换视图">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 3h7v7H3V3Zm11 0h7v7h-7V3ZM3 14h7v7H3v-7Zm11 0h7v7h-7v-7Z" />
+          </svg>
+        </button>
+      </header>
+
+      <main class="shell">
+        <aside class="sidebar">
+          <section class="side-section">
+            <div class="section-title">分类</div>
+            <div id="categoryList" class="category-list"></div>
+          </section>
+          <section class="side-section history-section">
+            <div class="section-title">播放历史</div>
+            <div id="historyList" class="history-list empty">暂无记录</div>
+          </section>
+        </aside>
+
+        <section class="content">
+          <div class="content-head">
+            <div>
+              <h1 id="pageTitle">片库</h1>
+              <p id="resultMeta">加载中</p>
+            </div>
+            <select id="sortSelect" class="select" aria-label="排序">
+              <option value="default">默认排序</option>
+              <option value="name">片名排序</option>
+              <option value="episodes">集数优先</option>
+            </select>
+          </div>
+          <div id="videoList" class="video-grid" aria-live="polite"></div>
+        </section>
+
+        <aside id="detailPanel" class="detail-panel" aria-live="polite">
+          <div class="detail-empty">
+            <div class="empty-icon">TV</div>
+            <p>选择影片</p>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
