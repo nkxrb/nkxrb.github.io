@@ -82,7 +82,7 @@ function bindGlobalEvents() {
 
   accessChannel?.addEventListener("message", (event) => {
     if (event.data?.type !== "secret" || typeof event.data.secret !== "string") return;
-    sessionStorage.setItem(STORAGE.secret, event.data.secret);
+    localStorage.setItem(STORAGE.secret, event.data.secret);
     restoreSecret().then(renderDetail);
   });
 
@@ -137,21 +137,18 @@ function applyCatalog(catalog) {
 }
 
 async function restoreSecret() {
-  const secret = sessionStorage.getItem(STORAGE.secret);
+  const hasSecret = localStorage.getItem(STORAGE.secret) !== null;
+  const secret = localStorage.getItem(STORAGE.secret) || "";
   state.key = null;
   state.unlocked = false;
-  if (!secret || !state.config) return;
+  if (!hasSecret || !state.config) return;
   try {
-    const key = await deriveKey(secret, state.config);
-    if (state.root?.r) {
-      const probe = await fetchJson(`./data/p/${state.root.r}/0`);
-      await decryptEnvelope(probe, key);
-    }
-    state.key = key;
+    state.key = await deriveKey(secret, state.config);
     state.unlocked = true;
   } catch (error) {
     console.warn(error);
-    sessionStorage.removeItem(STORAGE.secret);
+    state.key = null;
+    state.unlocked = false;
   }
 }
 
