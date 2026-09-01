@@ -1,5 +1,6 @@
 const STORAGE = {
   secret: "tvm.secret.v1",
+  secretUpdatedAt: "tvm.secret.v1.updatedAt",
   history: "tvm.history.v1",
   ui: "tvm.ui.v1",
 };
@@ -7,6 +8,7 @@ const STORAGE = {
 const rates = [0.75, 1, 1.25, 1.5, 2];
 const textDecoder = new TextDecoder();
 const textEncoder = new TextEncoder();
+const accessChannel = "BroadcastChannel" in window ? new BroadcastChannel("tvm-access") : null;
 
 const state = {
   root: null,
@@ -29,6 +31,7 @@ const state = {
   hls: null,
   saveTimer: 0,
   detailOpen: false,
+  pendingResumeAt: 0,
 };
 
 const els = {
@@ -72,9 +75,15 @@ function bindGlobalEvents() {
   });
 
   window.addEventListener("storage", (event) => {
-    if (event.key === STORAGE.secret) {
+    if (event.key === STORAGE.secretUpdatedAt) {
       restoreSecret().then(renderDetail);
     }
+  });
+
+  accessChannel?.addEventListener("message", (event) => {
+    if (event.data?.type !== "secret" || typeof event.data.secret !== "string") return;
+    sessionStorage.setItem(STORAGE.secret, event.data.secret);
+    restoreSecret().then(renderDetail);
   });
 
   window.addEventListener("resize", syncDetailMode, { passive: true });
@@ -241,6 +250,7 @@ function renderDetail() {
   renderChrome();
   const video = state.selectedVideo;
   if (!video) {
+    releasePlayer();
     els.detailPanel.innerHTML = `
       <div class="detail-empty">
         <div class="empty-icon">TV</div>
@@ -326,8 +336,7 @@ function bindDetailEvents() {
     player.addEventListener("timeupdate", () => scheduleHistorySave(player));
     player.addEventListener("loadedmetadata", () => seekFromHistory(player));
     player.addEventListener("ended", playNextEpisode);
-    player.addEventListener("error", () => switchSource("当前线路不可用，已尝试换源"));
-    player.addEventListener("stalled", () => switchSource("加载中断，已尝试换源"));
+    player.addEventListener("error", () => setStatus("playerStatus", "当前线路播放异常", true));
     player.addEventListener("ratechange", () => syncRateButtons(player.playbackRate));
     bindSourceButtons();
     bindEpisodeButtons();
@@ -339,6 +348,8 @@ function bindDetailEvents() {
 function bindSourceButtons() {
   document.querySelectorAll(".source-button").forEach((button) => {
     button.addEventListener("click", () => {
+      const player = document.getElementById("player");
+      state.pendingResumeAt = player?.currentTime || 0;
       state.sourceIndex = Number(button.dataset.source);
       renderDetail();
     });
@@ -350,6 +361,7 @@ function bindEpisodeButtons() {
     button.addEventListener("click", () => {
       state.episodeIndex = Number(button.dataset.episode);
       state.sourceIndex = 0;
+      state.pendingResumeAt = 0;
       renderDetail();
     });
   });
@@ -366,6 +378,7 @@ function bindRateButtons(player) {
 }
 
 async function selectVideo(index, fromHistory = false) {
+  releasePlayer();
   state.selectedIndex = index;
   state.selectedVideo = state.videos[index];
   state.playable = null;
@@ -380,16 +393,7 @@ async function selectVideo(index, fromHistory = false) {
 
 function closeDetail() {
   state.detailOpen = false;
-  if (state.hls) {
-    state.hls.destroy();
-    state.hls = null;
-  }
-  const player = document.getElementById("player");
-  if (player) {
-    player.pause();
-    player.removeAttribute("src");
-    player.load();
-  }
+  releasePlayer();
   syncDetailMode();
 }
 
@@ -427,7 +431,8 @@ async function loadCurrentSource(options = {}) {
   const source = episode?.sources?.[state.sourceIndex];
   if (!player || !source?.url) return;
 
-  const keepTime = options.keepTime ? player.currentTime : 0;
+  const keepTime = Number(options.resumeAt || state.pendingResumeAt || (options.keepTime ? player.currentTime : 0));
+  state.pendingResumeAt = 0;
   const url = source.url;
   setStatus("playerStatus", source.name || "加载中");
 
@@ -441,6 +446,9 @@ async function loadCurrentSource(options = {}) {
       const Hls = await ensureHls();
       if (Hls?.isSupported()) {
         state.hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+        state.hls.on(Hls.Events.ERROR, (_event, data) => {
+          if (data?.fatal) setStatus("playerStatus", "当前线路播放异常", true);
+        });
         state.hls.loadSource(url);
         state.hls.attachMedia(player);
       } else {
@@ -465,29 +473,25 @@ async function loadCurrentSource(options = {}) {
   syncNowPlaying();
 }
 
-async function switchSource(message) {
-  const episode = state.playable?.episodes[state.episodeIndex];
-  if (!episode?.sources?.length) return;
-  const player = document.getElementById("player");
-  const currentTime = player?.currentTime || 0;
-  if (state.sourceIndex + 1 < episode.sources.length) {
-    state.sourceIndex += 1;
-    setStatus("playerStatus", message || "切换线路中");
-    renderDetail();
-    const nextPlayer = document.getElementById("player");
-    if (nextPlayer && currentTime > 0) nextPlayer.dataset.resumeAt = String(currentTime);
-    await loadCurrentSource({ autoplay: true, keepTime: true });
-    return;
-  }
-  setStatus("playerStatus", "所有线路均不可用", true);
-}
-
 function playNextEpisode() {
   if (!state.playable) return;
   if (state.episodeIndex + 1 >= state.playable.episodes.length) return;
   state.episodeIndex += 1;
   state.sourceIndex = 0;
+  state.pendingResumeAt = 0;
   renderDetail();
+}
+
+function releasePlayer() {
+  if (state.hls) {
+    state.hls.destroy();
+    state.hls = null;
+  }
+  const player = document.getElementById("player");
+  if (!player) return;
+  player.pause();
+  player.removeAttribute("src");
+  player.load();
 }
 
 function scheduleHistorySave(player) {

@@ -1,6 +1,8 @@
 const STORAGE_KEY = "tvm.secret.v1";
+const STORAGE_UPDATED_AT_KEY = "tvm.secret.v1.updatedAt";
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
+const accessChannel = "BroadcastChannel" in window ? new BroadcastChannel("tvm-access") : null;
 
 const form = document.getElementById("gateForm");
 const input = document.getElementById("secretInput");
@@ -35,12 +37,13 @@ form.addEventListener("submit", async (event) => {
     const probe = await fetchJson(probePath);
     await decryptEnvelope(probe, key);
     sessionStorage.setItem(STORAGE_KEY, secret);
-    localStorage.setItem(`${STORAGE_KEY}.updatedAt`, String(Date.now()));
+    accessChannel?.postMessage({ type: "secret", secret });
+    localStorage.setItem(STORAGE_UPDATED_AT_KEY, String(Date.now()));
     setStatus("已保存");
   } catch (error) {
     console.error(error);
     sessionStorage.removeItem(STORAGE_KEY);
-    localStorage.setItem(`${STORAGE_KEY}.updatedAt`, String(Date.now()));
+    localStorage.setItem(STORAGE_UPDATED_AT_KEY, String(Date.now()));
     setStatus("秘钥无效", true);
   }
 });
