@@ -888,7 +888,7 @@ function getSkyOrb(date: Date, phase: SkyPhase, lunarDay: number): SkyOrb {
     const delta = shortestHourDistance(hour, moonTransitHour)
     return {
       x: clamp(.72 + delta * .04, .14, .82),
-      y: clamp(.12 + Math.pow(Math.min(1, Math.abs(delta) / 7), 1.45) * .48, .1, .68),
+      y: clamp(.1 + Math.pow(Math.min(1, Math.abs(delta) / 7), 1.45) * .42, .1, .56),
       radius: 14
     }
   }
