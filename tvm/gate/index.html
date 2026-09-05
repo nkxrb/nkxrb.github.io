@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>TVM Access</title>
+    <link rel="stylesheet" href="../app.css" />
+    <style>
+      body {
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        padding: 1rem;
+      }
+
+      .gate-card {
+        width: min(100%, 28rem);
+        padding: 1.2rem;
+        border: 1px solid var(--line-soft);
+        border-radius: 0.5rem;
+        background: rgba(24, 27, 31, 0.9);
+        box-shadow: var(--shadow);
+      }
+
+      .gate-card h1 {
+        margin-bottom: 0.35rem;
+      }
+
+      .gate-card p {
+        margin: 0 0 1rem;
+        color: var(--muted);
+      }
+
+      .gate-form {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .gate-input {
+        width: 100%;
+        height: 2.75rem;
+        padding: 0 0.8rem;
+        border: 1px solid var(--line);
+        border-radius: 0.45rem;
+        outline: none;
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.045);
+      }
+
+      .gate-row {
+        display: flex;
+        gap: 0.6rem;
+      }
+
+      .gate-row button,
+      .gate-row a {
+        flex: 1;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="gate-card">
+      <h1>访问校验</h1>
+      <p id="gateMeta">读取配置中</p>
+      <form id="gateForm" class="gate-form">
+        <input id="secretInput" class="gate-input" type="password" autocomplete="current-password" placeholder="输入秘钥" />
+        <div class="gate-row">
+          <button class="primary-button" type="submit">保存</button>
+          <a class="ghost-button" href="../">进入</a>
+        </div>
+        <div id="gateStatus" class="status-line"></div>
+      </form>
+    </main>
+    <script src="./key.js" defer></script>
+  </body>
+</html>
