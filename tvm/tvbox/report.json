@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-05T18:31:56.652Z",
+  "generatedAt": "2026-09-05T20:40:23.725Z",
   "summary": {
     "upstreams": 6,
     "androidSites": 1590,
-    "macosSites": 432,
-    "sharedSites": 310,
+    "macosSites": 433,
+    "sharedSites": 311,
     "jarFiles": 42,
-    "unsupportedOnMacOS": 1515
+    "unsupportedOnMacOS": 1514
   },
   "sourceReports": [
     {
@@ -20,15 +20,6 @@
       "sites": 10
     },
     {
-      "key": "tvyuan-full",
-      "name": "tvyuan 全量版",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/tvbox_full.json",
-      "resolvedUrl": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/tvbox_full.json",
-      "status": "ok",
-      "format": "json",
-      "sites": 1575
-    },
-    {
       "key": "iduo",
       "name": "iduo / config.bin",
       "url": "https://iduo.us.ci/gt/leevi0709/one/main/config.bin",
@@ -38,20 +29,13 @@
       "sites": 89
     },
     {
-      "key": "fantaihard",
-      "name": "饭太硬",
-      "url": "http://www.饭太硬.cc/tv",
-      "resolvedUrl": "http://fty.xxooo.cf/tv",
+      "key": "tvyuan-full",
+      "name": "tvyuan 全量版",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/tvbox_full.json",
+      "resolvedUrl": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/tvbox_full.json",
       "status": "ok",
-      "format": "html-link:embedded-base64",
-      "sites": 49
-    },
-    {
-      "key": "yingshicang",
-      "name": "影视仓",
-      "url": "http://www.影视仓.com",
-      "status": "error",
-      "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接"
+      "format": "json",
+      "sites": 1575
     },
     {
       "key": "tvyuan-multi",
@@ -104,6 +88,22 @@
           "error": "多仓子项不是 TVBox 配置"
         }
       ]
+    },
+    {
+      "key": "fantaihard",
+      "name": "饭太硬",
+      "url": "http://www.饭太硬.cc/tv",
+      "resolvedUrl": "http://fty.xxooo.cf/tv",
+      "status": "ok",
+      "format": "html-link:embedded-base64",
+      "sites": 49
+    },
+    {
+      "key": "yingshicang",
+      "name": "影视仓",
+      "url": "http://www.影视仓.com",
+      "status": "error",
+      "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接"
     }
   ],
   "compatibility": {
@@ -14708,11 +14708,11 @@
       "reason": "MacOS 端没有可执行 JAR，且未匹配到 JS 迁移脚本。"
     },
     {
-      "key": "cupfox_in",
-      "name": "[85ms|vv] 茶杯狐 • cupfox.in",
+      "key": "路漫漫",
+      "name": "[85ms|vv] 路漫漫 • 动漫",
       "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%8C%B6%E6%9D%AF%E7%8B%90.js",
+      "api": "https://pan.29o.cn/down.php/136fd915b6164bb2dcec424a091bb699.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/LMM.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -14726,6 +14726,15 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
+      "key": "去看吧",
+      "name": "[85ms|vv] 去看吧 • 动漫",
+      "type": 3,
+      "api": "https://pan.29o.cn/down.php/136fd915b6164bb2dcec424a091bb699.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/QKB.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
       "key": "新闪雷",
       "name": "[85ms|vv] 新闪雷 • MP4",
       "type": 3,
@@ -14735,29 +14744,11 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "drpy_js_百忙无果",
-      "name": "[85ms|vv] 官源 • 芒果",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%99%BE%E5%BF%99%E6%97%A0%E6%9E%9C.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
       "key": "drpy_js_豆瓣",
       "name": "[85ms|vv] 搜索 • 豆瓣",
       "type": 3,
       "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
       "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/drpy.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
-      "key": "drpy_js_菜狗",
-      "name": "[85ms|vv] 官源 • 搜狗",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%8F%9C%E7%8B%97.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -14780,11 +14771,20 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "路漫漫",
-      "name": "[85ms|vv] 路漫漫 • 动漫",
+      "key": "drpy_js_百忙无果",
+      "name": "[85ms|vv] 官源 • 芒果",
       "type": 3,
-      "api": "https://pan.29o.cn/down.php/136fd915b6164bb2dcec424a091bb699.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/LMM.js",
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%99%BE%E5%BF%99%E6%97%A0%E6%9E%9C.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
+      "key": "cupfox_in",
+      "name": "[85ms|vv] 茶杯狐 • cupfox.in",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%8C%B6%E6%9D%AF%E7%8B%90.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -14807,15 +14807,6 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "drpy_js_Anime1动畫",
-      "name": "[85ms|vv] 动漫 • Anime1动畫",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/Anime1%E5%8A%A8%E7%95%AB.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
       "key": "drpy_js_NT动漫",
       "name": "[85ms|vv] 动漫 • NT动漫",
       "type": 3,
@@ -14830,6 +14821,15 @@
       "type": 3,
       "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
       "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E5%8E%BB%E7%9C%8B%E5%90%A7.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
+      "key": "drpy_js_菜狗",
+      "name": "[85ms|vv] 官源 • 搜狗",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%8F%9C%E7%8B%97.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -14861,20 +14861,20 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "drpy_js_爱上你听书网",
-      "name": "[85ms|vv] 听书 • 爱上你听书",
+      "key": "drpy_js_有声小说",
+      "name": "[85ms|vv] 听书 • 有声小说",
       "type": 3,
       "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%88%B1%E4%B8%8A%E4%BD%A0%E5%90%AC%E4%B9%A6%E7%BD%91.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E6%9C%89%E5%A3%B0%E5%B0%8F%E8%AF%B4%E5%90%A7.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "去看吧",
-      "name": "[85ms|vv] 去看吧 • 动漫",
+      "key": "drpy_js_播客",
+      "name": "[85ms|vv] 聚合 • 播客",
       "type": 3,
-      "api": "https://pan.29o.cn/down.php/136fd915b6164bb2dcec424a091bb699.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/QKB.js",
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E6%92%AD%E5%AE%A2.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -14897,29 +14897,20 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "drpy_js_有声小说",
-      "name": "[85ms|vv] 听书 • 有声小说",
+      "key": "drpy_js_Anime1动畫",
+      "name": "[85ms|vv] 动漫 • Anime1动畫",
       "type": 3,
       "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E6%9C%89%E5%A3%B0%E5%B0%8F%E8%AF%B4%E5%90%A7.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/Anime1%E5%8A%A8%E7%95%AB.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "drpy_js_播客",
-      "name": "[85ms|vv] 聚合 • 播客",
+      "key": "drpy_js_爱上你听书网",
+      "name": "[85ms|vv] 听书 • 爱上你听书",
       "type": 3,
       "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E6%92%AD%E5%AE%A2.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
-      "key": "drpy_js_网易公版影像",
-      "name": "[85ms|vv] 聚合 • 网易公版",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%BD%91%E6%98%93%E5%85%AC%E7%89%88%E5%BD%B1%E5%83%8F.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%88%B1%E4%B8%8A%E4%BD%A0%E5%90%AC%E4%B9%A6%E7%BD%91.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -14933,11 +14924,11 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "88js",
-      "name": "[194ms|荐片] 🥇88┃看球[js]",
+      "key": "drpy_js_酷6网",
+      "name": "[85ms|vv] 聚合 • 酷6网",
       "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/88%E7%9C%8B%E7%90%83.js",
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E9%85%B76%E7%BD%91.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -14947,6 +14938,33 @@
       "type": 3,
       "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
       "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/310%E7%9B%B4%E6%92%AD.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
+      "key": "drpy_js_网易公版影像",
+      "name": "[85ms|vv] 聚合 • 网易公版",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%BD%91%E6%98%93%E5%85%AC%E7%89%88%E5%BD%B1%E5%83%8F.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
+      "key": "88js",
+      "name": "[194ms|荐片] 🥇88┃看球[js]",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/88%E7%9C%8B%E7%90%83.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
+      "key": "drpy_js_兔小贝",
+      "name": "[194ms|荐片] ⚜️少儿┃兔小贝[js]",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E5%85%94%E5%B0%8F%E8%B4%9D.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -14969,24 +14987,6 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "drpy_js_评书随身听",
-      "name": "[194ms|荐片] 🎄评书┃评书随身听[js]",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%AF%84%E4%B9%A6%E9%9A%8F%E8%BA%AB%E5%90%AC.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
-      "key": "drpy_js_兔小贝",
-      "name": "[194ms|荐片] ⚜️少儿┃兔小贝[js]",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E5%85%94%E5%B0%8F%E8%B4%9D.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
       "key": "drpy_js_广播迷FM",
       "name": "[194ms|荐片] 🏐广播┃广播迷FM[js]",
       "type": 3,
@@ -14996,11 +14996,11 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "drpy_js_酷6网",
-      "name": "[85ms|vv] 聚合 • 酷6网",
+      "key": "drpy_js_评书随身听",
+      "name": "[194ms|荐片] 🎄评书┃评书随身听[js]",
       "type": 3,
       "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E9%85%B76%E7%BD%91.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%AF%84%E4%B9%A6%E9%9A%8F%E8%BA%AB%E5%90%AC.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -15014,15 +15014,6 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：getaddrinfo ENOTFOUND ghp.ci"
     },
     {
-      "key": "csp_CandyMuj_duanju",
-      "name": "[216ms|noimank] 💥短剧网",
-      "type": 3,
-      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%9F%AD%E5%89%A7%E7%BD%91.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
       "key": "js_B站精简",
       "name": "[238ms|https://bitbucket.org/xduo/duoapi/raw/master/xpg.json] 🅱️┃哔哩┃精简",
       "type": 3,
@@ -15032,20 +15023,11 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：getaddrinfo ENOTFOUND m35.grelighting.cn"
     },
     {
-      "key": "虎牙js",
-      "name": "[336ms|饭太硬] 🐯虎牙┃直播",
+      "key": "csp_CandyMuj_duanju",
+      "name": "[216ms|noimank] 💥短剧网",
       "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/%E8%99%8E%E7%89%99.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
-      "key": "斗鱼js",
-      "name": "[336ms|饭太硬] 🐟斗鱼┃直播",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/%E6%96%97%E9%B1%BC%E7%9B%B4%E6%92%AD.js",
+      "api": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/libs/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%9F%AD%E5%89%A7%E7%BD%91.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -15059,20 +15041,29 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
+      "key": "斗鱼js",
+      "name": "[336ms|饭太硬] 🐟斗鱼┃直播",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/%E6%96%97%E9%B1%BC%E7%9B%B4%E6%92%AD.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
+      "key": "虎牙js",
+      "name": "[336ms|饭太硬] 🐯虎牙┃直播",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/%E8%99%8E%E7%89%99.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
       "key": "奇优影视",
       "name": "[739ms|5] 奇优影视",
       "type": 3,
       "api": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/drpy2.min.js",
       "ext": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/qiyouys.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
-      "key": "hipy_js_北川影视",
-      "name": "[739ms|5] 北川影视(drpy_t3)",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/drpy_libs/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/drpy_js/%E5%8C%97%E5%B7%9D%E5%BD%B1%E8%A7%86.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -15095,11 +15086,38 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "奇米动漫",
-      "name": "[1226ms|fmys] 🍿┃奇米┃动漫",
+      "key": "hipy_js_北川影视",
+      "name": "[739ms|5] 北川影视(drpy_t3)",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/drpy_libs/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/drpy_js/%E5%8C%97%E5%B7%9D%E5%BD%B1%E8%A7%86.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
+      "key": "drpy_js_ddys",
+      "name": "[1121ms|俊哥接口] 低端影视(DRPY)",
+      "type": 3,
+      "api": "http://home.jundie.top:666/JS/dr_py/libs/drpy.min.js",
+      "ext": "http://home.jundie.top:666/JS/dr_py/js/ddys.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 401"
+    },
+    {
+      "key": "drpy_js_akjs",
+      "name": "[1121ms|俊哥接口] 爱看机器人(DRPY)",
+      "type": 3,
+      "api": "http://home.jundie.top:666/JS/dr_py/libs/drpy.min.js",
+      "ext": "http://home.jundie.top:666/JS/dr_py/js/%E7%88%B1%E7%9C%8B%E6%9C%BA%E5%99%A8%E4%BA%BA.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 401"
+    },
+    {
+      "key": "csp_huya",
+      "name": "[1226ms|fmys] 🐯┃虎牙┃直播",
       "type": 3,
       "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/qmdm.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/huya.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -15113,56 +15131,11 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "csp_huya",
-      "name": "[1226ms|fmys] 🐯┃虎牙┃直播",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/huya.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
-      "key": "哔哩影视",
-      "name": "[1226ms|fmys] 🅱️┃哔哩┃影视",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/blys.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
       "key": "csp_douyu",
       "name": "[1226ms|fmys] 🦈┃斗鱼┃直播",
       "type": 3,
       "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
       "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/douyu.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
-      "key": "drpy_js_akjs",
-      "name": "[1121ms|俊哥接口] 爱看机器人(DRPY)",
-      "type": 3,
-      "api": "http://home.jundie.top:666/JS/dr_py/libs/drpy.min.js",
-      "ext": "http://home.jundie.top:666/JS/dr_py/js/%E7%88%B1%E7%9C%8B%E6%9C%BA%E5%99%A8%E4%BA%BA.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 401"
-    },
-    {
-      "key": "drpy_js_ddys",
-      "name": "[1121ms|俊哥接口] 低端影视(DRPY)",
-      "type": 3,
-      "api": "http://home.jundie.top:666/JS/dr_py/libs/drpy.min.js",
-      "ext": "http://home.jundie.top:666/JS/dr_py/js/ddys.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 401"
-    },
-    {
-      "key": "哔哩影音",
-      "name": "[1226ms|fmys] 🅱️┃哔哩┃影音",
-      "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/wdbl.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -15176,11 +15149,29 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
-      "key": "贱贱",
-      "name": "[2809ms|金鹰] 🎬荐片┃影视",
+      "key": "哔哩影音",
+      "name": "[1226ms|fmys] 🅱️┃哔哩┃影音",
       "type": 3,
-      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/apiv461drpy2.min.js",
-      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/jp.js",
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/wdbl.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
+      "key": "哔哩影视",
+      "name": "[1226ms|fmys] 🅱️┃哔哩┃影视",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/blys.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
+      "key": "奇米动漫",
+      "name": "[1226ms|fmys] 🍿┃奇米┃动漫",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/qmdm.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
@@ -15203,6 +15194,15 @@
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
     },
     {
+      "key": "贱贱",
+      "name": "[2809ms|金鹰] 🎬荐片┃影视",
+      "type": 3,
+      "api": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/apiv461drpy2.min.js",
+      "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/jp.js",
+      "origin": "remote-js",
+      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
+    },
+    {
       "key": "hipy_js_黑木耳资源[资]",
       "name": "[2809ms|金鹰] 🥥木耳┃资源",
       "type": 3,
@@ -15210,15 +15210,6 @@
       "ext": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/hei.js",
       "origin": "remote-js",
       "reason": "JS Spider 下载失败，未下发到 MacOS 配置：HTTP 404"
-    },
-    {
-      "key": "MG",
-      "name": "[739ms|5] 芒果TV[追剧]",
-      "type": 3,
-      "api": "https://file.icve.com.cn/file_doc/249/899/3E7E0C8A023B624CEC6BDCC200F06F02.js",
-      "ext": "https://cdn.waimaimingtang.com/file/images/bwc/20251023002108-a4795930ec.js",
-      "origin": "remote-js",
-      "reason": "JS Spider 下载失败，未下发到 MacOS 配置：Timeout after 15000ms"
     }
   ],
   "jarManifest": [
@@ -17595,8 +17586,8 @@
   ],
   "vendoredJavaScript": [
     {
-      "site": "cupfox_in",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%8C%B6%E6%9D%AF%E7%8B%90.js",
+      "site": "路漫漫",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/LMM.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -17607,26 +17598,20 @@
       "error": "HTTP 404"
     },
     {
+      "site": "去看吧",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/QKB.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
       "site": "新闪雷",
       "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E6%96%B0%E9%97%AA%E9%9B%B7.js",
       "status": "error",
       "error": "HTTP 404"
     },
     {
-      "site": "drpy_js_百忙无果",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%99%BE%E5%BF%99%E6%97%A0%E6%9E%9C.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
       "site": "drpy_js_豆瓣",
       "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/drpy.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
-      "site": "drpy_js_菜狗",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%8F%9C%E7%8B%97.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -17643,8 +17628,14 @@
       "error": "HTTP 404"
     },
     {
-      "site": "路漫漫",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/LMM.js",
+      "site": "drpy_js_百忙无果",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%99%BE%E5%BF%99%E6%97%A0%E6%9E%9C.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "cupfox_in",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%8C%B6%E6%9D%AF%E7%8B%90.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -17661,12 +17652,6 @@
       "error": "HTTP 404"
     },
     {
-      "site": "drpy_js_Anime1动畫",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/Anime1%E5%8A%A8%E7%95%AB.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
       "site": "drpy_js_NT动漫",
       "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/NT%E5%8A%A8%E6%BC%AB.js",
       "status": "error",
@@ -17675,6 +17660,12 @@
     {
       "site": "drpy_js_去看吧",
       "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E5%8E%BB%E7%9C%8B%E5%90%A7.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "drpy_js_菜狗",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%8F%9C%E7%8B%97.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -17697,14 +17688,14 @@
       "error": "HTTP 404"
     },
     {
-      "site": "drpy_js_爱上你听书网",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%88%B1%E4%B8%8A%E4%BD%A0%E5%90%AC%E4%B9%A6%E7%BD%91.js",
+      "site": "drpy_js_有声小说",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E6%9C%89%E5%A3%B0%E5%B0%8F%E8%AF%B4%E5%90%A7.js",
       "status": "error",
       "error": "HTTP 404"
     },
     {
-      "site": "去看吧",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/QKB.js",
+      "site": "drpy_js_播客",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E6%92%AD%E5%AE%A2.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -17721,20 +17712,14 @@
       "error": "HTTP 404"
     },
     {
-      "site": "drpy_js_有声小说",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E6%9C%89%E5%A3%B0%E5%B0%8F%E8%AF%B4%E5%90%A7.js",
+      "site": "drpy_js_Anime1动畫",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/Anime1%E5%8A%A8%E7%95%AB.js",
       "status": "error",
       "error": "HTTP 404"
     },
     {
-      "site": "drpy_js_播客",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E6%92%AD%E5%AE%A2.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
-      "site": "drpy_js_网易公版影像",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%BD%91%E6%98%93%E5%85%AC%E7%89%88%E5%BD%B1%E5%83%8F.js",
+      "site": "drpy_js_爱上你听书网",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%88%B1%E4%B8%8A%E4%BD%A0%E5%90%AC%E4%B9%A6%E7%BD%91.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -17745,14 +17730,32 @@
       "error": "HTTP 404"
     },
     {
-      "site": "88js",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/88%E7%9C%8B%E7%90%83.js",
+      "site": "drpy_js_酷6网",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E9%85%B76%E7%BD%91.js",
       "status": "error",
       "error": "HTTP 404"
     },
     {
       "site": "drpy_js_310直播",
       "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/310%E7%9B%B4%E6%92%AD.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "drpy_js_网易公版影像",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%BD%91%E6%98%93%E5%85%AC%E7%89%88%E5%BD%B1%E5%83%8F.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "88js",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/88%E7%9C%8B%E7%90%83.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "drpy_js_兔小贝",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E5%85%94%E5%B0%8F%E8%B4%9D.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -17775,14 +17778,14 @@
       "error": "HTTP 404"
     },
     {
-      "site": "drpy_js_评书随身听",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%AF%84%E4%B9%A6%E9%9A%8F%E8%BA%AB%E5%90%AC.js",
+      "site": "drpy_js_广播迷FM",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E5%B9%BF%E6%92%AD%E8%BF%B7FM.js",
       "status": "error",
       "error": "HTTP 404"
     },
     {
-      "site": "drpy_js_兔小贝",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E5%85%94%E5%B0%8F%E8%B4%9D.js",
+      "site": "drpy_js_评书随身听",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E8%AF%84%E4%B9%A6%E9%9A%8F%E8%BA%AB%E5%90%AC.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -17793,9 +17796,9 @@
       "status": "ok"
     },
     {
-      "site": "csp_zhibo_huya",
-      "url": "https://agit.ai/fantaiying/dr_py/raw/branch/main/js/%E8%99%8E%E7%89%99%E7%9B%B4%E6%92%AD.js",
-      "file": "public/js/spiders/1327c8c38ce69d6b.js",
+      "site": "drpy_js_有声绘本网",
+      "url": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/%E6%9C%89%E5%A3%B0%E7%BB%98%E6%9C%AC%E7%BD%91.js",
+      "file": "public/js/spiders/2f5b4672251d1e13.js",
       "status": "ok"
     },
     {
@@ -17805,27 +17808,15 @@
       "status": "ok"
     },
     {
-      "site": "drpy_js_广播迷FM",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E5%B9%BF%E6%92%AD%E8%BF%B7FM.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
-      "site": "drpy_js_有声绘本网",
-      "url": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/%E6%9C%89%E5%A3%B0%E7%BB%98%E6%9C%AC%E7%BD%91.js",
-      "file": "public/js/spiders/2f5b4672251d1e13.js",
+      "site": "csp_zhibo_huya",
+      "url": "https://agit.ai/fantaiying/dr_py/raw/branch/main/js/%E8%99%8E%E7%89%99%E7%9B%B4%E6%92%AD.js",
+      "file": "public/js/spiders/1327c8c38ce69d6b.js",
       "status": "ok"
     },
     {
       "site": "我的哔哩(js)",
       "url": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/js/%E6%88%91%E7%9A%84%E5%93%94%E5%93%A9.js",
       "file": "public/js/spiders/39c8c2ee1d52a0af.js",
-      "status": "ok"
-    },
-    {
-      "site": "爱看(js)",
-      "url": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/js/%E7%88%B1%E7%9C%8B.js",
-      "file": "public/js/spiders/a52e2c0efc1819ca.js",
       "status": "ok"
     },
     {
@@ -17841,33 +17832,15 @@
       "status": "ok"
     },
     {
-      "site": "两个BT(js)",
-      "url": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/js/%E4%B8%A4%E4%B8%AABT.js",
-      "file": "public/js/spiders/fd70d1f9f28fe486.js",
-      "status": "ok"
-    },
-    {
-      "site": "怡萱动漫(js)",
-      "url": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/js/%E6%80%A1%E8%90%B1%E5%8A%A8%E6%BC%AB.js",
-      "file": "public/js/spiders/fcde9e6fa31697ec.js",
-      "status": "ok"
-    },
-    {
-      "site": "子子影视(js)",
-      "url": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/js/%E5%AD%90%E5%AD%90%E5%BD%B1%E8%A7%86.js",
-      "file": "public/js/spiders/7659f70c7eae755b.js",
-      "status": "ok"
-    },
-    {
-      "site": "drpy_js_88看球",
-      "url": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/88%E7%9C%8B%E7%90%83.js",
-      "file": "public/js/spiders/73655854c86a2745.js",
-      "status": "ok"
-    },
-    {
       "site": "drpy_js_JRKAN直播",
       "url": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/JRKAN%E7%9B%B4%E6%92%AD.js",
       "file": "public/js/spiders/a1ca125e2e1eb6cc.js",
+      "status": "ok"
+    },
+    {
+      "site": "两个BT(js)",
+      "url": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/js/%E4%B8%A4%E4%B8%AABT.js",
+      "file": "public/js/spiders/fd70d1f9f28fe486.js",
       "status": "ok"
     },
     {
@@ -17877,10 +17850,28 @@
       "status": "ok"
     },
     {
-      "site": "drpy_js_酷6网",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E9%85%B76%E7%BD%91.js",
-      "status": "error",
-      "error": "HTTP 404"
+      "site": "drpy_js_88看球",
+      "url": "https://gh-proxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/js/88%E7%9C%8B%E7%90%83.js",
+      "file": "public/js/spiders/73655854c86a2745.js",
+      "status": "ok"
+    },
+    {
+      "site": "子子影视(js)",
+      "url": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/js/%E5%AD%90%E5%AD%90%E5%BD%B1%E8%A7%86.js",
+      "file": "public/js/spiders/7659f70c7eae755b.js",
+      "status": "ok"
+    },
+    {
+      "site": "怡萱动漫(js)",
+      "url": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/js/%E6%80%A1%E8%90%B1%E5%8A%A8%E6%BC%AB.js",
+      "file": "public/js/spiders/fcde9e6fa31697ec.js",
+      "status": "ok"
+    },
+    {
+      "site": "爱看(js)",
+      "url": "https://www.agit.ai/fantaiying/dr_py/raw/branch/main/js/%E7%88%B1%E7%9C%8B.js",
+      "file": "public/js/spiders/a52e2c0efc1819ca.js",
+      "status": "ok"
     },
     {
       "site": "dr_兔小贝",
@@ -17889,16 +17880,16 @@
       "error": "getaddrinfo ENOTFOUND ghp.ci"
     },
     {
-      "site": "csp_CandyMuj_duanju",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%9F%AD%E5%89%A7%E7%BD%91.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
       "site": "js_B站精简",
       "url": "http://m35.grelighting.cn/html/box/js/B%E7%AB%99%E7%B2%BE%E7%AE%80.js",
       "status": "error",
       "error": "getaddrinfo ENOTFOUND m35.grelighting.cn"
+    },
+    {
+      "site": "csp_CandyMuj_duanju",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/js/%E7%9F%AD%E5%89%A7%E7%BD%91.js",
+      "status": "error",
+      "error": "HTTP 404"
     },
     {
       "site": "果果",
@@ -17931,33 +17922,15 @@
       "status": "ok"
     },
     {
-      "site": "采之王",
-      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/js/CJZW.js?type=url&params=https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/json/CJJT.json$1$1",
-      "file": "public/js/spiders/7ce98ba808cb1d3a.js",
-      "status": "ok"
-    },
-    {
-      "site": "虎牙js",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/%E8%99%8E%E7%89%99.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
       "site": "爱奇艺幕",
       "url": "http://nn.4688888.xyz/js/%E7%88%B1%E5%A5%87%E8%89%BA.js",
       "file": "public/js/spiders/c678cd3fb9512bb8.js",
       "status": "ok"
     },
     {
-      "site": "斗鱼js",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/%E6%96%97%E9%B1%BC%E7%9B%B4%E6%92%AD.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
-      "site": "腾腾视频",
-      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/js/TXSP.js",
-      "file": "public/js/spiders/9b82162f158d0c69.js",
+      "site": "腾讯幕",
+      "url": "http://nn.4688888.xyz/js/%E8%85%BE%E8%AE%AF%E8%A7%86%E9%A2%91.js",
+      "file": "public/js/spiders/a842c463299dee53.js",
       "status": "ok"
     },
     {
@@ -17973,15 +17946,9 @@
       "error": "HTTP 404"
     },
     {
-      "site": "腾讯幕",
-      "url": "http://nn.4688888.xyz/js/%E8%85%BE%E8%AE%AF%E8%A7%86%E9%A2%91.js",
-      "file": "public/js/spiders/a842c463299dee53.js",
-      "status": "ok"
-    },
-    {
-      "site": "采集之王",
-      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/js/CJZW.js?type=url&params=https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/json/CJJT.json$1$1",
-      "file": "public/js/spiders/7ce98ba808cb1d3a.js",
+      "site": "腾腾视频",
+      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/js/TXSP.js",
+      "file": "public/js/spiders/9b82162f158d0c69.js",
       "status": "ok"
     },
     {
@@ -17991,21 +17958,45 @@
       "status": "ok"
     },
     {
-      "site": "果果视频",
-      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/js/MGSP.js",
-      "file": "public/js/spiders/c2afa2707ad574c7.js",
-      "status": "ok"
-    },
-    {
       "site": "奇奇视频",
       "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/js/AQY.js",
       "file": "public/js/spiders/797588bf94d1c3cc.js",
       "status": "ok"
     },
     {
-      "site": "NT动漫",
-      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/anime/js/NTDM.js",
-      "file": "public/js/spiders/cd1700cebec87c7d.js",
+      "site": "采之王",
+      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/js/CJZW.js?type=url&params=https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/json/CJJT.json$1$1",
+      "file": "public/js/spiders/7ce98ba808cb1d3a.js",
+      "status": "ok"
+    },
+    {
+      "site": "采集之王",
+      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/js/CJZW.js?type=url&params=https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/json/CJJT.json$1$1",
+      "file": "public/js/spiders/7ce98ba808cb1d3a.js",
+      "status": "ok"
+    },
+    {
+      "site": "果果视频",
+      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/movie/js/MGSP.js",
+      "file": "public/js/spiders/c2afa2707ad574c7.js",
+      "status": "ok"
+    },
+    {
+      "site": "斗鱼js",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/%E6%96%97%E9%B1%BC%E7%9B%B4%E6%92%AD.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "虎牙js",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/FTY/%E8%99%8E%E7%89%99.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "花子动漫",
+      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/anime/js/HZDM.js",
+      "file": "public/js/spiders/7b4d513666616a57.js",
       "status": "ok"
     },
     {
@@ -18015,9 +18006,9 @@
       "status": "ok"
     },
     {
-      "site": "花子动漫",
-      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/anime/js/HZDM.js",
-      "file": "public/js/spiders/7b4d513666616a57.js",
+      "site": "腾讯视频",
+      "url": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/qq.js",
+      "file": "public/js/spiders/f7c384a3b216c64d.js",
       "status": "ok"
     },
     {
@@ -18027,21 +18018,21 @@
       "status": "ok"
     },
     {
+      "site": "NT动漫",
+      "url": "https://git.yylx.win/raw.githubusercontent.com/PizazzGY/NewTVBox/main/anime/js/NTDM.js",
+      "file": "public/js/spiders/cd1700cebec87c7d.js",
+      "status": "ok"
+    },
+    {
+      "site": "360影视",
+      "url": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/360.js",
+      "file": "public/js/spiders/2d509f77c1fe17cb.js",
+      "status": "ok"
+    },
+    {
       "site": "爱奇艺",
       "url": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/iqiyi.js",
       "file": "public/js/spiders/a52fc22da70d0130.js",
-      "status": "ok"
-    },
-    {
-      "site": "腾讯视频",
-      "url": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/qq.js",
-      "file": "public/js/spiders/f7c384a3b216c64d.js",
-      "status": "ok"
-    },
-    {
-      "site": "搜狗影视",
-      "url": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/sogou.js",
-      "file": "public/js/spiders/2cb29c7d9ea5c0e6.js",
       "status": "ok"
     },
     {
@@ -18051,16 +18042,16 @@
       "status": "ok"
     },
     {
+      "site": "搜狗影视",
+      "url": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/sogou.js",
+      "file": "public/js/spiders/2cb29c7d9ea5c0e6.js",
+      "status": "ok"
+    },
+    {
       "site": "奇优影视",
       "url": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/qiyouys.js",
       "status": "error",
       "error": "HTTP 404"
-    },
-    {
-      "site": "360影视",
-      "url": "https://gh-proxy.org/https://raw.github.com/tly824/TvBoxx/master/js/360.js",
-      "file": "public/js/spiders/2d509f77c1fe17cb.js",
-      "status": "ok"
     },
     {
       "site": "hipy_js_腾云驾雾[官]",
@@ -18069,10 +18060,10 @@
       "status": "ok"
     },
     {
-      "site": "hipy_js_北川影视",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/drpy_js/%E5%8C%97%E5%B7%9D%E5%BD%B1%E8%A7%86.js",
-      "status": "error",
-      "error": "HTTP 404"
+      "site": "hipy_js_百忙无果[官]",
+      "url": "https://gh-proxy.org/https://raw.github.com/tly824/hipy-server/master/app/t4/files//drpy_js/%E7%99%BE%E5%BF%99%E6%97%A0%E6%9E%9C[%E5%AE%98].js",
+      "file": "public/js/spiders/73eb2947aff45868.js",
+      "status": "ok"
     },
     {
       "site": "hipy_js_策驰影院(自动)",
@@ -18081,9 +18072,9 @@
       "error": "HTTP 404"
     },
     {
-      "site": "hipy_js_百忙无果[官]",
-      "url": "https://gh-proxy.org/https://raw.github.com/tly824/hipy-server/master/app/t4/files//drpy_js/%E7%99%BE%E5%BF%99%E6%97%A0%E6%9E%9C[%E5%AE%98].js",
-      "file": "public/js/spiders/73eb2947aff45868.js",
+      "site": "MG",
+      "url": "https://cdn.waimaimingtang.com/file/images/bwc/20251023002108-a4795930ec.js",
+      "file": "public/js/spiders/4a9d77875484f676.js",
       "status": "ok"
     },
     {
@@ -18093,8 +18084,26 @@
       "error": "HTTP 404"
     },
     {
-      "site": "奇米动漫",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/qmdm.js",
+      "site": "hipy_js_北川影视",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/drpy_js/%E5%8C%97%E5%B7%9D%E5%BD%B1%E8%A7%86.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "drpy_js_ddys",
+      "url": "http://home.jundie.top:666/JS/dr_py/js/ddys.js",
+      "status": "error",
+      "error": "HTTP 401"
+    },
+    {
+      "site": "drpy_js_akjs",
+      "url": "http://home.jundie.top:666/JS/dr_py/js/%E7%88%B1%E7%9C%8B%E6%9C%BA%E5%99%A8%E4%BA%BA.js",
+      "status": "error",
+      "error": "HTTP 401"
+    },
+    {
+      "site": "csp_huya",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/huya.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -18105,38 +18114,8 @@
       "error": "HTTP 404"
     },
     {
-      "site": "csp_huya",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/huya.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
-      "site": "哔哩影视",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/blys.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
       "site": "csp_douyu",
       "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/douyu.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
-      "site": "drpy_js_akjs",
-      "url": "http://home.jundie.top:666/JS/dr_py/js/%E7%88%B1%E7%9C%8B%E6%9C%BA%E5%99%A8%E4%BA%BA.js",
-      "status": "error",
-      "error": "HTTP 401"
-    },
-    {
-      "site": "drpy_js_ddys",
-      "url": "http://home.jundie.top:666/JS/dr_py/js/ddys.js",
-      "status": "error",
-      "error": "HTTP 401"
-    },
-    {
-      "site": "哔哩影音",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/wdbl.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -18147,8 +18126,20 @@
       "error": "HTTP 404"
     },
     {
-      "site": "贱贱",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/jp.js",
+      "site": "哔哩影音",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/wdbl.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "哔哩影视",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/blys.js",
+      "status": "error",
+      "error": "HTTP 404"
+    },
+    {
+      "site": "奇米动漫",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/qmdm.js",
       "status": "error",
       "error": "HTTP 404"
     },
@@ -18165,6 +18156,12 @@
       "error": "HTTP 404"
     },
     {
+      "site": "cupfox_in_9fea27",
+      "url": "https://qist.wyfc.qzz.io/js/%E8%8C%B6%E6%9D%AF%E7%8B%90.js",
+      "file": "public/js/spiders/6c15e53a6203cf37.js",
+      "status": "ok"
+    },
+    {
       "site": "js_短剧天堂",
       "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/djtt.js",
       "status": "error",
@@ -18177,10 +18174,10 @@
       "status": "ok"
     },
     {
-      "site": "cupfox_in_9fea27",
-      "url": "https://qist.wyfc.qzz.io/js/%E8%8C%B6%E6%9D%AF%E7%8B%90.js",
-      "file": "public/js/spiders/6c15e53a6203cf37.js",
-      "status": "ok"
+      "site": "贱贱",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/jp.js",
+      "status": "error",
+      "error": "HTTP 404"
     },
     {
       "site": "去看吧_42bac8",
@@ -18189,15 +18186,15 @@
       "status": "ok"
     },
     {
-      "site": "drpy_js_360影视_1660e1",
-      "url": "https://qist.wyfc.qzz.io/js/360%E5%BD%B1%E8%A7%86.js",
-      "file": "public/js/spiders/7c6cdb5e62c0b3e1.js",
-      "status": "ok"
-    },
-    {
       "site": "路漫漫_fbf7cd",
       "url": "https://qist.wyfc.qzz.io/js/LMM.js",
       "file": "public/js/spiders/7e905449276e938a.js",
+      "status": "ok"
+    },
+    {
+      "site": "drpy_js_360影视_1660e1",
+      "url": "https://qist.wyfc.qzz.io/js/360%E5%BD%B1%E8%A7%86.js",
+      "file": "public/js/spiders/7c6cdb5e62c0b3e1.js",
       "status": "ok"
     },
     {
@@ -18219,27 +18216,15 @@
       "status": "ok"
     },
     {
-      "site": "drpy_js_优酷_a5a7b2",
-      "url": "https://qist.wyfc.qzz.io/js/%E4%BC%98%E9%85%B7.js",
-      "file": "public/js/spiders/06fa98efab73a79b.js",
-      "status": "ok"
-    },
-    {
       "site": "drpy_js_腾云驾雾_af9bd0",
       "url": "https://qist.wyfc.qzz.io/js/%E8%85%BE%E4%BA%91%E9%A9%BE%E9%9B%BE.js",
       "file": "public/js/spiders/61557ccee724410c.js",
       "status": "ok"
     },
     {
-      "site": "hipy_js_黑木耳资源[资]",
-      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/hei.js",
-      "status": "error",
-      "error": "HTTP 404"
-    },
-    {
-      "site": "drpy_js_路漫漫_d6a441",
-      "url": "https://qist.wyfc.qzz.io/js/%E8%B7%AF%E6%BC%AB%E6%BC%AB.js",
-      "file": "public/js/spiders/d7ed3e5cf0893ae3.js",
+      "site": "drpy_js_优酷_a5a7b2",
+      "url": "https://qist.wyfc.qzz.io/js/%E4%BC%98%E9%85%B7.js",
+      "file": "public/js/spiders/06fa98efab73a79b.js",
       "status": "ok"
     },
     {
@@ -18255,27 +18240,33 @@
       "status": "ok"
     },
     {
-      "site": "drpy_js_NT动漫_b9cb6e",
-      "url": "https://qist.wyfc.qzz.io/js/NT%E5%8A%A8%E6%BC%AB.js",
-      "file": "public/js/spiders/4f8ef667176c719d.js",
-      "status": "ok"
-    },
-    {
       "site": "drpy_js_A8音乐_0b865e",
       "url": "https://qist.wyfc.qzz.io/js/A8%E9%9F%B3%E4%B9%90.js",
       "file": "public/js/spiders/5aa79f04aa1fcc55.js",
       "status": "ok"
     },
     {
-      "site": "drpy_js_蜻蜓FM_7626f5",
-      "url": "https://qist.wyfc.qzz.io/js/%E8%9C%BB%E8%9C%93FM.js",
-      "file": "public/js/spiders/24278ec36543ab39.js",
+      "site": "drpy_js_NT动漫_b9cb6e",
+      "url": "https://qist.wyfc.qzz.io/js/NT%E5%8A%A8%E6%BC%AB.js",
+      "file": "public/js/spiders/4f8ef667176c719d.js",
+      "status": "ok"
+    },
+    {
+      "site": "drpy_js_路漫漫_d6a441",
+      "url": "https://qist.wyfc.qzz.io/js/%E8%B7%AF%E6%BC%AB%E6%BC%AB.js",
+      "file": "public/js/spiders/d7ed3e5cf0893ae3.js",
       "status": "ok"
     },
     {
       "site": "drpy_js_DJ音乐_54cbb9",
       "url": "https://qist.wyfc.qzz.io/js/DJ%E9%9F%B3%E4%B9%90.js",
       "file": "public/js/spiders/1a3455bd077153c8.js",
+      "status": "ok"
+    },
+    {
+      "site": "drpy_js_蜻蜓FM_7626f5",
+      "url": "https://qist.wyfc.qzz.io/js/%E8%9C%BB%E8%9C%93FM.js",
+      "file": "public/js/spiders/24278ec36543ab39.js",
       "status": "ok"
     },
     {
@@ -18288,18 +18279,6 @@
       "site": "drpy_js_博看听书_30c320",
       "url": "https://qist.wyfc.qzz.io/js/%E5%8D%9A%E7%9C%8B%E5%90%AC%E4%B9%A6.js",
       "file": "public/js/spiders/dbcd654491dc72ec.js",
-      "status": "ok"
-    },
-    {
-      "site": "drpy_js_有声小说_bec34b",
-      "url": "https://qist.wyfc.qzz.io/js/%E6%9C%89%E5%A3%B0%E5%B0%8F%E8%AF%B4%E5%90%A7.js",
-      "file": "public/js/spiders/4ea5686f755b5105.js",
-      "status": "ok"
-    },
-    {
-      "site": "drpy_js_酷6网_a8eb4b",
-      "url": "https://qist.wyfc.qzz.io/js/%E9%85%B76%E7%BD%91.js",
-      "file": "public/js/spiders/4b1173276ee3569a.js",
       "status": "ok"
     },
     {
@@ -18321,21 +18300,21 @@
       "status": "ok"
     },
     {
+      "site": "drpy_js_有声小说_bec34b",
+      "url": "https://qist.wyfc.qzz.io/js/%E6%9C%89%E5%A3%B0%E5%B0%8F%E8%AF%B4%E5%90%A7.js",
+      "file": "public/js/spiders/4ea5686f755b5105.js",
+      "status": "ok"
+    },
+    {
+      "site": "drpy_js_酷6网_a8eb4b",
+      "url": "https://qist.wyfc.qzz.io/js/%E9%85%B76%E7%BD%91.js",
+      "file": "public/js/spiders/4b1173276ee3569a.js",
+      "status": "ok"
+    },
+    {
       "site": "csp_huya_992d6e",
       "url": "https://iduo.us.ci/gt/leevi0709/one/main/lib/huya.js",
       "file": "public/js/spiders/cbbf14ed84f2ee21.js",
-      "status": "ok"
-    },
-    {
-      "site": "csp_douyu_b2a4d0",
-      "url": "https://iduo.us.ci/gt/leevi0709/one/main/lib/douyu.js",
-      "file": "public/js/spiders/3b667fb450392a5a.js",
-      "status": "ok"
-    },
-    {
-      "site": "虎牙js_68344d",
-      "url": "https://git.yylx.win/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/%E8%99%8E%E7%89%99.js",
-      "file": "public/js/spiders/57d3bfb3bcb77672.js",
       "status": "ok"
     },
     {
@@ -18345,16 +18324,28 @@
       "status": "ok"
     },
     {
+      "site": "虎牙js_68344d",
+      "url": "https://git.yylx.win/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/%E8%99%8E%E7%89%99.js",
+      "file": "public/js/spiders/57d3bfb3bcb77672.js",
+      "status": "ok"
+    },
+    {
+      "site": "csp_douyu_b2a4d0",
+      "url": "https://iduo.us.ci/gt/leevi0709/one/main/lib/douyu.js",
+      "file": "public/js/spiders/3b667fb450392a5a.js",
+      "status": "ok"
+    },
+    {
       "site": "dr_兔小贝_8eb459",
       "url": "https://git.yylx.win/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/%E5%85%94%E5%B0%8F%E8%B4%9D.js",
       "file": "public/js/spiders/399e094f777d4f44.js",
       "status": "ok"
     },
     {
-      "site": "MG",
-      "url": "https://cdn.waimaimingtang.com/file/images/bwc/20251023002108-a4795930ec.js",
+      "site": "hipy_js_黑木耳资源[资]",
+      "url": "https://fastly.jsdelivr.net/gh/25175/tvyuan@master/lib/hei.js",
       "status": "error",
-      "error": "Timeout after 15000ms"
+      "error": "HTTP 404"
     }
   ]
 }
