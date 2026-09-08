@@ -291,6 +291,96 @@ h1 {
   background: var(--panel);
 }
 
+.config-controls {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.config-controls .select,
+.config-url-input,
+.config-controls .primary-button {
+  width: 100%;
+}
+
+.config-url-input {
+  height: 2.35rem;
+  min-width: 0;
+  padding: 0 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  outline: none;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.config-url-input::placeholder {
+  color: #7c8994;
+}
+
+.source-list-panel {
+  display: grid;
+  gap: 0.4rem;
+  max-height: 15rem;
+  overflow: auto;
+  padding-right: 0.15rem;
+}
+
+.source-list-panel.empty {
+  min-height: 3.5rem;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.source-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.55rem;
+  align-items: start;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--line-soft);
+  border-radius: 0.45rem;
+  color: var(--muted-strong);
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
+}
+
+.source-item:hover {
+  border-color: rgba(38, 212, 164, 0.35);
+  background: rgba(255, 255, 255, 0.065);
+}
+
+.source-item input {
+  margin-top: 0.18rem;
+  accent-color: var(--accent);
+}
+
+.source-item span,
+.source-item strong,
+.source-item small {
+  min-width: 0;
+}
+
+.source-item strong,
+.source-item small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.source-item strong {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.source-item small {
+  margin-top: 0.18rem;
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
 .video-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));

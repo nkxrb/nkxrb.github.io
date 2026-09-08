@@ -30,6 +30,19 @@
       <main class="shell">
         <aside class="sidebar">
           <section class="side-section">
+            <div class="section-title">配置源</div>
+            <div class="config-controls">
+              <select id="configProfileSelect" class="select" aria-label="配置源"></select>
+              <input id="configUrlInput" class="config-url-input" type="url" spellcheck="false" autocomplete="off" placeholder="配置地址" />
+              <button id="loadConfigButton" class="primary-button" type="button">加载</button>
+              <div id="configStatus" class="status-line">待加载配置</div>
+            </div>
+          </section>
+          <section class="side-section">
+            <div class="section-title">线路</div>
+            <div id="sourceList" class="source-list-panel empty">待加载配置</div>
+          </section>
+          <section class="side-section">
             <div class="section-title">分类</div>
             <div id="categoryList" class="category-list"></div>
           </section>
