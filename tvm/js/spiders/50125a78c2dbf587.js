@@ -1,505 +1,798 @@
-<html>
-<head ><style>*{margin: 0; padding: 0;}</style><meta  name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" content=""><script>
-  if (!"gdprAppliesGlobally" in window) {
-    window.gdprAppliesGlobally = true
-  }
-  if (!("cmp_id" in window) || window.cmp_id < 1) {
-    window.cmp_id = 0
-  }
-  if (!("cmp_cdid" in window)) {
-    window.cmp_cdid = "40679ccc92462"
-  }
-  if (!("cmp_params" in window)) {
-    window.cmp_params = ""
-  }
-  if (!("cmp_host" in window)) {
-    window.cmp_host = "d.delivery.consentmanager.net"
-  }
-  if (!("cmp_cdn" in window)) {
-    window.cmp_cdn = "cdn.consentmanager.net"
-  }
-  if (!("cmp_proto" in window)) {
-    window.cmp_proto = "https:"
-  }
-  if (!("cmp_codesrc" in window)) {
-    window.cmp_codesrc = "1"
-  }
-  window.cmp_getsupportedLangs = function() {
-    var b = ["DE", "EN", "FR", "IT", "NO", "DA", "FI", "ES", "PT", "RO", "BG", "ET", "EL", "GA", "HR", "LV", "LT", "MT", "NL", "PL", "SV", "SK", "SL", "CS", "HU", "RU", "SR", "ZH", "TR", "UK", "AR", "BS"];
-    if ("cmp_customlanguages" in window) {
-      for (var a = 0; a < window.cmp_customlanguages.length; a++) {
-        b.push(window.cmp_customlanguages[a].l.toUpperCase())
-      }
-    }
-    return b
-  };
-  window.cmp_getRTLLangs = function() {
-    var a = ["AR"];
-    if ("cmp_customlanguages" in window) {
-      for (var b = 0; b < window.cmp_customlanguages.length; b++) {
-        if ("r" in window.cmp_customlanguages[b] && window.cmp_customlanguages[b].r) {
-          a.push(window.cmp_customlanguages[b].l)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <title>Ghproxy</title>
+
+    <style type="text/css">
+        a, img {
+            outline: 0;
         }
-      }
-    }
-    return a
-  };
-  window.cmp_getlang = function(j) {
-    if (typeof(j) != "boolean") {
-      j = true
-    }
-    if (j && typeof(cmp_getlang.usedlang) == "string" && cmp_getlang.usedlang !== "") {
-      return cmp_getlang.usedlang
-    }
-    var g = window.cmp_getsupportedLangs();
-    var c = [];
-    var f = location.hash;
-    var e = location.search;
-    var a = "languages" in navigator ? navigator.languages : [];
-    if (f.indexOf("cmplang=") != -1) {
-      c.push(f.substr(f.indexOf("cmplang=") + 8, 2).toUpperCase())
-    } else {
-      if (e.indexOf("cmplang=") != -1) {
-        c.push(e.substr(e.indexOf("cmplang=") + 8, 2).toUpperCase())
-      } else {
-        if ("cmp_setlang" in window && window.cmp_setlang != "") {
-          c.push(window.cmp_setlang.toUpperCase())
-        } else {
-          if (a.length > 0) {
-            for (var d = 0; d < a.length; d++) {
-              c.push(a[d])
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ol, ul {
+            list-style: none;
+        }
+
+        img {
+            border: none;
+        }
+
+        a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .cf:after, .cf:before {
+            content: " ";
+            display: table;
+        }
+
+        .cf:after {
+            clear: both;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            -webkit-text-size-adjust: none;
+            -moz-text-size-adjust: none;
+            -ms-text-size-adjust: none;
+            -o-text-size-adjust: none;
+            text-size-adjust: none;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1f2e;
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .ios_fix {
+            width: 1px;
+            min-width: 100%;
+            *width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wrapper {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            width: 100%;
+            background-color: transparent;
+        }
+
+        .heading {
+            visibility: visible;
+            word-wrap: break-word;
+            text-align: center;
+            font-size: 30px;
+            color: #ffffff;
+            font-family: Montserrat-bold, arial, sans-serif, Arial, sans-serif;
+            font-weight: bold;
+            padding-top: 60px;
+            padding-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .searches {
+            color: #a0a8c0;
+            font-size: 12px;
+            margin: 0 0 16px;
+            font-family: montserrat_regular, arial, sans-serif;
+        }
+
+        .no-results {
+            color: #828694;
+            font-size: 14px;
+            margin: 10px 0 20px;
+            font-family: montserrat_regular, arial, sans-serif;
+            text-align: center;
+        }
+
+        li .content {
+            position: relative;
+            padding: 0 50px 0 25px;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #2a3441;
+            border: solid 1px #4a5568;
+        }
+
+        li .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+            right: 25px;
+            color: #ffffff;
+        }
+
+        li .anchortext a {
+            line-height: 29px;
+            max-height: 87px;
+            word-wrap: break-word;
+            overflow: hidden;
+            display: block;
+            text-align: center;
+            font-size: 24px;
+            color: #ffffff;
+            font-weight: bold;
+            font-family: Verdana, arial, sans-serif;
+            text-transform: capitalize;
+        }
+
+        li:hover .content {
+            background: #e09a00;
+            border-color: #e09a00;
+        }
+
+        li:hover .anchortext a {
+            color: #ffffff;
+            text-decoration: ;
+        }
+
+        .list_wrapper {
+            overflow: hidden;
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 30px 10px;
+            flex: 1;
+        }
+
+        li {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        li:last-child {
+            margin-bottom: none;
+        }
+
+        li .anchorhref {
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            overflow: hidden;
+            z-index: 999;
+        }
+
+        li table {
+            table-layout: fixed;
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        .content td {
+            height: 114px;
+        }
+
+        .footer {
+            text-align: center;
+            font-family: arial, sans-serif;
+            padding: 20px 10px;
+            background-color: transparent;
+            width: 220px;
+            margin: auto auto 20px;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+
+        .footer-links a {
+            display: inline-block;
+            line-height: 20px;
+            color: #a0a8c0;
+            font-family: Arial, sans-serif;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        @media screen and (max-width: 599px) {
+            .list_wrapper {
+                background: transparent;
+                padding-left: 20px;
+                padding-right: 20px;
             }
-          }
+
+            li .content {
+                background-color: #2a3441;
+                border: solid 1px #4a5568;
+            }
         }
-      }
-    }
-    if ("language" in navigator) {
-      c.push(navigator.language)
-    }
-    if ("userLanguage" in navigator) {
-      c.push(navigator.userLanguage)
-    }
-    var h = "";
-    for (var d = 0; d < c.length; d++) {
-      var b = c[d].toUpperCase();
-      if (g.indexOf(b) != -1) {
-        h = b;
-        break
-      }
-      if (b.indexOf("-") != -1) {
-        b = b.substr(0, 2)
-      }
-      if (g.indexOf(b) != -1) {
-        h = b;
-        break
-      }
-    }
-    if (h == "" && typeof(cmp_getlang.defaultlang) == "string" && cmp_getlang.defaultlang !== "") {
-      return cmp_getlang.defaultlang
-    } else {
-      if (h == "") {
-        h = "EN"
-      }
-    }
-    h = h.toUpperCase();
-    return h
-  };
-  (function() {
-    var u = document;
-    var v = u.getElementsByTagName;
-    var h = window;
-    var o = "";
-    var b = "_en";
-    if ("cmp_getlang" in h) {
-      o = h.cmp_getlang().toLowerCase();
-      if ("cmp_customlanguages" in h) {
-        for (var q = 0; q < h.cmp_customlanguages.length; q++) {
-          if (h.cmp_customlanguages[q].l.toUpperCase() == o.toUpperCase()) {
-            o = "en";
-            break
-          }
+
+        /* The 87px clamp is exactly three 29px lines. At phone widths the longest
+           real keywords need a fourth, and it was being cut off with no ellipsis. */
+        @media only screen and (max-width: 767px) {
+            li .anchortext a {
+                max-height: none;
+                overflow: visible;
+            }
         }
-      }
-      b = "_" + o
+    </style>
+    <style>
+        /* Decorative Side Elements */
+        .decorative-left,
+        .decorative-right {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .decorative-left {
+            left: 0;
+        }
+
+        .decorative-right {
+            right: 0;
+        }
+
+        /* Improved Chevron Design with Flat Ends */
+        .chevron {
+            position: relative;
+            width: 35vw;
+            max-width: calc((100vw - 560px - 40px) / 2);
+            height: 13vh;
+            background: currentColor;
+            transition: all 0.3s ease;
+        }
+
+        .chevron-left {
+            margin-left: -5vw;
+            clip-path: polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%);
+        }
+
+        .chevron-right {
+            margin-right: -5vw;
+            clip-path: polygon(20% 0, 100% 0, 100% 100%, 20% 100%, 0 50%);
+        }
+
+        /* Colors for chevrons with hover effects - darker shades for black theme */
+        .chevron-blue-left,
+        .chevron-blue-right {
+            color: #2a3441;
+        }
+
+        .chevron-green-left,
+        .chevron-green-right {
+            color: #2a3441;
+        }
+
+        .chevron-yellow-left,
+        .chevron-yellow-right {
+            color: #2a3441;
+        }
+
+        .chevron-pink-left,
+        .chevron-pink-right {
+            color: #2a3441;
+        }
+
+        .chevron-purple-left,
+        .chevron-purple-right {
+            color: #2a3441;
+        }
+
+        /* Hover effects for chevrons */
+        .container:hover .chevron-left {
+            margin-left: -3vw;
+        }
+
+        .container:hover .chevron-right {
+            margin-right: -3vw;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .decorative-left,
+            .decorative-right {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="ios_fix">
+    <div class="heading" style="visibility: visible;">Ghproxy</div>
+
+    <div class="wrapper">
+        <!-- Left Decorative Elements -->
+        <div class="decorative-left">
+            <div class="chevron chevron-left chevron-blue-left"></div>
+            <div class="chevron chevron-left chevron-green-left"></div>
+            <div class="chevron chevron-left chevron-yellow-left"></div>
+            <div class="chevron chevron-left chevron-pink-left"></div>
+            <div class="chevron chevron-left chevron-purple-left"></div>
+        </div>
+
+        <div class="list_wrapper">
+            <div class="searches">Related Searches:</div>
+
+                <ul class="list_1">
+                        <li>
+                            <div class="content">
+                                <div class="arrow">
+                                    <img src="/assets/images/arrow.png">
+                                </div>
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0" align="left">
+                                    <tbody>
+                                    <tr>
+                                        <td width="100%" align="left" valign="middle">
+                                            <div class="anchortext">
+                                                <a href="/kw-click" data-ct="6oRO3d5ImNdoaKfBiRSJIfM5FePEHe5N3Sg9oaVCieZ6t9qWjYR9orfcl0-qwGwzVjrYfXu6Nw9GM59_91Zgz4oSf_0YfLWU68BMvbExnj3NO5KLNqHyj-KeDgmqENLZD9IZp4BBtMH-SI6rA24EDV8rmdIUbTn4DDGp1vkAbYi8-FEE7a_dPDnkUOMmYKmzcHhfXfkZ4t24kfBAWjWiXhk8RtF3gkIXNhCVt0Bc3EsrZKLfVvkAs4vs7Am9f2DvWN0p9tBR3YNPLFj7aDO2zRD82KHMV8TVMgX20Pmhflxah88dnYUDQc59Sq0L3CwZ2DVKfHxMioma1E7fm6ju9j3eFtY3BSciANOBPbVXXE2XCtZpQQFE2XPE2AgzTS6SmtdPwZR0bjmuTgDZi9xUqIb1Rg_bLafE4QfUiljUQ0DbEBGmaz0pzxNM8e7K0iW3VDwt1ZcLSKvCGrT-7utP6vnRhQsmybRwaCY3IujRFg-pnR8Hu_YE9_e6BDYp9KXblcQ-mNjSoKMv2MGXmMKg3Y9TGlrKYTkwjcCOLDEs-js7oqZJjyJfPiFlMKLoEGxI1j12HBiSQx6umWgs5v0eXx-JCENkSAqv7-GSehtJzNaHV6daILEkUaksohqgIvXR5dSMcdS3emQP4tOigqddEoIbhCGCR9ILGSINsUEw9Tt6KH2rI1bsbs9ZZfHuhGFRIo53TJ2SlRk-XAlIzBUNfzFi9a5qDQu6TezzWZ1m15C3xSfaa9D05mRzHEH0OoFgnjHVyayNxpp5bPKgPJmwiqPU3SbRRdNgdN05D3cOSQ1pTOprEUyijsDireQflDYCb9sGOOMP05cMfDVCocFFuRdtiuamV44Xr0KEVrY3KYyTPeLOMEdOyIpBPGmj0cNQs4BPYslwJ_OXttzJAjsgxaVASYmWfLlioggMsIR3Lq3qK8gFF3yVkrdevsmmlPH7ktQKk0dFLe0yeiThKxQst_vY5cL8eQ2FHqh4P192aOMb_Q96P42Aqwt2Tx5qEiqK2e14jTwswxM2O7-2g8LaInBK8NIGP6cj51iPO8iaYKkC53TCCG20x0glW8177jFgcP1d88DrOq_CfvxMoVtW97OalJ5kZommgRZDAFWwQ1JI0pM2WdZBDwRW4vlpfvsuCl3U7VDmQtsxifwjByxCdx0ardHXJSr2LX3By3TbuBhOCfxkR9RUJLfaGm4SDYgMpo-xZe-LYTdtkt_vPoD-OA6jnLIgMr1BP3lHX3eQGM7Z5WMbZsLbwNciI8yX6-TJcZUIH2L09m8caNftAyjDqL1BC_jEJfTpnN1-rakvSpo6cZd2szhd23nUPyQb8mOlN1lXYeNazckBMJHsdjf42Se4deepFSBrnMdGqk6hLW2rGxTlT4Mbnv3jG2nPrFJHDMfQKlNdW81Lcxm92OkOGv83He-deRmQYKyKyzJRi6mUdE2TARt63b85CfrcSxHxuNY-xfEN9WjX_rX01xvMaHPFB71J7i8mymEdx9cnfYPmUNCvSqtUq82gZI_6gQLBPVMi0O0VVYa3Qr7vYf31ioa4USsBEA1f8cgYBTs2JQncCI_4MapDSguarUX-u0rL9BLHcnJFYjTZBS8cfhE9laYSLzZpQhBRUNdHQ0r-9EwaRb9gVrsmZi8LkJKNqotrMSCpit9x1sDkA4W3L1BcfrtxGQukUIy5huNFTlVSIIuHtdCAMnVKi1NOKLHPhocs12encQcwSL5NRKHfkSbwqm1NjaTee5pP0kCTtlTd75uuQeq7Yc69pqaOBq4k-p4dJkYWf7aX38yoTno_7eE2mvo5GN4kq8ezZ2S0sVkEi_srSEiYKCjHUwz9vxByjxlhQkpQRKRkOpqPkX_bUrG5jCB22DrkQnujIRgLCOHUJ__acWTXgJqPfR0u2O3rJuOTEA98BUsSsTCtTVM"
+                                                target="_blank">secure file transfer</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="/kw-click" data-ct="rRwbNpvZhyc81T2vb2BxEjc_uxaJ7FBUHcGGkoAX8yNFBdHRPhjmzjchEBfZRvKEyqUSfLkf_aeN2kv-vZAFPISOVyvfhS5Y0KcE0vlwPGffKlIgsTGUwk27dTC0Dj5D-RWA_AWVfO95wbMeJyj-WfgShyHMnK22zgBJX-66zqGe3FwpW6sBid-rtfFwYKw8g1djuO3ElA2T9SBhGWhFQmYeWZdvbRox2-Wu8C1QMhG7o3j-a4V1jywvJbUYFr0UZsmpymkzAc4bC3V432P7ANCMaNWjaU4Fi6IZ-dxD2Y4rlkWyRFf4_juHVU1sr8bjy9gY7wCrEVRzRuQyv1Zy7PHiO3Ik5Z9wgPkVO5x506GYVcP_HH5xrCFTKoCrY6OPgm3G2s8GxWwSDzybJ1P84fJG7CSufESL_6zsN2nVzyk2GIYGKhgSMB0FrDIXj5IhloLII1OymqBlvvyJ3VOcwGFsvyVskkxSTgb-C5Kv1GLkb9DzxjiGCHXOHp0-pa7UEtHESUPvBIfUjw-w6XcMSCWayfkt78q6wZ6SvXS0VYsze3F4dfU_IzqaJUE9PORxA7n3LvJ5BIPOLUHpWnSk3BJo5_ISdKDRuEzQhDYghYLwjRvDysALI8GN-KbfZ3zDUKApAAVokFeJpUmsIpEZnFfaT1Prg5_YlRwI8LVtsgu8lnXe8kvA84hVHO_D9DgztC5I95KIJGhHzpWqLB6jAa4yx6DCtSt4ZSAfRe20PMWh5_qNBjGycv2D7ndiTzMPeO_N-FWxvJ8FbyL7n-05sRNqIlHZqst6ao5oat_f2E9ZfESDlVjB5JNvXUe2DyB7b9TQXrr7vfW9w5n87UK4XoGqsfa122zuGfGRMtBtV-G5V7cdMMwFxV8iNbjOviBiUoTtbdjBGT6f2tQeg7RR9Dl5g2z798bkUhWsgdLM1ECztL0UI8EMiRGDkTIfqLmf47yj3dBOaSa5vHVC_Se2-3x1m0uR2B8pqtIJDlkocDCu5qUVKDASDQyp68-8yMNn7Z1Mv_lXe3iD9yG4iMpJ-PRN-yIML0MBrR8RMLsY0tblqn5HatzAKGZwJl41nY0zEa237H6XRpPDW4RRW2Xy76XL4T3bQjbGfpUk4F42MYheRoJw_iXvam1NDkSXYzKcICKBA1Sx8ZTIj7u0FPwEAcXkLlXVCeLWmLY67yeA2P8qOPJkLbmSiwGBKsdQNDjYrh-qSed4vWtIdXhnfk8R2s1THVyQi18WRzRT5YDlx4-diUCGcrvB8jOvIKTeHYgB8jRnV-A8V6ZwI_8hx13KT1YuusO41BmXouqgj3wE_I6zjL29b23rynC7rGBemzPhrk86fy1gF3E4Mga7dmrcVvyEWW0MY_aLBmG26CqrooCow7Y0fjGbAXhDWd5Yh64-tJex1QrZoRpdQ_1WQ20yE6Ze7qctAjnPzsIXirh3Z7unUSyhI-mVb3NAqp4PTg76HMT5jUC5kiDaujb2z6w8sF4qsXt97yUneQejzeLOv2s-1IzLAy5bPeg-LCBObn9xJVPxn4dH_9jI5VdRXq3YmtFmLV7qShqU1DfzOrHmSvjOs_kEbvNEvdZ5yGPuIPyMHs3519oIPoREhJ3bFSW31drGOcwlcXxPVwlxzaQqSfdzl_TkfqAeKC1gVWQsCUw2jwRi6GNuKSgMvX5cpk7Yc2gAiax9xmvFYAjwvNKRJsThSFD8rpYJNJQSefFb8-3UKq9fL5hm-8MSM-LYrPXQGKV4DBK2WFvnyxe4Mo1IRojULETRg-ob7qYX4HwCO6Mzr7urHyp5Rlmq4G_hgqrzo4zuh2CZKBFvd84Y9h5ziFtXkr1Me-qZTtuXxqh1ZXdzj3cu4doESQqzFuqDdzihDC4otIAmzwoiHitqvibop43s1M7_dFq5Gn8WGUwc4LHbj5ZwPvo-vAh80CU" class="anchorhref"
+                            target="_blank"></a>
+                        </li>
+                        <li>
+                            <div class="content">
+                                <div class="arrow">
+                                    <img src="/assets/images/arrow.png">
+                                </div>
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0" align="left">
+                                    <tbody>
+                                    <tr>
+                                        <td width="100%" align="left" valign="middle">
+                                            <div class="anchortext">
+                                                <a href="/kw-click" data-ct="bququJCHqUIyuqrBZaGhKpiSpVCbqjlXVt0dHYTCSA6iFP5TgcCuEQCsmjqPlSvy6KlXvicXQeQv5Y1oqde0NlMdbr86jPmmEjw3GjUlnGDmAeaaEi0NcMwXvHjXFsINYBSVmnXAMuJK3JpFHw0zqvSA6oUwh_iT-7x-nCsq6aizVLkvUbptYN1sK5s4R10bTHsty-g5FKB2gTYCo0K0A0cTmSVs3QZjH9lj0i62CRfSkww6RZhtj-YuVHIbX-dMMfX5GcOVCEr5ZQguvCv0DHafB_svCY1TwX7bUlxs5k5MgOPIKHHPS-hJWDmf9GzW-3HXb8YGzhQ8sFJcpgqtoAcdDpoxnrjpZTH6WC3O0cB_Tap7ZY-5pi8YRaNN57tEDkTL3a2_MYTB3ZNV0SMqW9MjUpguOUqMflDhrzCL43efI_V0kfk8aQ66lKaKvhmyKKlu7kPmzZ0iNdkbwFJXojBL2E2JzIlSCSjiQ1A49mfotW-Py0mttPl5ovx7cbNejomWzTmeVlqJMFq-nOENgsg2AYFKR29s4aNQRlWXbiNEPkHUH67K8H6SiKreiJ5l_LRjt5oG7XMVdDQEYoG1CXwFeJX6ej28MBHEtkwvF9BFgUBZOj5pW3cYHvqueklu3XCHwq3HWnSE6G_oxZsf0fTo3zu0GGtXl-w0X0YRQnVFsux-ecs9zXTS5BiDVa8xDPdqoPvmLHEqx9P5BkCsQSEqFgbMUIu36keNhCpEDiepAE7DNyKJq7DkrdP5oOjX96SAuL1j2C1CaieZ2ioosAWhphmr8E1qUGqsDIrEif5vWjYeKcBUtjd3OL7HgtduPoT6HuOz1He0cGS8puU9b_43NqI-2B8LRDkKw1OVdvIGpx4QPekl4zqTwZXI6IkBjGOxIOrERC82sE5uSvv7q-3MBPdnwxnSQoJqgxxnf1P09JIsw5oDHeCwzq-RDAvz--FyZxMROiIb3WYkKlc3EQ4lCadgNKWsficVm3fvExE02NQ1Dn_SWQMuYv6Tul72ty24_zUX-JN5qUCe87jnTiLDOzlf2Yxd8pAXlIRoQzHSctkMuJebjdjDbA6o7_syzCc5vHVQVbTvFo3PJ4A-mbLZ4_X4zl88auM-HyWV6RKk7YtGuSszmXwbzVFKZ-TIX-qh9LWaJiWzTUnFPS0jkY7EeaNM_se2B3eOHQfyFOevtfSIvJLr9wwJHoGYdSUtOJeVoiwwyKb52wCAxH6W_0i2j3DSGJht73Yj1msyW4bOJtXKrosYkrVZqzRystAnAPiLzZXeSGKRQARxGqmanUSU8T6F6E_9kYAye2umBmOTgsZ6TiTmEqqxOymGiluI8HwjZciTNmcnmExOe_Dy7076Vxdo7bm-HCuvx4IQHVmsrjUrg1NTwfkHZVLSA1G9N31qv_1lxMF2B5Lux_ELLv2r-gFKdkkZ-qcPaLe0dHjMbBw82gY_6jGlAjcTbZXauAeD3xfc8zI4OrYkYSt9oe53rVs3DRU4kjNIUFq4W08hoVBs1TQeRg1ORDzg_kj08P6cPBR_l55d72aiIX6eQLSKQK1F7cbDpJBqYStTwJht7iY2ETFHZ_2Kl2FCddYzZEMf8SKVNfNHre7aih4uW7qAjaeHdnHrQe-R498soqAHaRVY-T-qP_OBTayKmHCRXgyUkfdLrt4pw5uO0fp8Ypv9Mpc_r2NFjzlsGy6KS_XNC252io63x-OrjEyv5lWO0V0oXZy8OSfMzjp3Hp7h_V-DhwgTkfipCV5_vEIErF3GN22HD9QI2ieX7F6sSCB9XPkhx0FuJDOQf6kKezAljCpN7rUSxgR-7paf7pvZQFgKim25KkPL0EDx0dC1IV0HEmHKh6a3HKhFcKYSgG9gXEEQNYN0WSTbFVT2i2K1rVBJtcLDhWi5cU2FKzZ1wnhoG-SvhmGmAT1_kBBSgCXU"
+                                                target="_blank">encrypted data sharing</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="/kw-click" data-ct="RwPOrTeCn78krg1WMvRgZlQEBsiBeY0p6saBRtPxi-TR5MswRKqsrEXUqchsm4y2AoByqVPcRWAHugyuj04jVxu0gHh_Tiw_yrw6EJT_IzxkTu3WcoRzVukbRSH9mHBzt9GnQU-qTVHal3ncC-kMp_EJm5dlM5aNXfsMZy0kEkqgABfGFT8IYS5EMUw88ut1RxPIirXHFFMhITmHDem1iHDvCmFg5RDwtqfqxf06H-O9Mi1Lw7MbqrtiAja8adLKEonauHG_9nE4GRe9TY0wEXZAkUcfchvoe_tdWtqkplG9VxMErdb9Zcpmqvr8IgCjr-0v7uRyNxgnBZQnwKWOAfAxgU9qmi6bkxBPSGIDGHCNgD9tSUdTbOzmuRhGza0mUy4CcghwpCVqEZDszEoava-dVOHXV5zqss-bDQxFOvX8U6qPukqujg0o-kt_V03u3KtdLr35BCIJlCs-l9U3OqD3SX0brggwjpfrCM11dGQiGXx05UR0ZlHcOnJPqUmSJ7ZIb-plgaC_6-gdcFxX4_eSkWQL4rzymqXxBgsp4fdCt5UAfOCwH7edIkoSKOaQYZapApgMD_jggFas7NlBK2hhiCpOC4EMBRP7PaSd3bxjcHT7JN0Q64jJkQ7R41PHRVF5BAgKMC2temtVz0Ynmq-GjsXPpx6KNZyrBa31tdGI3wONPk8zpfdbAr7KYRIrzT2HLhPF3AdnILo6_8w9qxaFMYZWRnLr8jOY-eR4rnHG4pjES9lUAaFRum4X28qFIFuplqOannJgDgYGGJml1wpzRxcofkDBTXOsJOaMIjhdv4eJidrl1cmdAVbhmq0J5vg5sgduBK0pj3p_SM09fEm1Ujwsg-xvQaUd2jKhHCLYGB9_9ySmLTkRcXEVj996_LXVeh26xCNQ0jYdsaHPU0olCNMHYqJRu2Ihe_Zh_l98MHQEsbO-VyXcw5FV9C69H6rp8Q90-U3aE4tyNAfTwjaHbqp2xBOi6iIbAP4S6ngEDN724Wo1yXSapHOFMN6GDdugwHpZBjMpQ31Nm2zqecLVnGEedJTwlQWCyUyZXRkTClcaXdsW8JhM43_6fJ9Tb6c1h4Uj3QlXMsyNIb1jv2ubr_gmpvRC3PM5yAGbTVvI4J_ftKBvtsZd-B4bUUGJEBxqe7bw7IJO9yXTYtRPukUw48I2L8uBhkuO9ObJ_8Lj87oseNAjQC22Q3fzjyChWMM4I7Hn-SRhMZVd7EIcJB7Cgi4zyGRfdgDtZAjKWdyz9GXsYbt3Swrl7USWl-HXbvbkBO4qo9HaCZVL3bziHaXXtzraREtpX49eiDw8NAccZhsZIJxr1lNFMgBXmcB-bJVgSHs-DBBRCzt3rXpEzpHZQ8x08hi3RGRRNEZD84JdQVRJ0ZGVoEx1ZncTXyZhqoMBP0BNRvnQrJH2CGR8CuWbKU95ic7ujP1kTpF6ZIaZL_rpsMEbAY9cDn1lspeLYlwTBalupx3pHvPvqZTuG-6_V8s7Je29R-MO5NLXjO-h0IRjYjP05YUc2eVCd7RpFx4KAL0KCiYaskar9Xi4-rKkMRH6kFFhnN2JLJ07Oh1uO8VUr3PhaUlhKdn6XX9-TT99pzupNxRCvSqvLNvv3vcRWJkAz9hcLwluosFViADc8RRbcEsFiot6VS923oLMd6Mi_kSDMlaCCt4zvxX84TraLYnfqJjP7rpysA6HtXuy1bJGIvvBYxwRak0l4HQ5mNVqyG9Ps703z1gmSarzZtD5YuLrtGkhiqOWY5czGsTEHnhaQrU2AMslRTMJxv3aUzv_jzO9UIebzZw4q6V8yrFd6ogHYZfp_x444JfQLTSD8vdK9O-qZ80P8F44QHHhWaCIdRaXEWpMSaNqQ33vaiSNrtMDvS7QKOBeBKbIhNXq56K3ITtzi5mismJTBg_CfhcXU8sHXNRx7AO8X-CR" class="anchorhref"
+                            target="_blank"></a>
+                        </li>
+                        <li>
+                            <div class="content">
+                                <div class="arrow">
+                                    <img src="/assets/images/arrow.png">
+                                </div>
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0" align="left">
+                                    <tbody>
+                                    <tr>
+                                        <td width="100%" align="left" valign="middle">
+                                            <div class="anchortext">
+                                                <a href="/kw-click" data-ct="DcGbeHPINjcwRW_47F1tBSmZulDf5E3e5IpPBMV2Pzh_HbvxxwrURXBlkwflFXRqprBEEULMYnzD5Cb98Ds6kHrdgrj1OZHyv71VJbgRockjWVI_M88j3SrjxEGM9CDhN34vUx3l9JgboWXiyQDZZh79jhDvdlZNAla6sKPAQn3iplMZqYP6bDtPjiBhLj1ISS6VHNH7xG21FbHUit205o_6jyAQD5XCrNFtDaRVK7hjw8xh1nMUCCI0T7uCuxPDYaq2PVAG2icE4ceVtBVY7vZbf1TgsbX1dPcuRfoID2yNb6BBqV2-5TULjODjrFxG85UACZTnpTULa41x9k5YtwtK5Qk9pr5TDjb2VAuBXKs0Tm5CfqWWzBLunFb1EGtyL2_OHmadmTuiwlrbRY3AV2Oaq951GQXD5rAEI5TxmV30w6vCPhHNZZkuNAEsIhc0xEDo8GqusvAAdnqDydltvP_dHB3GLfSvL36YUWgtw88sGiDajERjCyoWwbDzFMkbZPF7BYTxF2bPsK12etcAYnr9IxY9go3UtE22mXlxHJ9zz1mhzV4NBE1qPb1K3HN7mFlYqJ_IqyqajWr8qTgz3wRNVwjbviT72wC8Q4Nl9lF2lD0mYd29EiI9HeYKfsojn-E3n6nWzI5tNGH2c0MAsEanHGwiiyRv2KYOK0VihlusN4zT5PJ-5_Y7a3cNkjYpni6ilFAEjhHL149vBhm9z09Kx8VMjfNcn-BbtmPjlJ_WXGAWhYDAzfFItWBusHuY78Q2ZnGIAyQYSug-KztAw2QGNIcFZNgggyMQZK-HiBJr_rrLdJ_Ipqy2u_Eo03HTLmxb6JVH3ZIAZjntA7KYh9B6Rq84fFmhAcropcfxScLCVKoWYzYWIuhMlxTbWGg6EPrMCTnYSzcWQu_lnvnflNpafZgXUpMRbcqli_Yn6pc3N1OTk1XQCdm-57oRFIhtvSIkZA6mgLrntxrlmK4jEhXiClJOdnfSBKg599PZocAAiUUxCi1oZD-2_JfeY2T2ZQBANdBQUrEJoVyIE8lUJuLQIbpfT1s5asul0jXeXz7dpNugiobFUwKRUimjvBZghPh4rRbf4-oTFBPcbpmitGoU5vHlsb-TfoNpgeTH4JLqeSNLtFx3LEcdsl4OlhRNDNRZD3eNd3yPv11FVHmTaxsHcNDrXdR4bRPWl72cEGGaUOKTtaqwGRjlUsvOgo6rkM-n3e0YBWuaJAZIX0pZ6N5_Z6rqTSD23WTJdk5vTzA2hFLVBLAhWgtP-BgtPLt9q8mw91ZSpgEqyiUiBCCzTdP0GdKO8yyP0h41R9LOt5BitGSPkfzctRr9d_QFqkji1RbYdi3GNUfT2J_Ijly8c0e0rh9map0ewlTdAPXH7U_WyWQUNyEBXg7WEp6MLrIMAw_miQdrmIfR2hjS3KRzKaBpeFhpq2MX0DpG7hrmYwhzFWvfeiVes6gbQj0LJquDJKB5Ek--JbFY9TpEjhkZiHTKLzC93qv4E2OBMwgbuA3qxWj4oOYr-EENT79gjdpUX2HZrr14yjdwX7V-V6T691RTdl6xxOskXB2U6cWUedTlKX_aCeXprX5suA5P-Qgf93DUjI03QO_bylf8hLYnC0dscirYkKOJfMbepBqgRSxmzcLZqzoPWct9kOhIE9B84dvDbHoZKqv-UH4a4us9E-5Nss1PRt9GZAv9wfAE2smj1k8ph4_Idj-ygCTdpMqGEWpNHludx41JEWP-v6sCEwxP6vDV8h9luo3iFw9a5LDALiEXIiI7K4jXDLN83Y6Wl9UmXi5bppzKi38f3DM19FGjMCr39ykCMEk81HmattmK9c6pDm0bn-S8N7TlZhr10bICgy_7jwfP-beIk9MNfoW-gRKD14gutyZdZPPl8ObaSYRvv1q1JVlf-Jv7dVqQQmbP-uW0iRGJ2JhgB-AE-VLUdPjMf-WsHvLx"
+                                                target="_blank">virtual private network cost</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="/kw-click" data-ct="aQicGos8wrgyZO7pfkIaZEyOnJ-R0S9pgej8oopJLwaQbfwzr0s0uBQREF_Y2bXICFT60cLYrA46c6HT9DsdXQDxxKAt0SICcVrl68-K4py4eOI3T5DGHakbUYN-0GtPEMQoJ3w30u4KaOkro3emaUezZaLJhSKL9K6bbZeVfrXPNXgp95teoK5YDAqVC4WvkJe06BN-QmV00orXu4OU0nb5ZSluRM9on2RFBwKZeKN4dftyT6bIKMnS93Os8JDFI0vpFy03hIcB9wy9rQuI3JUFRNGxsvhbgtcKqlmidVvEU-VbO0iIgxbo3TvEnWAma2nYDRagiAQ1ORMTLjTgYNsjf470R4aVp6BsTugiYBLrCp1n0l2caHBoO2ovk8lOJK-rpExUP-TkcEMLqtDh8ou5qFY5doA7qHQJCWoMvcGCR5PpwaivkXkfFYaT6mHzmSwaGscemXWuk5cA8mHoG1aVt1c_ssXPKPkJbozw1wQvpxluD6EcOaJDdAtHom3-Ht1nHWtaALQZ15qwK0E8lR5YwvGrJcQCe_ScME3oDx_CG-W7dKvbbfFE0d7LqxGrDrqtOJkCoY65Z4euLTCb0eM_Tzn-s0ugnZdOrK5xbmMhdQ4M1XzSJJOBAg01ZZRHx0nRC8Npqek67rAPUSfUoj1e76OWEg4-f3AIgjT-N3TYsK6axoPKnuHCSCCoVZn1AuwvXLjz75CcCCFOEIR-5lX_e8khV-K4DIBUKbw5czsWwp2SkamThWryxccYd_LkBAEK6llztAP-Zg4_uYjhH5io231PBKM02L6wL16-oUj85wx_C-JFUlj_LbMzTx5rfCYhTMA36MFJd8Z4yHAyJjyctcx_R59cULeOrcFcl2COSnZrkYYgkGnJMsmA-_32VELKHMXyWiyoOJ2xs1NFcuf-lBLAG47fu10Sy6D1yPwYA6_4qZIdGQMGNLv9Wl8oStFMBzouX57TtQPzdLFGBAxthSXfb3oZK7UKRlP15aKbU_JPoj6z_VcoyyPOGEqe1aKXXy0HQ_yAn7_fllUA3L8xtWAZPS4Ti1n4l7weGmurFyXDOoFU_OXkyU_y7QsiAV_VrxM98oKyTmWhFYvjlHYY78Fav_u1jXSypEkjGRvlm6CQhZqVoNHzZ-FwjkfpUroqUfD3S8n_ziqpDCuUcOo3CKOBstmj3LEBb4e_1j1l7Uv0PTsL4WIuwKZbG5S-dltuhth8Io2I-UUS850_L_HzcHr238LWgZdgMeTjnCjcaU9eRzo8XD44G3EjpwK_mSoX1oRzo02bVG3v22wNY66Qd_sV792S79Jh9shdiVK6DtI-0iWurOrqBCjEDpIAmvAkdvRNr1ztEjDzFiVU1O95KX44aTXG83njQE0L7HXchA61gnMJmmHDyaLLAcfaxfrpQNY7zDP-W3sTYvrsURtKpO15lvWPxpDwAy68Nx1vr9s_M_B2NdVSbLrEdYCJCyHi0-Azy-KFJzHIMmGwLqWwVtwgByny-_Z6UaPtOSetLhfwgVHSQm9IGFFSMUlkL9tA9NxIbbAFkn5TMAq1B3XA_k5PKtUC2-_JUnrx2dSpM2yyDtr9abMjN9ii_xzBEkny71c7Dt4sbRvsRsu8c4vdTHpiyjMGHac2ynkKg2dFQ4mw6SYVZ3EjSJIxrk9n8ZEXY4K-GSyVBK-GBypf_OJYfbf-JCKo4kHl-xQ22yJQezY56rHFmSUuYnuiGWgDZlmU7aWBwdy68ve8o5DnK4itpocSfpTOEbiDsiD4FnjIqAYxKHU2xTXUYXiVRpjEob_9BW_KlS8Fo1_irWwHr1GzT7g62CHAZjkS2Ar6FPs1wW9WmTV2yFQLX8UszF-7EwvYsvvlEJEwkeYEpvZ52sWKVFfJ3dwyARIAQBOvDr2kG4GJdlbnOLLfik97lWsprvoS1GxmDvaqECZJr3WTi4aeI-PulQhyKyx-" class="anchorhref"
+                            target="_blank"></a>
+                        </li>
+                        <li>
+                            <div class="content">
+                                <div class="arrow">
+                                    <img src="/assets/images/arrow.png">
+                                </div>
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0" align="left">
+                                    <tbody>
+                                    <tr>
+                                        <td width="100%" align="left" valign="middle">
+                                            <div class="anchortext">
+                                                <a href="/kw-click" data-ct="EJxqZLuklGGQ1g5fmwfXutzUq4vklZ5U5JBScCX8w10aOyfgobKHZMTllGY4Z65KsvsEeWrjhn1Szr1goNGhLmpl08E3OLiSkrrdZoE92q1H8ZsRwnhw91Pj_IDeocmYtYR9L0U5zhBUiWNGr8KjEG8zpHqgI1t0oG7_rsKQtpC4KOCSHuqFPNG7FjXUGN5sStZCIENFZK9FUX3Mbewu1ojGrGgL0QqCNfzYtskGglOn-Pa_Zf7VRSju-oDQe0-j_057jJCjzX4muKNEJRNMm-qBBI0HQPYdSLe_hdDSmfYHJgogFrzmjoeoatIY7nZ9NOChPe1en9sJ9cr_nplpRx9u21KasPHyzms14JPQINS9xRhpFQ-O0RhvqDUV99lB_nAlPtBQn_6WuI-br4MQOpXgy0rI7RxKjrIwh4iWHw6fvtVuz2tVvZ_nI2j9ug01PZGbhFbYwiVQ5j6UYntFomG5s74Hy2uXAsAl2Pd-MLSq7hciVG93ZTKBWAcHLnKwtWgirw3qw7heVnvjkxUeAjDXvpfd5BVgQoc9hIC1AIC-M1FcvyHayt1G3RPMPGA2JovVvZo3WOaOJ36m1KG1nOPmPTcJVesu4XWw60opL_68gZ7V7ksfMNF5mj2sIzKaOraQgwBl6YfPulLts7tJbQm0ecmLrAEyqYaXOq0u96U1dCa-epA6KzEYL65yeAwUET_ZtT_RmWvGMa15gbayeYId7kcn0Ffw4rk921m5MjuTRJGKCm9ScpivFozikTONkKf3dUdoUlThFQM63uVm-KmnjQhiBCgiFDiMPRPWWAQl6waXM4l5udTSw5yw92pQZjvbDHeRiJ6TY6vQVYexdKAJPU-VrVYLutRO7fRHShmVOOBIGbssR5wCZ1-ACYAg9xcXcyvzEjS5v_Qmg-V6A8tAFzhyD57-n9fS7MO8oceI1bt_PTX1rpAgkNWaGX1ccuL8cKIOjozBBQdBsfA0uElOeKWzfE89_ESLHjlGOKETtXrImqsrbR11z4uV2lX-PO_p7YA2JvewoIE-oXtiMnalx5Wxx8rZd_l0lMUUjPLTxhvusTvOGRoGyXapRJMZxKqMb6pYd4LpsDgJ-p9Dk0MDF6-qeVgYT_MeGH_YSwrrB49z6jdz3V0yzDLX7cjqSAT6JP13cvCthsQSDqfpZ1fqT2qSDuRguOT74DpJ9Nq1ngTQB0ANTlhaM8IfOCgFb585wEmRzv8BZWi2a2k9j9M1qoUV-L62scp9PhSKSlF5ybKDyRBLsF9gLwkJwpU96bFUY-AdonrdqfczXqafivBoWMQEnZVqfz9s4K0xI_1eIdyIZet8xhJNAZ4RTkZZk4GuAYdydc5tpFbIgaEHfFp022eGVOn9r9im3w2PtCzikfaVpSbZlkzuEfWIReYLkT_KXWPdOiXT3XWFVTZ4S0VkJu0wUPEsT1crqkct31Mb2UzIUteWF1rTOobcoYpAjhG2yHGwCTz8lS0J_d1lFU_8lxnxd9wjiOtVYykd9O8kFjCT4TwESYtHSsZv-mfe1--O2R5YiyFAF6NIdUGHxoBbd4SePDVE01QgkNt4qfkZyrKHXoSN5gvI2IMEJhAc6juVYezVfnMCWaYEF6W8k6FHrOeVKFRoqINHDHs1JF87S6XvVBtTszunrar3ltuBtd3vlGYbF8OuQhR6yrGxqINuLAXz8-1G6PSmJqwBb-aKh6oBRMxQQ27BoBhPSqdBZ4fpo0mRrWN73KsBY2oXycc400pKZSzo8ZN7Akt1L6zYa6dL7Lt4LOATooVA5MhsZRcScLGoc2nBqYxB06TzgTs1g6-M8uFuMNEplnxSBvk5iUjtszu6yrJ-K7XBdLGecdfu_uZQxe-1WnbjIjZg1wr1EMhS2MklnDqcA4PNyVgehhZdYc6uHgBeGYM00jhWMZoIE8TmXRAaZIUMy069"
+                                                target="_blank">online backup services</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="/kw-click" data-ct="FEIUvwZQ4Ypv0T4W8WCkG-ZWbe6ZzAyWPlU5UlhzWgZjoKtIqu_yzH2nb4BhAfm0S47CSFgSOnmqc3piTTothxT45Rsx3shGteCMjqA_YbF6_5zYGmzrhsaSNiw8-F6wBcIfDtNj5NRZpyzvkP9kmybgHty7jd7NXv_nexBuxOGCei-beZE_TzvAr_7UcyHC2LZYgCuJXis7UTJFdDfu3pws_qdmPCmgRK7hvQ1AreYE2I-VBSXL8DrtfCkBAUf1CtNTg5wxWKbk6Y8Ncl1yNsbTv-iVmorwXNLH9z0-vD2m-4jKvxhhEEXNfQ_g79TdwuWHWkxIvpADWe_S7cvyUMTZZAoccxbAcctlwXoSSFEUkMaEibki91OHXl5QOGlnWxp4EBELT9SLsbJbV7z1xr4a9vANK3YvZuFxOJEyUisroeIhhNMiHe85kVz46-MtWJEGcUUlfwlifTlwEisXXmfI462CoXHVrvUn1xt8rdPt2koXeNdU--8hWzoH6G3rEZMXGi3rql-AebVsIk5Bv43zlZGzafgLKguVUMkbsEFHFVSFfBr4KwM5idlzHnl3BzpqriYPVQbYpkXYu2QiTqkMyyuItdlE4OHXCl5cAwa69GzWdtOpIihKti-5IMnj3GbtDGOxrb2JTPkV5u2DpaJf5OqQyokAjpLw8RonYX29Uil22LZg7m2j50fRUqAlT02h5v3pHISRlwi9sKEuj3I9QJ8hdyrCzdh49IkqbSVc-xTRpyiSjRcxS_mEj0p5tzHSh-Cn3pLWDwgMJ9Mjq2Izy-nqZ8dHJVUes0DKQ2OfBSpDobN98db5O3yUNeI6A1lM7aj-LWTxTFMVzRmZgSJPhyC59WAVQ4nZY7TadvA-qWCDWFZDZgvCkZF3brRzYDDfwOHsZ85VSDplfvnjp7TzjD79lDxF4dcBCixGYhKWDErlAzEYV0tGf1QqtiCmQIQLT1VK6xW0Cj3xbYI5c8td58YRUzyZ4J_RnFPoT82JqB0UdvY77ncg7A8uCfM1HuoynhymbLTxZQsicnZUHCYmcQMMWECtXyQueGhKeV5JNVdCBHuWK-tUxUQmRNJ36Hkt_NEceC5JFJhExFkyhD56uEjhq_xWG_JdX9ytpBXAnpJuSkUMCqjzl2lLpO2lUMilPrpnJNYGPoSieK7Nr2Js7F2pdSMZ-k4UjcQ4n23wEkMAKhyj1FP9gsRooEkrwtnBjpGOjMxZx17aoPRWxXzFqfJ6OHoOVVLAnQLHguP0dQ7n3ThNuJrIq-uBn6JLaURoi85Wi8qU48D_tD9j16bgOO2mu-FF5uFGbwowYdWF3cdqg99pWBz26KDQ6WiHSwgpAnzu4o33qRsE7Lx3ty85FcO4UPD_i01KAvB0gNpdaHJ7-3UGxrQWaW_EVA-rfXTGEiiTDa4lXHpsMAAoA22cysyhbvUyYBej4VEM0ZAE8kfI1jU1AXymLfIhqOytr-1c_k0vO2w9WY5CDxFJkTyxPz-H6c9rbCIASFFUr1WtJR5Z39_hGHosGjDCrYF0dW9dWgarNL1c22TWSYoqp-YKOxIT1a33wYQ63da7HBTvKxBDSstv41w_EcNnafq42Bmp4i93L-Nga8G3X0cQUwiOpR1Idrjxng2_bWwSJDxyUhvtjlXORh2SW2BVeSJfnZopbpFeyVhrlMI-nXssbPL-jm4DbHlUqsSQfOOdMvsA4-EJ21QTeZrXeKimI7UNtWe3gShOtaDISoFCrLJkn2sIo1HGx869ZMbyDc7amupS-gqVVmjxKOLGcjEdM5xVev8y9FamxLTKjVEjaUGSOSrL1c5ZIhuuw3o0axlJrv63Cx9gTqvwVgluvSkKZJ3mYIvuK_9E7g6IEnMzWRzqDGQOYNkQpQ9s8ou43VMSOf5wxPvUPSVvt97wMrap6B-hMlThyAGMbm_Uy4cvhEGw" class="anchorhref"
+                            target="_blank"></a>
+                        </li>
+                        <li>
+                            <div class="content">
+                                <div class="arrow">
+                                    <img src="/assets/images/arrow.png">
+                                </div>
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0" align="left">
+                                    <tbody>
+                                    <tr>
+                                        <td width="100%" align="left" valign="middle">
+                                            <div class="anchortext">
+                                                <a href="/kw-click" data-ct="Kq-g9LK-L75z6QmVNeu0uLjzZdeL-wKol0dMeGEOxo7XdiAz98aKdtLC-Fw-ZjcdXQUiHkHsWcNdYfl6PLNbLPP42eAHO8TNH9sXX_urMwxjgINdHgHapnj99k97kWF9l6wwttwMIQkQXudHbs0vcsnWPmxY9C8ijZQS4abTmXYtvuz4LHesxy8urKUpfN5gSOvygzkPaLtBhsJTNvxJX-ENWDzRRaUHvZVdMPo19cx2HUiy2UVDKP4JkEVC4c4D5sAZVxj2ok59CxH25kWSOnJwbH7Cgd4ItdUH93OJuLkDFYHXquv6PYQpOdahY3uIbuWUtyINOPs2tc_OQ9TRxaxFC9W7rfgyKo0qP5En5H9rl4QQ3c0CKflAT4zMzMDcDwgAzd19LkWckvGGHWOEq1KNjILWyjDDaDVJLNPI11lzGs617OKN3hSHG0FjGXsfCuu8X2UgC42EQ1uRmAMhY29lM6nCGjf6mRkOGX12vO6nTKLMcb-__D5226q5FaZ8_yvRxoWCtiMTaVLQhmWIIBC7cE3fiaEJqWYkrQ_EqJXvKRXK-TTyqUcouT5iqAWd5WFAwk-uBQSc4VggiwXKrZjC6VyuSuDQnh162jS2t8ZkjbJJBwjc0N6Sq-xZWbUoxld5SnPZqv5iuk6YpxyLYjkwnZuHDVuXe7BBbzc8Ib6YjOS0a-XvwDA6K3WUcxWMaEk96Ds7Sj5fteCSkyR8C0sZPDdF1XAgWbL7zpQdTUn7XqcVs2zRf36uvNcTjjs_m61MO2wxt4DEb_ZQXpeNuCk8gl6drT56guFzNizNir4rnD_6iDHhMS6kFj7-MQ2UWmXqxI4rHeh3Rs982abn45S8C-QBEjfPhs9Cc0bGE6bCFhkJ-5Td3OkmiNg_JJOSxKLOHVn6qmFK0BnGmEPsCGMib4FgPru_4XsQRZlw6LqBK6Bpn_sorV_dz_hCUa0rY1zVRtLsQmQsvwrJWe4t8b109ZptagZfDsm0JJQpZuGSh5zFzyyDN_I1uLvTzv7hgMSyiJ7liVNriEe9IlZJkLS-RifWW3TwxNXZnX_Mcr7npOHGoX4I78lF4v0XHga85gNDylI9pyxwrZrjssAmzHVo1dcOhuT_EpHRxAqnWlCJMZWtvjzMAbrkZ9EM0GbC5nSwDOTwuZmTLmC8M5dRToyneUKR2VOWTkiJeDx9gCgXe80MKoFwRmsYNpi16o_Vq3fiR0ByPtUS9aadgRfkWAVLFL0FImquzxrxTpRYVnkiac1uXHca5eF0BlbiR1GMrBr4QrmOA0PgiiX4jzwXHa0m-2aUvlgMhxIuxtWHYuaNJ9inqD3GWysBiDyZr29vSXHN75l3yRkuyA3AZcvGeDzoUO_e5hyrovtsPHYbWDFZ4rTta7fy1BNLzkiMqsMeWT9IMt_w5CLpmwcZRLxkz66_SfAxulFGAP9HsNKPaRO3yV8tDGBNvmhwxXLl-vkWiI9uwe3-ztTJ-gks6TBDWP4UhkcVzQ7mJnuPldPE1Vqst4NQZH5BCHZur7nyfCfStDp78R-aEzwhYd3RRXDHKrDdlbNE-CyXF2yLMeTpsDxSjjungdjplht9itQFQyZxNm29joiITb6qCw8bO0VVeNIuewCQeF248xzz0pghCIloFRHmumM4TBS3kjZOnmXkkTQRfmAsXFrcXe-sgVg4_Q2Ih-iv7E_klJxV0zEHBmZFF708y7bEomM-OF7SDn7OoTDwKbuetpdi8GKLY4MPsRnUUrUSSVVyVmeEFToPLAopYNqjLy4YuWxwv-LaZWlJQ8ePnxkwAjW9BL2pp4VuydwUr2EvL20LeYDSorItbcXWZmfzegdCDIItRrbHCaKoJHDBhd1DsAj9mFhqd7CJVxHhEj6II8UhyOE6KKPAXWR8UR9ntktJ8gHTiY7A1Z8"
+                                                target="_blank">best VPN deals</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="/kw-click" data-ct="VSRuRjcQHhMFsDw2e9_unjcvqdASRibCMOYhcwmFBZbiFPtBp-Jx80Y_85mmU4SHTmsgFei7hgPvEpQGUhpdl7GHBW_lVdGE0PbU5e4_HF6TSwYK6thw6QIwx8VTf4yDnu9m2LWiREplyBgAnT1bIqY-gYqVsApIlI3VzZqx5rFcq57qDql0lpnY0Xfiv4tq_mA9JhWgiLZ4ztPURGbQWzLPPNxNE0_civrv7ZDGMfgjBwFvpLoLX-ywPCW9mtvPbXpmNAx3jpseSZQcrUFqRBFCVPkhfX6Yw8JVlGPGhYQuAuyZXLeuJhZlAYNgSV4DSWyfRMjymkdjG2UFha9ZivFhQ3IJQOsnOIdMIOUaGSb5h3w20IQl3VpyCJ3naXwIxIqYrCCPAP9UW6piHauHQ5RiAUv5vck8FRbVYH20Nnob1BWRW8yI978P_kofZrowXHhcfTcG1qlOv2nAikeAWduDJ0iIOe5zfo-YkeffOstRgsybGToyQt0DF7qPzFBihRfzMq_Q63FhTS_o1Gtx0uvF-e4GlzLgaZ8ZI6KehQseHPTkL0M-rVCLlG4ygRP4otYhzcemLmqE8W6bzT-6EQaNLeEUWKo57MUf4W63qMejs5ylxBGkZ5s6nplZ9XpEfmVo1Mxwe87NnsQgsW2Z2_XpMJLdBRZx8HOQt6fp81vXY5KOv0sie3ZbKBbnjlrbllb-p0QUTznhbDuUftBUyj-eQP2tXy3AbxjOswrtGvEj4MInZVoMHsdUkUETFjYUzQRYpzaEmAnRw8sp_epPkALLIYRP46fY-QFsLOBxKxi_mTv6F8qh4SFm464iu_YrkVg9lztuaLIKZsEif1XXWl8rrVvPZNdad660zND61ZuycKVo9aUC3DaYvrg5iCkYgr2EqyL13_-zq7Oh0QAphkxgELZr8dc1dQyictVlqBmi0_BODuKa-P0Va36fM8I7r0QXPzJpPmuAvh05DZhe8_dtP4yqZxWMz3r48WkXiImD6jNY8w-PqgeeSXektuPiqA_OZrAWPJcw0IIR0JB3k7gD-clrqHywcsB9bIGWl2DvNhdqkFixiQpTylCfFUj4F6qG6MGda6RCu4Fi5ePPDDborqzC26oOyRuG3S37ADERIpnP_YmvS6SKbUo366Nc6ypdzscLOvcgfAh4xEISkBS7r4Cesu7jDXGUglikhw6T36HLbLdq1ZrIRgyObPoK-GGxVF4_PYwzsgf9IA-40lbmcihNTIxxcyD5Y9bGsfyiFIxTIA9tHsmkW3DVAqzI3EExGE0X5SXovQqRUInd4MkSsSEhHa94odX_bUmZFYPTaVpNImSpTo8gl6BEu6BwtIVPnRD1WAUCh3w3idF_aTfeR5xyRClnI1eTS827AxZuSbOfegiBY0UhTPHhO3438KR3wLxPErvEyjJPT_d6xvEVAEc50nuGLNlx-1yVNiduxAbd2R_ZAOz_q7EM_73AC9wHI-jyRNtJEscyUC1jtMiMacnAbdi6ZkH91jhNTYGjop-Se0QFGzlVAClDtoK6XHckpzW2mK5ccLbKk1YtlW3BfifVCCawypXYIEqevoiTvr6AfUKT8kkd7cLgNSJt109tSQzG_HP76kp4NRzpeea5j68uEqU8N-Xr-wVcKp-i0E_JPtPRaru2tksv0xEUjkyfHhYwOOsObwzibxD6HqgKz804Wx0Hq59tacjWSuw9FHg4oowe5L_jYpzC-zQ47wrZXUn3ycFk81ffJhOPy1inrLpvicIw9ucNF1ZVSDEM7EYSxvLq8kun-eDx6DJadGVJwDZYGkpVQABU-Ir_UFlw3xwpwQ4G-BH5IQEvr-vK2y1rpsmOg3kPqr9OOShBsuxxxYVBNBZbIz4wiK05k61tjrwfuKccCX9QDpcO2DwSBTOS8FYAI_oLj1sN2JY" class="anchorhref"
+                            target="_blank"></a>
+                        </li>
+                </ul>
+        </div>
+
+        <!-- Right Decorative Elements -->
+        <div class="decorative-right">
+            <div class="chevron chevron-right chevron-blue-right"></div>
+            <div class="chevron chevron-right chevron-green-right"></div>
+            <div class="chevron chevron-right chevron-yellow-right"></div>
+            <div class="chevron chevron-right chevron-pink-right"></div>
+            <div class="chevron chevron-right chevron-purple-right"></div>
+        </div>
+
+        <div class="footer">
+            <footer class="footer-links">
+                <a href="/privacy" target="_blank">Privacy Policy</a> | <a href="/terms" target="_blank">Terms of Service</a>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.__cherami = {
+        sessionId: "58f2cf4b-faa5-412b-af1a-fbd04a1b75d1",
+        source: "",
+        tkn: "19vnMT3S",
+        reportUrl: window.location.origin + '/cherami/report'
+    };
+
+    // Report an event. `payload.wa` is sent to the legacy report, `payload.dmFeed`
+    // to the new dm-feed report; include only the destinations this event needs.
+    function report(action, payload) {
+        payload = payload || {};
+        const data = { action: action, _ts: String(Date.now()) };
+        const source = window.__cherami.source;
+        const sessionId = window.__cherami.sessionId;
+        const tkn = window.__cherami.tkn;
+
+        // Carry the partner token so the server resolves the correct campaign
+        // instead of falling back to the default token.
+        if (tkn) data.tkn = tkn;
+
+        if (payload.wa) {
+            const wa = Object.assign({}, payload.wa);
+            if (source) wa.cid = source;
+            if (sessionId) wa.sid = sessionId;
+            data.wa = JSON.stringify(wa);
+        }
+        if (payload.dmFeed) {
+            const dmFeed = Object.assign({}, payload.dmFeed);
+            if (source) dmFeed.source = source;
+            if (sessionId) dmFeed.session_id = sessionId;
+            data.dmFeed = JSON.stringify(dmFeed);
+        }
+
+        const reportUrl = new URL(window.__cherami.reportUrl);
+        reportUrl.search = new URLSearchParams(data).toString();
+
+        const img = new Image();
+        img.src = reportUrl.toString();
     }
 
-    function x(i, e) {
-      var w = "";
-      i += "=";
-      var s = i.length;
-      var d = location;
-      if (d.hash.indexOf(i) != -1) {
-        w = d.hash.substr(d.hash.indexOf(i) + s, 9999)
-      } else {
-        if (d.search.indexOf(i) != -1) {
-          w = d.search.substr(d.search.indexOf(i) + s, 9999)
-        } else {
-          return e
+    function getCanvasFingerprint() {
+        try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return null;
+
+            canvas.width = 200;
+            canvas.height = 50;
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.textBaseline = 'alphabetic';
+            ctx.fillStyle = '#f60';
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = '#069';
+            ctx.fillText('Cherami fingerprint', 2, 15);
+            ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+            ctx.fillText('Cherami fingerprint', 4, 17);
+
+            return canvas.toDataURL().substring(0, 100);
+        } catch (e) {
+            return null;
         }
-      }
-      if (w.indexOf("&") != -1) {
-        w = w.substr(0, w.indexOf("&"))
-      }
-      return w
     }
-    var k = ("cmp_proto" in h) ? h.cmp_proto : "https:";
-    if (k != "http:" && k != "https:") {
-      k = "https:"
-    }
-    var g = ("cmp_ref" in h) ? h.cmp_ref : location.href;
-    var j = u.createElement("script");
-    j.setAttribute("data-cmp-ab", "1");
-    var c = x("cmpdesign", "cmp_design" in h ? h.cmp_design : "");
-    var f = x("cmpregulationkey", "cmp_regulationkey" in h ? h.cmp_regulationkey : "");
-    var r = x("cmpgppkey", "cmp_gppkey" in h ? h.cmp_gppkey : "");
-    var n = x("cmpatt", "cmp_att" in h ? h.cmp_att : "");
-    j.src = k + "//" + h.cmp_host + "/delivery/cmp.php?" + ("cmp_id" in h && h.cmp_id > 0 ? "id=" + h.cmp_id : "") + ("cmp_cdid" in h ? "&cdid=" + h.cmp_cdid : "") + "&h=" + encodeURIComponent(g) + (c != "" ? "&cmpdesign=" + encodeURIComponent(c) : "") + (f != "" ? "&cmpregulationkey=" + encodeURIComponent(f) : "") + (r != "" ? "&cmpgppkey=" + encodeURIComponent(r) : "") + (n != "" ? "&cmpatt=" + encodeURIComponent(n) : "") + ("cmp_params" in h ? "&" + h.cmp_params : "") + (u.cookie.length > 0 ? "&__cmpfcc=1" : "") + "&l=" + o.toLowerCase() + "&o=" + (new Date()).getTime();
-    j.type = "text/javascript";
-    j.async = true;
-    if (u.currentScript && u.currentScript.parentElement) {
-      u.currentScript.parentElement.appendChild(j)
-    } else {
-      if (u.body) {
-        u.body.appendChild(j)
-      } else {
-        var t = v("body");
-        if (t.length == 0) {
-          t = v("div")
-        }
-        if (t.length == 0) {
-          t = v("span")
-        }
-        if (t.length == 0) {
-          t = v("ins")
-        }
-        if (t.length == 0) {
-          t = v("script")
-        }
-        if (t.length == 0) {
-          t = v("head")
-        }
-        if (t.length > 0) {
-          t[0].appendChild(j)
-        }
-      }
-    }
-    var m = "js";
-    var p = x("cmpdebugunminimized", "cmpdebugunminimized" in h ? h.cmpdebugunminimized : 0) > 0 ? "" : ".min";
-    var a = x("cmpdebugcoverage", "cmp_debugcoverage" in h ? h.cmp_debugcoverage : "");
-    if (a == "1") {
-      m = "instrumented";
-      p = ""
-    }
-    var j = u.createElement("script");
-    j.src = k + "//" + h.cmp_cdn + "/delivery/" + m + "/cmp" + b + p + ".js";
-    j.type = "text/javascript";
-    j.setAttribute("data-cmp-ab", "1");
-    j.async = true;
-    if (u.currentScript && u.currentScript.parentElement) {
-      u.currentScript.parentElement.appendChild(j)
-    } else {
-      if (u.body) {
-        u.body.appendChild(j)
-      } else {
-        var t = v("body");
-        if (t.length == 0) {
-          t = v("div")
-        }
-        if (t.length == 0) {
-          t = v("span")
-        }
-        if (t.length == 0) {
-          t = v("ins")
-        }
-        if (t.length == 0) {
-          t = v("script")
-        }
-        if (t.length == 0) {
-          t = v("head")
-        }
-        if (t.length > 0) {
-          t[0].appendChild(j)
-        }
-      }
-    }
-  })();
-  window.cmp_addFrame = function(b) {
-    if (!window.frames[b]) {
-      if (document.body) {
-        var a = document.createElement("iframe");
-        a.style.cssText = "display:none";
-        if ("cmp_cdn" in window && "cmp_ultrablocking" in window && window.cmp_ultrablocking > 0) {
-          a.src = "//" + window.cmp_cdn + "/delivery/empty.html"
-        }
-        a.name = b;
-        a.setAttribute("title", "Intentionally hidden, please ignore");
-        a.setAttribute("role", "none");
-        a.setAttribute("tabindex", "-1");
-        document.body.appendChild(a)
-      } else {
-        window.setTimeout(window.cmp_addFrame, 10, b)
-      }
-    }
-  };
-  window.cmp_rc = function(h) {
-    var b = document.cookie;
-    var f = "";
-    var d = 0;
-    while (b != "" && d < 100) {
-      d++;
-      while (b.substr(0, 1) == " ") {
-        b = b.substr(1, b.length)
-      }
-      var g = b.substring(0, b.indexOf("="));
-      if (b.indexOf(";") != -1) {
-        var c = b.substring(b.indexOf("=") + 1, b.indexOf(";"))
-      } else {
-        var c = b.substr(b.indexOf("=") + 1, b.length)
-      }
-      if (h == g) {
-        f = c
-      }
-      var e = b.indexOf(";") + 1;
-      if (e == 0) {
-        e = b.length
-      }
-      b = b.substring(e, b.length)
-    }
-    return (f)
-  };
-  window.cmp_stub = function() {
-    var a = arguments;
-    __cmp.a = __cmp.a || [];
-    if (!a.length) {
-      return __cmp.a
-    } else {
-      if (a[0] === "ping") {
-        if (a[1] === 2) {
-          a[2]({
-            gdprApplies: gdprAppliesGlobally,
-            cmpLoaded: false,
-            cmpStatus: "stub",
-            displayStatus: "hidden",
-            apiVersion: "2.2",
-            cmpId: 31
-          }, true)
-        } else {
-          a[2](false, true)
-        }
-      } else {
-        if (a[0] === "getUSPData") {
-          a[2]({
-            version: 1,
-            uspString: window.cmp_rc("")
-          }, true)
-        } else {
-          if (a[0] === "getTCData") {
-            __cmp.a.push([].slice.apply(a))
-          } else {
-            if (a[0] === "addEventListener" || a[0] === "removeEventListener") {
-              __cmp.a.push([].slice.apply(a))
-            } else {
-              if (a.length == 4 && a[3] === false) {
-                a[2]({}, false)
-              } else {
-                __cmp.a.push([].slice.apply(a))
-              }
+
+    function getWebGLFingerprint() {
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            if (!gl) return null;
+
+            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+            if (debugInfo) {
+                return {
+                    vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || '',
+                    renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '',
+                };
             }
-          }
+            return null;
+        } catch (e) {
+            return null;
         }
-      }
     }
-  };
-  window.cmp_gpp_ping = function() {
-    return {
-      gppVersion: "1.0",
-      cmpStatus: "stub",
-      cmpDisplayStatus: "hidden",
-      supportedAPIs: ["tcfca", "usnat", "usca", "usva", "usco", "usut", "usct"],
-      cmpId: 31
-    }
-  };
-  window.cmp_gppstub = function() {
-    var a = arguments;
-    __gpp.q = __gpp.q || [];
-    if (!a.length) {
-      return __gpp.q
-    }
-    var g = a[0];
-    var f = a.length > 1 ? a[1] : null;
-    var e = a.length > 2 ? a[2] : null;
-    if (g === "ping") {
-      return window.cmp_gpp_ping()
-    } else {
-      if (g === "addEventListener") {
-        __gpp.e = __gpp.e || [];
-        if (!("lastId" in __gpp)) {
-          __gpp.lastId = 0
+
+    function reportClientAttestation() {
+        try {
+            const c = window.__cherami || {};
+            if (!c || !c.sessionId) {
+                return;
+            }
+
+            const canvasFp = getCanvasFingerprint();
+            const webglFp = getWebGLFingerprint();
+
+            const attestation = JSON.stringify({
+                jsExecuted: true,
+                screenW: window.screen.width,
+                screenH: window.screen.height,
+                dpr: window.devicePixelRatio || 1,
+                maxTouchPoints: navigator.maxTouchPoints || 0,
+                webdriver: navigator.webdriver === true,
+                tzOffset: new Date().getTimezoneOffset(),
+                cookieEnabled: navigator.cookieEnabled,
+                languagesCount: navigator.languages ? navigator.languages.length : 0,
+                platform: navigator.platform || '',
+                canvasFp: canvasFp,
+                webglVendor: webglFp ? webglFp.vendor : null,
+                webglRenderer: webglFp ? webglFp.renderer : null,
+                hardwareConcurrency: navigator.hardwareConcurrency || 0,
+                deviceMemory: navigator.deviceMemory || 0,
+            });
+
+            const payload = {
+                action: 'clientCheck',
+                wa: { extraString1: attestation, sid: c.sessionId || null },
+                dmFeed: { extra_string1: attestation, source: c.source || null, session_id: c.sessionId || null },
+            };
+
+            if (navigator.sendBeacon) {
+                const blob = new Blob([JSON.stringify({ action: payload.action, payload })], {
+                    type: 'application/json',
+                });
+                navigator.sendBeacon(c.reportUrl, blob);
+                return;
+            }
+
+            fetch(c.reportUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: payload.action, payload }),
+                keepalive: true,
+                credentials: 'include',
+            }).catch(function() {
+                // Silent fail - don't break page
+            });
+        } catch (err) {
+            // Silent fail - don't break page
         }
-        __gpp.lastId++;
-        var c = __gpp.lastId;
-        __gpp.e.push({
-          id: c,
-          callback: f
+    }
+
+    window.addEventListener('load', function() {
+        reportClientAttestation();
+    });
+
+    // ─── Funnel click tracking ────────────────────────────────────────────
+    var pageOpenedAt = Date.now();
+
+    function msSincePageOpen() {
+        return Date.now() - pageOpenedAt;
+    }
+
+    // Which part of the result the user clicked (stored as click_zone).
+    function keywordClickZone(clicked) {
+        if (clicked.closest('.arrow') || clicked.closest('.kw-arrow')) return 'arrow';
+        if (clicked.closest('.anchortext') || clicked.closest('.kw-text')) return 'text';
+        return 'row';
+    }
+
+    function adClickZone(clicked) {
+        if (clicked.closest('.arrow_wrap')) return 'cta';
+        if (clicked.closest('.title')) return 'title';
+        if (clicked.closest('.desc')) return 'description';
+        if (clicked.closest('.url')) return 'domain';
+        return 'ad';
+    }
+
+    // Assembled here rather than rendered into the page, so a scrape comes away with nothing to replay.
+    function armKeywordLink(link, clicked) {
+        link.href = '/kw-click?t=' + encodeURIComponent(link.dataset.ct)
+            + '&ttc=' + msSincePageOpen()
+            + '&zone=' + encodeURIComponent(keywordClickZone(clicked));
+    }
+
+    function trackAdClick(link, clicked) {
+        var ads = document.querySelectorAll('a.content-wrap');
+        report('adClick', {
+            dmFeed: {
+                page: 'ads',
+                step: 'click',
+                ads_variant: '',
+                test_id: '2',
+                root_domain: 'gh-proxy.net',
+                position: Array.prototype.indexOf.call(ads, link) + 1,
+                click_zone: adClickZone(clicked),
+                time_to_click_ms: msSincePageOpen()
+            }
         });
-        return {
-          eventName: "listenerRegistered",
-          listenerId: c,
-          data: true,
-          pingData: window.cmp_gpp_ping()
-        }
-      } else {
-        if (g === "removeEventListener") {
-          var h = false;
-          __gpp.e = __gpp.e || [];
-          for (var d = 0; d < __gpp.e.length; d++) {
-            if (__gpp.e[d].id == e) {
-              __gpp.e[d].splice(d, 1);
-              h = true;
-              break
+    }
+
+    // pointerdown/keydown fire before the new tab's URL is locked in; click is too late.
+    function onKeywordIntent(event) {
+        try {
+            var clicked = event.target;
+            if (!clicked || !clicked.closest) return;
+            if (event.type === 'keydown' && event.key !== 'Enter') return;
+
+            var keywordLink = clicked.closest('a[data-ct]');
+            if (keywordLink) armKeywordLink(keywordLink, clicked);
+        } catch (err) {}
+    }
+
+    document.addEventListener('pointerdown', onKeywordIntent, true);
+    document.addEventListener('keydown', onKeywordIntent, true);
+
+    document.addEventListener('click', function (event) {
+        try {
+            var clicked = event.target;
+            if (!clicked || !clicked.closest) return;
+
+            var adLink = clicked.closest('a.content-wrap');
+            if (adLink) {
+                trackAdClick(adLink, clicked);
             }
-          }
-          return {
-            eventName: "listenerRemoved",
-            listenerId: e,
-            data: h,
-            pingData: window.cmp_gpp_ping()
-          }
-        } else {
-          if (g === "getGPPData") {
-            return {
-              sectionId: 3,
-              gppVersion: 1,
-              sectionList: [],
-              applicableSections: [0],
-              gppString: "",
-              pingData: window.cmp_gpp_ping()
-            }
-          } else {
-            if (g === "hasSection" || g === "getSection" || g === "getField") {
-              return null
-            } else {
-              __gpp.q.push([].slice.apply(a))
-            }
-          }
+        } catch (err) {}
+    }, true);
+</script><script>
+    (function () {
+        var props = {"trafficSrc":"intango_park_dm_1638_1","ysid":"225RBO1L9VSS4"} || {};
+        
+
+        var startedAt = Date.now();
+        var called = false;
+        var reported = null;
+
+        function send(step) {
+            try {
+                if (typeof report !== 'function') return;
+                report('yahooBeacon', {
+                    dmFeed: {
+                        page: 'keywords',
+                        step: step,
+                        test_id: '2',
+                        root_domain: 'gh-proxy.net',
+                        
+                        kw_variant: 'keywords-dark',
+                        extra_integer1: Date.now() - startedAt
+                    }
+                });
+            } catch (e) {}
         }
-      }
-    }
-  };
-  window.cmp_msghandler = function(d) {
-    var a = typeof d.data === "string";
-    try {
-      var c = a ? JSON.parse(d.data) : d.data
-    } catch (f) {
-      var c = null
-    }
-    if (typeof(c) === "object" && c !== null && "__cmpCall" in c) {
-      var b = c.__cmpCall;
-      window.__cmp(b.command, b.parameter, function(h, g) {
-        var e = {
-          __cmpReturn: {
-            returnValue: h,
-            success: g,
-            callId: b.callId
-          }
-        };
-        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
-      })
-    }
-    if (typeof(c) === "object" && c !== null && "__uspapiCall" in c) {
-      var b = c.__uspapiCall;
-      window.__uspapi(b.command, b.version, function(h, g) {
-        var e = {
-          __uspapiReturn: {
-            returnValue: h,
-            success: g,
-            callId: b.callId
-          }
-        };
-        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
-      })
-    }
-    if (typeof(c) === "object" && c !== null && "__tcfapiCall" in c) {
-      var b = c.__tcfapiCall;
-      window.__tcfapi(b.command, b.version, function(h, g) {
-        var e = {
-          __tcfapiReturn: {
-            returnValue: h,
-            success: g,
-            callId: b.callId
-          }
-        };
-        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
-      }, b.parameter)
-    }
-    if (typeof(c) === "object" && c !== null && "__gppCall" in c) {
-      var b = c.__gppCall;
-      window.__gpp(b.command, function(h, g) {
-        var e = {
-          __gppReturn: {
-            returnValue: h,
-            success: g,
-            callId: b.callId
-          }
-        };
-        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
-      }, "parameter" in b ? b.parameter : null, "version" in b ? b.version : 1)
-    }
-  };
-  window.cmp_setStub = function(a) {
-    if (!(a in window) || (typeof(window[a]) !== "function" && typeof(window[a]) !== "object" && (typeof(window[a]) === "undefined" || window[a] !== null))) {
-      window[a] = window.cmp_stub;
-      window[a].msgHandler = window.cmp_msghandler;
-      window.addEventListener("message", window.cmp_msghandler, false)
-    }
-  };
-  window.cmp_setGppStub = function(a) {
-    if (!(a in window) || (typeof(window[a]) !== "function" && typeof(window[a]) !== "object" && (typeof(window[a]) === "undefined" || window[a] !== null))) {
-      window[a] = window.cmp_gppstub;
-      window[a].msgHandler = window.cmp_msghandler;
-      window.addEventListener("message", window.cmp_msghandler, false)
-    }
-  };
-  window.cmp_addFrame("__cmpLocator");
-  if (!("cmp_disableusp" in window) || !window.cmp_disableusp) {
-    window.cmp_addFrame("__uspapiLocator")
-  }
-  if (!("cmp_disabletcf" in window) || !window.cmp_disabletcf) {
-    window.cmp_addFrame("__tcfapiLocator")
-  }
-  if (!("cmp_disablegpp" in window) || !window.cmp_disablegpp) {
-    window.cmp_addFrame("__gppLocator")
-  }
-  window.cmp_setStub("__cmp");
-  if (!("cmp_disabletcf" in window) || !window.cmp_disabletcf) {
-    window.cmp_setStub("__tcfapi")
-  }
-  if (!("cmp_disableusp" in window) || !window.cmp_disableusp) {
-    window.cmp_setStub("__uspapi")
-  }
-  if (!("cmp_disablegpp" in window) || !window.cmp_disablegpp) {
-    window.cmp_setGppStub("__gpp")
-  };
-</script></head>
-<body ><img src="https://l.cdn-fileserver.com/bping.php?vgd_asn=8075&wshp=0&r=1788843749125&vgd_tsce=L1346&vgd_cage=59&vgd_cdv=O3435&vgd_wlstp=0&prid=8PR11258V&cid=8CU7G8B38&ugd=4&lf=6&wsip=170763523&vgd_rpth=%2Fola&gdpr=0&crid=342704488&cc=US&sc=IA&ssld=%7B%22QQNN%22%3A%22Pb%22%2C%22QQN75%22%3A%22OJQnYm8zJQ%22%2C%22QQ8E%22%3A%22%22%2C%22QQQN%22%3A%22VK%22%2C%22QQl8E%22%3A%22%22%7D&vgd_l2type=dmola&vgd_oresf=one&vgd_setup=c21&requrl=https%3A%2F%2Fgh-proxy.net&vi=1788843749219849386&hvsid=00001788843749123028989455368316&lper=100&mspa=1&vgd_oreqf=one&vgd_len=558&vgd_end=1" width="0px" height="0px" style="display: none !important" id="_ol_lg_1788843749219849386" /><div id="_ol_one_1788843749219849386" > </div><script type="text/javascript">!function(){"use strict";var d,i={"id":"_ol_one_1788843749219849386","l2u":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%28L%28j=P\u0026%28dBUX=acrR_%2Akrp%3A%29anpK%2A%7CTCar%3A0lHS%28ySy%28fSyoN%7CTKar%3Ay10S0l0Syl0Sl\u0026.L1u=P\u0026.XLBu=P\u00260L=\u00261BBuL=J\u00267UB=ebiD0dKQK7D%2Fy%21%21%2FFbQ%21qvCty%2Fty0F%21Cyyy\u00267Z0X.%28j=w5\u00267jB5=\u00267jBJ=\u00267jYg7%28d=\u00267jw=\u00267u8y=\u0026A.D0=\u0026Aj=\u0026BLUC=nJ%21q~\u0026CUD%28j=\u0026DC-yDX=1BBuL%3A%2F%2FQ1TuDYFMSdCB\u0026L%28tC=JJkqF~al\u0026LLXj=%7B%22LLUU%22%3A%2236%22%2C%22LLUBM%22%3A%22jCL+gY%28dCL%22%2C%22LL%28u%22%3A%22%22%2C%22LLLU%22%3A%22iv%22%2C%22LLt%28u%22%3A%22%22%7D\u0026LU=iv\u0026LZjDij=\u0026MZdOUUOCFu=\u0026MjLuD=\u0026MuXu=\u0026QjuD=P\u0026QjuDUdLB=\u0026RZ%28j=s_+he6+2CLB+T+5+nCwCX\u0026U%28j=a83%2A4ab%21a\u0026U1dg%21=Je%29a4%21G%2A%29\u0026U1dg5=YLwqO%28dBU\u0026UBu%28j=\u0026UD%28j=%21q5%2APqqaa\u0026UU=36\u0026Ujw=%29%21q%21k\u0026X5BMuC=jgYX7\u0026Y%28j=0PjC00C~T%2A~Z%2ATqJZ5T7l5JTj0%21a5Pk0j0~0\u0026YX70=YdC\u0026Z%28j=\u0026Z%28jw5=\u0026Z7C=\u0026ZC=P\u0026ZjDij=\u0026dBw=\u0026dgCDD=J\u0026gLu7=J\u0026htmlsrc=1\u0026jCUggg=\u0026jgD0=J\u0026kkdd=un%7CW%7Chn3AH9%2Au\u0026tpid=\u0026u%28j=ae%2993_Gh%21\u0026w%28=J%2Aaaaq%21%2Aql5Jlaql%21a~\u0026yLuCd0=P\u0026yQj=q","l2h":"acl=\u0026aclp=\u0026cl=\u0026clp=\u0026hvsid=00001788843749123028989455368316\u0026l2type=dmola\u0026lp=%7B%22ppvi%22%3A%222153638934908699221%22%2C%22wlstp%22%3A%220%22%7D\u0026matchstring=\u0026pvl=%7B%22nmerr%22%3A%221%22%7D\u0026pvlp=\u0026sbdrId=\u0026verid=","vgh":"vgd_sc=IA\u0026vgd_cmp_inj_fl=true","so":{"l2host":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%21rQj=DRcp.\u0026%28Ar%211=U\u0026%28rW1=U\u0026%29v=R8eeepc8p_yR_ep_ce.\u0026-1A1=\u0026-7YkQQkj61=\u0026-lr1Z=\u00261vl=ezPLnTNwc\u00262%28Zq=\u00262l=\u00267Bj=\u00267j=U\u00267lZOl=\u00267vl=\u00267vl%29y=\u0026Ay%21-1j=lExAB\u0026B1VJ=\u0026B7qA%28vl=%29y\u0026BQ%21=zCOZqYdsdBZ%2FJcc%2F6Cscp5j3J%2F3Jq6cjJJJ\u0026Bl%21R=\u0026Bl%21y=\u0026Bl%29=\u0026BlxEBvY=\u0026Er1B=R\u0026Jr1jYq=U\u0026Jsl=p\u0026K7vl=mT+wz%2A+fjr%21+F+y+Dj%29jA\u0026Q%211vl=\u0026QQ=n%2A\u0026QWYEc=RzPehcN8P\u0026QWYEy=xr%29pkvY%21Q\u0026QZvl=cpy8Uppee\u0026Ql%29=PcpcM\u0026Qvl=eVn8heCce\u0026W%21%211r=R\u0026Y%21%29=\u0026YEjZZ=R\u0026ZjoJZA=W%21%211r%3A%2F%2FsWF1Zx6-bYj%21\u0026htmlsrc=1\u0026jQZvl=\u0026kkdd=3n%7CH%7CnA9%2A\u0026lEZq=R\u0026ljQEEE=\u0026qr=\u0026r7lZOl=\u0026rQ=O5\u0026rrAl=%7B%22rrQQ%22%3A%22n%2A%22%2C%22rrQ%21-%22%3A%22ljr+ExvYjr%22%2C%22rrv1%22%3A%22%22%2C%22rrrQ%22%3A%22O5%22%2C%22rr3v1%22%3A%22%22%7D\u0026rv3j=RRMp6.e_\u0026sl1Z=U\u0026sl1ZQYr%21=\u0026tpid=\u0026vY%21QA=eguKT8MuG%3APeDGd8%7CFjeu%3Aq_ibvJbJv~bJS9%7CFdeu%3AJWqbq_qbJ_qb_\u0026vrvl=U\u0026xABq=xYj\u0026xvl=qUljqqj.F8.78FpR7yFB_yRFlqceyUMqlq.q","be":"0","nmerr":"1"},"w":"100%","h":"100%","scr":"yes","ek":"cut2FAC698y RjrwgLUqsSo71/J53V~4lPWe-0_nfBXaKTbizdvkZ|DpGMNIYHxO=QhEm","es":11,"m":{"alc":[{"ht":"https://l.cdn-fileserver.com","pt":"log","tp":"CM"},{"ht":"https://gh-proxy.net","pt":"sk-lgprxfwd.php","tp":"DM"}],"vi":"1788843749219849386","cid":"8CU7G8B38","crid":"342704488","rl":"https://gh-proxy.net","mprpslog":"m0i0xTVoNm8yUQ6xuxWK8aR20NC0gQXrFmu_8rND1JZdyEastwT-uttxQkCe-tH8er8VjoT9eIj1tym4AM-8fzF9IG_Eziu9FmlY_V0b4vlHWlehLTdc-ZGWmQIA4ypLZILjXadf_nQzyGjZ_t-Z26OzEPZhtAQ9ah6oaMZlqelNR6-jKPfoD8b6vsCjyzUC6dNFXMJ9YgQ%3D"}};(d=document.createElement("div")).className=["adclass","googleAdSense","MediumRectangleAdPanel","adv_left","browse-banner_ad","sponsored"].join(" "),d.id="abp_px",d.style.cssText="opacity: 0; visibility: hidden; width: 0; height: 0; position: absolute; top: -9999px; left: -9999px;",document.body.appendChild(d),window.setTimeout(function(){var e,t="none"===(e="display",(t=d).style[e]||(t.currentStyle?t.currentStyle[e]:document.defaultView&&document.defaultView.getComputedStyle?(e=(e=e.replace(/([A-Z])/g,"-$1")).toLowerCase(),(t=document.defaultView.getComputedStyle(t,""))&&t.getPropertyValue(e)):null));if(d.parentNode.removeChild(d),t)for(var n=i.m&&i.m.alc?i.m.alc:{},o=0;o<n.length;o++)!function(e,t){var n=new Image,o=i.m&&i.m.rl?encodeURIComponent(i.m.rl).replace(/#.*/g,""):"",d={logid:"kfk",evtid:"adpl",tp:t,cid:i.m&&i.m.cid?i.m.cid:"",crid:i.m&&i.m.crid?i.m.crid:"",vi:i.m&&i.m.vi?i.m.vi:"",requrl:o,adt1:t},t=Object.keys(d).filter(function(e){return"requrl"!==e}).map(function(e){return encodeURIComponent(e)+"="+encodeURIComponent(d[e])}).join("&");n.src=e+"?"+t+"&requrl="+o}(n[o].ht+"/"+n[o].pt,n[o].tp)},0)}();!function(){window.olaSyncCount=window.olaSyncCount||0,window.__bdata="";var e,t,n,o,c,r,i,d,a,s,u,l,m={"id":"_ol_one_1788843749219849386","l2u":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%28L%28j=P\u0026%28dBUX=acrR_%2Akrp%3A%29anpK%2A%7CTCar%3A0lHS%28ySy%28fSyoN%7CTKar%3Ay10S0l0Syl0Sl\u0026.L1u=P\u0026.XLBu=P\u00260L=\u00261BBuL=J\u00267UB=ebiD0dKQK7D%2Fy%21%21%2FFbQ%21qvCty%2Fty0F%21Cyyy\u00267Z0X.%28j=w5\u00267jB5=\u00267jBJ=\u00267jYg7%28d=\u00267jw=\u00267u8y=\u0026A.D0=\u0026Aj=\u0026BLUC=nJ%21q~\u0026CUD%28j=\u0026DC-yDX=1BBuL%3A%2F%2FQ1TuDYFMSdCB\u0026L%28tC=JJkqF~al\u0026LLXj=%7B%22LLUU%22%3A%2236%22%2C%22LLUBM%22%3A%22jCL+gY%28dCL%22%2C%22LL%28u%22%3A%22%22%2C%22LLLU%22%3A%22iv%22%2C%22LLt%28u%22%3A%22%22%7D\u0026LU=iv\u0026LZjDij=\u0026MZdOUUOCFu=\u0026MjLuD=\u0026MuXu=\u0026QjuD=P\u0026QjuDUdLB=\u0026RZ%28j=s_+he6+2CLB+T+5+nCwCX\u0026U%28j=a83%2A4ab%21a\u0026U1dg%21=Je%29a4%21G%2A%29\u0026U1dg5=YLwqO%28dBU\u0026UBu%28j=\u0026UD%28j=%21q5%2APqqaa\u0026UU=36\u0026Ujw=%29%21q%21k\u0026X5BMuC=jgYX7\u0026Y%28j=0PjC00C~T%2A~Z%2ATqJZ5T7l5JTj0%21a5Pk0j0~0\u0026YX70=YdC\u0026Z%28j=\u0026Z%28jw5=\u0026Z7C=\u0026ZC=P\u0026ZjDij=\u0026dBw=\u0026dgCDD=J\u0026gLu7=J\u0026htmlsrc=1\u0026jCUggg=\u0026jgD0=J\u0026kkdd=un%7CW%7Chn3AH9%2Au\u0026tpid=\u0026u%28j=ae%2993_Gh%21\u0026w%28=J%2Aaaaq%21%2Aql5Jlaql%21a~\u0026yLuCd0=P\u0026yQj=q","l2h":"acl=\u0026aclp=\u0026cl=\u0026clp=\u0026hvsid=00001788843749123028989455368316\u0026l2type=dmola\u0026lp=%7B%22ppvi%22%3A%222153638934908699221%22%2C%22wlstp%22%3A%220%22%7D\u0026matchstring=\u0026pvl=%7B%22nmerr%22%3A%221%22%7D\u0026pvlp=\u0026sbdrId=\u0026verid=","vgh":"vgd_sc=IA\u0026vgd_cmp_inj_fl=true","so":{"l2host":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%21rQj=DRcp.\u0026%28Ar%211=U\u0026%28rW1=U\u0026%29v=R8eeepc8p_yR_ep_ce.\u0026-1A1=\u0026-7YkQQkj61=\u0026-lr1Z=\u00261vl=ezPLnTNwc\u00262%28Zq=\u00262l=\u00267Bj=\u00267j=U\u00267lZOl=\u00267vl=\u00267vl%29y=\u0026Ay%21-1j=lExAB\u0026B1VJ=\u0026B7qA%28vl=%29y\u0026BQ%21=zCOZqYdsdBZ%2FJcc%2F6Cscp5j3J%2F3Jq6cjJJJ\u0026Bl%21R=\u0026Bl%21y=\u0026Bl%29=\u0026BlxEBvY=\u0026Er1B=R\u0026Jr1jYq=U\u0026Jsl=p\u0026K7vl=mT+wz%2A+fjr%21+F+y+Dj%29jA\u0026Q%211vl=\u0026QQ=n%2A\u0026QWYEc=RzPehcN8P\u0026QWYEy=xr%29pkvY%21Q\u0026QZvl=cpy8Uppee\u0026Ql%29=PcpcM\u0026Qvl=eVn8heCce\u0026W%21%211r=R\u0026Y%21%29=\u0026YEjZZ=R\u0026ZjoJZA=W%21%211r%3A%2F%2FsWF1Zx6-bYj%21\u0026htmlsrc=1\u0026jQZvl=\u0026kkdd=3n%7CH%7CnA9%2A\u0026lEZq=R\u0026ljQEEE=\u0026qr=\u0026r7lZOl=\u0026rQ=O5\u0026rrAl=%7B%22rrQQ%22%3A%22n%2A%22%2C%22rrQ%21-%22%3A%22ljr+ExvYjr%22%2C%22rrv1%22%3A%22%22%2C%22rrrQ%22%3A%22O5%22%2C%22rr3v1%22%3A%22%22%7D\u0026rv3j=RRMp6.e_\u0026sl1Z=U\u0026sl1ZQYr%21=\u0026tpid=\u0026vY%21QA=eguKT8MuG%3APeDGd8%7CFjeu%3Aq_ibvJbJv~bJS9%7CFdeu%3AJWqbq_qbJ_qb_\u0026vrvl=U\u0026xABq=xYj\u0026xvl=qUljqqj.F8.78FpR7yFB_yRFlqceyUMqlq.q","be":"0","nmerr":"1"},"w":"100%","h":"100%","scr":"yes","ek":"cut2FAC698y RjrwgLUqsSo71/J53V~4lPWe-0_nfBXaKTbizdvkZ|DpGMNIYHxO=QhEm","es":11,"m":{"alc":[{"ht":"https://l.cdn-fileserver.com","pt":"log","tp":"CM"},{"ht":"https://gh-proxy.net","pt":"sk-lgprxfwd.php","tp":"DM"}],"vi":"1788843749219849386","cid":"8CU7G8B38","crid":"342704488","rl":"https://gh-proxy.net","mprpslog":"m0i0xTVoNm8yUQ6xuxWK8aR20NC0gQXrFmu_8rND1JZdyEastwT-uttxQkCe-tH8er8VjoT9eIj1tym4AM-8fzF9IG_Eziu9FmlY_V0b4vlHWlehLTdc-ZGWmQIA4ypLZILjXadf_nQzyGjZ_t-Z26OzEPZhtAQ9ah6oaMZlqelNR6-jKPfoD8b6vsCjyzUC6dNFXMJ9YgQ%3D"}};function p(){var e,t=m.cks;f(t)&&(document.body?((e=document.createElement("iframe")).id="_mN_cksync_"+window.olaSyncCount,e.width=0,e.height=0,e.style.display="none",e.style.visibility="hidden",e.setAttribute("frameborder","0"),document.body.appendChild(e),e=e,t=t,t="<!DOCTYPE html><html><head>"+["<scr",'ipt type="text/javascript">'].join("")+'var syncURL = "'+t+'" ;  function createTag() { window.location.replace(syncURL); }'+["</scr","ipt>"].join("")+'</head><body onload="createTag()"></body></html>',(e=(e=e.contentWindow||e.contentDocument).document?e.document:e).open(),e.write(t),e.close(),window.olaSyncCount++):setTimeout(p,100))}function w(e){for(var t=m.es,n=m.ek,o=(e=""+e,""),c=0;c<e.length;c++){var r=e.charAt(c),i=n.indexOf(r);o+=0<=i?n.charAt((i+t)%n.length):r}return o}function h(e){return e&&"object"==typeof e}function y(e){return"function"==typeof e}function f(e){switch(typeof e){case"string":return void 0!==e&&""!==e&&null!==e;case"object":return null!==e;case"number":case"boolean":return 1;default:return}}h(m)&&(e=Date.now(),t={prel2:e},n=m.l2u,o=m.l2h,c=m.vgh,r=m.so,i=m.m,d=m.w,a=m.h,s=m.scr,u=m.id,y(window.csRsz2)?r.resdnv2=window.csRsz2():r.resdnv2=i.cr,n=n+"&eobd="+encodeURIComponent(w(decodeURIComponent(window.__bdata)))+"&eoac="+encodeURIComponent(w(i.acid)),f(i.chnm)&&(n=n+"&eoch="+encodeURIComponent(w(i.chnm))),h(i.ssm)&&h(i.clkd)&&(i.clkd.bdata=decodeURIComponent(window.__bdata),r.ssmcr=i.ssm,r.clkTrkData=i.clkd),n=function(e,t,n){e=e.split("?");return e[0]+"?"+t+"="+encodeURIComponent(n)+"&"+e[1]}(n,"ule",n.length),n+="&ure=1",r.csip=i.csip,y(window.userFrequencyTracker)&&(0<(l=userFrequencyTracker().getLocalStorageCount())&&(c+="&vgd_lsct="+l),0<(l=userFrequencyTracker().getSessionStorageCount()))&&(c+="&vgd_ssct="+l),l=c+"&"+o+"&acid="+i.acid+"&mprpslog="+i.mprpslog+"&tchkpts="+encodeURIComponent(JSON.stringify(t))+"&stime="+e+"&l3d="+encodeURIComponent(encodeURIComponent(JSON.stringify(r))),i.prvDet&&(l+="&prvDet="+encodeURIComponent(JSON.stringify(i.prvDet))),function(){var t=!1;try{"object"==typeof window.top&&"object"==typeof window&&(t=window.top!=window)}catch(e){t=!0}return t}()&&(l+="&infr=1"),function(e){try{if(e&&e.top&&e.top.document)return 1}catch(e){}return}(window)||(l+="&twna=1"),""===s&&(s="no"),(c=document.createElement("iframe")).width=d,c.height=a,c.setAttribute("src",n+"#"+l),c.setAttribute("scrolling",s),c.setAttribute("frameborder","0"),c.setAttribute("marginheight","0"),c.setAttribute("marginwidth","0"),c.onload=function(){p()},document.getElementById(u).appendChild(c))}();</script><div >
-	<a style="display: none;height:25px;line-height:25px;color: rgb(136, 136, 136);text-align: center;line-height:25px;width: 100%;position: fixed;bottom: 0px;left: 0px;z-index: 9999;background-color: #10162c;padding: 0px 0;text-decoration: none;font-family: Arial, sans-serif;font-size: clamp(11px, 2.5vw, 15px);" id="dnslink" href="#" onclick="__cmp('showScreen'); return false">Do Not Sell or Share My Personal Information</a>
-	 </div><script>
-  function checkDNS() {
-    __cmp('getCMPData', true, function(x) {
-        var possibleKeys = ['CCPA','USVCDPA','USCPA','USUCPA','USCAPDP','USTDPSA','USOCDPA','USMTCDPA','USFDBR','USDPDPA','USICDPA','USNEDPA','USNHPA','USNJDPA','USTIPA','USMCDPA']; //add possible regulations where to show the DNS-link
-        if ('regulationKey' in x && possibleKeys.indexOf(x.regulationKey) != -1) {
-          document.getElementById('dnslink').style.display = 'block'; /* show the link*/
-          document.querySelectorAll('[id^="_ol_one_"]').forEach(el => {
-  			el.style.height = "calc(100vh - 25px)";
-          });
-        } else {
-          document.getElementById('dnslink').style.display = 'none'; /* don't show the link*/
-		  document.querySelectorAll('[id^="_ol_one_"]').forEach(el => {
-  			el.style.height = "100vh";
-          });
+
+        function settle(step) {
+            if (reported) return;
+            reported = step;
+            send(step);
         }
-      });
-    }
-    setInterval(checkDNS, 1000);
-</script></body>
+
+        function argument() {
+            props.ykws = Array.prototype.map.call(document.querySelectorAll('.list_1 a'), function (a) {
+                return a.textContent ? a.textContent.trim() : '';
+            }).filter(Boolean).join(',');
+            return props;
+        }
+
+        // Never gated on `reported`: the deadline gives up on measuring, not on billing.
+        function run() {
+            if (called) return true;
+            if (typeof window.initDMKeywords !== 'function') return false;
+
+            called = true;
+            try {
+                window.initDMKeywords(argument());
+                reported ? send('late-ok') : settle('ok');
+            } catch (e) {
+                settle('threw');
+            }
+            return true;
+        }
+
+        function poll() {
+            if (run() || reported) return;
+            if (Date.now() - startedAt < 15000) setTimeout(poll, 50);
+            else settle('timeout');
+        }
+
+        var script = document.createElement('script');
+        // Dated, not per-request: a unique query string made every impression a cache miss.
+        script.src = 'https://s.appreports.net/serenity.js?v=' + new Date().toISOString().slice(0, 10);
+        script.async = true;
+        script.onload = run;
+        script.onerror = function () { settle('load-failed'); };
+
+        document.head.appendChild(script);
+        poll();
+    })();
+</script>
+<script>
+    console.log('https://intivesearch.com');
+
+    window.addEventListener('load', function () {
+        try {
+            // Collect all displayed keywords in order
+            const keywordElements = document.querySelectorAll('.list_1 .anchortext a');
+            const keywords = Array.from(keywordElements).map(function(link) {
+                return link && link.textContent ? link.textContent.trim() : '';
+            }).filter(function(keyword) {
+                return keyword.length > 0;
+            });
+            const keywordsString = keywords.length > 0 ? keywords.join(',') : '';
+
+            report('keywordsPageLoad', {
+                wa: {
+                    extraString1: keywordsString,
+                    extraString2: 'gh-proxy.net',
+                    extraString3: '2'
+                },
+                dmFeed: {
+                    page: 'keywords',
+                    step: 'load',
+                    kw_variant: 'keywords-dark',
+                    test_id: '2',
+                    root_domain: 'gh-proxy.net',
+                    item_count: keywords.length
+                }
+            });
+        } catch (error) {
+            // Ensure report is sent even if there's an error collecting keywords
+            console.error('Error collecting keywords for pageload event:', error);
+            report('keywordsPageLoad', {
+                wa: {
+                    extraString1: '',
+                    extraString2: 'gh-proxy.net',
+                    extraString3: '2'
+                },
+                dmFeed: {
+                    page: 'keywords',
+                    step: 'load',
+                    kw_variant: 'keywords-dark',
+                    test_id: '2',
+                    root_domain: 'gh-proxy.net',
+                    item_count: 0
+                }
+            });
+        }
+    });
+</script>
+</body>
 </html>
