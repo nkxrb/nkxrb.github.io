@@ -1,505 +1,572 @@
-<html>
-<head ><style>*{margin: 0; padding: 0;}</style><meta  name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" content=""><script>
-  if (!"gdprAppliesGlobally" in window) {
-    window.gdprAppliesGlobally = true
-  }
-  if (!("cmp_id" in window) || window.cmp_id < 1) {
-    window.cmp_id = 0
-  }
-  if (!("cmp_cdid" in window)) {
-    window.cmp_cdid = "40679ccc92462"
-  }
-  if (!("cmp_params" in window)) {
-    window.cmp_params = ""
-  }
-  if (!("cmp_host" in window)) {
-    window.cmp_host = "d.delivery.consentmanager.net"
-  }
-  if (!("cmp_cdn" in window)) {
-    window.cmp_cdn = "cdn.consentmanager.net"
-  }
-  if (!("cmp_proto" in window)) {
-    window.cmp_proto = "https:"
-  }
-  if (!("cmp_codesrc" in window)) {
-    window.cmp_codesrc = "1"
-  }
-  window.cmp_getsupportedLangs = function() {
-    var b = ["DE", "EN", "FR", "IT", "NO", "DA", "FI", "ES", "PT", "RO", "BG", "ET", "EL", "GA", "HR", "LV", "LT", "MT", "NL", "PL", "SV", "SK", "SL", "CS", "HU", "RU", "SR", "ZH", "TR", "UK", "AR", "BS"];
-    if ("cmp_customlanguages" in window) {
-      for (var a = 0; a < window.cmp_customlanguages.length; a++) {
-        b.push(window.cmp_customlanguages[a].l.toUpperCase())
-      }
-    }
-    return b
-  };
-  window.cmp_getRTLLangs = function() {
-    var a = ["AR"];
-    if ("cmp_customlanguages" in window) {
-      for (var b = 0; b < window.cmp_customlanguages.length; b++) {
-        if ("r" in window.cmp_customlanguages[b] && window.cmp_customlanguages[b].r) {
-          a.push(window.cmp_customlanguages[b].l)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Ghproxy</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
-      }
-    }
-    return a
-  };
-  window.cmp_getlang = function(j) {
-    if (typeof(j) != "boolean") {
-      j = true
-    }
-    if (j && typeof(cmp_getlang.usedlang) == "string" && cmp_getlang.usedlang !== "") {
-      return cmp_getlang.usedlang
-    }
-    var g = window.cmp_getsupportedLangs();
-    var c = [];
-    var f = location.hash;
-    var e = location.search;
-    var a = "languages" in navigator ? navigator.languages : [];
-    if (f.indexOf("cmplang=") != -1) {
-      c.push(f.substr(f.indexOf("cmplang=") + 8, 2).toUpperCase())
-    } else {
-      if (e.indexOf("cmplang=") != -1) {
-        c.push(e.substr(e.indexOf("cmplang=") + 8, 2).toUpperCase())
-      } else {
-        if ("cmp_setlang" in window && window.cmp_setlang != "") {
-          c.push(window.cmp_setlang.toUpperCase())
-        } else {
-          if (a.length > 0) {
-            for (var d = 0; d < a.length; d++) {
-              c.push(a[d])
-            }
-          }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0e1114;
+            color: #e8eaed;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-      }
-    }
-    if ("language" in navigator) {
-      c.push(navigator.language)
-    }
-    if ("userLanguage" in navigator) {
-      c.push(navigator.userLanguage)
-    }
-    var h = "";
-    for (var d = 0; d < c.length; d++) {
-      var b = c[d].toUpperCase();
-      if (g.indexOf(b) != -1) {
-        h = b;
-        break
-      }
-      if (b.indexOf("-") != -1) {
-        b = b.substr(0, 2)
-      }
-      if (g.indexOf(b) != -1) {
-        h = b;
-        break
-      }
-    }
-    if (h == "" && typeof(cmp_getlang.defaultlang) == "string" && cmp_getlang.defaultlang !== "") {
-      return cmp_getlang.defaultlang
-    } else {
-      if (h == "") {
-        h = "EN"
-      }
-    }
-    h = h.toUpperCase();
-    return h
-  };
-  (function() {
-    var u = document;
-    var v = u.getElementsByTagName;
-    var h = window;
-    var o = "";
-    var b = "_en";
-    if ("cmp_getlang" in h) {
-      o = h.cmp_getlang().toLowerCase();
-      if ("cmp_customlanguages" in h) {
-        for (var q = 0; q < h.cmp_customlanguages.length; q++) {
-          if (h.cmp_customlanguages[q].l.toUpperCase() == o.toUpperCase()) {
-            o = "en";
-            break
-          }
+        .main-content {
+            flex: 1;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
         }
-      }
-      b = "_" + o
-    }
+        .header {
+            padding: 32px 20px 24px;
+        }
+        .header-overline {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #8ab4f8;
+            margin-bottom: 8px;
+            display: block;
+            opacity: 0.8;
+        }
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.25;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+        .list-container {
+            padding: 0 20px;
+            flex: 1;
+        }
+        .list_1 {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            counter-reset: result-counter;
+        }
+        .list-item {
+            margin: 0;
+            padding: 0;
+        }
+        .dir-link {
+            display: flex;
+            align-items: center;
+            background-color: #181b21;
+            border: 1px solid #2a2e37;
+            border-radius: 12px;
+            padding: 18px 16px;
+            text-decoration: none;
+            color: inherit;
+            min-height: 76px;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+        .dir-link:active {
+            background-color: #20242c;
+            transform: scale(0.98);
+        }
+        .dir-link::before {
+            counter-increment: result-counter;
+            content: "0" counter(result-counter);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 14px;
+            font-weight: 500;
+            color: #5f6368;
+            align-self: flex-start;
+            margin-top: 4px;
+            margin-right: 16px;
+        }
+        .dir-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .kw-text {
+            font-size: 19px;
+            font-weight: 500;
+            line-height: 1.35;
+            color: #e8eaed;
+        }
+        .dir-icon {
+            color: #5f6368;
+            margin-left: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dir-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+        .list-item:first-child .dir-link {
+            background-color: #141f2e;
+            border-color: rgba(138, 180, 248, 0.4);
+            padding: 24px 16px;
+            min-height: 94px;
+        }
+        .list-item:first-child .dir-link::before {
+            color: #8ab4f8;
+            opacity: 0.9;
+        }
+        .list-item:first-child .dir-content::before {
+            content: "Top result";
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #8ab4f8;
+            background: rgba(138, 180, 248, 0.15);
+            align-self: flex-start;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .list-item:first-child .kw-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .list-item:first-child .dir-icon {
+            color: #8ab4f8;
+        }
+        .no-results {
+            padding: 24px;
+            text-align: center;
+            color: #9aa0a6;
+            font-size: 16px;
+        }
+        .footer {
+            padding: 48px 20px 32px;
+            text-align: center;
+            font-size: 13px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .footer a {
+            color: #5f6368;
+            text-decoration: none;
+        }
+        .footer a:active {
+            color: #9aa0a6;
+        }
+    </style>
+</head>
+<body>
 
-    function x(i, e) {
-      var w = "";
-      i += "=";
-      var s = i.length;
-      var d = location;
-      if (d.hash.indexOf(i) != -1) {
-        w = d.hash.substr(d.hash.indexOf(i) + s, 9999)
-      } else {
-        if (d.search.indexOf(i) != -1) {
-          w = d.search.substr(d.search.indexOf(i) + s, 9999)
-        } else {
-          return e
-        }
-      }
-      if (w.indexOf("&") != -1) {
-        w = w.substr(0, w.indexOf("&"))
-      }
-      return w
-    }
-    var k = ("cmp_proto" in h) ? h.cmp_proto : "https:";
-    if (k != "http:" && k != "https:") {
-      k = "https:"
-    }
-    var g = ("cmp_ref" in h) ? h.cmp_ref : location.href;
-    var j = u.createElement("script");
-    j.setAttribute("data-cmp-ab", "1");
-    var c = x("cmpdesign", "cmp_design" in h ? h.cmp_design : "");
-    var f = x("cmpregulationkey", "cmp_regulationkey" in h ? h.cmp_regulationkey : "");
-    var r = x("cmpgppkey", "cmp_gppkey" in h ? h.cmp_gppkey : "");
-    var n = x("cmpatt", "cmp_att" in h ? h.cmp_att : "");
-    j.src = k + "//" + h.cmp_host + "/delivery/cmp.php?" + ("cmp_id" in h && h.cmp_id > 0 ? "id=" + h.cmp_id : "") + ("cmp_cdid" in h ? "&cdid=" + h.cmp_cdid : "") + "&h=" + encodeURIComponent(g) + (c != "" ? "&cmpdesign=" + encodeURIComponent(c) : "") + (f != "" ? "&cmpregulationkey=" + encodeURIComponent(f) : "") + (r != "" ? "&cmpgppkey=" + encodeURIComponent(r) : "") + (n != "" ? "&cmpatt=" + encodeURIComponent(n) : "") + ("cmp_params" in h ? "&" + h.cmp_params : "") + (u.cookie.length > 0 ? "&__cmpfcc=1" : "") + "&l=" + o.toLowerCase() + "&o=" + (new Date()).getTime();
-    j.type = "text/javascript";
-    j.async = true;
-    if (u.currentScript && u.currentScript.parentElement) {
-      u.currentScript.parentElement.appendChild(j)
-    } else {
-      if (u.body) {
-        u.body.appendChild(j)
-      } else {
-        var t = v("body");
-        if (t.length == 0) {
-          t = v("div")
-        }
-        if (t.length == 0) {
-          t = v("span")
-        }
-        if (t.length == 0) {
-          t = v("ins")
-        }
-        if (t.length == 0) {
-          t = v("script")
-        }
-        if (t.length == 0) {
-          t = v("head")
-        }
-        if (t.length > 0) {
-          t[0].appendChild(j)
-        }
-      }
-    }
-    var m = "js";
-    var p = x("cmpdebugunminimized", "cmpdebugunminimized" in h ? h.cmpdebugunminimized : 0) > 0 ? "" : ".min";
-    var a = x("cmpdebugcoverage", "cmp_debugcoverage" in h ? h.cmp_debugcoverage : "");
-    if (a == "1") {
-      m = "instrumented";
-      p = ""
-    }
-    var j = u.createElement("script");
-    j.src = k + "//" + h.cmp_cdn + "/delivery/" + m + "/cmp" + b + p + ".js";
-    j.type = "text/javascript";
-    j.setAttribute("data-cmp-ab", "1");
-    j.async = true;
-    if (u.currentScript && u.currentScript.parentElement) {
-      u.currentScript.parentElement.appendChild(j)
-    } else {
-      if (u.body) {
-        u.body.appendChild(j)
-      } else {
-        var t = v("body");
-        if (t.length == 0) {
-          t = v("div")
-        }
-        if (t.length == 0) {
-          t = v("span")
-        }
-        if (t.length == 0) {
-          t = v("ins")
-        }
-        if (t.length == 0) {
-          t = v("script")
-        }
-        if (t.length == 0) {
-          t = v("head")
-        }
-        if (t.length > 0) {
-          t[0].appendChild(j)
-        }
-      }
-    }
-  })();
-  window.cmp_addFrame = function(b) {
-    if (!window.frames[b]) {
-      if (document.body) {
-        var a = document.createElement("iframe");
-        a.style.cssText = "display:none";
-        if ("cmp_cdn" in window && "cmp_ultrablocking" in window && window.cmp_ultrablocking > 0) {
-          a.src = "//" + window.cmp_cdn + "/delivery/empty.html"
-        }
-        a.name = b;
-        a.setAttribute("title", "Intentionally hidden, please ignore");
-        a.setAttribute("role", "none");
-        a.setAttribute("tabindex", "-1");
-        document.body.appendChild(a)
-      } else {
-        window.setTimeout(window.cmp_addFrame, 10, b)
-      }
-    }
-  };
-  window.cmp_rc = function(h) {
-    var b = document.cookie;
-    var f = "";
-    var d = 0;
-    while (b != "" && d < 100) {
-      d++;
-      while (b.substr(0, 1) == " ") {
-        b = b.substr(1, b.length)
-      }
-      var g = b.substring(0, b.indexOf("="));
-      if (b.indexOf(";") != -1) {
-        var c = b.substring(b.indexOf("=") + 1, b.indexOf(";"))
-      } else {
-        var c = b.substr(b.indexOf("=") + 1, b.length)
-      }
-      if (h == g) {
-        f = c
-      }
-      var e = b.indexOf(";") + 1;
-      if (e == 0) {
-        e = b.length
-      }
-      b = b.substring(e, b.length)
-    }
-    return (f)
-  };
-  window.cmp_stub = function() {
-    var a = arguments;
-    __cmp.a = __cmp.a || [];
-    if (!a.length) {
-      return __cmp.a
-    } else {
-      if (a[0] === "ping") {
-        if (a[1] === 2) {
-          a[2]({
-            gdprApplies: gdprAppliesGlobally,
-            cmpLoaded: false,
-            cmpStatus: "stub",
-            displayStatus: "hidden",
-            apiVersion: "2.2",
-            cmpId: 31
-          }, true)
-        } else {
-          a[2](false, true)
-        }
-      } else {
-        if (a[0] === "getUSPData") {
-          a[2]({
-            version: 1,
-            uspString: window.cmp_rc("")
-          }, true)
-        } else {
-          if (a[0] === "getTCData") {
-            __cmp.a.push([].slice.apply(a))
-          } else {
-            if (a[0] === "addEventListener" || a[0] === "removeEventListener") {
-              __cmp.a.push([].slice.apply(a))
-            } else {
-              if (a.length == 4 && a[3] === false) {
-                a[2]({}, false)
-              } else {
-                __cmp.a.push([].slice.apply(a))
-              }
+    <main class="main-content">
+        <header class="header">
+            <span class="header-overline">Directory Index</span>
+            <h1 class="header-title">Ghproxy</h1>
+        </header>
+
+        <div class="list-container">
+            <ul class="list_1">
+                            <li class="list-item">
+                                <a href="/kw-click" data-ct="jJvFRzAuwMU0ZMf2adEj54JzqmhSXcSY5ADfjExYJPfLCYEvPq2bhEAJNptVyK_ry6xAx0z5BVMmHnDCnr4W9GLLyfKZ8tggbe0NoFuRfuBFJP4nNvcIQjjwYO86XrgxkXk8RcGs0YoO99_m5So5kD14ulRzL_7vF9RHlXZDiezhymL1QBteld9h_ueT2pw34r33i_D_Bx94-U62s2S-CbuT3XyCei3T2PyoPeYuiVmqk60XesWDHiuQfsFk8FTgeLfVydwYwsNut0kB1Vp0Mj2F6MdZlibkNBhrGgiGZJFsfRKuCFcEadcyYZ76krS_1naUDl5Z5akxKfedh9_Xl9SJ6W2m9M-mMrn7Kd68ix2GNbIYxB72WU4I4VarEUnDzCBrkBqlDMoOipWWuojU8ClAoLohrecFjV1AWlsXYElP8sa22jNAMhCpR213DtTJ_nEKhF98KUXOhZuPU8FjpEKVMZ3SuknTmCbJrFrmuc3fD9j5j2zIKoKP8VAkZZzK7Gbrj8AQRS9IV9J4kKoQy1NY4bVkPzgPfOMQWAWkf6d2iOm1zJQOHEBBBcj0PGY5hYhCK2auPVuXKkaBoI4v4BZ3o3bL0Vch0HaLtH5GppfTDDj2RL87w7DZVBh5pUVWjnt2mEx8q1WH9H0Zqq4woBOIZo_w63DPas9KM4lCpcxvsSr_SyTBLb5ttbYXi6MabinKDwxtSyK5fGtJn0BBGIpLllMzjcEVWABg7lrJ0nIGD7gmAaU9QMAJJ3kiy3gT6wFzPDJJdu0kaMQZ5o10fmVlFFeVfpdSbNLoEPIK9CnlbHqI-TVcdOC2TPXNZcS5yeHzLLElDrmBQJaL4mPqF5f8K2nWe61_KOEFUBPOpyoskoEp4lFVC8uu_TiSTPNfl_Err2WMUOq7XjTM0NHerTvVFuwjuH7ARwBDenCCW_gh3jlMF0jaX6rm41Ia5a6PJtuueBV7J9syBPZGEz42w8iqcy9ru0w01Yd58xvzEiWcOIdvQSwYfdbPW2l7aLLjfARwRjYdbC2K3Ip0HrZwY9KvRA91pWQaoW39FGq7eNPemimJxrq8CypUzoJ4076tvUQsuf6FymwA7Lj--BYBKy1wyYtkZ21AaanTN4ZLVxtRDri3EoUMg2bJBqbuYY4Ibfbi8ae2aYxR4_Cj6lPg6MUIBo5b1hbiX0roo_lWKb1jgICB7R2TLGDjKv2cMrCskr-E5Abo6JvkBhXTQP4Lefxk4kWT-d-KTKiLwZDkQxnY0ggCaKmzdn3-1wU79WIRYnJczlbFOqNlwlvXAyE3Uw-E0BLEpsZDVUYXXxizmzu__spdX3KL-0uMWfNKlVuDzfYFzlQbl4r5GUi9HIQKSyyd52RA-JEoU8cc3ugev9UsLRBYR3l2rleF-VHe1jdNP32tP58mzZaa-ejanbxhvf9z0T6wUNyUmAcePt-a50ZcwgwZg4lGuZLbu78TvABW4Qa_vnp7UlkTPGSN5Fskjw8DMO3XWX2nj8RJzPoVF-Hns94TWwL_3Rt9o02FpL98mkl7Gur2ynyhzGGv_HBDbPYoBAZpq9PYuxFm8gP8TdPBG7-SHQpEmaVb-kZHehCMlLK0_rH-kkoTRMQr-ywlxaBKcButs8sME0s7fm-e1YdnD_5luTdkTS8jW89BKzawDWlKwkGMyqREOvYxex7VTjYAGENGfpdxLlfCzu9vb2m07O_UaQlJBL2gBZGCN29LychV_mHzbrAHJSV1Bzcw3hMcQvH-dL7lmktAAPGaAT3N5tOU9bJzM7hL2x_F_GGxwU4dg9B__ZNvXK6hWodEcBLIb-x8w-s6816YucOoaAOl07wfuCRmlStiC0p3NJj1IMXEkGnYqZ4kJIIdbzGuRtoGu-NQKm7y6bqMQMX1vRaNFjuLZBKZvmv6Nk8_UTupld-bA0RNU7mYhmt1mg" class="dir-link" target="_blank">
+                                    <div class="dir-content">
+                                        <span class="kw-text">secure file transfer</span>
+                                    </div>
+                                    <div class="dir-icon">
+                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a href="/kw-click" data-ct="ojwRXs8BxmBsLYA2YagZLLGFJLQwc584lCuoDkkIr5TJNysHk75PB67DbxnkAxYTI4unEx0q9Io6qzG5_ObsphcB9eGLQMndnhHntU5haN28ZHWRThPvMMmmb66GEOxUau3LWNIt9t3AbXneWc0hhK5A4h4DZbStSQ4t7h_R4QQyGMS_6DjQepSxJzlHFq0H469vebei-L0jmqDpj9fYkn1-37vZAHNlZoUOEG-m00ebYwPlcXStbEWH5_VIRN_gDietC69stiJF_WTRahl_9hNlP-HrYM5c_WGLP7BugNs46qjE1msaJxCBr3cv5CVz7X2nC4r3yO3HIqJiFIxwcYgNIZLKtuk2XAMflx8UHdSS4-kfwiopXPnTsyIeMj_9e8K26ENrpz6WvuWC_SBeCV1MuETLo6qH1WATDJzHzGBkTlHy9tiQILtM_iFgj4jbPNlRiIM_AFoJ0z7Dimk9NPwFP_3UeU4Ck3mfzDEJ-spbVZc-RZdqQfcx3ovK5oWvDJKzLcLvh7SUTJZnGmozytvLQoZwKgyX1h7HKWm7zuEjYXox0HK0sMT-wGhIUUfFYaGRXhdpIU5B-0GRuFzgnqYoNep_5emf3_NgJmNu7rdANUZM7qBLY8s1u84MISzZjJ7CIJBGPWeyeeZQuODkg5QQZL0TAQBVr2wKfFn2AHete8Cgc4gB97zRQqaDlOxREzJZ-RqSJqgWurVjTqTij4lMxGoN66oPFHZqPmL2xLXsPSvSDdDsIT2Kq6TSiYF8WkX_Kb6FovlCIGoEDw0tKiV5DboXlKEgYq1-FVDYIMFLizVnCnX8QuiIeEug8BpYKTpMYoZhM4OtFqdHEu48Mveh8cs0uQbtlqGFnPBW3QFgAGXg8qegQWhlW4CMu1ddveyq3K3wMKo5pEOoX_CKA0oVZmzlFc2-1aMQFKyscfz6wPWEh5Z3VBCSg5UxoUk0cPtY0shxQX2MqU_zmdAls0QMb67XcxgJ1-EzulrjH72P21H1NrqqlldftiFCpwOJNEkRgA0e72RBbgifdMuGE05WKRGfdh13oNSXPHAoGgyq9UJikM3MNMxMqlRQWyH2A7YqmDW17JwRlJzHU-2lZ6JP914hz8hTDoRCU0Rd_GqR-XFIIDPeTPFBP-YRw12OYjkQCryGWdU8KRjVfmlQzewK5pLCzQ-MDmgDfZwsFPmSsRaagWf7m6jMF1rgN0EqsZrjkTXJoqJXG2XJ3X-KLgW9te99X0W7QhzcnaZFkF4WGLT3SGbyDWKVmGLaGjfKziS0oRf3zKJMFMRAN0mUPTdls0N1RNf_PleHOsFiD7zBxv8pLgpoj7hewJ7yoYpfpN5pek11XPU6m6Wl9IE1qRshGjldhVDGzmrtEuRI8kH43jcRNHC9nKvL34RgAOjdbxzDMBc216j4h2vpRpP0ZsYWz3aSPdWPFHT_2sMK_H_R1YG35V_IWfuhSiIEwiLo81vWrdY6WLQSXVIfTOOCUTIKbG2lioiEXukNpmcCqYVCbixfy0RT41AU3CierAWQUruWX-VIYdnnhAG58q_ufPViDuOE2nKl2NaKFUx_SkmBTVtXb2AyTp1wOAcxq_bCjxgzdi8Wde17Qczv-phUmqJa-KkJxNjVqSBCbGNKg19XJpXfRjpRIGdR8Y1giU1TZ7UFINldh61YzHinRbw9Jn3c3C3-uC5rZlnvtvHMQGWaLOBtpiXFH_6qRj8ykQmySngqPizgfRRnEcPm3XHSBD6rT4H9dMMT4DwvEmpSXOK5QKbYnqSkyRSOdvq9tt9m2lMjyC1nnIAMb10_IdkaE3P9FMECd0ocBVQqrDuMcVAs9la5CmZtM2lbcrsLA7H8sechEgeMifUwSZhPMcppjPkTXzA1PHHt3rpeHGY4UkSkuZWn4ugV8JSwNzjSxhNETpjPiTcyxSA8yXPRnc72Ho8" class="dir-link" target="_blank">
+                                    <div class="dir-content">
+                                        <span class="kw-text">encrypted data sharing</span>
+                                    </div>
+                                    <div class="dir-icon">
+                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a href="/kw-click" data-ct="-XY--aasts1YjjWXk5qZDXZQcSqiEy9JicopQLCZFbhzhs_hCxC2rRXQl1uinhsCvxbx1GaSrSK2fXI_mn4JIjEzP_eF3QgAKGhkPb1IiLfadZE1CaaYPfNR8E0fV1Arp-QaVMZA5t0-tKLdId-TF9srG_l6wxTSjg_VgA445ozyJJKUmgy5zK-T3dBh5aGfsR1JTwvm1ws-WskSTcELfyAEW8gWxR_TU3hhb_f9gxSH6gBSAzgeaHG-nqW5kHDi9sTDiuJDG6jlhSqW8Bv3CV6CY2mh-40rDj4gU-l51qY45ZdbuliKiKcZyp1l8mFQqqrCOPgkma6iCn4v-jXmX4R2gI26FJSFaImBIflH5F0Ouehl8iCT4zk_GWKknQ2axLEMOB8bs4gRST1g9h9W6mNjCV_BpT3stt1RuFqpHJ1TI-CIAyg3x2gmqL4asP3xFhkFiXcYSy9X2ggZoxpm4elLAMzDOFh-v8zbr_PpBAuJJ0w6_5kx5pQz7E3CV4cUrS05vx6HYPBJJtbAAqe5MFw297KYHx4g172yeVtC39r7W9PYOcVneqauhgogoPGiJEuGViaCNaS0O1agi7Ufqnbxlt-TNep6qvT_1yN47NgvkcK-0P5DpYMvy-jNJF4E6nzq5Tquq5HLkjqocbW42B5ZkOztbQabwoii79VVRWcSpiBe9ttmm_5I7N_wVkBgJze3vtQ7pzvo26pC7K4hMZQACtVQXPyj6FUWCDgJwbAU41B_aBU7eX65_YFkwBdB5vJQi6XGKFAQa4Pu3y6oea0vPGhMLm3i6AgPQIReEIF6bP9cTMb0mzF34VPeLzUdxoiNVv44aqOwRW6OUDfwh4qm1LfL6J4Somoj5-8zvBK7qz2D-MLQISZgxeWL4ikSDVaMoSzDTAc1SVNPOYngn0m6afJ1WNZ-Ez00n_UC2m1q21KJg-STuxr6VUnMuTv0NKLbeJ5G7rtx3Hqr4Rkcv749znVGl85qJSH6lwKOiPYGVp4Fd26kdfC4gdx2abFMAcdBR4o_3qx17F1NRPuJmkJbU0v95AG1_z3uZMVAaCARsB_UdcPLhZ79S6eEEZYb1eBZ6R9qPf8SskaKLanxRXXK9FIGTe0HGU0FMZlJEFfG2PqPSh12w9BLobU_-ZiSneFFcO6r6VZIMjdj5WCEUomHY-uA1f07DKTw_deYiEPEX95bdM20duB2FGbvkfK0shzIF4mXUHPi1nJ5gKBJXbR5rIJEQO3CeOllcz2zjR1SlXF7Cn2DQBjHOBnMvlMdR4t0D_OL-E2fH6n6ceDn0FQLbe5NVXpr7gLnU4DwkrU2EeB97pEy9mLHhlR2cWHsszvFdSO_iFaGp3g_Xe4rhjwZQmuhm1mX3GswHXoMi2Ai1u373M0B7GrqhhlGVlmwOvCmX-KvOpST_EzrAjTrMXlIIskGM-fYIPdm_h9cFJQzv2xdcldrfyLk606Oeibx0IPeFX__C4891z0HKX-ghKfILki0OCxQRlMFmr8JLntHLaXb4Fh59cIh8uACgJN_EMc71HdAnOzR6LgtO--4xvfsudGQXuETG9evqbZ9U7ANKzNSEsBNGdKvCxHbIDMO_1Ajv-7w3s5VPhK7Xs9mELq8yH3DrcjcBJUNUBtD2fsDBR1jVdZDZrFLSZmG734PhDjX-XHBhCfk-EdcKWn2DGTD5jtPxsPRfI0WKdVMjviEajthMCs-QyidRxHmKN30TZuq3szAb6Ax6H5rJ3lRQ91ECV_mdIMvTl28jQZyojxeO0tQnIjrs44xREDzvqfRlhm1Xo5X_rquOGxx6jdTNF0dFtoTF2sKL4uk1zrHcs10VAH59k2GTtQqSimrsbkb-3fHdhQ1b0ruIfTizmgN-P2nHhkykm8xhg_PnEcDzf443P2A5EgwvTGLzFcwNV6pUY2sz7eFzJqpnID_kReruS-thj5_R1b21YUT0V8" class="dir-link" target="_blank">
+                                    <div class="dir-content">
+                                        <span class="kw-text">virtual private network cost</span>
+                                    </div>
+                                    <div class="dir-icon">
+                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a href="/kw-click" data-ct="TVkHHUbVisvg7XrGUQaT1g0OkS73B4q8EwtWMoMy3IQ9KRBdAFox4Pf7PQ1sjs6AZyUpzSNnHKbTu1TtoJWUqBpfXK0RdHxPSfhmHdeeQHU2Q1NheM7hz0nfpDKXfZBse7WYXC_WZ_JVKRCC1C4yk0OorH83hmGrf2rO7DkxH7k090K-fJ8xbf4hm6EfCAVywUDHTJl5FONKIdp_aFlOOPgQbqGHvg9rVkdqqI7DEMRfGnPVfU0sd0GAiwQR2O_o-bnFKa-5z09E4-VVJe-fZy92WJ4JQd5p71y9pL8oHi6Y1V1gOT0yIGTbzzwu5CJku0ZEkFz4S4wwetD9TN45G_ySTFAy0LaM26CLnBDAL5hSjfn4hfRi1aVubFPh4EkTVWS5Sn1O0-VqoSAz8pdRRXZRUbpx6rKhWxeu-UBc_o3M5XhE7z6mMD-Go2LBzh45MiMl8k4xfbakv4EX0p69nMOHJdU4SHwS4r4Ih5Ptc77tyZ2fJbyjGv9kQwgIYl7Msyopf3P-V-tA7Stt0qDyP_QFTMI-5RDuH2FeB2CwOhSJAo8ZELbIlMf8a-58nsEN0HoF4s6uQKbBz_bUDdpN4KoHZwB7gw2KkFBoS9opDw7rT5mw18CSi5o75lynxnauQohjWCTq0bfUH6l4vdmRjz6OSl8kZSW0b3Bss_7Exkgfqnd5Tkr2ySkJZjpSP7QuD-F8V5tDqVIk0uFiwMuUpH3fqTCQ_wqHdEhnXWGEL8je78v1Kka2X2ALBcqPhEf5Zng5GT9STVgczhqhDVlKKzdb7shg2xwhiq3j9HOs1-U8PINIEvOWa2wH-IfAzlQA3T600AFo5Z4OFNYKpbaSCHwVXtSgmI6IG1LnMdjtPVIdPdesuPLEB6j_3jJz6D3MWUTLFiTPGbBvNhd8HbfqHd7yGkQtfU7CKfkZkwDo0CeLGR55_Au3YOYkCpG95RXOJuvui1tMWZbwW8ZyKmH80bWC-pHxDQFcciPWtCgbbZmw5bnM4pCxuZfqgjPHeAw1a6JAOHiRSn2jQsM1KlWB1EkQnDdKWqf9v0QtexoKTvWSFD5ddh85exzqZ0wS75t6RsNRGG6FaiHT_r78IkCwC7YTg155eRIHqDlNq_NpbMnxUS5DYcYo4IMIQOitPjEZaiKWWeQd3xdBe9It5BEq5vxhNL4yh-mevIPABg0-HEbk2xzrIQlurtBP382YJby4x6CgopbHwqJmyApR29kBmYWG1wH5pZGXiW8p-9Xl4aPm8RCMXVfbVtjy1raM2J1VmEyUOS4Z40W1jTNz4Y9Ci9L8VOFUjNvxkPdbOY07CcqsBuIyXD8ZOYRxsJ1jhxefgL1KPBB3hd8hMJ8S_WWOlIJbCuRHu3ldRgGK_u_sg9DIcy98tBpVcEBm6skyk5hdslEu0tLAlmBBm17hxy4O4Tu1BAFihN-IOEHoByrFWxZT6I7xSISF4FqRQYQYCrhp1Y1As8gdKIBZQ42FqUquE100isVLhIUnP2DaKgvbjjgOvgQXoQHcF0Aw5GVlUItg1PNHgdLZpr22cBxqrHFaPKenfEjsn1KyQ6bWW3mZZXSul0v-fR9UY_2Boj0j18OhwoQevwR4e-_dw3OBkAXKGktrdldm8d3xtS8kN8W3f2iL4yAO4v1CdB9a2gqOYlQTggMOS1L9NPa8nnenpw_GtrPqBkv5inSjGQHw2mvlwm03sFosmR19QmBmt3ditM5vsiQlOQCoNhKbGpQDLyAzGm9jEEIedizelydP7splrWd6UuZ5UQmiVxN8oGcdDoo17yE-bekapmba-4FoIbA7WrRybXAdbV65vt9yGbZM_6YHc-smw1QTAdQA1y2EJnUs6qQEnnK9oDf8nurG09G7QHVIcvvfaUAeckuxnZM24KvqiivT354z4UoZRRJ2xa2aZlrSSCgHzLkiIqtFocfv0qU" class="dir-link" target="_blank">
+                                    <div class="dir-content">
+                                        <span class="kw-text">online backup services</span>
+                                    </div>
+                                    <div class="dir-icon">
+                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a href="/kw-click" data-ct="cEL4-WjZqvwCfAmW7DaHaUTGAl9rWnAEroQ0ba_QEirCXxRifhzzPS9om-yoBoocC3zcVfonxj0Xr7Q1bwUlQZu2U-BzsnIXEg7zS9KJQKYU2rlcT8VcldgWcREo48-jKPshx0z-wrrcOqGuole7hy7GiAlz_B7P89ZDH2GrrJVwyfa_KGzGD4_2Y9AOaT5-1MTftcESAUFve8s2O2srZRMqskHj8DTUWm7b_S2nej9Ol_rH88aD-4JrmFZVgJLlkj3-wxWn1bxVeReyAo2KinsnoZpq0KsiJzD0tjN11HkSjLCvpEhW7L3PaCorfpM80oN1cHfEN4JA-UCWJurRb5QgcgSBWbYSJlk2qptD6Ba0bRTFF7xkP3vqVwnU3-0Eq7Np3vZwARsVnasTtnJ_EIH29M8eBjYotU3NJ3njpsDEy6KnlQNIo08SEoht_VPxPZZRTovlDHdSgmF7Fq0qg2WOQaugTOVFi9S_VT7-hHCi4gm8Q-GqEvgb3ObnC1ashF3k0CSmVVRmcxt3b3IPi4qq0g55X8VwqNkNqBE7ph3IpcZsptXT93PzFpLMtUmuTp1fGozw42LxYdUIHnSnawIXTuayEUhJde8oULym1luArjpOzYQ2ajWx-qtOi4x-o_OZ6qsNJSI8eeo5477FdUSfunRAhGneeTwbECVLcDpewmm_Sk2xg97cPwWyDbcGs8nxYJQ0LCmC8JS6aO-wwM9k5cHpfHq7eQo2KVqX1lLPiN9VwF3jbwy4u8nEKcjDfl08KSd9wkaKZs9xc2X1RF5M5XzT7SMsh0oFdtP4X4r4mpHfcazemoT--L6vcKZ0tBtCMoth_4ff7GkY-wtCZ9wxOJaI7mjUE8gmoH-333_4eGHsSprcwi_B8s-DTbRTRCrnc7TN-97jG1Y038dYR_GfhM0YLM-fbDFS96TRbKDdtgTXZCivxdmG7-jdnt7roN56UG9eEdXzPItIOBWaamaShRxJ5mjMAtClUxO0-Yl7DIBmXp5X0GimotcUW5_6X8672j7lesoGLnseuGjTxUdEYYJtvcqtZFwwMQ3UYvdi0EtY_-HGq9FDv1Se-SZZVdeRR-D_EFawElF9rUeyZXNReHGQc2AUKYHyBXsPqKMGmQAxpu0h7HHWGLJWNlnIl1bY_lfW70CSpXs6RunWPBZefH_nHiCYMEOd46u0IIWhlRhOJydZFdT0lHyL4Nbrl9aRRmaEwaTdEK1HbXLzsRvfts0gPkMu1TPg_6CY907O9TSDD_JTjKp5iWLpW5nJxe-ycbgUxFTmpP69xOThI6dcDSSphyNhyC9ieq_JLGmSX-nRoJ5db7tYLGsQQU3x2DF4jLfibypj_YnPT_RS5e9l-Uuk0F4BHh65TVBaS-xfGMIi07lu9sBV8ZwQ7XAQOemon4diVsSve3v1cop1jH_aVDqsXNrDKlNrIpEgZIj5yull0Iogh9TAEv_8WNOO6ZCw2FKrojmY1JxZxnKPAJt_faJDPrIIen9GUyenIy8OiuzzCB29BgdnsLAKAh7MLBiksf2e8mK0MDJggPM2KSzGwfa-MKCxSxiUdCHmeIzarKwASX6X4HbsMsV9u6vl32PwJbd5CyRluts8bjRPtzskzK_A-qxFmOoIQ-XGyK7sg1A8jHTEH6eCL3E4OSZGDFCGcRy10ShuvZTmAq_H14fTyen0UAKMcYVeeHGMb7Hg1YkpU1WrxLy9qiNggCXSRmaJlpgchBlKdFMfNu6WLJbYeAgtN78VGaT_WhXbkGQOtgI1jCINUeOfilKU_k3_nuc0-3gMypa-yPCeG_eMFNABNx6Zmp8zp_Ipn5hafo7bZCA5t6RScK8QbrB13OX44V2h0xUEd2Bd6SZ9_QndqJsqO2iQgeYaGqB2qNZbwlyo_Mzi9Kx0kYVj9xpTMon8dg" class="dir-link" target="_blank">
+                                    <div class="dir-content">
+                                        <span class="kw-text">best VPN deals</span>
+                                    </div>
+                                    <div class="dir-icon">
+                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
+                                    </div>
+                                </a>
+                            </li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <a href="https://intivesearch.com/privacy?dmn=gh-proxy.net&testId=23" target="_blank">Privacy Policy</a>
+        <a href="https://intivesearch.com/terms?dmn=gh-proxy.net&testId=23" target="_blank">Terms of Service</a>
+    </footer>
+
+    <script>
+        window.__cherami = {
+            sessionId: "281c5664-0d29-4959-a3e8-7d63ae69ebff",
+            source: "",
+            tkn: "19vnMT3S",
+            reportUrl: window.location.origin + '/cherami/report'
+        };
+    
+        // Report an event. `payload.wa` is sent to the legacy report, `payload.dmFeed`
+        // to the new dm-feed report; include only the destinations this event needs.
+        function report(action, payload) {
+            payload = payload || {};
+            const data = { action: action, _ts: String(Date.now()) };
+            const source = window.__cherami.source;
+            const sessionId = window.__cherami.sessionId;
+            const tkn = window.__cherami.tkn;
+    
+            // Carry the partner token so the server resolves the correct campaign
+            // instead of falling back to the default token.
+            if (tkn) data.tkn = tkn;
+    
+            if (payload.wa) {
+                const wa = Object.assign({}, payload.wa);
+                if (source) wa.cid = source;
+                if (sessionId) wa.sid = sessionId;
+                data.wa = JSON.stringify(wa);
             }
-          }
+            if (payload.dmFeed) {
+                const dmFeed = Object.assign({}, payload.dmFeed);
+                if (source) dmFeed.source = source;
+                if (sessionId) dmFeed.session_id = sessionId;
+                data.dmFeed = JSON.stringify(dmFeed);
+            }
+    
+            const reportUrl = new URL(window.__cherami.reportUrl);
+            reportUrl.search = new URLSearchParams(data).toString();
+    
+            const img = new Image();
+            img.src = reportUrl.toString();
         }
-      }
-    }
-  };
-  window.cmp_gpp_ping = function() {
-    return {
-      gppVersion: "1.0",
-      cmpStatus: "stub",
-      cmpDisplayStatus: "hidden",
-      supportedAPIs: ["tcfca", "usnat", "usca", "usva", "usco", "usut", "usct"],
-      cmpId: 31
-    }
-  };
-  window.cmp_gppstub = function() {
-    var a = arguments;
-    __gpp.q = __gpp.q || [];
-    if (!a.length) {
-      return __gpp.q
-    }
-    var g = a[0];
-    var f = a.length > 1 ? a[1] : null;
-    var e = a.length > 2 ? a[2] : null;
-    if (g === "ping") {
-      return window.cmp_gpp_ping()
-    } else {
-      if (g === "addEventListener") {
-        __gpp.e = __gpp.e || [];
-        if (!("lastId" in __gpp)) {
-          __gpp.lastId = 0
+    
+        function getCanvasFingerprint() {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return null;
+    
+                canvas.width = 200;
+                canvas.height = 50;
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(125, 1, 62, 20);
+                ctx.fillStyle = '#069';
+                ctx.fillText('Cherami fingerprint', 2, 15);
+                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+                ctx.fillText('Cherami fingerprint', 4, 17);
+    
+                return canvas.toDataURL().substring(0, 100);
+            } catch (e) {
+                return null;
+            }
         }
-        __gpp.lastId++;
-        var c = __gpp.lastId;
-        __gpp.e.push({
-          id: c,
-          callback: f
+    
+        function getWebGLFingerprint() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (!gl) return null;
+    
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debugInfo) {
+                    return {
+                        vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || '',
+                        renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '',
+                    };
+                }
+                return null;
+            } catch (e) {
+                return null;
+            }
+        }
+    
+        function reportClientAttestation() {
+            try {
+                const c = window.__cherami || {};
+                if (!c || !c.sessionId) {
+                    return;
+                }
+    
+                const canvasFp = getCanvasFingerprint();
+                const webglFp = getWebGLFingerprint();
+    
+                const attestation = JSON.stringify({
+                    jsExecuted: true,
+                    screenW: window.screen.width,
+                    screenH: window.screen.height,
+                    dpr: window.devicePixelRatio || 1,
+                    maxTouchPoints: navigator.maxTouchPoints || 0,
+                    webdriver: navigator.webdriver === true,
+                    tzOffset: new Date().getTimezoneOffset(),
+                    cookieEnabled: navigator.cookieEnabled,
+                    languagesCount: navigator.languages ? navigator.languages.length : 0,
+                    platform: navigator.platform || '',
+                    canvasFp: canvasFp,
+                    webglVendor: webglFp ? webglFp.vendor : null,
+                    webglRenderer: webglFp ? webglFp.renderer : null,
+                    hardwareConcurrency: navigator.hardwareConcurrency || 0,
+                    deviceMemory: navigator.deviceMemory || 0,
+                });
+    
+                const payload = {
+                    action: 'clientCheck',
+                    wa: { extraString1: attestation, sid: c.sessionId || null },
+                    dmFeed: { extra_string1: attestation, source: c.source || null, session_id: c.sessionId || null },
+                };
+    
+                if (navigator.sendBeacon) {
+                    const blob = new Blob([JSON.stringify({ action: payload.action, payload })], {
+                        type: 'application/json',
+                    });
+                    navigator.sendBeacon(c.reportUrl, blob);
+                    return;
+                }
+    
+                fetch(c.reportUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: payload.action, payload }),
+                    keepalive: true,
+                    credentials: 'include',
+                }).catch(function() {
+                    // Silent fail - don't break page
+                });
+            } catch (err) {
+                // Silent fail - don't break page
+            }
+        }
+    
+        window.addEventListener('load', function() {
+            reportClientAttestation();
         });
-        return {
-          eventName: "listenerRegistered",
-          listenerId: c,
-          data: true,
-          pingData: window.cmp_gpp_ping()
+    
+        // ─── Funnel click tracking ────────────────────────────────────────────
+        var pageOpenedAt = Date.now();
+    
+        function msSincePageOpen() {
+            return Date.now() - pageOpenedAt;
         }
-      } else {
-        if (g === "removeEventListener") {
-          var h = false;
-          __gpp.e = __gpp.e || [];
-          for (var d = 0; d < __gpp.e.length; d++) {
-            if (__gpp.e[d].id == e) {
-              __gpp.e[d].splice(d, 1);
-              h = true;
-              break
-            }
-          }
-          return {
-            eventName: "listenerRemoved",
-            listenerId: e,
-            data: h,
-            pingData: window.cmp_gpp_ping()
-          }
-        } else {
-          if (g === "getGPPData") {
-            return {
-              sectionId: 3,
-              gppVersion: 1,
-              sectionList: [],
-              applicableSections: [0],
-              gppString: "",
-              pingData: window.cmp_gpp_ping()
-            }
-          } else {
-            if (g === "hasSection" || g === "getSection" || g === "getField") {
-              return null
-            } else {
-              __gpp.q.push([].slice.apply(a))
-            }
-          }
+    
+        // Which part of the result the user clicked (stored as click_zone).
+        function keywordClickZone(clicked) {
+            if (clicked.closest('.arrow') || clicked.closest('.kw-arrow')) return 'arrow';
+            if (clicked.closest('.anchortext') || clicked.closest('.kw-text')) return 'text';
+            return 'row';
         }
-      }
-    }
-  };
-  window.cmp_msghandler = function(d) {
-    var a = typeof d.data === "string";
-    try {
-      var c = a ? JSON.parse(d.data) : d.data
-    } catch (f) {
-      var c = null
-    }
-    if (typeof(c) === "object" && c !== null && "__cmpCall" in c) {
-      var b = c.__cmpCall;
-      window.__cmp(b.command, b.parameter, function(h, g) {
-        var e = {
-          __cmpReturn: {
-            returnValue: h,
-            success: g,
-            callId: b.callId
-          }
-        };
-        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
-      })
-    }
-    if (typeof(c) === "object" && c !== null && "__uspapiCall" in c) {
-      var b = c.__uspapiCall;
-      window.__uspapi(b.command, b.version, function(h, g) {
-        var e = {
-          __uspapiReturn: {
-            returnValue: h,
-            success: g,
-            callId: b.callId
-          }
-        };
-        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
-      })
-    }
-    if (typeof(c) === "object" && c !== null && "__tcfapiCall" in c) {
-      var b = c.__tcfapiCall;
-      window.__tcfapi(b.command, b.version, function(h, g) {
-        var e = {
-          __tcfapiReturn: {
-            returnValue: h,
-            success: g,
-            callId: b.callId
-          }
-        };
-        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
-      }, b.parameter)
-    }
-    if (typeof(c) === "object" && c !== null && "__gppCall" in c) {
-      var b = c.__gppCall;
-      window.__gpp(b.command, function(h, g) {
-        var e = {
-          __gppReturn: {
-            returnValue: h,
-            success: g,
-            callId: b.callId
-          }
-        };
-        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
-      }, "parameter" in b ? b.parameter : null, "version" in b ? b.version : 1)
-    }
-  };
-  window.cmp_setStub = function(a) {
-    if (!(a in window) || (typeof(window[a]) !== "function" && typeof(window[a]) !== "object" && (typeof(window[a]) === "undefined" || window[a] !== null))) {
-      window[a] = window.cmp_stub;
-      window[a].msgHandler = window.cmp_msghandler;
-      window.addEventListener("message", window.cmp_msghandler, false)
-    }
-  };
-  window.cmp_setGppStub = function(a) {
-    if (!(a in window) || (typeof(window[a]) !== "function" && typeof(window[a]) !== "object" && (typeof(window[a]) === "undefined" || window[a] !== null))) {
-      window[a] = window.cmp_gppstub;
-      window[a].msgHandler = window.cmp_msghandler;
-      window.addEventListener("message", window.cmp_msghandler, false)
-    }
-  };
-  window.cmp_addFrame("__cmpLocator");
-  if (!("cmp_disableusp" in window) || !window.cmp_disableusp) {
-    window.cmp_addFrame("__uspapiLocator")
-  }
-  if (!("cmp_disabletcf" in window) || !window.cmp_disabletcf) {
-    window.cmp_addFrame("__tcfapiLocator")
-  }
-  if (!("cmp_disablegpp" in window) || !window.cmp_disablegpp) {
-    window.cmp_addFrame("__gppLocator")
-  }
-  window.cmp_setStub("__cmp");
-  if (!("cmp_disabletcf" in window) || !window.cmp_disabletcf) {
-    window.cmp_setStub("__tcfapi")
-  }
-  if (!("cmp_disableusp" in window) || !window.cmp_disableusp) {
-    window.cmp_setStub("__uspapi")
-  }
-  if (!("cmp_disablegpp" in window) || !window.cmp_disablegpp) {
-    window.cmp_setGppStub("__gpp")
-  };
-</script></head>
-<body ><img src="https://l.cdn-fileserver.com/bping.php?hvsid=00001789102908749028997457924358&requrl=https%3A%2F%2Fgh-proxy.net&vgd_asn=8075&mspa=0&wshp=0&r=1789102908751&cid=8CU7G8B38&sc=IL&lper=100&vgd_tsce=L1349&vgd_setup=c21&vgd_wlstp=0&lf=6&cc=US&wsip=170764546&vgd_cage=62&vgd_cdv=O3435&vgd_oresf=one&prid=8PR11258V&ugd=4&ssld=%7B%22QQNN%22%3A%22Pb%22%2C%22QQN75%22%3A%22Nw8N1ym%22%2C%22QQ8E%22%3A%22%22%2C%22QQQN%22%3A%22VT%22%2C%22QQl8E%22%3A%22%22%7D&vgd_rpth=%2Fola&gdpr=0&vgd_l2type=dmola&vgd_oreqf=one&crid=342704488&vi=1789102908195563106&vgd_len=555&vgd_end=1" width="0px" height="0px" style="display: none !important" id="_ol_lg_1789102908195563106" /><div id="_ol_one_1789102908195563106" > </div><script type="text/javascript">!function(){"use strict";var d,i={"id":"_ol_one_1789102908195563106","l2u":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%28%28No=%7B%22%28%28GG%22%3A%22pl%22%2C%22%28%28GRB%22%3A%22GJYG5wj%22%2C%22%28%28Yz%22%3A%22%22%2C%22%28%28%28G%22%3A%22DW%22%2C%22%28%281Yz%22%3A%22%22%7D\u0026%28FoIDo=\u0026%28G=DW\u0026%28Y1y=33.LKX2H\u0026%2AFYo=Qb+cEl+7y%28R+C+L+WygyN\u00265F9NuYo=g_\u00265GR=ExDIL5qPdOPd%2F1xLwyLKPqwtdwee%2Fw1dyw5\u00265oR3=\u00265oR_=\u00265og=\u00265ojU5YO=\u00265zat=\u00268o=\u00268uI9=\u00269%28=\u0026BFOSGGSyKz=\u0026Bo%28zI=\u0026BzNz=\u0026F5y=\u0026FYo=\u0026FYog_=\u0026FoIDo=\u0026Fy=4\u0026GG=pl\u0026GIYo=PL_k4LL22\u0026GJOUP=3Em2sPfkm\u0026GJOU_=j%28gLSYORG\u0026GRzYo=\u0026GYo=2apks2xP2\u0026Gog=mPLP.\u0026IydtIN=JRRz%28%3A%2F%2FwJCzIjKBMOyR\u0026JRRz%28=3\u0026N_RBzy=oUjN5\u0026ORg=\u0026OUyII=3\u0026R%28Gy=W3PLH\u0026U%28z5=4\u0026Y%28Yo=4\u0026YORGN=2v%29%2Abk.%29%21%3Am2W%21qk%7CCy2%29%3A9HnMYtMtYVMtT~%7CCq2%29%3AtJ9M9tTMt~VMH\u0026gY=3k2H34_H423H..XP34X\u0026htmlsrc=1\u0026jN59=jOy\u0026jYo=2X595y5PCoFGyCLF33CH_PPCk4H_.LG4o.oG\u0026kkdd=uu%7Ch%7C3nu%2AH9A\u0026oUI9=3\u0026oyGUUU=\u0026t%28zyO9=4\u0026tpid=\u0026two=L\u0026u%28Jz=4\u0026uN%28Rz=4\u0026wozI=4\u0026wozIGO%28R=\u0026yGIYo=\u0026zYo=2EmhpbfcP","l2h":"acl=\u0026aclp=\u0026cl=\u0026clp=\u0026hvsid=00001789102908749028997457924358\u0026l2type=dmola\u0026lp=%7B%22ppvi%22%3A%222153664850875818518%22%2C%22wlstp%22%3A%220%22%7D\u0026matchstring=\u0026pvl=%7B%22nmerr%22%3A%221%22%7D\u0026pvlp=\u0026sbdrId=\u0026verid=","vgh":"vgd_sc=IL\u0026vgd_cmp_inj_fl=true","so":{"l2host":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?--PO=%7B%22--55%22%3A%22_4%22%2C%22--5KY%22%3A%225b851ym%22%2C%22--8S%22%3A%22%22%2C%22---5%22%3A%22VT%22%2C%22--l8S%22%3A%22%22%7D\u0026-5=VT\u0026-8li=%2A%2A3HEuW%21\u0026-GOFVO=\u002615K=dRVFH1IADkAD%2FlRHyiHEAIyxDyzz%2FylDiy1\u00261GLPB8O=en\u00261OK%2A=\u00261OKn=\u00261Oe=\u00261Omq18k=\u00261Swx=\u002655=_4\u002658O=Ww_h.WRAW\u00265F8O=AHnh9HHWW\u00265KS8O=\u00265Oe=NAHA3\u00265bkqA=%2AdNW.A%28hN\u00265bkqn=m-eH08kK5\u00268-8O=9\u00268kK5P=W2ovch3o6%3ANWT6Ih%7CgiWo%3AL%217J8xJx8sJxZt%7CgIWo%3AxbLJLxZJxtsJ%21\u0026B-bS=9\u0026BP-KS=9\u0026FiDxFP=bKKS-%3A%2F%2FybgSFmEYJkiK\u0026G1i=\u0026G8O=\u0026G8Oen=\u0026GOFVO=\u0026Gi=9\u0026K-5i=T%2AAH%21\u0026L-=\u0026Oi5qqq=\u0026OqFL=%2A\u0026PnKYSi=OqmP1\u0026S8O=WdNM_c%28aA\u0026UBFL=\u0026UO=\u0026YGk0550iES=\u0026YO-SF=\u0026YSPS=\u0026bKKS-=%2A\u0026e8=%2AhW%21%2A9n%219W%2A%2133uA%2A9u\u0026htmlsrc=1\u0026i5F8O=\u0026kKe=\u0026kkdd=%21%7CH%7C%2AnA9\u0026kqiFF=%2A\u0026m8O=Wu1L1i1AgOG5igHG%2A%2Ag%21nAAgh9%21n3H59O3O5\u0026mP1L=mki\u0026q-S1=9\u0026tpid=\u0026vG8O=fc+ad4+Qi-K+g+H+TieiP\u0026x-SikL=9\u0026xyO=H\u0026yOSF=9\u0026yOSF5k-K=","be":"0","nmerr":"1"},"w":"100%","h":"100%","scr":"yes","ek":"cut2FAC698y RjrwgLUqsSo71/J53V~4lPWe-0_nfBXaKTbizdvkZ|DpGMNIYHxO=QhEm","es":11,"m":{"alc":[{"ht":"https://l.cdn-fileserver.com","pt":"log","tp":"CM"},{"ht":"https://gh-proxy.net","pt":"sk-lgprxfwd.php","tp":"DM"}],"vi":"1789102908195563106","cid":"8CU7G8B38","crid":"342704488","rl":"https://gh-proxy.net","mprpslog":"7Yig7QFIYd0jgTwTVjGN0Tvhc4TmQNAjG-LHFEqF0BNu2qDh_4EMOAqrXS7R_LGfIHyiTvX3VQnZZYAI0BNAKLRstNJrGbYvnfKOxcLkjh7XLNd-DsRKfhpSYBEFYPGBRlTd5QI6A7qZa_gB86KPFC4pTMLqvUgU_KmwZdBps0IN0UcjanMnkv-xjmxmkFg59Xyt-E7FTrQ%3D"}};(d=document.createElement("div")).className=["adclass","googleAdSense","MediumRectangleAdPanel","adv_left","browse-banner_ad","sponsored"].join(" "),d.id="abp_px",d.style.cssText="opacity: 0; visibility: hidden; width: 0; height: 0; position: absolute; top: -9999px; left: -9999px;",document.body.appendChild(d),window.setTimeout(function(){var e,t="none"===(e="display",(t=d).style[e]||(t.currentStyle?t.currentStyle[e]:document.defaultView&&document.defaultView.getComputedStyle?(e=(e=e.replace(/([A-Z])/g,"-$1")).toLowerCase(),(t=document.defaultView.getComputedStyle(t,""))&&t.getPropertyValue(e)):null));if(d.parentNode.removeChild(d),t)for(var n=i.m&&i.m.alc?i.m.alc:{},o=0;o<n.length;o++)!function(e,t){var n=new Image,o=i.m&&i.m.rl?encodeURIComponent(i.m.rl).replace(/#.*/g,""):"",d={logid:"kfk",evtid:"adpl",tp:t,cid:i.m&&i.m.cid?i.m.cid:"",crid:i.m&&i.m.crid?i.m.crid:"",vi:i.m&&i.m.vi?i.m.vi:"",requrl:o,adt1:t},t=Object.keys(d).filter(function(e){return"requrl"!==e}).map(function(e){return encodeURIComponent(e)+"="+encodeURIComponent(d[e])}).join("&");n.src=e+"?"+t+"&requrl="+o}(n[o].ht+"/"+n[o].pt,n[o].tp)},0)}();!function(){window.olaSyncCount=window.olaSyncCount||0,window.__bdata="";var e,t,n,o,c,r,i,d,a,s,u,l,m={"id":"_ol_one_1789102908195563106","l2u":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%28%28No=%7B%22%28%28GG%22%3A%22pl%22%2C%22%28%28GRB%22%3A%22GJYG5wj%22%2C%22%28%28Yz%22%3A%22%22%2C%22%28%28%28G%22%3A%22DW%22%2C%22%28%281Yz%22%3A%22%22%7D\u0026%28FoIDo=\u0026%28G=DW\u0026%28Y1y=33.LKX2H\u0026%2AFYo=Qb+cEl+7y%28R+C+L+WygyN\u00265F9NuYo=g_\u00265GR=ExDIL5qPdOPd%2F1xLwyLKPqwtdwee%2Fw1dyw5\u00265oR3=\u00265oR_=\u00265og=\u00265ojU5YO=\u00265zat=\u00268o=\u00268uI9=\u00269%28=\u0026BFOSGGSyKz=\u0026Bo%28zI=\u0026BzNz=\u0026F5y=\u0026FYo=\u0026FYog_=\u0026FoIDo=\u0026Fy=4\u0026GG=pl\u0026GIYo=PL_k4LL22\u0026GJOUP=3Em2sPfkm\u0026GJOU_=j%28gLSYORG\u0026GRzYo=\u0026GYo=2apks2xP2\u0026Gog=mPLP.\u0026IydtIN=JRRz%28%3A%2F%2FwJCzIjKBMOyR\u0026JRRz%28=3\u0026N_RBzy=oUjN5\u0026ORg=\u0026OUyII=3\u0026R%28Gy=W3PLH\u0026U%28z5=4\u0026Y%28Yo=4\u0026YORGN=2v%29%2Abk.%29%21%3Am2W%21qk%7CCy2%29%3A9HnMYtMtYVMtT~%7CCq2%29%3AtJ9M9tTMt~VMH\u0026gY=3k2H34_H423H..XP34X\u0026htmlsrc=1\u0026jN59=jOy\u0026jYo=2X595y5PCoFGyCLF33CH_PPCk4H_.LG4o.oG\u0026kkdd=uu%7Ch%7C3nu%2AH9A\u0026oUI9=3\u0026oyGUUU=\u0026t%28zyO9=4\u0026tpid=\u0026two=L\u0026u%28Jz=4\u0026uN%28Rz=4\u0026wozI=4\u0026wozIGO%28R=\u0026yGIYo=\u0026zYo=2EmhpbfcP","l2h":"acl=\u0026aclp=\u0026cl=\u0026clp=\u0026hvsid=00001789102908749028997457924358\u0026l2type=dmola\u0026lp=%7B%22ppvi%22%3A%222153664850875818518%22%2C%22wlstp%22%3A%220%22%7D\u0026matchstring=\u0026pvl=%7B%22nmerr%22%3A%221%22%7D\u0026pvlp=\u0026sbdrId=\u0026verid=","vgh":"vgd_sc=IL\u0026vgd_cmp_inj_fl=true","so":{"l2host":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?--PO=%7B%22--55%22%3A%22_4%22%2C%22--5KY%22%3A%225b851ym%22%2C%22--8S%22%3A%22%22%2C%22---5%22%3A%22VT%22%2C%22--l8S%22%3A%22%22%7D\u0026-5=VT\u0026-8li=%2A%2A3HEuW%21\u0026-GOFVO=\u002615K=dRVFH1IADkAD%2FlRHyiHEAIyxDyzz%2FylDiy1\u00261GLPB8O=en\u00261OK%2A=\u00261OKn=\u00261Oe=\u00261Omq18k=\u00261Swx=\u002655=_4\u002658O=Ww_h.WRAW\u00265F8O=AHnh9HHWW\u00265KS8O=\u00265Oe=NAHA3\u00265bkqA=%2AdNW.A%28hN\u00265bkqn=m-eH08kK5\u00268-8O=9\u00268kK5P=W2ovch3o6%3ANWT6Ih%7CgiWo%3AL%217J8xJx8sJxZt%7CgIWo%3AxbLJLxZJxtsJ%21\u0026B-bS=9\u0026BP-KS=9\u0026FiDxFP=bKKS-%3A%2F%2FybgSFmEYJkiK\u0026G1i=\u0026G8O=\u0026G8Oen=\u0026GOFVO=\u0026Gi=9\u0026K-5i=T%2AAH%21\u0026L-=\u0026Oi5qqq=\u0026OqFL=%2A\u0026PnKYSi=OqmP1\u0026S8O=WdNM_c%28aA\u0026UBFL=\u0026UO=\u0026YGk0550iES=\u0026YO-SF=\u0026YSPS=\u0026bKKS-=%2A\u0026e8=%2AhW%21%2A9n%219W%2A%2133uA%2A9u\u0026htmlsrc=1\u0026i5F8O=\u0026kKe=\u0026kkdd=%21%7CH%7C%2AnA9\u0026kqiFF=%2A\u0026m8O=Wu1L1i1AgOG5igHG%2A%2Ag%21nAAgh9%21n3H59O3O5\u0026mP1L=mki\u0026q-S1=9\u0026tpid=\u0026vG8O=fc+ad4+Qi-K+g+H+TieiP\u0026x-SikL=9\u0026xyO=H\u0026yOSF=9\u0026yOSF5k-K=","be":"0","nmerr":"1"},"w":"100%","h":"100%","scr":"yes","ek":"cut2FAC698y RjrwgLUqsSo71/J53V~4lPWe-0_nfBXaKTbizdvkZ|DpGMNIYHxO=QhEm","es":11,"m":{"alc":[{"ht":"https://l.cdn-fileserver.com","pt":"log","tp":"CM"},{"ht":"https://gh-proxy.net","pt":"sk-lgprxfwd.php","tp":"DM"}],"vi":"1789102908195563106","cid":"8CU7G8B38","crid":"342704488","rl":"https://gh-proxy.net","mprpslog":"7Yig7QFIYd0jgTwTVjGN0Tvhc4TmQNAjG-LHFEqF0BNu2qDh_4EMOAqrXS7R_LGfIHyiTvX3VQnZZYAI0BNAKLRstNJrGbYvnfKOxcLkjh7XLNd-DsRKfhpSYBEFYPGBRlTd5QI6A7qZa_gB86KPFC4pTMLqvUgU_KmwZdBps0IN0UcjanMnkv-xjmxmkFg59Xyt-E7FTrQ%3D"}};function p(){var e,t=m.cks;f(t)&&(document.body?((e=document.createElement("iframe")).id="_mN_cksync_"+window.olaSyncCount,e.width=0,e.height=0,e.style.display="none",e.style.visibility="hidden",e.setAttribute("frameborder","0"),document.body.appendChild(e),e=e,t=t,t="<!DOCTYPE html><html><head>"+["<scr",'ipt type="text/javascript">'].join("")+'var syncURL = "'+t+'" ;  function createTag() { window.location.replace(syncURL); }'+["</scr","ipt>"].join("")+'</head><body onload="createTag()"></body></html>',(e=(e=e.contentWindow||e.contentDocument).document?e.document:e).open(),e.write(t),e.close(),window.olaSyncCount++):setTimeout(p,100))}function w(e){for(var t=m.es,n=m.ek,o=(e=""+e,""),c=0;c<e.length;c++){var r=e.charAt(c),i=n.indexOf(r);o+=0<=i?n.charAt((i+t)%n.length):r}return o}function h(e){return e&&"object"==typeof e}function y(e){return"function"==typeof e}function f(e){switch(typeof e){case"string":return void 0!==e&&""!==e&&null!==e;case"object":return null!==e;case"number":case"boolean":return 1;default:return}}h(m)&&(e=Date.now(),t={prel2:e},n=m.l2u,o=m.l2h,c=m.vgh,r=m.so,i=m.m,d=m.w,a=m.h,s=m.scr,u=m.id,y(window.csRsz2)?r.resdnv2=window.csRsz2():r.resdnv2=i.cr,n=n+"&eobd="+encodeURIComponent(w(decodeURIComponent(window.__bdata)))+"&eoac="+encodeURIComponent(w(i.acid)),f(i.chnm)&&(n=n+"&eoch="+encodeURIComponent(w(i.chnm))),h(i.ssm)&&h(i.clkd)&&(i.clkd.bdata=decodeURIComponent(window.__bdata),r.ssmcr=i.ssm,r.clkTrkData=i.clkd),n=function(e,t,n){e=e.split("?");return e[0]+"?"+t+"="+encodeURIComponent(n)+"&"+e[1]}(n,"ule",n.length),n+="&ure=1",r.csip=i.csip,y(window.userFrequencyTracker)&&(0<(l=userFrequencyTracker().getLocalStorageCount())&&(c+="&vgd_lsct="+l),0<(l=userFrequencyTracker().getSessionStorageCount()))&&(c+="&vgd_ssct="+l),l=c+"&"+o+"&acid="+i.acid+"&mprpslog="+i.mprpslog+"&tchkpts="+encodeURIComponent(JSON.stringify(t))+"&stime="+e+"&l3d="+encodeURIComponent(encodeURIComponent(JSON.stringify(r))),i.prvDet&&(l+="&prvDet="+encodeURIComponent(JSON.stringify(i.prvDet))),function(){var t=!1;try{"object"==typeof window.top&&"object"==typeof window&&(t=window.top!=window)}catch(e){t=!0}return t}()&&(l+="&infr=1"),function(e){try{if(e&&e.top&&e.top.document)return 1}catch(e){}return}(window)||(l+="&twna=1"),""===s&&(s="no"),(c=document.createElement("iframe")).width=d,c.height=a,c.setAttribute("src",n+"#"+l),c.setAttribute("scrolling",s),c.setAttribute("frameborder","0"),c.setAttribute("marginheight","0"),c.setAttribute("marginwidth","0"),c.onload=function(){p()},document.getElementById(u).appendChild(c))}();</script><div >
-	<a style="display: none;height:25px;line-height:25px;color: rgb(136, 136, 136);text-align: center;line-height:25px;width: 100%;position: fixed;bottom: 0px;left: 0px;z-index: 9999;background-color: #10162c;padding: 0px 0;text-decoration: none;font-family: Arial, sans-serif;font-size: clamp(11px, 2.5vw, 15px);" id="dnslink" href="#" onclick="__cmp('showScreen'); return false">Do Not Sell or Share My Personal Information</a>
-	 </div><script>
-  function checkDNS() {
-    __cmp('getCMPData', true, function(x) {
-        var possibleKeys = ['CCPA','USVCDPA','USCPA','USUCPA','USCAPDP','USTDPSA','USOCDPA','USMTCDPA','USFDBR','USDPDPA','USICDPA','USNEDPA','USNHPA','USNJDPA','USTIPA','USMCDPA']; //add possible regulations where to show the DNS-link
-        if ('regulationKey' in x && possibleKeys.indexOf(x.regulationKey) != -1) {
-          document.getElementById('dnslink').style.display = 'block'; /* show the link*/
-          document.querySelectorAll('[id^="_ol_one_"]').forEach(el => {
-  			el.style.height = "calc(100vh - 25px)";
-          });
-        } else {
-          document.getElementById('dnslink').style.display = 'none'; /* don't show the link*/
-		  document.querySelectorAll('[id^="_ol_one_"]').forEach(el => {
-  			el.style.height = "100vh";
-          });
+    
+        function adClickZone(clicked) {
+            if (clicked.closest('.arrow_wrap')) return 'cta';
+            if (clicked.closest('.title')) return 'title';
+            if (clicked.closest('.desc')) return 'description';
+            if (clicked.closest('.url')) return 'domain';
+            return 'ad';
         }
-      });
-    }
-    setInterval(checkDNS, 1000);
-</script></body>
+    
+        // Assembled here rather than rendered into the page, so a scrape comes away with nothing to replay.
+        function armKeywordLink(link, clicked) {
+            link.href = '/kw-click?t=' + encodeURIComponent(link.dataset.ct)
+                + '&ttc=' + msSincePageOpen()
+                + '&zone=' + encodeURIComponent(keywordClickZone(clicked));
+        }
+    
+        function trackAdClick(link, clicked) {
+            var ads = document.querySelectorAll('a.content-wrap');
+            report('adClick', {
+                dmFeed: {
+                    page: 'ads',
+                    step: 'click',
+                    ads_variant: '',
+                    test_id: '23',
+                    root_domain: 'gh-proxy.net',
+                    position: Array.prototype.indexOf.call(ads, link) + 1,
+                    click_zone: adClickZone(clicked),
+                    time_to_click_ms: msSincePageOpen()
+                }
+            });
+        }
+    
+        // pointerdown/keydown fire before the new tab's URL is locked in; click is too late.
+        function onKeywordIntent(event) {
+            try {
+                var clicked = event.target;
+                if (!clicked || !clicked.closest) return;
+                if (event.type === 'keydown' && event.key !== 'Enter') return;
+    
+                var keywordLink = clicked.closest('a[data-ct]');
+                if (keywordLink) armKeywordLink(keywordLink, clicked);
+            } catch (err) {}
+        }
+    
+        document.addEventListener('pointerdown', onKeywordIntent, true);
+        document.addEventListener('keydown', onKeywordIntent, true);
+    
+        document.addEventListener('click', function (event) {
+            try {
+                var clicked = event.target;
+                if (!clicked || !clicked.closest) return;
+    
+                var adLink = clicked.closest('a.content-wrap');
+                if (adLink) {
+                    trackAdClick(adLink, clicked);
+                }
+            } catch (err) {}
+        }, true);
+    </script>    <script>
+        (function () {
+            var props = {"trafficSrc":"intango_park_dm_1638_1","ysid":"0HTOPHLLA7QAB"} || {};
+            
+    
+            var startedAt = Date.now();
+            var called = false;
+            var reported = null;
+    
+            function send(step) {
+                try {
+                    if (typeof report !== 'function') return;
+                    report('yahooBeacon', {
+                        dmFeed: {
+                            page: 'keywords',
+                            step: step,
+                            test_id: '23',
+                            root_domain: 'gh-proxy.net',
+                            
+                            kw_variant: 'keywords-test-9',
+                            extra_integer1: Date.now() - startedAt
+                        }
+                    });
+                } catch (e) {}
+            }
+    
+            function settle(step) {
+                if (reported) return;
+                reported = step;
+                send(step);
+            }
+    
+            function argument() {
+                props.ykws = Array.prototype.map.call(document.querySelectorAll('.list_1 a'), function (a) {
+                    return a.textContent ? a.textContent.trim() : '';
+                }).filter(Boolean).join(',');
+                return props;
+            }
+    
+            // Never gated on `reported`: the deadline gives up on measuring, not on billing.
+            function run() {
+                if (called) return true;
+                if (typeof window.initDMKeywords !== 'function') return false;
+    
+                called = true;
+                try {
+                    window.initDMKeywords(argument());
+                    reported ? send('late-ok') : settle('ok');
+                } catch (e) {
+                    settle('threw');
+                }
+                return true;
+            }
+    
+            function poll() {
+                if (run() || reported) return;
+                if (Date.now() - startedAt < 15000) setTimeout(poll, 50);
+                else settle('timeout');
+            }
+    
+            var script = document.createElement('script');
+            // Dated, not per-request: a unique query string made every impression a cache miss.
+            script.src = 'https://s.appreports.net/serenity.js?v=' + new Date().toISOString().slice(0, 10);
+            script.async = true;
+            script.onload = run;
+            script.onerror = function () { settle('load-failed'); };
+    
+            document.head.appendChild(script);
+            poll();
+        })();
+    </script>
+    <script>
+        window.addEventListener('load', function () {
+            try {
+                var anchors = document.querySelectorAll('.list_1 a');
+                var kws = Array.prototype.map.call(anchors, function (a) {
+                    var kwTextNode = a.querySelector('.kw-text');
+                    return (kwTextNode && kwTextNode.textContent ? kwTextNode.textContent.trim() : '');
+                }).filter(function (s) { return s.length > 0; }).join(',');
+                report('keywordsPageLoad', {
+                    wa: {
+                        extraString1: kws,
+                        extraString2: 'gh-proxy.net',
+                        extraString3: '23'
+                    },
+                    dmFeed: {
+                        page: 'keywords',
+                        step: 'load',
+                        kw_variant: 'keywords-test-9',
+                        test_id: '23',
+                        root_domain: 'gh-proxy.net',
+                        item_count: kws ? kws.split(',').length : 0
+                    }
+                });
+            } catch (e) {
+                report('keywordsPageLoad', {
+                    wa: {
+                        extraString1: '',
+                        extraString2: 'gh-proxy.net',
+                        extraString3: '23'
+                    },
+                    dmFeed: {
+                        page: 'keywords',
+                        step: 'load',
+                        kw_variant: 'keywords-test-9',
+                        test_id: '23',
+                        root_domain: 'gh-proxy.net',
+                        item_count: 0
+                    }
+                });
+            }
+        });
+    </script>
+</body>
 </html>
