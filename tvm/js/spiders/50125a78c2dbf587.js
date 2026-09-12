@@ -1,572 +1,505 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="robots" content="noindex, nofollow">
-    <title>Ghproxy</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
+<html>
+<head ><style>*{margin: 0; padding: 0;}</style><meta  name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" content=""><script>
+  if (!"gdprAppliesGlobally" in window) {
+    window.gdprAppliesGlobally = true
+  }
+  if (!("cmp_id" in window) || window.cmp_id < 1) {
+    window.cmp_id = 0
+  }
+  if (!("cmp_cdid" in window)) {
+    window.cmp_cdid = "40679ccc92462"
+  }
+  if (!("cmp_params" in window)) {
+    window.cmp_params = ""
+  }
+  if (!("cmp_host" in window)) {
+    window.cmp_host = "d.delivery.consentmanager.net"
+  }
+  if (!("cmp_cdn" in window)) {
+    window.cmp_cdn = "cdn.consentmanager.net"
+  }
+  if (!("cmp_proto" in window)) {
+    window.cmp_proto = "https:"
+  }
+  if (!("cmp_codesrc" in window)) {
+    window.cmp_codesrc = "1"
+  }
+  window.cmp_getsupportedLangs = function() {
+    var b = ["DE", "EN", "FR", "IT", "NO", "DA", "FI", "ES", "PT", "RO", "BG", "ET", "EL", "GA", "HR", "LV", "LT", "MT", "NL", "PL", "SV", "SK", "SL", "CS", "HU", "RU", "SR", "ZH", "TR", "UK", "AR", "BS"];
+    if ("cmp_customlanguages" in window) {
+      for (var a = 0; a < window.cmp_customlanguages.length; a++) {
+        b.push(window.cmp_customlanguages[a].l.toUpperCase())
+      }
+    }
+    return b
+  };
+  window.cmp_getRTLLangs = function() {
+    var a = ["AR"];
+    if ("cmp_customlanguages" in window) {
+      for (var b = 0; b < window.cmp_customlanguages.length; b++) {
+        if ("r" in window.cmp_customlanguages[b] && window.cmp_customlanguages[b].r) {
+          a.push(window.cmp_customlanguages[b].l)
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0e1114;
-            color: #e8eaed;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+      }
+    }
+    return a
+  };
+  window.cmp_getlang = function(j) {
+    if (typeof(j) != "boolean") {
+      j = true
+    }
+    if (j && typeof(cmp_getlang.usedlang) == "string" && cmp_getlang.usedlang !== "") {
+      return cmp_getlang.usedlang
+    }
+    var g = window.cmp_getsupportedLangs();
+    var c = [];
+    var f = location.hash;
+    var e = location.search;
+    var a = "languages" in navigator ? navigator.languages : [];
+    if (f.indexOf("cmplang=") != -1) {
+      c.push(f.substr(f.indexOf("cmplang=") + 8, 2).toUpperCase())
+    } else {
+      if (e.indexOf("cmplang=") != -1) {
+        c.push(e.substr(e.indexOf("cmplang=") + 8, 2).toUpperCase())
+      } else {
+        if ("cmp_setlang" in window && window.cmp_setlang != "") {
+          c.push(window.cmp_setlang.toUpperCase())
+        } else {
+          if (a.length > 0) {
+            for (var d = 0; d < a.length; d++) {
+              c.push(a[d])
+            }
+          }
         }
-        .main-content {
-            flex: 1;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
+      }
+    }
+    if ("language" in navigator) {
+      c.push(navigator.language)
+    }
+    if ("userLanguage" in navigator) {
+      c.push(navigator.userLanguage)
+    }
+    var h = "";
+    for (var d = 0; d < c.length; d++) {
+      var b = c[d].toUpperCase();
+      if (g.indexOf(b) != -1) {
+        h = b;
+        break
+      }
+      if (b.indexOf("-") != -1) {
+        b = b.substr(0, 2)
+      }
+      if (g.indexOf(b) != -1) {
+        h = b;
+        break
+      }
+    }
+    if (h == "" && typeof(cmp_getlang.defaultlang) == "string" && cmp_getlang.defaultlang !== "") {
+      return cmp_getlang.defaultlang
+    } else {
+      if (h == "") {
+        h = "EN"
+      }
+    }
+    h = h.toUpperCase();
+    return h
+  };
+  (function() {
+    var u = document;
+    var v = u.getElementsByTagName;
+    var h = window;
+    var o = "";
+    var b = "_en";
+    if ("cmp_getlang" in h) {
+      o = h.cmp_getlang().toLowerCase();
+      if ("cmp_customlanguages" in h) {
+        for (var q = 0; q < h.cmp_customlanguages.length; q++) {
+          if (h.cmp_customlanguages[q].l.toUpperCase() == o.toUpperCase()) {
+            o = "en";
+            break
+          }
         }
-        .header {
-            padding: 32px 20px 24px;
-        }
-        .header-overline {
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: #8ab4f8;
-            margin-bottom: 8px;
-            display: block;
-            opacity: 0.8;
-        }
-        .header-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 0;
-            line-height: 1.25;
-            color: #ffffff;
-            letter-spacing: -0.5px;
-        }
-        .list-container {
-            padding: 0 20px;
-            flex: 1;
-        }
-        .list_1 {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            counter-reset: result-counter;
-        }
-        .list-item {
-            margin: 0;
-            padding: 0;
-        }
-        .dir-link {
-            display: flex;
-            align-items: center;
-            background-color: #181b21;
-            border: 1px solid #2a2e37;
-            border-radius: 12px;
-            padding: 18px 16px;
-            text-decoration: none;
-            color: inherit;
-            min-height: 76px;
-            transition: transform 0.15s ease, background-color 0.15s ease;
-        }
-        .dir-link:active {
-            background-color: #20242c;
-            transform: scale(0.98);
-        }
-        .dir-link::before {
-            counter-increment: result-counter;
-            content: "0" counter(result-counter);
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 14px;
-            font-weight: 500;
-            color: #5f6368;
-            align-self: flex-start;
-            margin-top: 4px;
-            margin-right: 16px;
-        }
-        .dir-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .kw-text {
-            font-size: 19px;
-            font-weight: 500;
-            line-height: 1.35;
-            color: #e8eaed;
-        }
-        .dir-icon {
-            color: #5f6368;
-            margin-left: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .dir-icon svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-        }
-        .list-item:first-child .dir-link {
-            background-color: #141f2e;
-            border-color: rgba(138, 180, 248, 0.4);
-            padding: 24px 16px;
-            min-height: 94px;
-        }
-        .list-item:first-child .dir-link::before {
-            color: #8ab4f8;
-            opacity: 0.9;
-        }
-        .list-item:first-child .dir-content::before {
-            content: "Top result";
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #8ab4f8;
-            background: rgba(138, 180, 248, 0.15);
-            align-self: flex-start;
-            padding: 4px 8px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
-        .list-item:first-child .kw-text {
-            font-size: 22px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-        .list-item:first-child .dir-icon {
-            color: #8ab4f8;
-        }
-        .no-results {
-            padding: 24px;
-            text-align: center;
-            color: #9aa0a6;
-            font-size: 16px;
-        }
-        .footer {
-            padding: 48px 20px 32px;
-            text-align: center;
-            font-size: 13px;
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-        }
-        .footer a {
-            color: #5f6368;
-            text-decoration: none;
-        }
-        .footer a:active {
-            color: #9aa0a6;
-        }
-    </style>
-</head>
-<body>
+      }
+      b = "_" + o
+    }
 
-    <main class="main-content">
-        <header class="header">
-            <span class="header-overline">Directory Index</span>
-            <h1 class="header-title">Ghproxy</h1>
-        </header>
-
-        <div class="list-container">
-            <ul class="list_1">
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="MKrt8ds8DXrIK-ZlnVhXY9XvmDllUXZ2Ofp6aVGZIDfzp6EulQoxSw7gANGbU2KozGV7xNfn3G-q_YkHyayh-_Bm16OqyrawE_ngs-0jw5gNkit-XSKTFfb3PA_TpBQg1t_EOoZyK-ttcVMn_qABdfygmtIo324s4ZXTOAxneLnrgt1zQXDtdwz1Ug_RuN1F-P7P5krN82Bd2e3dOToWU3GKqeXp_KiqlmlVEOpw_YZzm3PSYsrEHGejk7Skzst7FMPU7poOSCnwHdoE0IqupVuTaAgVQbIhkuu17ltoBLhGXupbDsp1S64C-PJz4XNzfhefB0FaZ4tzdADj7OhM1HNmd2if0WVA6Ma0GtH2WDRn2fQ_uqG3frpTUAD4vB-Y99J3-LykJlfWcFsiOnfFglNsJ1EsI69-FHrQqxEhDtVC6VDPEFW_8t9BG5CJrzKbuMcsjeZ2d_8g0tydTXL3gqXI9O9Io7pfIDSlVBqLl9Xn5ka_GKmb0rluXWa9QMhFKgYmw_OnKTfK0CtO_ZtKeD7BUWiEQAWHPIeG8Lu9FqiPXZ1aT67U0zU5T-XKjV7JmRdBXkJXpYFYQITDryjYqMXfO8ExyxCR-FDXG-ofQ6kjiLTHXz6dkvXvElMTV-ArYNZsWo33-kK6ZK5UfVu1m3_rybE6nGq3T1LFfPs6sLLui5ibCpj3RplbZ33TOv5Ly0P41Nz_IUFrIz2PD1IDyUq6fcltFkd4pptMMXXmZ91pe33ZguhyKnqLMheOyCEe7AC4bKVga1R24TH40C2DkqmronxmMJBUlXZ12n-meEPcYLyL5txsv6bjPLOdRBI5BNusxYqABi5opUCu2zF4RMm0fBLpwFyON0m5kABErk0z6a_nF5m4WON5Ko9rM-jkmgkqQwR_aJJqLx0oVQ_95Mt76n-r3PGEj0YO2tSRcrvr26M2hZTDwCHhm1383Ug1UvM6l2Z4WeGrt4mKHAPcS36QTnUlTwlUpGw7k5wtSmvQKPVz7N4_QBc4T4rnBFX0x_U-XSmiQCxGQc-U3P7sNuyCtslB6YXCc8zG5JNyx3YC9Yp3awfuo5-PFths5yYV9bATssMWmgZWZ2Ja6bEKz6PA1VvTGI1MN_3cT3vJKXYzqk1rUddHtIvBnBZwuAUHHEiPW522IojfIffeGSZqF1ELUMk8LMe9hpR6cu0VreLWO_O1i3jghfFrn5_99e4Cvzp91mjYrVaP8FBrH_JI0O6TMC2k6wAMSzajkGQWwqKkMUxxO5mU76TGFUqz8oPYOO39LfSYGRbOLfSnPdW7OXX_2k12CmM3bZwu_WM0wzi6K9YXNOsJVBnjOrnI8anRAYTYZBXI6qA3OgL8Z7wpF6zlABCh6LmcTiJIx3rLVMi1WPfQLxDJ2U2C78DUEu9XQ4impdrygL8_osf8hGjfp9nKv2uiL2_SGverQfP1Z8m5Jb8pFv5dVdrW9EGTEyZ4yrcABXawG8pZJQqFHwKKQwjvcQfupnfoR0vlkg6JWau_487fKiTDbvNJjCOo_yvqO4qu7K2X7u0iO22BXYZGHM5Mzh3LH0J4mfx46FaWmM3eXzUcrA9GW7wy0WS7XLr356wl4bvI7UIcznSOMdMPvPzJQuJJ0SMtQG6o8jDTfvBvWYntuHbQpqM9FF2ZM6_GEewXtvEIPyNgqO3MNc215SVj3RZ5DJ_QrFdyGjZaAR3m_WCtDDsTc81B3tj7-Aft7j2UkT8hoZNK5ykISCiaL2zTiwxO4iAQbGzRmJilm_GeZBAbCzdGAskEd5M7DTzpYu6tT9eKCt2iSRP_gfpMwHAaUC4hDL_8WDVOIByvX0wOAAoS64UGWRCjnAienjTFS7B2zpF4JbGrAcJRIo1wBll3mM6mE99E5GLXttKkHmPJ8FYYwCjIGrR_1k_ECrTLkUpMUH0nptkMwmxeSj3WI400dyZ3nV_D7nib5C0" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">real estate</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="Amgqvyy24wc6QPZY8OvPKZzr7EYatvMb_KGAk77VUxaP84NABr4f1796nXwNw4kta3oxuMi0D3ky5XSU_TFhBCp6ZMQBZ4tuGMdbv7DZiMffWdCBH3bVzFIt7Y0Z9OoKbir2nCfBLyBvs3MMbQZkkm6IudgaJb1sPnuAl1yEpyk5z6_tXp9fL_Of3CFV9aO8U8f97GjQlrnPPF1MODS-9dJT7umFP-kL2l8_s99oiLs-w0tKDAfVyCcMd9L4diKSgAxCi_HD-YQFpO9LMVQB64VX_-JVpF4RhzCx-2OpGUzJfZfPJXL6MM80rK2TcnIlwRh0Dst2duD_g14GgapGLWM4CsR2qI4UMEKhq_H9aPoi2VBbI4ctXHhw1l8RbYFx0FTxLcw-AwJKKWL4WZeuclZMOXxUDpGHNWPLORbYlgBinM17mIsOaFlLPx4fcQ9gza722XVp3groUPh6jFO5XFQfbnZWVFtyeYjdKgOnJZ8HLq95O08yccGa0PQ-TaRdhKq67zRI8vpfK9bU5QYhpMpkCrXp2-y67MfUJDew8Tr7EiGDPWzlOljXX_F-tE_-KGnhjCE4QG1HhcRCF6oPS7t9ppXnbIc5ccKWmu2NdYW43tVaWRXc3VlFAjLvBOflUlVif1848MrkF2x8DNA6oSisFP7aS0NQeZwGzOKC5HMEWBwWCEBtYzDhCSYJdYovZlDVuIi3erHhWOiDGBSzOaZnaIgmjYHot90q6irDUYHR35im2H7NwhVZPickWSzfP80GwVRFR3SnBp6vIzuOduScqzpvzcMNDu3Sm1gz_KshNIxlBufqKhai3H-S3-CXUqOUMzKQnZA1Wfb58GawGdV8LQz9LLngVr3LQy1KcERHc_G2p-9GetZNb-6zMM664vsIJYJxsX13h6JCudJ1_MKkhbNYmaf5UGlDmUGa3M0Nc6fm6K5XpA7d4VWHwBn8iGRU4m0C4GsKJnReQ31d1i7LNuPxdbfoFD1vsdNo9IPkZRaOVLoXPehbPiEucCpaMYv9rop0Ec-V6W6c-yyD1iqRb65XvW_FPwweGDIAvS_qAmoVR38mcLK4_0RHCWeCSil-OH0qfNbK6QxxzYXmTrfcwYPh69hciSj_b7P-VJ535kUfJOsjS-SZWcGXAlXqyeXxkICc8Hf2h1NYpUc3HRoj5exWdVFDcLfXwOM8mvRJ5_XecP8_zlgO5oAaSZaVx2o0gxVM1_VPjyL_TnqSwtEe0Nv5xeut8ipyqMLKwtH8oeZ4TD80nyVEyvMXViCKNhLQdE3KfcGgB0aQt5R56UaArqi8ig7B5ZQphkj9XJTavvJB96sieb1KwEB4qLHXTnMh2njTVgF-aG-rb4xNZ_arJNXFJoSNP8CqXyJR7u25n6lyRpeW7UGYLgDtok9WS2-IUW46Pd8yM6UL9MT1BRNrmJj4FAoWdaTlsQEP4561vYNWO-PVQ-qFfp90nfVgty8lkmSgUCeb1a_ODpROSZhGErHwZZO79EEX1Ya043GigTQ-jnFpZmG7Rwu9NKnx_-FGcrfhcoXyZ4PXYSyPpZ7iBo-PcXGMeW932o2idyYPsbkYypogCwFdQHmXUm-GTvXX1STYNuiUPwnKyf-m9NxdKZ2qTIPflJs-UXId3QIljjdSwcBEMD8_4xLpRahO3B6S1oZHyOJEpv686GZjj1_spzxS6S8ZXaZyYmto7ftCMZn6AO7d06tv0NvOjY15HPXkrmNvTqaIq1S4-IIFLIGjqqF_oa3qbBoI9kMs_YCWrhnIHeo28vB3wvo2_a7uORdGkG71NaxKJMT2GWfKbyJW7H_Jsv-JiJBwlXqThMMHqgsyHM3_1p2wraIT2C9KlO7R3WZ8kltZdedBlZf57Y6AM-Zxj_ORF6dyrHkokEz8N-ibwIA-scAVwY_MYUBCCz_VPv2yHNbjUZgk3-iqiPVbmbWlxnQBRIBtOntxtdj8aqe0n7aZFUFBAZ-inCMrPGk" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">apartment for rent</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="QINpWf8FSft9u19PCkveH72FS40nUTh27U--XtSUCp9CRm3J5NYnME-d2LY2KtLM61cOJOzzSeNQauwSxrqFrozaLAICR7-R1xv9jKbeN7OqmywYL29zOZauhJPs7hZct92lU4bg4FA4pHRlIixiqtR42Ot4UsUOv2ATIA4X03_06G5Mmn3pCksrOdpKFWHn98H1PQuZFKyVLFWFJGgjPoPhweiKcazFKjjDwr54l8CUGYGDP1MP8mDzR0NriYxrrCfes_xNyL7zTDMpMB05pw6iU7SL5n4JtnnT3GTzo9AXZddstDQIPc67mvr-ybQOn9bofmf6CEaNje5z66VB8mMHP3XxTLET8ceLduYs8ksJOkoT5RpW_5FjyUqgCqo0vOpsFnqOqV0-6OEiS0iWtYqZiXOexRzvw_-SFwOBjdR2iTPkWwh5SuuTU8KunHZehhUl3RKrCQrLtphp1RmNQoXvYE7CWHNYNbHahl24MpOkVPbS0KO5jgr3AOga3ekFj0-tVVaH_tTuI7trA9Mx5om5K6K1NbdtTqEn1vxz7G17IcwnWKGWHwjVtj0n_VYFYOHE235zng5zJIyHM-HuF7ybPyr2tV2wpzRZwCELRIuQni5w3tRrwagTYMwG8KQLvtAPbyBX9Hi8GBSF6mP82wiEAhXsGHawlHXJU9NT0PWKnjYYCf9kJFKJ_Izjey_wnjltP4fQ92e3PL-0rvxH7_xRv7yzaKTSBmLvlFTXmyi5pjs2u29HmIBVpkTTiWylgEiYaXWZuXt5sD04X0H80ze_0Eu2q67CrAgcBdhIvoJ9CjbLZB1LGDWSCp124TxPoc1uGXBnMsh7IVGaoPh3LIkIXMK1VEVheTwyN-nGSTHGa7P9Pw-o3qA3H5_0sWrCr3FUlLjIOpLV2-orT1zhfKGmvFM_RHjC3IohRRWPS1kuNXV5-R7_SWcGEe9chxUFNdZl0-QKUr6Z3K4u5_D7EWb6txT6pIh0i73B6yNKX4KIPtb_avL94OKeDOTamJLiHIhK4Or81Bxwhcb4jKi8KHCg7Gd9mfHk4RDaYrYhsD67en8ZxcspdedXkwOLxPLJnjJGI4ADnbwekKx0c4SrlOM3xz4e8SMRjc1Vy4e5yQnp3bJpjh33henDHQhxZJin0x-SfAc8D_MFwnS-UUi6avpVwUi5SW2oK-kCLRjCVWvNAbyM6dbD2jVfWUUoW1T4gpK3C79NknRdDZJE_b98joWVmxpVAzj5XUzvR92tYq9SkkLwNVbvcUN3GDG0TmEypcu1zE0aPM4jtSZPNTXDkM_cA0RaG3ujBoq9GcIaG-8V5Zr-nLYfOCCyBp3DsbDXflLfRf1x_kpV5nwkT2TLuJ22wWzeBmLPh_4d18WiW9arzOhxX4FIqttfB_rlei5PjB1Wo8SW4AroRG8g5sI2A7A9sEyPU3ECaQwy8DmLDqFQOOP8YcsS4YdqbM8kc5lQ0XrF3NK2Ay55LheZDewT_dJ5FDd4oCnXGxQKaLbAa28ydwEm1ByZQaM7Kt70WneQeMq6cXvbRasGdDXzFEfVq8P0_w7fdVKur1NPv5E6Fi8xCZRldmQ2GDFvGWr0eLyNXk7HcYami3ol_D2WV0A5fpU5R-_gvCH0YjfIiB4SH9x-P4smlv_n1DuSbprgiOJvJiV8ImHZuWTRbJOa_WbW9Uq5CZxpSKNfp6npyCVoQYntzWWk599if3NPobILrblVA34GmMJBBixf7P3XexwfUuhyzal3cF-0qp-Y5Rgzk_LlavEUOgfbzhZXAuLjrYU8jQ_btfbmM3OPsYZ2o7bNS-idxkaIJJrEvQkMs7OxcjoiXx28R3z7KxKl_jcBLrLjDDaSNFwxB_D1eGcQDiAjo-DlffA2AUpd4mo6CzUCAIpKztS0RaMKnZIFT4wn94OJjEfzBpnG776xx9cAlBzM" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">secure file transfer</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="dedXd55dgE4tv9X6v7N7WJ3AgSGHxLcPbGPTCMDEFWqITdAj9nq6-PoptTyQEV4Ch8NsYc9a61FgthQBdpiTT2M0KV68PkiIin8_Lu7BYTMOi2RO3kRLzf293k_UzRPzy-vV6mmMlMB-16ptpWE3T3oib2T8fw-y6HH4LsukwJzGOWIA_lyJW1jskAtpfItEBgc_6bJBzVzkC5wBTLcL-_3pPSeKNwKSUWEGhxw4KykKH32vVhTWpCaJUQnkr-wNRRnTG2nQBlcu5CACSIOj6ymcSnHf5zRWbM9fIjVAIe9m4I2I_oMUSYU8hyffpFFh_Q9m3_jSodmu17zmjbwW0g3qrgP_hTLNiV-4bjDPN_QQFAmgMKR5-IqPX75wBAeLmXNr_5ORn1vGMLZWZEKL0UIGqQZ_WpGmaJUVoRe1bFZf_z6Fa6iNoi_rzjXwBDZxoS0hb269rhdE5Bj8eiX7Q9Vz8UvkLiYpmGdrL-8ZPM6Iq_cxJBTw8-QbDDqOWOIA_fr6Ykh5tQT5g9nqlBvTE1tMvTlo-y5GwiEMEEc9w7voItgi1MOGoHdxg8QWf36kDNb5C0Ytp7_Pk9Y63Vy2rp68QS3XFleCOsZher_pe5jtqt0K_ZJsnLG_-djrP5du4HhzJKwCMH3lZ80_IJA9ZfUs1hKd5yMRdJYEEANx0kkjDpkHFf3YGsFt2KfD8dGkDnpaHKZRYOHaNUvWET8wKLUcJz5uKZ63497T04phh1blvKgMGsDePC2bp7bD2s4VMOyKGBQsySbPYbfYV6t8xR5jj1EHBjG5IR3QfQkIU6pVXQIDqBO0CHvKYIEhUJk1zif2x133HmEDApwiMYIzddm8tXPWGgg8I79zoDexa2qokI4Xf-h2MP6uMARwcH9w7J1wUnRVIdYXtz7ElIh0FwB9MGOpBxEfRcSgvmiKlUG4_nfDdD4F_P_x4gPIY2PuxGd084ElnBDSZQ7BCEXA9n1sSlrhXClki54SoD9s5cQv-Jv7xQZet92_G-VuR85rfGzOF8EaEcBBZgN46pl2dp1riRyNS_eKt94lOdgviEa71aXQrNF7Qpz3X32TVy9mdDZdB0sdzSCnipMJhjH_KJByWhjuoRJ1BahboHPRkSdbLaJWmI8cN3_8VzTpDeleDzn1W95ayC7KG-1spTisoLQx86cE_PIy2bGZgYURpVJn3HWK5BvjJFENgiq-Ak8slGxgJ_RMcr9OXOgCZLviLkxQzGorc1tiyIN0v4aywZbymnkBPgP0zuDuCMD83eD7haVK5NYPzi4kVLnU3klYl30TdHjpjGeYCP1nNkRg99Fv2fNZcX2asRTG05HSAVzMwaRONYDTjvYhDbmQVuI4vJwjmFueVU3b9WSiR7uKU-kUWfHAnJxvkFTsRCEU_THqj57Y0H9FKWvaRzFUtikplye9PT1QLQ4WT5Irf0Z51hOePoBXpS7TRx8BrqcqnmQ6nLKFGT1mqWb5xWbcxPLXUXGowpTEo5z8YzbvmuioNL73E7sxtaTK5mVYzljio-0_z8P2mFsLd5W-2V_XkSGk2t3FyXvtT3NfdbgRL0lvzXhaLFJp9-YUazRdG-Hk2KRcrbW-fzURkkSvRvZUjR8Ri-oFns9TLVrHYLgB8Bg_F9LqR_pntaZ6UU7ZHDydX03xmMYsk4O4jJ3EZ9TYoHFMVa1sITuKlvz1kBlYZgc7hCHZmX06AbUIYCsodKwXUoQQvsiY7KtUpGMjvF_6FHjove8Wv7L0CExfk9CggQK0-ssDSkg1crWRqPW66Kp3ZxLCfetM25rrEBU6YIyRMkhJ4ivmdETNxTcHYF7JIAwu-bFRQMGoL8PdY8ljVBUXuybL6Jph_xN_Wsqc5ioaPR40UzfjTzYKKeo6lTTl2QwBxHEUxp5a1P-9jt4fEh-13defYbwv21TLRUf9yywAMNOfoMn1pQ" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">encrypted data sharing</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="_6nYqfMT8XkNXQmIXWQ_dUqR1qnGe_x_fdgMhc740JWbprsnEcFo-x9iUgtCvqDSusOS8_vpQHLI3yAOYnYVBKZ1J5otM7pAyoX_EIPuEElKbEHB8u37qTfMPIc4vFv1kneG1Bf2aLT7Y0fE4peOKAxiqoob2OB9QGIIdTKiPi4en1cdat4IOwy206HEPxKZVE1olqGoNNffVOdhgHNb7aLDDO0-If8H1qON3zooTsGFXmQMvKXxQxwbf1YXgUuvd8BHcVapTe9pd4ahwE7F4CcZhNM7MYSx2itptvPhmQWo62w70d_svVsmYlm2eZ_kvz7WOETAYE3aT-p0Gs1sVL8D_evguCXIfd4cKlbTTeExoG7NDWQszFslkwbj9w7HzRJ8HIbRTQQxqxWnhMnWEI6Yy9_2OiplROixA0do93nbf9Gt6-3or5lrjfzO9488xEKqYLWBL_0S4Z2B06vBl0o-HBFlbJ44zm36hkEqBB-r6Uy1yNV-yWX5oGYsKEC6IqL8oEMsEXSrwSFGT24eGAkEeuV6N5cyx7IZpLm49eSkEwdzrKXvApcnCBgpjJ-n9llCXeHqdRqmtQs8Srs6nkpxume4b2oJQJHna7SI6tLbcisPViFpeuw1NpNzewDwoB6M9F6PO3FkeOglYpdxiPDJQ8bN6YYZ29s_nfscIQH6chrNdbKcsVC6Z3PiHoTgy4dOWfLVfQz8nNRp8xvAWqD8-LAeXe_K-vad1_P3voOvlxgAQZdPUeKRG0u1BfhcLkLiLb0NhBlzqdNpnJmjXdTwhFp4njaJLFf1R94ggzFWm6-nDCuCI4_mMTZeDbqFZF1Ox7NsWuH6gTBHn614b2f4xZUkhgmXLRw7yNEjk8GaCR_C3clpdn_MYd33u50BwW8cf-mQLG6c_tpDGJjhvCYvhgDD1WzZD4GH52kgeYI-ojpBoLVMgp9uzxugV0Ee8xliMoDm6sGihZQhbJsfZgB6vAkQOrYaK6BuQzITRQlbhWdYKioGkg-fZU6p198DsunpuF-HhX7kPttlk36mYDiJS01rSwCd6bWb5-Iz8SFqKs-FVKhbgWcgFubVEwnAyVil7k0MW4tuGoYxaCznnBKPVTOPaE05uodgu-jlhCBU8c02tho4cYEVuK5y5ZJXLbt9pEAC3OPgqu5UwVkflpwzd8zWCIgu7PxliZh37_5uLG0ZXddi5iUY5VvD56PWxSyo45UnW4XNdIDowhouJD_2JU3pHj6S34KkwaZ5AA5qma0pmpBWyx-n4C2I33Y8fCVA8xXeTmGQO8_B0RJOCxB1yuDzqEd0daCPDMAtYSFIZrrMqlXzjQX8y5gHWQsCfbYulakDT0eM4Ino5ytlCfbsLYfuumBF8lYvIXNq5QKFozK15UvgPTslOVs3Ae3lBE5lx9sEUoARGew2nP62jrHN1gC8pb1SnsEg1gVCTUTMgvbuSy2Cehh4D0PjZWv_LI9-7RrbtLhDUQkOFdSqvSkYWp9kmaC3TVTiRiJDWwaZgjnBhbHvssf8mCbCnStUYxI1MLL80Now-mgdRl3XLqMn8r-vHVLmroPzf2GoiCgS3VkRMpGebXVrBfBUl-s74M53VhhvNNYuiiR75wQD1Ety3dcl3PoT06JyZLGWbB7sN6nfbEiiCYcPhYV8SF03kPKGqz7p93331t7STq8pFKtzMez4CHdASGdsIhBdQ14guHQwTbHP_yMFioJsJmVxRHnz9Exlw9KPD0ZZucdqcAgD1NEhMRtioxVaV-hH-oc42c32IOR82yDYGNTJ8syJNTM4qEF-TbaNFRi07IYsDX_MVt2KxBk40Y0dAqTmtzm2NzoL-SA9qM2RY6FhZlbND35gafcRt7-A-U0QgWsz3P2Wu6hEulSuTojTHBG_3ZTKAOBDvdeI0eznAQUTECZaHPTh2tHvkaOrjZuM2DSYQKFwbYws" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">cloud storage solutions</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-            </ul>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <a href="https://intivesearch.com/privacy?dmn=gh-proxy.net&testId=24" target="_blank">Privacy Policy</a>
-        <a href="https://intivesearch.com/terms?dmn=gh-proxy.net&testId=24" target="_blank">Terms of Service</a>
-    </footer>
-
-    <script>
-        window.__cherami = {
-            sessionId: "1f78ede5-b712-472e-a58a-2b6a006847e4",
-            source: "",
-            tkn: "19vnMT3S",
-            reportUrl: window.location.origin + '/cherami/report'
+    function x(i, e) {
+      var w = "";
+      i += "=";
+      var s = i.length;
+      var d = location;
+      if (d.hash.indexOf(i) != -1) {
+        w = d.hash.substr(d.hash.indexOf(i) + s, 9999)
+      } else {
+        if (d.search.indexOf(i) != -1) {
+          w = d.search.substr(d.search.indexOf(i) + s, 9999)
+        } else {
+          return e
+        }
+      }
+      if (w.indexOf("&") != -1) {
+        w = w.substr(0, w.indexOf("&"))
+      }
+      return w
+    }
+    var k = ("cmp_proto" in h) ? h.cmp_proto : "https:";
+    if (k != "http:" && k != "https:") {
+      k = "https:"
+    }
+    var g = ("cmp_ref" in h) ? h.cmp_ref : location.href;
+    var j = u.createElement("script");
+    j.setAttribute("data-cmp-ab", "1");
+    var c = x("cmpdesign", "cmp_design" in h ? h.cmp_design : "");
+    var f = x("cmpregulationkey", "cmp_regulationkey" in h ? h.cmp_regulationkey : "");
+    var r = x("cmpgppkey", "cmp_gppkey" in h ? h.cmp_gppkey : "");
+    var n = x("cmpatt", "cmp_att" in h ? h.cmp_att : "");
+    j.src = k + "//" + h.cmp_host + "/delivery/cmp.php?" + ("cmp_id" in h && h.cmp_id > 0 ? "id=" + h.cmp_id : "") + ("cmp_cdid" in h ? "&cdid=" + h.cmp_cdid : "") + "&h=" + encodeURIComponent(g) + (c != "" ? "&cmpdesign=" + encodeURIComponent(c) : "") + (f != "" ? "&cmpregulationkey=" + encodeURIComponent(f) : "") + (r != "" ? "&cmpgppkey=" + encodeURIComponent(r) : "") + (n != "" ? "&cmpatt=" + encodeURIComponent(n) : "") + ("cmp_params" in h ? "&" + h.cmp_params : "") + (u.cookie.length > 0 ? "&__cmpfcc=1" : "") + "&l=" + o.toLowerCase() + "&o=" + (new Date()).getTime();
+    j.type = "text/javascript";
+    j.async = true;
+    if (u.currentScript && u.currentScript.parentElement) {
+      u.currentScript.parentElement.appendChild(j)
+    } else {
+      if (u.body) {
+        u.body.appendChild(j)
+      } else {
+        var t = v("body");
+        if (t.length == 0) {
+          t = v("div")
+        }
+        if (t.length == 0) {
+          t = v("span")
+        }
+        if (t.length == 0) {
+          t = v("ins")
+        }
+        if (t.length == 0) {
+          t = v("script")
+        }
+        if (t.length == 0) {
+          t = v("head")
+        }
+        if (t.length > 0) {
+          t[0].appendChild(j)
+        }
+      }
+    }
+    var m = "js";
+    var p = x("cmpdebugunminimized", "cmpdebugunminimized" in h ? h.cmpdebugunminimized : 0) > 0 ? "" : ".min";
+    var a = x("cmpdebugcoverage", "cmp_debugcoverage" in h ? h.cmp_debugcoverage : "");
+    if (a == "1") {
+      m = "instrumented";
+      p = ""
+    }
+    var j = u.createElement("script");
+    j.src = k + "//" + h.cmp_cdn + "/delivery/" + m + "/cmp" + b + p + ".js";
+    j.type = "text/javascript";
+    j.setAttribute("data-cmp-ab", "1");
+    j.async = true;
+    if (u.currentScript && u.currentScript.parentElement) {
+      u.currentScript.parentElement.appendChild(j)
+    } else {
+      if (u.body) {
+        u.body.appendChild(j)
+      } else {
+        var t = v("body");
+        if (t.length == 0) {
+          t = v("div")
+        }
+        if (t.length == 0) {
+          t = v("span")
+        }
+        if (t.length == 0) {
+          t = v("ins")
+        }
+        if (t.length == 0) {
+          t = v("script")
+        }
+        if (t.length == 0) {
+          t = v("head")
+        }
+        if (t.length > 0) {
+          t[0].appendChild(j)
+        }
+      }
+    }
+  })();
+  window.cmp_addFrame = function(b) {
+    if (!window.frames[b]) {
+      if (document.body) {
+        var a = document.createElement("iframe");
+        a.style.cssText = "display:none";
+        if ("cmp_cdn" in window && "cmp_ultrablocking" in window && window.cmp_ultrablocking > 0) {
+          a.src = "//" + window.cmp_cdn + "/delivery/empty.html"
+        }
+        a.name = b;
+        a.setAttribute("title", "Intentionally hidden, please ignore");
+        a.setAttribute("role", "none");
+        a.setAttribute("tabindex", "-1");
+        document.body.appendChild(a)
+      } else {
+        window.setTimeout(window.cmp_addFrame, 10, b)
+      }
+    }
+  };
+  window.cmp_rc = function(h) {
+    var b = document.cookie;
+    var f = "";
+    var d = 0;
+    while (b != "" && d < 100) {
+      d++;
+      while (b.substr(0, 1) == " ") {
+        b = b.substr(1, b.length)
+      }
+      var g = b.substring(0, b.indexOf("="));
+      if (b.indexOf(";") != -1) {
+        var c = b.substring(b.indexOf("=") + 1, b.indexOf(";"))
+      } else {
+        var c = b.substr(b.indexOf("=") + 1, b.length)
+      }
+      if (h == g) {
+        f = c
+      }
+      var e = b.indexOf(";") + 1;
+      if (e == 0) {
+        e = b.length
+      }
+      b = b.substring(e, b.length)
+    }
+    return (f)
+  };
+  window.cmp_stub = function() {
+    var a = arguments;
+    __cmp.a = __cmp.a || [];
+    if (!a.length) {
+      return __cmp.a
+    } else {
+      if (a[0] === "ping") {
+        if (a[1] === 2) {
+          a[2]({
+            gdprApplies: gdprAppliesGlobally,
+            cmpLoaded: false,
+            cmpStatus: "stub",
+            displayStatus: "hidden",
+            apiVersion: "2.2",
+            cmpId: 31
+          }, true)
+        } else {
+          a[2](false, true)
+        }
+      } else {
+        if (a[0] === "getUSPData") {
+          a[2]({
+            version: 1,
+            uspString: window.cmp_rc("")
+          }, true)
+        } else {
+          if (a[0] === "getTCData") {
+            __cmp.a.push([].slice.apply(a))
+          } else {
+            if (a[0] === "addEventListener" || a[0] === "removeEventListener") {
+              __cmp.a.push([].slice.apply(a))
+            } else {
+              if (a.length == 4 && a[3] === false) {
+                a[2]({}, false)
+              } else {
+                __cmp.a.push([].slice.apply(a))
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+  window.cmp_gpp_ping = function() {
+    return {
+      gppVersion: "1.0",
+      cmpStatus: "stub",
+      cmpDisplayStatus: "hidden",
+      supportedAPIs: ["tcfca", "usnat", "usca", "usva", "usco", "usut", "usct"],
+      cmpId: 31
+    }
+  };
+  window.cmp_gppstub = function() {
+    var a = arguments;
+    __gpp.q = __gpp.q || [];
+    if (!a.length) {
+      return __gpp.q
+    }
+    var g = a[0];
+    var f = a.length > 1 ? a[1] : null;
+    var e = a.length > 2 ? a[2] : null;
+    if (g === "ping") {
+      return window.cmp_gpp_ping()
+    } else {
+      if (g === "addEventListener") {
+        __gpp.e = __gpp.e || [];
+        if (!("lastId" in __gpp)) {
+          __gpp.lastId = 0
+        }
+        __gpp.lastId++;
+        var c = __gpp.lastId;
+        __gpp.e.push({
+          id: c,
+          callback: f
+        });
+        return {
+          eventName: "listenerRegistered",
+          listenerId: c,
+          data: true,
+          pingData: window.cmp_gpp_ping()
+        }
+      } else {
+        if (g === "removeEventListener") {
+          var h = false;
+          __gpp.e = __gpp.e || [];
+          for (var d = 0; d < __gpp.e.length; d++) {
+            if (__gpp.e[d].id == e) {
+              __gpp.e[d].splice(d, 1);
+              h = true;
+              break
+            }
+          }
+          return {
+            eventName: "listenerRemoved",
+            listenerId: e,
+            data: h,
+            pingData: window.cmp_gpp_ping()
+          }
+        } else {
+          if (g === "getGPPData") {
+            return {
+              sectionId: 3,
+              gppVersion: 1,
+              sectionList: [],
+              applicableSections: [0],
+              gppString: "",
+              pingData: window.cmp_gpp_ping()
+            }
+          } else {
+            if (g === "hasSection" || g === "getSection" || g === "getField") {
+              return null
+            } else {
+              __gpp.q.push([].slice.apply(a))
+            }
+          }
+        }
+      }
+    }
+  };
+  window.cmp_msghandler = function(d) {
+    var a = typeof d.data === "string";
+    try {
+      var c = a ? JSON.parse(d.data) : d.data
+    } catch (f) {
+      var c = null
+    }
+    if (typeof(c) === "object" && c !== null && "__cmpCall" in c) {
+      var b = c.__cmpCall;
+      window.__cmp(b.command, b.parameter, function(h, g) {
+        var e = {
+          __cmpReturn: {
+            returnValue: h,
+            success: g,
+            callId: b.callId
+          }
         };
-    
-        // Report an event. `payload.wa` is sent to the legacy report, `payload.dmFeed`
-        // to the new dm-feed report; include only the destinations this event needs.
-        function report(action, payload) {
-            payload = payload || {};
-            const data = { action: action, _ts: String(Date.now()) };
-            const source = window.__cherami.source;
-            const sessionId = window.__cherami.sessionId;
-            const tkn = window.__cherami.tkn;
-    
-            // Carry the partner token so the server resolves the correct campaign
-            // instead of falling back to the default token.
-            if (tkn) data.tkn = tkn;
-    
-            if (payload.wa) {
-                const wa = Object.assign({}, payload.wa);
-                if (source) wa.cid = source;
-                if (sessionId) wa.sid = sessionId;
-                data.wa = JSON.stringify(wa);
-            }
-            if (payload.dmFeed) {
-                const dmFeed = Object.assign({}, payload.dmFeed);
-                if (source) dmFeed.source = source;
-                if (sessionId) dmFeed.session_id = sessionId;
-                data.dmFeed = JSON.stringify(dmFeed);
-            }
-    
-            const reportUrl = new URL(window.__cherami.reportUrl);
-            reportUrl.search = new URLSearchParams(data).toString();
-    
-            const img = new Image();
-            img.src = reportUrl.toString();
+        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
+      })
+    }
+    if (typeof(c) === "object" && c !== null && "__uspapiCall" in c) {
+      var b = c.__uspapiCall;
+      window.__uspapi(b.command, b.version, function(h, g) {
+        var e = {
+          __uspapiReturn: {
+            returnValue: h,
+            success: g,
+            callId: b.callId
+          }
+        };
+        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
+      })
+    }
+    if (typeof(c) === "object" && c !== null && "__tcfapiCall" in c) {
+      var b = c.__tcfapiCall;
+      window.__tcfapi(b.command, b.version, function(h, g) {
+        var e = {
+          __tcfapiReturn: {
+            returnValue: h,
+            success: g,
+            callId: b.callId
+          }
+        };
+        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
+      }, b.parameter)
+    }
+    if (typeof(c) === "object" && c !== null && "__gppCall" in c) {
+      var b = c.__gppCall;
+      window.__gpp(b.command, function(h, g) {
+        var e = {
+          __gppReturn: {
+            returnValue: h,
+            success: g,
+            callId: b.callId
+          }
+        };
+        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
+      }, "parameter" in b ? b.parameter : null, "version" in b ? b.version : 1)
+    }
+  };
+  window.cmp_setStub = function(a) {
+    if (!(a in window) || (typeof(window[a]) !== "function" && typeof(window[a]) !== "object" && (typeof(window[a]) === "undefined" || window[a] !== null))) {
+      window[a] = window.cmp_stub;
+      window[a].msgHandler = window.cmp_msghandler;
+      window.addEventListener("message", window.cmp_msghandler, false)
+    }
+  };
+  window.cmp_setGppStub = function(a) {
+    if (!(a in window) || (typeof(window[a]) !== "function" && typeof(window[a]) !== "object" && (typeof(window[a]) === "undefined" || window[a] !== null))) {
+      window[a] = window.cmp_gppstub;
+      window[a].msgHandler = window.cmp_msghandler;
+      window.addEventListener("message", window.cmp_msghandler, false)
+    }
+  };
+  window.cmp_addFrame("__cmpLocator");
+  if (!("cmp_disableusp" in window) || !window.cmp_disableusp) {
+    window.cmp_addFrame("__uspapiLocator")
+  }
+  if (!("cmp_disabletcf" in window) || !window.cmp_disabletcf) {
+    window.cmp_addFrame("__tcfapiLocator")
+  }
+  if (!("cmp_disablegpp" in window) || !window.cmp_disablegpp) {
+    window.cmp_addFrame("__gppLocator")
+  }
+  window.cmp_setStub("__cmp");
+  if (!("cmp_disabletcf" in window) || !window.cmp_disabletcf) {
+    window.cmp_setStub("__tcfapi")
+  }
+  if (!("cmp_disableusp" in window) || !window.cmp_disableusp) {
+    window.cmp_setStub("__uspapi")
+  }
+  if (!("cmp_disablegpp" in window) || !window.cmp_disablegpp) {
+    window.cmp_setGppStub("__gpp")
+  };
+</script></head>
+<body ><img src="https://l.cdn-fileserver.com/bping.php?gdpr=0&mspa=0&vgd_l2type=dmola&vgd_oresf=one&hvsid=00001789211290958010892446725188&ugd=4&lf=6&cc=US&wsip=170763042&vgd_cage=64&vgd_wlstp=0&cid=8CU7G8B38&vi=1789211290943527257&requrl=https%3A%2F%2Fgh-proxy.net&wshp=0&vgd_cdv=O3435&crid=342704488&sc=IL&vgd_rpth=%2Fola&r=1789211290959&vgd_tsce=L1350&vgd_oreqf=one&vgd_setup=c21&prid=8PR11258V&lper=100&ssld=%7B%22QQNN%22%3A%22Pb%22%2C%22QQN75%22%3A%22Nw8N1ym%22%2C%22QQ8E%22%3A%22%22%2C%22QQQN%22%3A%22VT%22%2C%22QQl8E%22%3A%22%22%7D&vgd_asn=8075&vgd_len=555&vgd_end=1" width="0px" height="0px" style="display: none !important" id="_ol_lg_1789211290943527257" /><div id="_ol_one_1789211290943527257" > </div><script type="text/javascript">!function(){"use strict";var d,i={"id":"_ol_one_1789211290943527257","l2u":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%28g9QaG=w-u%28Z\u0026-kaZ=j\u0026.k.w=j\u0026.y9_%28=v8TtLi1Tq%3ABvAqri%7CUGvT%3AmPe3.f3f.n3fE0%7CUrvT%3AnE3mcn3fEm3P\u00262GIf2%28=x99ak%3A%2F%2FFxUa2uJQ3yG9\u00269k_G=A~M1j\u0026Fwa2=j\u0026Fwa2_yk9=\u0026G_2.w=\u0026QWy%29__%29GJa=\u0026Qa%28a=\u0026Qwka2=\u0026V%28k9a=j\u0026Vkxa=j\u0026W.w=\u0026W.wbg=\u0026WG=j\u0026WZG=\u0026Ww2dw=\u0026YV2m=\u0026Yw=\u0026ZWm%28V.w=bg\u0026Z_9=Chd2%2AZrMIyMI%2F5h%2AFG%2AJMrFfIFcc%2FF5IGFZ\u0026Zapf=\u0026Zw9g=\u0026Zw9~=\u0026Zwb=\u0026Zwu-Z.y=\u0026_.w=vpKiSvhMv\u0026_2.w=M%2Agij%2A%2Avv\u0026_9a.w=\u0026__=Ks\u0026_wb=BM%2AM1\u0026_xy-M=~CBvSMOiB\u0026_xy-g=ukb%2A%29.y9_\u0026a.w=vCBlKLOHM\u0026b.=~ivPg~~gPjP%2AM1gig1i\u0026fFw=%2A\u0026fkaGym=j\u0026htmlsrc=1\u0026k.5G=~~1%2AJDvP\u0026kWw2dw=\u0026k_=dA\u0026kk%28w=%7B%22kk__%22%3A%22Ks%22%2C%22kk_9Q%22%3A%22_x._ZFu%22%2C%22kk.a%22%3A%22%22%2C%22kkk_%22%3A%22dA%22%2C%22kk5.a%22%3A%22%22%7D\u0026kkdd=uA%7Ch%7C3%2AnH9Au\u0026mk=\u0026tW.w=oL+HCs+zGk9+U+g+AGbG%28\u0026tpid=\u0026u%28Zm=uyG\u0026u.w=1P%2A%2AG1WZUD1jZU%2AwiPUZg%2AZUvwGgDDMZi~Dw\u0026w-2m=~\u0026wG_---=\u0026x99ak=~\u0026y-G22=~\u0026y9b=","l2h":"acl=\u0026aclp=\u0026cl=\u0026clp=\u0026hvsid=00001789211290958010892446725188\u0026l2type=dmola\u0026lp=%7B%22ppvi%22%3A%222153675689096699221%22%2C%22wlstp%22%3A%220%22%7D\u0026matchstring=\u0026pvl=%7B%22nmerr%22%3A%221%22%7D\u0026pvlp=\u0026sbdrId=\u0026verid=","vgh":"vgd_sc=IL\u0026vgd_cmp_inj_fl=true","so":{"l2host":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%2ALNB=F\u0026%2ALNBxHay=\u00267aNP=F\u0026ADayN=F\u0026AaXN=F\u0026BUheBD=XyyNa%3A%2F%2F%2AX1NBWip%29HUy\u0026D4ypNU=L7WDP\u0026Ga=\u0026H7UBB=d\u0026Hyk=\u0026L7BG=d\u0026LUx777=\u0026N_L=0fT6~uclo\u0026PLW7P_H=\u0026PLk=\u0026PLy4=\u0026PLyd=\u0026PN3e=\u0026PtGDA_L=k4\u0026Pxy=fzMBVPQohHoh%2FqzV%2AUVioQ%2Aeh%2Amm%2F%2AqhU%2AP\u0026UxB_L=\u0026WDPG=WHU\u0026W_L=EsVVUEtP1vEFP1VL%21s1P4VP10LU4vvoP%21dvL\u0026XyyNa=d\u0026ZABG=\u0026ZL=\u0026_HyxD=0S8nu%21E8j%3AT0.jQ%21%7C1U08%3AGs9%29_e%29e_R%29e%28g%7C1Q08%3AR%28%29GmR%29e%28G%29s\u0026_a_L=F\u0026a_qU=ddEViv0s\u0026aaDL=%7B%22aaxx%22%3A%22~I%22%2C%22aaxyp%22%3A%22xX_xP%2AW%22%2C%22aa_N%22%3A%22%22%2C%22aaax%22%3A%22M.%22%2C%22aaq_N%22%3A%22%22%7D\u0026atLBML=\u0026ax=M.\u0026e%2AL=V\u0026eaNUHG=F\u0026htmlsrc=1\u0026k_=d%210s4dd4sFsVoE4%214E%21\u0026kkdd=H%2A%7CH%7C9%2AnA\u0026nt_L=bu+lfI+JUay+1+4+.UkUD\u0026pLaNB=\u0026pNDN=\u0026ptHrxxrUiN=\u0026tLBML=\u0026tPU=\u0026tU=F\u0026t_L=\u0026t_Lk4=\u0026tpid=\u0026xB_L=oV4%21FVV00\u0026xLk=ToVoE\u0026xXH74=WakVr_Hyx\u0026xXH7o=dfT0Koc%21T\u0026x_L=03~%21K0zo0\u0026xx=~I\u0026xyN_L=\u0026yaxU=.doEF","be":"0","nmerr":"1"},"w":"100%","h":"100%","scr":"yes","ek":"cut2FAC698y RjrwgLUqsSo71/J53V~4lPWe-0_nfBXaKTbizdvkZ|DpGMNIYHxO=QhEm","es":11,"m":{"alc":[{"ht":"https://l.cdn-fileserver.com","pt":"log","tp":"CM"},{"ht":"https://gh-proxy.net","pt":"sk-lgprxfwd.php","tp":"DM"}],"vi":"1789211290943527257","cid":"8CU7G8B38","crid":"342704488","rl":"https://gh-proxy.net","mprpslog":"MFIeT1O5QactHNJ9FWEMsjuiXj8G2XBZcR31NJ7Zhs7HTpGB6UA1lwMJvVLqGemQyfNBrY4onDRB55hVRuhFehuw83QlkZbsMOg8Dja67rA7WdOJMVtMKE--JzILapKDvOgoEJT5cOaiRVhGh1AJ5oRZD0KDurYujjE5XWwBKFIOfZh99f6SsVDXpyh1rHIKNWBiJF_MCZc%3D"}};(d=document.createElement("div")).className=["adclass","googleAdSense","MediumRectangleAdPanel","adv_left","browse-banner_ad","sponsored"].join(" "),d.id="abp_px",d.style.cssText="opacity: 0; visibility: hidden; width: 0; height: 0; position: absolute; top: -9999px; left: -9999px;",document.body.appendChild(d),window.setTimeout(function(){var e,t="none"===(e="display",(t=d).style[e]||(t.currentStyle?t.currentStyle[e]:document.defaultView&&document.defaultView.getComputedStyle?(e=(e=e.replace(/([A-Z])/g,"-$1")).toLowerCase(),(t=document.defaultView.getComputedStyle(t,""))&&t.getPropertyValue(e)):null));if(d.parentNode.removeChild(d),t)for(var n=i.m&&i.m.alc?i.m.alc:{},o=0;o<n.length;o++)!function(e,t){var n=new Image,o=i.m&&i.m.rl?encodeURIComponent(i.m.rl).replace(/#.*/g,""):"",d={logid:"kfk",evtid:"adpl",tp:t,cid:i.m&&i.m.cid?i.m.cid:"",crid:i.m&&i.m.crid?i.m.crid:"",vi:i.m&&i.m.vi?i.m.vi:"",requrl:o,adt1:t},t=Object.keys(d).filter(function(e){return"requrl"!==e}).map(function(e){return encodeURIComponent(e)+"="+encodeURIComponent(d[e])}).join("&");n.src=e+"?"+t+"&requrl="+o}(n[o].ht+"/"+n[o].pt,n[o].tp)},0)}();!function(){window.olaSyncCount=window.olaSyncCount||0,window.__bdata="";var e,t,n,o,c,r,i,d,a,s,u,l,m={"id":"_ol_one_1789211290943527257","l2u":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%28g9QaG=w-u%28Z\u0026-kaZ=j\u0026.k.w=j\u0026.y9_%28=v8TtLi1Tq%3ABvAqri%7CUGvT%3AmPe3.f3f.n3fE0%7CUrvT%3AnE3mcn3fEm3P\u00262GIf2%28=x99ak%3A%2F%2FFxUa2uJQ3yG9\u00269k_G=A~M1j\u0026Fwa2=j\u0026Fwa2_yk9=\u0026G_2.w=\u0026QWy%29__%29GJa=\u0026Qa%28a=\u0026Qwka2=\u0026V%28k9a=j\u0026Vkxa=j\u0026W.w=\u0026W.wbg=\u0026WG=j\u0026WZG=\u0026Ww2dw=\u0026YV2m=\u0026Yw=\u0026ZWm%28V.w=bg\u0026Z_9=Chd2%2AZrMIyMI%2F5h%2AFG%2AJMrFfIFcc%2FF5IGFZ\u0026Zapf=\u0026Zw9g=\u0026Zw9~=\u0026Zwb=\u0026Zwu-Z.y=\u0026_.w=vpKiSvhMv\u0026_2.w=M%2Agij%2A%2Avv\u0026_9a.w=\u0026__=Ks\u0026_wb=BM%2AM1\u0026_xy-M=~CBvSMOiB\u0026_xy-g=ukb%2A%29.y9_\u0026a.w=vCBlKLOHM\u0026b.=~ivPg~~gPjP%2AM1gig1i\u0026fFw=%2A\u0026fkaGym=j\u0026htmlsrc=1\u0026k.5G=~~1%2AJDvP\u0026kWw2dw=\u0026k_=dA\u0026kk%28w=%7B%22kk__%22%3A%22Ks%22%2C%22kk_9Q%22%3A%22_x._ZFu%22%2C%22kk.a%22%3A%22%22%2C%22kkk_%22%3A%22dA%22%2C%22kk5.a%22%3A%22%22%7D\u0026kkdd=uA%7Ch%7C3%2AnH9Au\u0026mk=\u0026tW.w=oL+HCs+zGk9+U+g+AGbG%28\u0026tpid=\u0026u%28Zm=uyG\u0026u.w=1P%2A%2AG1WZUD1jZU%2AwiPUZg%2AZUvwGgDDMZi~Dw\u0026w-2m=~\u0026wG_---=\u0026x99ak=~\u0026y-G22=~\u0026y9b=","l2h":"acl=\u0026aclp=\u0026cl=\u0026clp=\u0026hvsid=00001789211290958010892446725188\u0026l2type=dmola\u0026lp=%7B%22ppvi%22%3A%222153675689096699221%22%2C%22wlstp%22%3A%220%22%7D\u0026matchstring=\u0026pvl=%7B%22nmerr%22%3A%221%22%7D\u0026pvlp=\u0026sbdrId=\u0026verid=","vgh":"vgd_sc=IL\u0026vgd_cmp_inj_fl=true","so":{"l2host":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%2ALNB=F\u0026%2ALNBxHay=\u00267aNP=F\u0026ADayN=F\u0026AaXN=F\u0026BUheBD=XyyNa%3A%2F%2F%2AX1NBWip%29HUy\u0026D4ypNU=L7WDP\u0026Ga=\u0026H7UBB=d\u0026Hyk=\u0026L7BG=d\u0026LUx777=\u0026N_L=0fT6~uclo\u0026PLW7P_H=\u0026PLk=\u0026PLy4=\u0026PLyd=\u0026PN3e=\u0026PtGDA_L=k4\u0026Pxy=fzMBVPQohHoh%2FqzV%2AUVioQ%2Aeh%2Amm%2F%2AqhU%2AP\u0026UxB_L=\u0026WDPG=WHU\u0026W_L=EsVVUEtP1vEFP1VL%21s1P4VP10LU4vvoP%21dvL\u0026XyyNa=d\u0026ZABG=\u0026ZL=\u0026_HyxD=0S8nu%21E8j%3AT0.jQ%21%7C1U08%3AGs9%29_e%29e_R%29e%28g%7C1Q08%3AR%28%29GmR%29e%28G%29s\u0026_a_L=F\u0026a_qU=ddEViv0s\u0026aaDL=%7B%22aaxx%22%3A%22~I%22%2C%22aaxyp%22%3A%22xX_xP%2AW%22%2C%22aa_N%22%3A%22%22%2C%22aaax%22%3A%22M.%22%2C%22aaq_N%22%3A%22%22%7D\u0026atLBML=\u0026ax=M.\u0026e%2AL=V\u0026eaNUHG=F\u0026htmlsrc=1\u0026k_=d%210s4dd4sFsVoE4%214E%21\u0026kkdd=H%2A%7CH%7C9%2AnA\u0026nt_L=bu+lfI+JUay+1+4+.UkUD\u0026pLaNB=\u0026pNDN=\u0026ptHrxxrUiN=\u0026tLBML=\u0026tPU=\u0026tU=F\u0026t_L=\u0026t_Lk4=\u0026tpid=\u0026xB_L=oV4%21FVV00\u0026xLk=ToVoE\u0026xXH74=WakVr_Hyx\u0026xXH7o=dfT0Koc%21T\u0026x_L=03~%21K0zo0\u0026xx=~I\u0026xyN_L=\u0026yaxU=.doEF","be":"0","nmerr":"1"},"w":"100%","h":"100%","scr":"yes","ek":"cut2FAC698y RjrwgLUqsSo71/J53V~4lPWe-0_nfBXaKTbizdvkZ|DpGMNIYHxO=QhEm","es":11,"m":{"alc":[{"ht":"https://l.cdn-fileserver.com","pt":"log","tp":"CM"},{"ht":"https://gh-proxy.net","pt":"sk-lgprxfwd.php","tp":"DM"}],"vi":"1789211290943527257","cid":"8CU7G8B38","crid":"342704488","rl":"https://gh-proxy.net","mprpslog":"MFIeT1O5QactHNJ9FWEMsjuiXj8G2XBZcR31NJ7Zhs7HTpGB6UA1lwMJvVLqGemQyfNBrY4onDRB55hVRuhFehuw83QlkZbsMOg8Dja67rA7WdOJMVtMKE--JzILapKDvOgoEJT5cOaiRVhGh1AJ5oRZD0KDurYujjE5XWwBKFIOfZh99f6SsVDXpyh1rHIKNWBiJF_MCZc%3D"}};function p(){var e,t=m.cks;f(t)&&(document.body?((e=document.createElement("iframe")).id="_mN_cksync_"+window.olaSyncCount,e.width=0,e.height=0,e.style.display="none",e.style.visibility="hidden",e.setAttribute("frameborder","0"),document.body.appendChild(e),e=e,t=t,t="<!DOCTYPE html><html><head>"+["<scr",'ipt type="text/javascript">'].join("")+'var syncURL = "'+t+'" ;  function createTag() { window.location.replace(syncURL); }'+["</scr","ipt>"].join("")+'</head><body onload="createTag()"></body></html>',(e=(e=e.contentWindow||e.contentDocument).document?e.document:e).open(),e.write(t),e.close(),window.olaSyncCount++):setTimeout(p,100))}function w(e){for(var t=m.es,n=m.ek,o=(e=""+e,""),c=0;c<e.length;c++){var r=e.charAt(c),i=n.indexOf(r);o+=0<=i?n.charAt((i+t)%n.length):r}return o}function h(e){return e&&"object"==typeof e}function y(e){return"function"==typeof e}function f(e){switch(typeof e){case"string":return void 0!==e&&""!==e&&null!==e;case"object":return null!==e;case"number":case"boolean":return 1;default:return}}h(m)&&(e=Date.now(),t={prel2:e},n=m.l2u,o=m.l2h,c=m.vgh,r=m.so,i=m.m,d=m.w,a=m.h,s=m.scr,u=m.id,y(window.csRsz2)?r.resdnv2=window.csRsz2():r.resdnv2=i.cr,n=n+"&eobd="+encodeURIComponent(w(decodeURIComponent(window.__bdata)))+"&eoac="+encodeURIComponent(w(i.acid)),f(i.chnm)&&(n=n+"&eoch="+encodeURIComponent(w(i.chnm))),h(i.ssm)&&h(i.clkd)&&(i.clkd.bdata=decodeURIComponent(window.__bdata),r.ssmcr=i.ssm,r.clkTrkData=i.clkd),n=function(e,t,n){e=e.split("?");return e[0]+"?"+t+"="+encodeURIComponent(n)+"&"+e[1]}(n,"ule",n.length),n+="&ure=1",r.csip=i.csip,y(window.userFrequencyTracker)&&(0<(l=userFrequencyTracker().getLocalStorageCount())&&(c+="&vgd_lsct="+l),0<(l=userFrequencyTracker().getSessionStorageCount()))&&(c+="&vgd_ssct="+l),l=c+"&"+o+"&acid="+i.acid+"&mprpslog="+i.mprpslog+"&tchkpts="+encodeURIComponent(JSON.stringify(t))+"&stime="+e+"&l3d="+encodeURIComponent(encodeURIComponent(JSON.stringify(r))),i.prvDet&&(l+="&prvDet="+encodeURIComponent(JSON.stringify(i.prvDet))),function(){var t=!1;try{"object"==typeof window.top&&"object"==typeof window&&(t=window.top!=window)}catch(e){t=!0}return t}()&&(l+="&infr=1"),function(e){try{if(e&&e.top&&e.top.document)return 1}catch(e){}return}(window)||(l+="&twna=1"),""===s&&(s="no"),(c=document.createElement("iframe")).width=d,c.height=a,c.setAttribute("src",n+"#"+l),c.setAttribute("scrolling",s),c.setAttribute("frameborder","0"),c.setAttribute("marginheight","0"),c.setAttribute("marginwidth","0"),c.onload=function(){p()},document.getElementById(u).appendChild(c))}();</script><div >
+	<a style="display: none;height:25px;line-height:25px;color: rgb(136, 136, 136);text-align: center;line-height:25px;width: 100%;position: fixed;bottom: 0px;left: 0px;z-index: 9999;background-color: #10162c;padding: 0px 0;text-decoration: none;font-family: Arial, sans-serif;font-size: clamp(11px, 2.5vw, 15px);" id="dnslink" href="#" onclick="__cmp('showScreen'); return false">Do Not Sell or Share My Personal Information</a>
+	 </div><script>
+  function checkDNS() {
+    __cmp('getCMPData', true, function(x) {
+        var possibleKeys = ['CCPA','USVCDPA','USCPA','USUCPA','USCAPDP','USTDPSA','USOCDPA','USMTCDPA','USFDBR','USDPDPA','USICDPA','USNEDPA','USNHPA','USNJDPA','USTIPA','USMCDPA']; //add possible regulations where to show the DNS-link
+        if ('regulationKey' in x && possibleKeys.indexOf(x.regulationKey) != -1) {
+          document.getElementById('dnslink').style.display = 'block'; /* show the link*/
+          document.querySelectorAll('[id^="_ol_one_"]').forEach(el => {
+  			el.style.height = "calc(100vh - 25px)";
+          });
+        } else {
+          document.getElementById('dnslink').style.display = 'none'; /* don't show the link*/
+		  document.querySelectorAll('[id^="_ol_one_"]').forEach(el => {
+  			el.style.height = "100vh";
+          });
         }
-    
-        function getCanvasFingerprint() {
-            try {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                if (!ctx) return null;
-    
-                canvas.width = 200;
-                canvas.height = 50;
-                ctx.textBaseline = 'top';
-                ctx.font = '14px Arial';
-                ctx.textBaseline = 'alphabetic';
-                ctx.fillStyle = '#f60';
-                ctx.fillRect(125, 1, 62, 20);
-                ctx.fillStyle = '#069';
-                ctx.fillText('Cherami fingerprint', 2, 15);
-                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-                ctx.fillText('Cherami fingerprint', 4, 17);
-    
-                return canvas.toDataURL().substring(0, 100);
-            } catch (e) {
-                return null;
-            }
-        }
-    
-        function getWebGLFingerprint() {
-            try {
-                const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                if (!gl) return null;
-    
-                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                if (debugInfo) {
-                    return {
-                        vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || '',
-                        renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '',
-                    };
-                }
-                return null;
-            } catch (e) {
-                return null;
-            }
-        }
-    
-        function reportClientAttestation() {
-            try {
-                const c = window.__cherami || {};
-                if (!c || !c.sessionId) {
-                    return;
-                }
-    
-                const canvasFp = getCanvasFingerprint();
-                const webglFp = getWebGLFingerprint();
-    
-                const attestation = JSON.stringify({
-                    jsExecuted: true,
-                    screenW: window.screen.width,
-                    screenH: window.screen.height,
-                    dpr: window.devicePixelRatio || 1,
-                    maxTouchPoints: navigator.maxTouchPoints || 0,
-                    webdriver: navigator.webdriver === true,
-                    tzOffset: new Date().getTimezoneOffset(),
-                    cookieEnabled: navigator.cookieEnabled,
-                    languagesCount: navigator.languages ? navigator.languages.length : 0,
-                    platform: navigator.platform || '',
-                    canvasFp: canvasFp,
-                    webglVendor: webglFp ? webglFp.vendor : null,
-                    webglRenderer: webglFp ? webglFp.renderer : null,
-                    hardwareConcurrency: navigator.hardwareConcurrency || 0,
-                    deviceMemory: navigator.deviceMemory || 0,
-                });
-    
-                const payload = {
-                    action: 'clientCheck',
-                    wa: { extraString1: attestation, sid: c.sessionId || null },
-                    dmFeed: { extra_string1: attestation, source: c.source || null, session_id: c.sessionId || null },
-                };
-    
-                if (navigator.sendBeacon) {
-                    const blob = new Blob([JSON.stringify({ action: payload.action, payload })], {
-                        type: 'application/json',
-                    });
-                    navigator.sendBeacon(c.reportUrl, blob);
-                    return;
-                }
-    
-                fetch(c.reportUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: payload.action, payload }),
-                    keepalive: true,
-                    credentials: 'include',
-                }).catch(function() {
-                    // Silent fail - don't break page
-                });
-            } catch (err) {
-                // Silent fail - don't break page
-            }
-        }
-    
-        window.addEventListener('load', function() {
-            reportClientAttestation();
-        });
-    
-        // ─── Funnel click tracking ────────────────────────────────────────────
-        var pageOpenedAt = Date.now();
-    
-        function msSincePageOpen() {
-            return Date.now() - pageOpenedAt;
-        }
-    
-        // Which part of the result the user clicked (stored as click_zone).
-        function keywordClickZone(clicked) {
-            if (clicked.closest('.arrow') || clicked.closest('.kw-arrow')) return 'arrow';
-            if (clicked.closest('.anchortext') || clicked.closest('.kw-text')) return 'text';
-            return 'row';
-        }
-    
-        function adClickZone(clicked) {
-            if (clicked.closest('.arrow_wrap')) return 'cta';
-            if (clicked.closest('.title')) return 'title';
-            if (clicked.closest('.desc')) return 'description';
-            if (clicked.closest('.url')) return 'domain';
-            return 'ad';
-        }
-    
-        // Assembled here rather than rendered into the page, so a scrape comes away with nothing to replay.
-        function armKeywordLink(link, clicked) {
-            link.href = '/kw-click?t=' + encodeURIComponent(link.dataset.ct)
-                + '&ttc=' + msSincePageOpen()
-                + '&zone=' + encodeURIComponent(keywordClickZone(clicked));
-        }
-    
-        function trackAdClick(link, clicked) {
-            var ads = document.querySelectorAll('a.content-wrap');
-            report('adClick', {
-                dmFeed: {
-                    page: 'ads',
-                    step: 'click',
-                    ads_variant: '',
-                    test_id: '24',
-                    root_domain: 'gh-proxy.net',
-                    position: Array.prototype.indexOf.call(ads, link) + 1,
-                    click_zone: adClickZone(clicked),
-                    time_to_click_ms: msSincePageOpen()
-                }
-            });
-        }
-    
-        // pointerdown/keydown fire before the new tab's URL is locked in; click is too late.
-        function onKeywordIntent(event) {
-            try {
-                var clicked = event.target;
-                if (!clicked || !clicked.closest) return;
-                if (event.type === 'keydown' && event.key !== 'Enter') return;
-    
-                var keywordLink = clicked.closest('a[data-ct]');
-                if (keywordLink) armKeywordLink(keywordLink, clicked);
-            } catch (err) {}
-        }
-    
-        document.addEventListener('pointerdown', onKeywordIntent, true);
-        document.addEventListener('keydown', onKeywordIntent, true);
-    
-        document.addEventListener('click', function (event) {
-            try {
-                var clicked = event.target;
-                if (!clicked || !clicked.closest) return;
-    
-                var adLink = clicked.closest('a.content-wrap');
-                if (adLink) {
-                    trackAdClick(adLink, clicked);
-                }
-            } catch (err) {}
-        }, true);
-    </script>    <script>
-        (function () {
-            var props = {"trafficSrc":"intango_park_dm_1638_1","ysid":"1IL4DNPLA9MMD"} || {};
-            
-    
-            var startedAt = Date.now();
-            var called = false;
-            var reported = null;
-    
-            function send(step) {
-                try {
-                    if (typeof report !== 'function') return;
-                    report('yahooBeacon', {
-                        dmFeed: {
-                            page: 'keywords',
-                            step: step,
-                            test_id: '24',
-                            root_domain: 'gh-proxy.net',
-                            
-                            kw_variant: 'keywords-test-9',
-                            extra_integer1: Date.now() - startedAt
-                        }
-                    });
-                } catch (e) {}
-            }
-    
-            function settle(step) {
-                if (reported) return;
-                reported = step;
-                send(step);
-            }
-    
-            function argument() {
-                props.ykws = Array.prototype.map.call(document.querySelectorAll('.list_1 a'), function (a) {
-                    return a.textContent ? a.textContent.trim() : '';
-                }).filter(Boolean).join(',');
-                return props;
-            }
-    
-            // Never gated on `reported`: the deadline gives up on measuring, not on billing.
-            function run() {
-                if (called) return true;
-                if (typeof window.initDMKeywords !== 'function') return false;
-    
-                called = true;
-                try {
-                    window.initDMKeywords(argument());
-                    reported ? send('late-ok') : settle('ok');
-                } catch (e) {
-                    settle('threw');
-                }
-                return true;
-            }
-    
-            function poll() {
-                if (run() || reported) return;
-                if (Date.now() - startedAt < 15000) setTimeout(poll, 50);
-                else settle('timeout');
-            }
-    
-            var script = document.createElement('script');
-            // Dated, not per-request: a unique query string made every impression a cache miss.
-            script.src = 'https://s.appreports.net/serenity.js?v=' + new Date().toISOString().slice(0, 10);
-            script.async = true;
-            script.onload = run;
-            script.onerror = function () { settle('load-failed'); };
-    
-            document.head.appendChild(script);
-            poll();
-        })();
-    </script>
-    <script>
-        window.addEventListener('load', function () {
-            try {
-                var anchors = document.querySelectorAll('.list_1 a');
-                var kws = Array.prototype.map.call(anchors, function (a) {
-                    var kwTextNode = a.querySelector('.kw-text');
-                    return (kwTextNode && kwTextNode.textContent ? kwTextNode.textContent.trim() : '');
-                }).filter(function (s) { return s.length > 0; }).join(',');
-                report('keywordsPageLoad', {
-                    wa: {
-                        extraString1: kws,
-                        extraString2: 'gh-proxy.net',
-                        extraString3: '24'
-                    },
-                    dmFeed: {
-                        page: 'keywords',
-                        step: 'load',
-                        kw_variant: 'keywords-test-9',
-                        test_id: '24',
-                        root_domain: 'gh-proxy.net',
-                        item_count: kws ? kws.split(',').length : 0
-                    }
-                });
-            } catch (e) {
-                report('keywordsPageLoad', {
-                    wa: {
-                        extraString1: '',
-                        extraString2: 'gh-proxy.net',
-                        extraString3: '24'
-                    },
-                    dmFeed: {
-                        page: 'keywords',
-                        step: 'load',
-                        kw_variant: 'keywords-test-9',
-                        test_id: '24',
-                        root_domain: 'gh-proxy.net',
-                        item_count: 0
-                    }
-                });
-            }
-        });
-    </script>
-</body>
+      });
+    }
+    setInterval(checkDNS, 1000);
+</script></body>
 </html>
