@@ -1,6 +1,6 @@
 {
   "name": "Kidar TVM MacOS 极速轻量源",
-  "updatedAt": "2026-09-14T05:18:23.527Z",
+  "updatedAt": "2026-09-14T13:11:47.452Z",
   "spider": "",
   "sites": [
     {
@@ -13,21 +13,22 @@
       "filterable": 0
     },
     {
-      "key": "新浪资源",
-      "name": "新浪资源",
-      "type": 0,
-      "api": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/",
+      "key": "光速资源",
+      "name": "🎀光速┃采集",
+      "type": 1,
+      "api": "http://api.guangsuapi.com/api.php/provide/vod/",
       "searchable": 1,
       "quickSearch": 1,
-      "filterable": 0
+      "filterable": 0,
+      "changeable": 1
     },
     {
-      "key": "火狐",
-      "name": "🦊火狐采集",
+      "key": "魔都资源",
+      "name": "🤣魔都┃动漫",
       "type": 1,
-      "api": "https://hhzyapi.com/api.php/provide/vod/",
+      "api": "https://caiji.moduapi.cc/api.php/provide/vod/?ac=list",
       "searchable": 1,
-      "quickSearch": 0,
+      "quickSearch": 1,
       "filterable": 1
     },
     {
@@ -50,10 +51,10 @@
       "filterable": 0
     },
     {
-      "key": "光速资源",
-      "name": "🎀光速┃采集",
+      "key": "速播",
+      "name": "速播 | 采集",
       "type": 1,
-      "api": "http://api.guangsuapi.com/api.php/provide/vod/",
+      "api": "https://subocaiji.com/api.php/provide/vod/",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0,
@@ -70,40 +71,57 @@
       "changeable": 1
     },
     {
-      "key": "zy_金鹰影视点主页切换源",
-      "name": "🔰金鹰┃影视",
+      "key": "火狐",
+      "name": "🦊火狐采集",
       "type": 1,
-      "api": "https://jyzyapi.com/provide/vod/",
+      "api": "https://hhzyapi.com/api.php/provide/vod/",
+      "searchable": 1,
+      "quickSearch": 0,
+      "filterable": 1
+    },
+    {
+      "key": "新浪资源",
+      "name": "新浪资源",
+      "type": 0,
+      "api": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0
     },
     {
-      "key": "速播",
-      "name": "速播 | 采集",
-      "type": 1,
-      "api": "https://subocaiji.com/api.php/provide/vod/",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0,
-      "changeable": 1
-    },
-    {
-      "key": "电影天堂",
-      "name": "🎞️天堂采集",
-      "type": 1,
-      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "timeout": 10,
-      "changeable": 1
-    },
-    {
-      "key": "魔都资源",
+      "key": "魔都资源_6b8db7",
       "name": "魔都资源",
       "type": 1,
       "api": "https://www.mdzyapi.com/api.php/provide/vod/?ac=list",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0
+    },
+    {
+      "key": "电影天堂",
+      "name": "影视 • 电影天堂",
+      "type": 1,
+      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "playerType": 2,
+      "changeable": 1
+    },
+    {
+      "key": "如意资源",
+      "name": "🌼如意┃影视🌼",
+      "type": 1,
+      "api": "http://cj.rycjapi.com/api.php/provide/vod",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0
+    },
+    {
+      "key": "zy_金鹰影视点主页切换源",
+      "name": "🔰金鹰┃影视",
+      "type": 1,
+      "api": "https://jyzyapi.com/provide/vod/",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0
@@ -117,26 +135,6 @@
       "quickSearch": 1,
       "filterable": 0,
       "changeable": 1
-    },
-    {
-      "key": "裤佬JS聚合",
-      "name": "采集┃聚合",
-      "type": 4,
-      "api": "http://zhangqun1818.serv00.net/cj/cjjh.php?ac=list",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0,
-      "changeable": 1
-    },
-    {
-      "key": "采集集合",
-      "name": "采集集合+",
-      "type": 4,
-      "api": "http://zhangqun1818.serv00.net/cj/cjjh.php",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0,
-      "ext": "0"
     },
     {
       "key": "路漫漫",
@@ -206,7 +204,7 @@
       "script": "https://nkxrb.github.io/tvm/js/spiders/895cc7509fe4ea8b.js"
     },
     {
-      "key": "贱贱_f84aa7",
+      "key": "贱贱_c961d2",
       "name": "🎬荐片┃影视",
       "type": 3,
       "api": "http://550.3vcn.work/lib/apiv461drpy2.min.js",
@@ -230,25 +228,27 @@
       "script": "https://nkxrb.github.io/tvm/js/spiders/24a87e33bee88247.js"
     },
     {
-      "key": "葫芦",
-      "name": "王林丨免扫",
+      "key": "豆瓣",
+      "name": "访问网站【api.starlink.fan】获取更多接口",
       "type": 3,
-      "api": "https://gh-proxy.com/https://raw.githubusercontent.com/tushen6/Tomorrow/refs/heads/master/JS/AppGet.js",
-      "searchable": 1,
-      "quickSearch": 1,
+      "api": "http://124.223.214.31:16/api/lib/drpy2.min.js",
+      "searchable": 0,
+      "quickSearch": 0,
       "filterable": 0,
-      "ext": "[object Object]",
-      "script": "https://nkxrb.github.io/tvm/js/spiders/b94bd0d7249293d5.js"
+      "ext": "http://124.223.214.31:16/api/lib/douban.js",
+      "script": "https://nkxrb.github.io/tvm/js/spiders/c2b6a1a7dbcfbec8.js"
     },
     {
-      "key": "毒舌影视",
-      "name": "🥇毒舌｜影视",
+      "key": "钛金影视",
+      "name": "钛金影视",
       "type": 3,
-      "api": "https://cdn.jsdmirror.com/gh/ouhaibo1980/tvbox@main/js/%E6%AF%92%E8%88%8C%E5%BD%B1%E8%A7%86.js",
+      "api": "https://gh-proxy.org/https://raw.github.com/tly824/tvbox/master/lib/drpy2.min.js",
       "searchable": 1,
-      "quickSearch": 1,
+      "quickSearch": 0,
       "filterable": 0,
-      "script": "https://nkxrb.github.io/tvm/js/spiders/def23925380b1b32.js"
+      "changeable": 0,
+      "ext": "https://gh-proxy.org/https://raw.github.com/tly824/tvbox/master/js/drpy.js",
+      "script": "https://nkxrb.github.io/tvm/js/spiders/2cb49206d0af7f80.js"
     }
   ],
   "lives": [],
