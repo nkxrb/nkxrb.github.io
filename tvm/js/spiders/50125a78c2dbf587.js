@@ -1,572 +1,505 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="robots" content="noindex, nofollow">
-    <title>Ghproxy</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
+<html>
+<head ><style>*{margin: 0; padding: 0;}</style><meta  name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" content=""><script>
+  if (!"gdprAppliesGlobally" in window) {
+    window.gdprAppliesGlobally = true
+  }
+  if (!("cmp_id" in window) || window.cmp_id < 1) {
+    window.cmp_id = 0
+  }
+  if (!("cmp_cdid" in window)) {
+    window.cmp_cdid = "40679ccc92462"
+  }
+  if (!("cmp_params" in window)) {
+    window.cmp_params = ""
+  }
+  if (!("cmp_host" in window)) {
+    window.cmp_host = "d.delivery.consentmanager.net"
+  }
+  if (!("cmp_cdn" in window)) {
+    window.cmp_cdn = "cdn.consentmanager.net"
+  }
+  if (!("cmp_proto" in window)) {
+    window.cmp_proto = "https:"
+  }
+  if (!("cmp_codesrc" in window)) {
+    window.cmp_codesrc = "1"
+  }
+  window.cmp_getsupportedLangs = function() {
+    var b = ["DE", "EN", "FR", "IT", "NO", "DA", "FI", "ES", "PT", "RO", "BG", "ET", "EL", "GA", "HR", "LV", "LT", "MT", "NL", "PL", "SV", "SK", "SL", "CS", "HU", "RU", "SR", "ZH", "TR", "UK", "AR", "BS"];
+    if ("cmp_customlanguages" in window) {
+      for (var a = 0; a < window.cmp_customlanguages.length; a++) {
+        b.push(window.cmp_customlanguages[a].l.toUpperCase())
+      }
+    }
+    return b
+  };
+  window.cmp_getRTLLangs = function() {
+    var a = ["AR"];
+    if ("cmp_customlanguages" in window) {
+      for (var b = 0; b < window.cmp_customlanguages.length; b++) {
+        if ("r" in window.cmp_customlanguages[b] && window.cmp_customlanguages[b].r) {
+          a.push(window.cmp_customlanguages[b].l)
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0e1114;
-            color: #e8eaed;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+      }
+    }
+    return a
+  };
+  window.cmp_getlang = function(j) {
+    if (typeof(j) != "boolean") {
+      j = true
+    }
+    if (j && typeof(cmp_getlang.usedlang) == "string" && cmp_getlang.usedlang !== "") {
+      return cmp_getlang.usedlang
+    }
+    var g = window.cmp_getsupportedLangs();
+    var c = [];
+    var f = location.hash;
+    var e = location.search;
+    var a = "languages" in navigator ? navigator.languages : [];
+    if (f.indexOf("cmplang=") != -1) {
+      c.push(f.substr(f.indexOf("cmplang=") + 8, 2).toUpperCase())
+    } else {
+      if (e.indexOf("cmplang=") != -1) {
+        c.push(e.substr(e.indexOf("cmplang=") + 8, 2).toUpperCase())
+      } else {
+        if ("cmp_setlang" in window && window.cmp_setlang != "") {
+          c.push(window.cmp_setlang.toUpperCase())
+        } else {
+          if (a.length > 0) {
+            for (var d = 0; d < a.length; d++) {
+              c.push(a[d])
+            }
+          }
         }
-        .main-content {
-            flex: 1;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
+      }
+    }
+    if ("language" in navigator) {
+      c.push(navigator.language)
+    }
+    if ("userLanguage" in navigator) {
+      c.push(navigator.userLanguage)
+    }
+    var h = "";
+    for (var d = 0; d < c.length; d++) {
+      var b = c[d].toUpperCase();
+      if (g.indexOf(b) != -1) {
+        h = b;
+        break
+      }
+      if (b.indexOf("-") != -1) {
+        b = b.substr(0, 2)
+      }
+      if (g.indexOf(b) != -1) {
+        h = b;
+        break
+      }
+    }
+    if (h == "" && typeof(cmp_getlang.defaultlang) == "string" && cmp_getlang.defaultlang !== "") {
+      return cmp_getlang.defaultlang
+    } else {
+      if (h == "") {
+        h = "EN"
+      }
+    }
+    h = h.toUpperCase();
+    return h
+  };
+  (function() {
+    var u = document;
+    var v = u.getElementsByTagName;
+    var h = window;
+    var o = "";
+    var b = "_en";
+    if ("cmp_getlang" in h) {
+      o = h.cmp_getlang().toLowerCase();
+      if ("cmp_customlanguages" in h) {
+        for (var q = 0; q < h.cmp_customlanguages.length; q++) {
+          if (h.cmp_customlanguages[q].l.toUpperCase() == o.toUpperCase()) {
+            o = "en";
+            break
+          }
         }
-        .header {
-            padding: 32px 20px 24px;
-        }
-        .header-overline {
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: #8ab4f8;
-            margin-bottom: 8px;
-            display: block;
-            opacity: 0.8;
-        }
-        .header-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 0;
-            line-height: 1.25;
-            color: #ffffff;
-            letter-spacing: -0.5px;
-        }
-        .list-container {
-            padding: 0 20px;
-            flex: 1;
-        }
-        .list_1 {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            counter-reset: result-counter;
-        }
-        .list-item {
-            margin: 0;
-            padding: 0;
-        }
-        .dir-link {
-            display: flex;
-            align-items: center;
-            background-color: #181b21;
-            border: 1px solid #2a2e37;
-            border-radius: 12px;
-            padding: 18px 16px;
-            text-decoration: none;
-            color: inherit;
-            min-height: 76px;
-            transition: transform 0.15s ease, background-color 0.15s ease;
-        }
-        .dir-link:active {
-            background-color: #20242c;
-            transform: scale(0.98);
-        }
-        .dir-link::before {
-            counter-increment: result-counter;
-            content: "0" counter(result-counter);
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 14px;
-            font-weight: 500;
-            color: #5f6368;
-            align-self: flex-start;
-            margin-top: 4px;
-            margin-right: 16px;
-        }
-        .dir-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .kw-text {
-            font-size: 19px;
-            font-weight: 500;
-            line-height: 1.35;
-            color: #e8eaed;
-        }
-        .dir-icon {
-            color: #5f6368;
-            margin-left: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .dir-icon svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-        }
-        .list-item:first-child .dir-link {
-            background-color: #141f2e;
-            border-color: rgba(138, 180, 248, 0.4);
-            padding: 24px 16px;
-            min-height: 94px;
-        }
-        .list-item:first-child .dir-link::before {
-            color: #8ab4f8;
-            opacity: 0.9;
-        }
-        .list-item:first-child .dir-content::before {
-            content: "Top result";
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #8ab4f8;
-            background: rgba(138, 180, 248, 0.15);
-            align-self: flex-start;
-            padding: 4px 8px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
-        .list-item:first-child .kw-text {
-            font-size: 22px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-        .list-item:first-child .dir-icon {
-            color: #8ab4f8;
-        }
-        .no-results {
-            padding: 24px;
-            text-align: center;
-            color: #9aa0a6;
-            font-size: 16px;
-        }
-        .footer {
-            padding: 48px 20px 32px;
-            text-align: center;
-            font-size: 13px;
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-        }
-        .footer a {
-            color: #5f6368;
-            text-decoration: none;
-        }
-        .footer a:active {
-            color: #9aa0a6;
-        }
-    </style>
-</head>
-<body>
+      }
+      b = "_" + o
+    }
 
-    <main class="main-content">
-        <header class="header">
-            <span class="header-overline">Directory Index</span>
-            <h1 class="header-title">Ghproxy</h1>
-        </header>
-
-        <div class="list-container">
-            <ul class="list_1">
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="HcxFoVmsJFK58btvk2EffCkCB8WgyEe7EPXXw6hECMKvp_YmDREODm3vg8h_jlvYXg5wBvWT4pkSiPmeNmBTauZbNv4GpdI70pGBQfspN1OWVfYOQIOwEXiaEjmFPBfQBBdNrczoc1SqncmXxzZVAdItCqoMoj8_cRxjNLspKiXZseL8nn1fvQQYxQka6cFePuZCq9A2RV_EMc6J531BXEHQhD6uCtj0Hpxqp52beeSeaRtQL5OEAVNkgCIFyk8Bww1lrMxZncbsqnAwphA0D0-QDdNh7jhhrdlqnCMyzym887A1_nT854ja3TaLKZcNpcnuPu-p1JbTxgl03QcN4vEzx7yyGkun0_wyTYjz4WsLpWOpLcms2g6kEwpVcQGQ0GTp2QM558tGWj8N8UAXBhWH3m00J4SLmRL8EedvGsXHTCH46elz7v_kWhUwL6OgfnuOwjdmXKtHo2tn-LRHlhNz01jV7yn7a2DvuaKb42oAwo7UMJiIdJRw7A4zynKuWTL_baY6t9Hy6QKRllrddY-KbdusG_ailDL7nLa88dx0uSuPDYwFmX6PfyH83LHvVM-b9EigO3Cs55gDLazEtkuBTAqlORLd8QvGSey0AL_GYrTDoisM-fJI-ncIMA78qQlb78wj4Q4DCsqobRg1vSgvfUcf2XYCag_Uq3W1-TITMzrRxkUcqoztBamT74oeGqn-FnmaKOTK6sO724UKZVjuZFMJ4p8dphtN35tp3zATBOd6b9PGenpqEwusLu2MF7iru6n1NRdHfhDyeZLxMYIyMglll4kEh1LQnzILOUMw1Q_KrvERKgfGexZWS1_wR32J025wg20b48L0Y0Cz-VGkt7o_31BN3vZ-JcUyC_zqFk6XTJOct74XwTT-OAsE58Oive17NmizLFGrDBgsWif41sqLzqnsCEK6dlzk_iWX7JPdun9xgtY7acM-idHqzAQhGrDAtDVUyFj7Bj-WbQqKILml9SvT9sq-nuSMp0vsKhOyO5kjsK71SBj0s1Ii4A3Oj_wz2RESiEKqUHOTcf4Rls1YVisyzftWGSszOGBlaRtu-TkrSDS6bGCaceAIZb4djLZSA4eIs12i5lHq4fjADpcH-IiedQAD-NTQqG5Nw3F2slLQLalt7hYmIm8L1EaAQjUdYPxRCVFF7z0GIxIl6qErgzClRGvQW4avlSZrnR0tDT0Y8qTIHTx9D2Lqri-mmyM2uB6QShTl1rvbRIVFTDuqVCXR1a9wIJp6zJqettVxRGfIWEpou7g5O8nJqu0t-CRwmq1cUfwqPeEcG3CIZ1_DOhobMWke_kfZEYsP-jXT_PILfhx07n7iUqFGTQVo4d5BipXXmeIvYkyhu_TBoEZthoHVPajQDoQSX14k8_ToBwTmDS45VRcv0MQqCxYOqbkntBsKDZnYt_9pQUU7qsX3EXL2kaIzLI3X8ys1d9O0w3vWr5W73yPRllZfqqp4Y5not6aSikw0L3CE_k6hiLOv26bwUBs13Ylw_B3_w6urp8ogBTshIe-iQxYLhUn6rq3w4oX02APCUy2EfX3JQzeBJ4hJ3hsv8eLltaL7Mq6YsnJXrvRqkcvZ24tTD2SukIy4T7G3nrBhoLv_S9t66sElslfptiAKSrIr1beVBDOcbEPmOWYCzof6QMJXykK-LTZBM74ys0CnUywaWfzopudiupiT-5XytDyr470zBmqdLfG5N2YsG7kGt1Px45lGtVFrL7m_TyIExWXOLEfhsvePGUDdWOAw3sOehocKIlTd5a-SSEuhqCUqqSGyf4VWFYew_WvU1gYrrdds6wgkyIPMGMpZ_Ubjut09WYHbe5iH2V5tKzEKA9GGp0BtMPc1Sil4XsI5G5wlHaX2_oZZsCzshbPdlX0ZD-KW_lCS4h6pJgLY_2Tvl9uzfAT21KEqvovpbSUkGcSKfQ" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">secure file transfer</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="c7vUiRlERqExtLHr61KaDRxtBx2jzIkxXOq-2FqAyy991oOI2nhCl6c0rZQJ0mBs5ab3U3yyUFYAqRibvLzggMo8bCdLvQgIJg72DNy3-akDnbioPjZ8stoKwGtIyNqIIgD0DJrqHtcd-QRmF1uR7V8VkXaN0y1kmM-Cu0YN8AAXT4i-I9z5q-JlpMZ1f6BElZmnuhaxXqfh8hxdpyDT6enu1FzCBHnPAUTx0mDUEX1hMPnjtkWfR8Zb04KuuUsvpFuvrPeBOEc5EPD4JKeJTxISc0iIABnsnX-5kOywdWwllW5yLceoblD2C9ZevmMRGPSSt6ueLli_pO725rw2g7nES6w_RfbriLJblFapnvoNXgK3Y3Krn5k0vmIsZuldtD-5g9CpPkD_2_H7xvLX5nKraSXmdacTl1QQPV_iL1MHkN88r0sjh_KZaVzT3rg-bH1_8iDxsvzSI__wHwvGxsrBnruAF1bwOXyX4jPUVczZ5-OkZw4kthmd8D8PVY1IPw94M6kmjmGUZ7Ru8FsWd0RHGjIu2YmiXVpkMBVzp9zoVfy7UgyD07gStLEE3N-VfrnaSKRKbcE6hl9p5NA3m120-2Isnj0K9ZZv8ob4ZXIXS5qZbQGW-RYFrdT0TZ7Flm4PBdoT1f8N0KprU-1AhbEytPRFfuK0wcra8O2anhEd9RdJHA2PqTGrak7i_8hLfyOwI7jm_DctBH6d78M4CCQv1wfeG7CS1HnYvzbiR3bfZUNeUTaBIHxrknq3tfpLVCNzBi31oiFDAavix4A8BdO82a9eWxdyGWQSDJmazXrDbVtq5uYebd5Z92ydndf56nvSqTHcmKu04ifBT5bI2oKSrQFYVhGH4wWBIbBCc4G6C_nvfQuX1P3Gs4xMbsoPampGFhgqC5KZ1eE0ZBQyE72EIAL-Sp6dLGT6jXORg-JHBuryRRThWSSt1uizFHvA3Oi57PB6z-Cb2ZlTyhmDPYxhNk2CGyczyDr4Tr2QubS6i17tu4OQYaAR9rx9x58bchDt7yZ6BYhfcehK71UUySg04svlGCOg9d3IaCCHekVC2ghNeMJ5oA_zmYcTN3B2tDLk4qcAhJLwJCOH25nnA61ZsFaFIx712M4bGL-xh6Z2oJf-ceqIE83hXZEVDBrYwZuwO5CguudXRt1i1bkMzdxan8HKXeHmywL7NGkzqgBnsgbRvAy_u_sqqfbbhX-rVFWjYt31HriHSK5VCTH9WKdls83u-bzUbBuXKqRycYs46cMR6LnNDjQ41jgg_sXyVYpFf6yZGn1c7-MR_MKzFEod-6jVEOYuXJYx5fz0tFr_fCfsRDRGEPrtc9RXpKtMl8Gm4aXD9L6RKFs7tr26Ch9J2MsylC2hbtigJB-t7zbQsVhcrgAKhOEWwUOdL4gfw6cNxYsJMipzTsRRBVK8Gn1uQUmCeVLRzJJ81STNCIsf22pdg8tCGmmHbVie84lGKw255oQBo2GBH-6tVI4ySGdrA6wZJzFDsoTJ2PYO29zgILdX9xnJPd0zyI6-1b98Fwyj3EJogoJ3cIOrPbSoRwdk68ns7l5XpnEj8JAbmFL2g0TaR9jrDu2UrZv-TWxOvt5HNB11JyiaGx0I63X_VMd67vClkyR-Ft8PkGSUGJnCZf3EERN6Zlx3Km40vSoq5et7aH0mW71KNhp8BMxVXh9z361-RnVY6jxdom9VDW4gkn3XZJYcxeiZYX7uygGMfI-1jEIRDmSGveRYCS9qJFj90gOvmrC5BDx2pmxPwcaVwym7D1iRAeU1Q64qcE2s2gXHaHoRmhp4zw7_PRe428PhZRwy7Vvonkmb9QqSizzOsHFU0szvshXnErs9QZ-AKIx4vfwjf3TGZc7Y9UZxVKO9HnCF-n_e8vvlTIlkckDX6spU6MJWshXbPsCl5sRIyUMiPY-Uj_YscfvB6lf34nE" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">encrypted data sharing</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="clEsAx-_dxDHT8VbpVS-p6bsqWgRAMRvw88mafkOSbnGR1_Y9Z1f8VQw3KfwG9wL74oW5L31PBbyMSWmBKOpDDkEBe2xPIpMFy3fdTSWYrQM2okfMGdAgN_L27Cz7tWxDfObvTtP4InJzYouYjgDu06iESOlMOZ8XheKPnBXgm8WttN5AINmENfNclX5_MJ2_Cn_xekHta88O5CA5wETCysOiwIHdxqNi9iYT-qzBoN5voyNLrIVSZbLzs21MyZmFJW2wBCH0FSjwIuMOimqn95OhwZLLdCdF_CAhCbgsAFvMe5HY1gcZQCacL-3Cj2r6Jy0YEZvk4FT5ten3p2sOqjjLAaTpfqlmB8vHKwBH7lD9-vHA5mquSWwJk0Vjw3MVHuvyrBBoa_y3J1nXINN9E7Sial0giO9qXWW5HlqLzWifOPt980SJiBWS04ph508VLsO2X98r1V0fY6orakmY46UIDxgPG4v7JW0n929CpLh_wXpc6If4c3OvEkrwNAzZiSdfzd9e6eYOpfbTVeFHMYc2gmgRUBOeXpDHT2_I15zuZd5G9xchGYccPHtjCK5k2GiM47fxZ5iN119UdiKpcNnn3oM86Kdg3Y56Sudx6-j_Ei3OdLVFq5knwEwPkYnGSvj9Y0Lx6HjOoV6-_Z72WE-EHgxv92yE9DrJIoBjM9G0_71gFyLEJKDgYbJuDzI74wXxCDwAnxXdNZiOvMVmtckETP3MNGfMweHefuRGFHaw1iozr-zep5DrzSip0LY0GZlfJxJz6JaVT38hC9GIHopM20Wv8wYbTq60og5HXUO3Q0HUnriM-ZVKhidAGxjBG2Ux8_qu4Fq8wfsvcZSSSyxUblsxlUSvIg6QL3XuZh07-SCGqBGMC3V7rNt8hlN_DKWCVfiibkHytG9UB2u7KQa__96Cfc7IagpKsJe16b_Hssa-GX8atZl3NJ17aQMFfJ1nyqx18VXm87yJlmeE-4QzOIkGo2LTUZ0r_2VZjN8zL2FyAAwtn9J40o9Z_uOu4A7Xpkgv6aJS0zp1AyK9cJfMYvAP-2d0MqcApYccB9wVayvaYdPj-EvAu98gT_d9qHfh0nFJaNDsoSVPWqMNiNjRxaR6P028grlvKzgMlDgXoxxiuRklrz7vyFYZCNQVZfnnIf0zOMAiq2MGo58TwUvQJwvoDfmx3GeDHwaIlAmCYAHpv7vYv6XVMO_3SiWQRjYrncw9j3FyYtsUjliqluaDlR790L8I_YCSCs9P_lAUw5Wc1XhLMI_HmSKKvH7Zt4LgPllOeIptUhKibX1LbNQreF-QnBwS1eXsFrYxixScQaAyhew3N1hjOiy0LVo8ZHdGTLL50o1WwpjSXiEsd6r3ABK7qeMr3K49oAR2HMeZimG6vbl7XSKUqBg1q2qW75exfRppbkf-UR77OHKE6dOvyOygXTVN-tWFcMvOBFikZbK0P6FqOsZsnL8az5sGW1q_6LusFpYIjn7HevLN-DdjHSpIMpSPGvYZfBjCRAjHwj1sCojRI-7-diEiaBWJwXFMwNzv2qzdLTEHzhhZteoQZ_I6rMtlXlkincKfF4zLUrHpFW6Jn45P5854np7TQE_XFGSQPYwFUDUdeX0AxLDeWw_k7NnEoR01xMcRfbv9AEuKVpOxzU3Yx1-Z9AJrcvq2PioKshFuR7weHmzNw-dMDdqRFNhoPOGuQqfb8kIvMwJFZQdmTKPu3CLwtmA8-1pWbswjTMV-aLgxU8BJ9QMO7jOGwaXBOnhV13FO_6xDaKeEQQL4o5j8UnPuTkU_2y7lU-HtmWQJKUAjXrt28Da56dVE1CWC8qkkvPxfR54yGFKIdWFX59jQnLikK7Pyqapt4iw7vKdmDyGT63z3lMKuK2AxSpXfhXJQmA4wTNauvzwVbdpHj9XUx7HyG1rnZHn0QW6TthRV3IqFC0lUmVUdpuvYjS2jXGPivc" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">virtual private network cost</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="mweF12BD6MZGQerMSL_-DNkDZ0MXVXhds7N4vn9oBon06RzIJNeXbil4AD4b1xOVyLNAjjb81OnMXTkg9RKPi9vAkvyY8Q4C7uQ7G4JRTQLDgrvoykljX-UOkGgCIECEiJ9iWOlZ4uNvhIp1JYsbGu4C_aMT782W043KWKR-dp5WRFe-8x09guCV5BGJ3End2kY5P-5BgmbMnWrdPXHRYhSgP_0NMlH0Cpeau2juhYJkVpoP84pbgsXw1A4BlrAyN5JV23DZxzEoKiTUxpzHb3hPmf2Ev6mJO1IKK9bgCrZMYbjW6Ist90RlMWl_MC7Pt8vpOD1Jp6XglnZvPMQyE6JyfWfqtvV_p4iiiV-HAbtmiOzPjYkXOVPuOjP1TA8ID_q6LIcSzmrbjrlY9pRXRIhkAGijXQ1tNm-0BVEXQ9vIxeDcjwIXsoj_OYrg5Y56QZkhO_etKNqT-9gAuEjDKHH8JlLvrlssI2yOszpF0yOx6jJhbOnDnbaTF1-hex9xryXlON-ixc1unCc3eitIvWGrqSzVZDgPBHtgM2jvcTXEKPuude7U2PED6a-e2EjTKwrfQLq7b57HXGBRylJ1IXNKs7viakylrQfdvx35bblEhXR5hIVIgO4JMkx11yVJvrLrGh7vGMVcGmCv89snxoJnwoiBry2AXaub4W4_3IAo3O6v0B961pQuNH7iyE9nRKeU-YPZoA8JWAX_NpWEltSo3kz-kPYqmYOYxiu7Voig-0-vR5g8-fs9CnV-sIZthD2OoWdUx2FEN-qv5BS1MTPwXsf9uNO8pGce6VBej7QJWRcTx0J-vj1_YzC1HZixQSGfaEHpXufwe1-uI-WpFYbFF0ElFBX94YtGA4sOgIebV8zeh9W_3nCvXAyuGLMPjDD3kJNmw8fCq4l-JXCcp6gpdtjsrCR3G-eE9EwYN29p5ZmGhQ-nkqdXxWlmvycELx1JfVJiw4QDaWDnTRF4Oq-I4r7bjR2iLhBV6DZVAVwbDWy0nVP0iwW3O_QdplGldht7eE8aGSy2orcw2fvd4QoXfaPyGcAfUKzy7DwyxNrd_ZNY9pNlx5Dhe1GO6VqJ2_wDqkPdG9jtTl7D1qviBr5yQcxBYxfHpO4veO6iU9jTrepZBMukYKUi0XPt4Q7FBy9VKLYSLh07dkNP1hyc5poGJnqehR6ZLzvc45RFCwW0ECd2yEXURHkD3IfPdZK8qD1S7EV_tcTCCQuSbjH_pucLc_c6HgBJ0al8hie5O2Eeyqji9xDd9Zd026Z7jttUgGxyg0iUEzI2TMNwXC74QvB0ncKiSSzlfL3sztXugReRdJWpYJIKyJn9bDLeOoCaWVn-dZAg2NPzo4a8HycjHRpWAhVt1fD6e-BUzUO6k5_2qn8vxxoZsFrPPmjsC_1reMEits9CZFJ2z-rc9glfsDhDfo11kBe-1Uac0jdaabVQts21IzZc5aVUcYysqHjN_hzcgADiIHoet1T_h6lPtGu9d8MAgHfdWziQLRn-It3jN4leNsj54dgYZws1ZoQ6q1TC0o4cUC9C9dkt57lX32WY2dh5Am5dNVxhJtD6MdSMcKwtxOfOolxOzPNMmMtsupOccOlS6D1cdXgI9tIB-1csLHvTIbUQ0G3h9V_WOzyaYm2TRfD6a-HwGBTCwQvE7S1jygwa2fcyckQv2XnVdcBnDEk3eOP2-VR9O56lVOsOb5DrDhK6XrADQXnkQo-hQSUpi-E89VlZvoIsbcpSreNvsWFBbMfwjo8xPEZ9-1COWe6Wfk-X-EN6Oj29qRlq6mRkHt3SjMPaFb_NkAHi2A4R0yODMCrJnkFHTu4JeKYVm-Y4C1Fd8A9zlRUTU6v3yHrL-omHLOaweLovNTBq59lN6QuRPVWnCSUjSJPNjV-LFenC3zFKIr9musr5cbAYfrqN298SKtA1qjsvIQQy_FQ" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">online backup services</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="list-item">
-                                <a href="/kw-click" data-ct="LpGI6u2WM-PBf5pG0ikOsBhuKBf3JBdJ2L5JwJok3IAEKt_p47vBvztxEA8q_-uJhiNfpeWx1FPtZCQaoddEEzc_xfthxlW1vd_X2N8s6lE8nTrp5Ilk5DyvaVVHCGIJ1UCQNe2bmZa8Hs8ey8yq8fSLhjLnnLqX7ydJHCLthz2LeEM0k2Gd31FLNFpqGaLhie58sNTOqljVgK_FkE-fR1MXJTKvpKOBwjU_5t7XBOk9DCcFj0jWLQ5Ew1JM-6sn3EpvBqxnUeV0oh6UR6VVm4msO5zm0BFMzNiY2bF6a3I-eo1u3ZXkkvywzhqmJVTD6E1WBY4jUlIc-0DC0p1e0qQMKG-0UCilOY7gV6-bxb7N2MKiZgNV6W4a9vXhYzVJ4niLGPnH7vx5nkWeuXGZdqFobPb3mOBeugXgRYWm2Akms2zS7L1O2ZFDhEncuhmrXFwfeQhyFZfuVg_Mx_mlS-HELiHPyXAgKsfcLAKD3nBkfVOp4ip51cXSsiwkITaAi4rGCwIRl0h6Mx1amFkF1hk5f1V9WHEcZ0lEMNxHEsLyGyxVQ8h7LyS9aY7M3inzYjjTVI_e_roNJnCvHeWDHmB81iLHzB3LUL4cn6IXan9z3l-cST6HoXW7IWmWXnmhqTarU-OXxxJMi_KXxGKnZ7OHn7qrndnPnaeIzLRzwvgDaZtwX5a0fqPv9OKmnhP7GS1kZUjj6DFNZUXXYlFMDl1D6g1M7MiagdDlzZGfq6_Ixg852TUP_JgNTEg_eTRiKEApTCOtw7PMOMWLo2bjswc9OvKKOw4s8oojSmNtiPTyRLXU_KwOlNsSCX8hAsKP3SpQBLGs6EHydb8glLQSWCvcKdxy8yRPoMkDzP10B-PrYroyjfwkrUFE-TFCQN1bZ6QF36WCtUzCPumV0Kwa7AJaCtQWTtY8FuYwkAU1LYChHMEIgQnau-k5Ki9JdP03ubmTUQKzKO9QyIlMYq2RrHrkUSIK5U-_PzEWctcWFhWkCqoLrVhob4lJTlQZtfR_Ha2Sjyb-7Y29QnQUx-I9p2-oJyP7qGOzEoJ4gPE9Dr40ndccxybnox1_L49NKYjxSmsISTtDCmTEew4pspidViKRRpD6qADozbHO0-tL-IjJ01Jd9RHGWbYAz9P4ORsGS3bjeZfzh5KPZTZHn3KoVkK4M_Oeb7u3EWJ24DMJRgmr3379ohR8ZaQE2qEhIVftPT4DezIUueFZ6RPFDARvRcRsGae6-JSsu49LXtuqWxY2mjVjmfj_uV7Qnm1doMgZw2Nco-riV1flBs8eVGgsAPCIkVwCaHVg2r4JRs_P1MNaLkJ72_OFlQBGjlsLP32MpLneY2rDQkCT21N8raq_pUVsg56D4st86q7Iv1laaB92G2hcOmuimS_XQO5OVVQ_MPA7ElM6dAuOog7Al9OAAkrnmvISjEWEadeNGFKthULChCVwZIuJ01uViVPaU8LsEA5GJpvrhbV1X3WGjgnNegcb11H30uavnI6yHmGmbjtvysOiV6z-tQNqYS1pTli0XJOy5XqsDycNnyTJaowFLqZuD9BuZXfdY8wqIC2zVuZkbjO4x1tapJRrOYMKczWL4tyT4fGYPCbOGQN73FPSlZSK_dHOHyJ2DQhOcS_6ZlV8Yl5P8cMHQsuwq-fvh76MZyPLNJdeEMDHGAuSBfBG80IMsJk8UP0iDR4yFlBz4q5UuwW3RRNBjokt1AXpH53ji0GYujMJh_RTbxiDpwDg0PjSFXKMndRlXA0k0iwP_N0i8EWn18MvfRvCaYdFvxfcWWkAxgA6kx60gu6gXkSOXF5pxd9ZyUSYR1gJ3JxzL4h7pugfliUE-jAkWrvQwuzJwHHb9NYww1HeaMXDk5Em5SrEcEyn7JKAUsUAVNmu3aN1Z1o27hpghIFURvxWxP8674HRGLJl8dXWCqPk8j0X8pREjSwtVg9PvU9J" class="dir-link" target="_blank">
-                                    <div class="dir-content">
-                                        <span class="kw-text">best data security software</span>
-                                    </div>
-                                    <div class="dir-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M9.29 15.88L13.17 12 9.29 8.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l4.59 4.59c.39.39.39 1.02 0 1.41l-4.59 4.59c-.39.39-1.02.39-1.41 0-.38-.39-.39-1.03 0-1.42z"/></svg>
-                                    </div>
-                                </a>
-                            </li>
-            </ul>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <a href="https://intivesearch.com/privacy?dmn=gh-proxy.net&testId=21" target="_blank">Privacy Policy</a>
-        <a href="https://intivesearch.com/terms?dmn=gh-proxy.net&testId=21" target="_blank">Terms of Service</a>
-    </footer>
-
-    <script>
-        window.__cherami = {
-            sessionId: "21b1db2e-428b-43f8-b921-c6d57344048c",
-            source: "",
-            tkn: "19vnMT3S",
-            reportUrl: window.location.origin + '/cherami/report'
+    function x(i, e) {
+      var w = "";
+      i += "=";
+      var s = i.length;
+      var d = location;
+      if (d.hash.indexOf(i) != -1) {
+        w = d.hash.substr(d.hash.indexOf(i) + s, 9999)
+      } else {
+        if (d.search.indexOf(i) != -1) {
+          w = d.search.substr(d.search.indexOf(i) + s, 9999)
+        } else {
+          return e
+        }
+      }
+      if (w.indexOf("&") != -1) {
+        w = w.substr(0, w.indexOf("&"))
+      }
+      return w
+    }
+    var k = ("cmp_proto" in h) ? h.cmp_proto : "https:";
+    if (k != "http:" && k != "https:") {
+      k = "https:"
+    }
+    var g = ("cmp_ref" in h) ? h.cmp_ref : location.href;
+    var j = u.createElement("script");
+    j.setAttribute("data-cmp-ab", "1");
+    var c = x("cmpdesign", "cmp_design" in h ? h.cmp_design : "");
+    var f = x("cmpregulationkey", "cmp_regulationkey" in h ? h.cmp_regulationkey : "");
+    var r = x("cmpgppkey", "cmp_gppkey" in h ? h.cmp_gppkey : "");
+    var n = x("cmpatt", "cmp_att" in h ? h.cmp_att : "");
+    j.src = k + "//" + h.cmp_host + "/delivery/cmp.php?" + ("cmp_id" in h && h.cmp_id > 0 ? "id=" + h.cmp_id : "") + ("cmp_cdid" in h ? "&cdid=" + h.cmp_cdid : "") + "&h=" + encodeURIComponent(g) + (c != "" ? "&cmpdesign=" + encodeURIComponent(c) : "") + (f != "" ? "&cmpregulationkey=" + encodeURIComponent(f) : "") + (r != "" ? "&cmpgppkey=" + encodeURIComponent(r) : "") + (n != "" ? "&cmpatt=" + encodeURIComponent(n) : "") + ("cmp_params" in h ? "&" + h.cmp_params : "") + (u.cookie.length > 0 ? "&__cmpfcc=1" : "") + "&l=" + o.toLowerCase() + "&o=" + (new Date()).getTime();
+    j.type = "text/javascript";
+    j.async = true;
+    if (u.currentScript && u.currentScript.parentElement) {
+      u.currentScript.parentElement.appendChild(j)
+    } else {
+      if (u.body) {
+        u.body.appendChild(j)
+      } else {
+        var t = v("body");
+        if (t.length == 0) {
+          t = v("div")
+        }
+        if (t.length == 0) {
+          t = v("span")
+        }
+        if (t.length == 0) {
+          t = v("ins")
+        }
+        if (t.length == 0) {
+          t = v("script")
+        }
+        if (t.length == 0) {
+          t = v("head")
+        }
+        if (t.length > 0) {
+          t[0].appendChild(j)
+        }
+      }
+    }
+    var m = "js";
+    var p = x("cmpdebugunminimized", "cmpdebugunminimized" in h ? h.cmpdebugunminimized : 0) > 0 ? "" : ".min";
+    var a = x("cmpdebugcoverage", "cmp_debugcoverage" in h ? h.cmp_debugcoverage : "");
+    if (a == "1") {
+      m = "instrumented";
+      p = ""
+    }
+    var j = u.createElement("script");
+    j.src = k + "//" + h.cmp_cdn + "/delivery/" + m + "/cmp" + b + p + ".js";
+    j.type = "text/javascript";
+    j.setAttribute("data-cmp-ab", "1");
+    j.async = true;
+    if (u.currentScript && u.currentScript.parentElement) {
+      u.currentScript.parentElement.appendChild(j)
+    } else {
+      if (u.body) {
+        u.body.appendChild(j)
+      } else {
+        var t = v("body");
+        if (t.length == 0) {
+          t = v("div")
+        }
+        if (t.length == 0) {
+          t = v("span")
+        }
+        if (t.length == 0) {
+          t = v("ins")
+        }
+        if (t.length == 0) {
+          t = v("script")
+        }
+        if (t.length == 0) {
+          t = v("head")
+        }
+        if (t.length > 0) {
+          t[0].appendChild(j)
+        }
+      }
+    }
+  })();
+  window.cmp_addFrame = function(b) {
+    if (!window.frames[b]) {
+      if (document.body) {
+        var a = document.createElement("iframe");
+        a.style.cssText = "display:none";
+        if ("cmp_cdn" in window && "cmp_ultrablocking" in window && window.cmp_ultrablocking > 0) {
+          a.src = "//" + window.cmp_cdn + "/delivery/empty.html"
+        }
+        a.name = b;
+        a.setAttribute("title", "Intentionally hidden, please ignore");
+        a.setAttribute("role", "none");
+        a.setAttribute("tabindex", "-1");
+        document.body.appendChild(a)
+      } else {
+        window.setTimeout(window.cmp_addFrame, 10, b)
+      }
+    }
+  };
+  window.cmp_rc = function(h) {
+    var b = document.cookie;
+    var f = "";
+    var d = 0;
+    while (b != "" && d < 100) {
+      d++;
+      while (b.substr(0, 1) == " ") {
+        b = b.substr(1, b.length)
+      }
+      var g = b.substring(0, b.indexOf("="));
+      if (b.indexOf(";") != -1) {
+        var c = b.substring(b.indexOf("=") + 1, b.indexOf(";"))
+      } else {
+        var c = b.substr(b.indexOf("=") + 1, b.length)
+      }
+      if (h == g) {
+        f = c
+      }
+      var e = b.indexOf(";") + 1;
+      if (e == 0) {
+        e = b.length
+      }
+      b = b.substring(e, b.length)
+    }
+    return (f)
+  };
+  window.cmp_stub = function() {
+    var a = arguments;
+    __cmp.a = __cmp.a || [];
+    if (!a.length) {
+      return __cmp.a
+    } else {
+      if (a[0] === "ping") {
+        if (a[1] === 2) {
+          a[2]({
+            gdprApplies: gdprAppliesGlobally,
+            cmpLoaded: false,
+            cmpStatus: "stub",
+            displayStatus: "hidden",
+            apiVersion: "2.2",
+            cmpId: 31
+          }, true)
+        } else {
+          a[2](false, true)
+        }
+      } else {
+        if (a[0] === "getUSPData") {
+          a[2]({
+            version: 1,
+            uspString: window.cmp_rc("")
+          }, true)
+        } else {
+          if (a[0] === "getTCData") {
+            __cmp.a.push([].slice.apply(a))
+          } else {
+            if (a[0] === "addEventListener" || a[0] === "removeEventListener") {
+              __cmp.a.push([].slice.apply(a))
+            } else {
+              if (a.length == 4 && a[3] === false) {
+                a[2]({}, false)
+              } else {
+                __cmp.a.push([].slice.apply(a))
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+  window.cmp_gpp_ping = function() {
+    return {
+      gppVersion: "1.0",
+      cmpStatus: "stub",
+      cmpDisplayStatus: "hidden",
+      supportedAPIs: ["tcfca", "usnat", "usca", "usva", "usco", "usut", "usct"],
+      cmpId: 31
+    }
+  };
+  window.cmp_gppstub = function() {
+    var a = arguments;
+    __gpp.q = __gpp.q || [];
+    if (!a.length) {
+      return __gpp.q
+    }
+    var g = a[0];
+    var f = a.length > 1 ? a[1] : null;
+    var e = a.length > 2 ? a[2] : null;
+    if (g === "ping") {
+      return window.cmp_gpp_ping()
+    } else {
+      if (g === "addEventListener") {
+        __gpp.e = __gpp.e || [];
+        if (!("lastId" in __gpp)) {
+          __gpp.lastId = 0
+        }
+        __gpp.lastId++;
+        var c = __gpp.lastId;
+        __gpp.e.push({
+          id: c,
+          callback: f
+        });
+        return {
+          eventName: "listenerRegistered",
+          listenerId: c,
+          data: true,
+          pingData: window.cmp_gpp_ping()
+        }
+      } else {
+        if (g === "removeEventListener") {
+          var h = false;
+          __gpp.e = __gpp.e || [];
+          for (var d = 0; d < __gpp.e.length; d++) {
+            if (__gpp.e[d].id == e) {
+              __gpp.e[d].splice(d, 1);
+              h = true;
+              break
+            }
+          }
+          return {
+            eventName: "listenerRemoved",
+            listenerId: e,
+            data: h,
+            pingData: window.cmp_gpp_ping()
+          }
+        } else {
+          if (g === "getGPPData") {
+            return {
+              sectionId: 3,
+              gppVersion: 1,
+              sectionList: [],
+              applicableSections: [0],
+              gppString: "",
+              pingData: window.cmp_gpp_ping()
+            }
+          } else {
+            if (g === "hasSection" || g === "getSection" || g === "getField") {
+              return null
+            } else {
+              __gpp.q.push([].slice.apply(a))
+            }
+          }
+        }
+      }
+    }
+  };
+  window.cmp_msghandler = function(d) {
+    var a = typeof d.data === "string";
+    try {
+      var c = a ? JSON.parse(d.data) : d.data
+    } catch (f) {
+      var c = null
+    }
+    if (typeof(c) === "object" && c !== null && "__cmpCall" in c) {
+      var b = c.__cmpCall;
+      window.__cmp(b.command, b.parameter, function(h, g) {
+        var e = {
+          __cmpReturn: {
+            returnValue: h,
+            success: g,
+            callId: b.callId
+          }
         };
-    
-        // Report an event. `payload.wa` is sent to the legacy report, `payload.dmFeed`
-        // to the new dm-feed report; include only the destinations this event needs.
-        function report(action, payload) {
-            payload = payload || {};
-            const data = { action: action, _ts: String(Date.now()) };
-            const source = window.__cherami.source;
-            const sessionId = window.__cherami.sessionId;
-            const tkn = window.__cherami.tkn;
-    
-            // Carry the partner token so the server resolves the correct campaign
-            // instead of falling back to the default token.
-            if (tkn) data.tkn = tkn;
-    
-            if (payload.wa) {
-                const wa = Object.assign({}, payload.wa);
-                if (source) wa.cid = source;
-                if (sessionId) wa.sid = sessionId;
-                data.wa = JSON.stringify(wa);
-            }
-            if (payload.dmFeed) {
-                const dmFeed = Object.assign({}, payload.dmFeed);
-                if (source) dmFeed.source = source;
-                if (sessionId) dmFeed.session_id = sessionId;
-                data.dmFeed = JSON.stringify(dmFeed);
-            }
-    
-            const reportUrl = new URL(window.__cherami.reportUrl);
-            reportUrl.search = new URLSearchParams(data).toString();
-    
-            const img = new Image();
-            img.src = reportUrl.toString();
+        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
+      })
+    }
+    if (typeof(c) === "object" && c !== null && "__uspapiCall" in c) {
+      var b = c.__uspapiCall;
+      window.__uspapi(b.command, b.version, function(h, g) {
+        var e = {
+          __uspapiReturn: {
+            returnValue: h,
+            success: g,
+            callId: b.callId
+          }
+        };
+        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
+      })
+    }
+    if (typeof(c) === "object" && c !== null && "__tcfapiCall" in c) {
+      var b = c.__tcfapiCall;
+      window.__tcfapi(b.command, b.version, function(h, g) {
+        var e = {
+          __tcfapiReturn: {
+            returnValue: h,
+            success: g,
+            callId: b.callId
+          }
+        };
+        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
+      }, b.parameter)
+    }
+    if (typeof(c) === "object" && c !== null && "__gppCall" in c) {
+      var b = c.__gppCall;
+      window.__gpp(b.command, function(h, g) {
+        var e = {
+          __gppReturn: {
+            returnValue: h,
+            success: g,
+            callId: b.callId
+          }
+        };
+        d.source.postMessage(a ? JSON.stringify(e) : e, "*")
+      }, "parameter" in b ? b.parameter : null, "version" in b ? b.version : 1)
+    }
+  };
+  window.cmp_setStub = function(a) {
+    if (!(a in window) || (typeof(window[a]) !== "function" && typeof(window[a]) !== "object" && (typeof(window[a]) === "undefined" || window[a] !== null))) {
+      window[a] = window.cmp_stub;
+      window[a].msgHandler = window.cmp_msghandler;
+      window.addEventListener("message", window.cmp_msghandler, false)
+    }
+  };
+  window.cmp_setGppStub = function(a) {
+    if (!(a in window) || (typeof(window[a]) !== "function" && typeof(window[a]) !== "object" && (typeof(window[a]) === "undefined" || window[a] !== null))) {
+      window[a] = window.cmp_gppstub;
+      window[a].msgHandler = window.cmp_msghandler;
+      window.addEventListener("message", window.cmp_msghandler, false)
+    }
+  };
+  window.cmp_addFrame("__cmpLocator");
+  if (!("cmp_disableusp" in window) || !window.cmp_disableusp) {
+    window.cmp_addFrame("__uspapiLocator")
+  }
+  if (!("cmp_disabletcf" in window) || !window.cmp_disabletcf) {
+    window.cmp_addFrame("__tcfapiLocator")
+  }
+  if (!("cmp_disablegpp" in window) || !window.cmp_disablegpp) {
+    window.cmp_addFrame("__gppLocator")
+  }
+  window.cmp_setStub("__cmp");
+  if (!("cmp_disabletcf" in window) || !window.cmp_disabletcf) {
+    window.cmp_setStub("__tcfapi")
+  }
+  if (!("cmp_disableusp" in window) || !window.cmp_disableusp) {
+    window.cmp_setStub("__uspapi")
+  }
+  if (!("cmp_disablegpp" in window) || !window.cmp_disablegpp) {
+    window.cmp_setGppStub("__gpp")
+  };
+</script></head>
+<body ><img src="https://l.cdn-fileserver.com/bping.php?vgd_l2type=dmola&vi=1789508394744237559&sc=CA&mspa=1&vgd_tsce=L1353&vgd_cdv=O3435&prid=8PR11258V&cid=8CU7G8B38&hvsid=00001789508394727008828715529378&ugd=4&cc=US&ssld=%7B%22QQNN%22%3A%22Pb%22%2C%22QQN75%22%3A%22Q1znkL1zN8QNm%22%2C%22QQ8E%22%3A%22%22%2C%22QQQN%22%3A%22%3DK%22%2C%22QQl8E%22%3A%22%22%7D&vgd_oreqf=one&vgd_setup=c21&lf=6&lper=100&wsip=170763042&wshp=0&r=1789508394729&vgd_cage=67&vgd_oresf=one&vgd_wlstp=0&vgd_asn=8075&crid=342704488&requrl=https%3A%2F%2Fgh-proxy.net&vgd_rpth=%2Fola&gdpr=0&vgd_len=563&vgd_end=1" width="0px" height="0px" style="display: none !important" id="_ol_lg_1789508394744237559" /><div id="_ol_one_1789508394744237559" > </div><script type="text/javascript">!function(){"use strict";var d,i={"id":"_ol_one_1789508394744237559","l2u":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%21qq9e=P\u0026%286MR=%28.T\u0026%28gs=_RbbKT_saRSjzaKKcsazbs%2AazETMPMRsujSE\u0026%2A%21.VE=PDF_AEYcF\u0026%2A%21.VS=%28efK~g.q%2A\u0026%2A%2A=1N\u0026%2Ags=_51cA_nE_\u0026%2Aq9gs=\u0026%2Asf=FEKEb\u0026%2Awgs=EKScxKK__\u0026.VTww=P\u0026.qf=\u00266SqW9T=sV%286M\u00267s9w=x\u00267s9w%2A.eq=\u00269gs=_DFJ1pYUE\u0026GkwR=\u0026Gs=\u0026Lzgs=vp+UDN+8Teq+a+S+BTfT6\u0026M%2Aq=DnQEZTZ%2F7MHHEwXRToRwHM7KoCZOnZR.KMw\u0026M95X=\u0026Ms%28VMg.=\u0026Msf=\u0026MsqP=\u0026MsqS=\u0026MzR6kgs=fS\u0026Re=\u0026T%2Awgs=\u0026Ve9M=P\u0026W969=\u0026Wse9w=\u0026Wz.~%2A%2A~TO9=\u0026X7s=K\u0026Xe9T.R=aP\u0026e%2A=5Z\u0026ee6s=%7B%22ee%2A%2A%22%3A%221N%22%2C%22ee%2AqW%22%3A%22eM.+RwM.%2Age%2A%28%22%2C%22eeg9%22%3A%22%22%2C%22eee%2A%22%3A%225Z%22%2C%22eeHg9%22%3A%22%22%7D\u0026egHT=PPbKOj_u\u0026ezswQs=\u0026fg=Pc_ubx_EuKcKKSEcbbu\u0026g.q%2A6=aT_i%3ARu2lgXlXgIlXt-%7Cao_i%3A-RlX-glXtXlu%7CFh_i%3A%7C_hiLpcbi0%3AF_B0oc\u0026gegs=x\u0026htmlsrc=1\u0026k6eq9=x\u0026ke%219=x\u0026kkdd=H9%7CW%7CAH3hu%2A9n\u0026qe%2AT=BPEbE\u0026sT%2AVVV=\u0026sVwR=P\u0026tpid=\u0026wTCXw6=%21qq9e%3A%2F%2F7%21a9w%28OWl.Tq\u0026zMT=\u0026zT=x\u0026zgs=\u0026zgsfS=\u0026zswQs=","l2h":"acl=\u0026aclp=\u0026cl=\u0026clp=\u0026hvsid=00001789508394727008828715529378\u0026l2type=dmola\u0026lp=%7B%22ppvi%22%3A%222153705399475188413%22%2C%22wlstp%22%3A%220%22%7D\u0026matchstring=\u0026pvl=%7B%22nmerr%22%3A%221%22%7D\u0026pvlp=\u0026sbdrId=\u0026verid=","vgh":"vgd_sc=CA\u0026vgd_cmp_inj_fl=true","so":{"l2host":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%21_TXc=\u0026%2AkkCf=x\u0026-fCI=x\u0026.f%2AC=y\u0026.tfkC=y\u00265cCT=y\u00265cCT_Ffk=\u00269X=x%29pPDypKPq%29qqrK%29DDP\u0026CXc=pejoAmzNK\u0026F-%21TT=x\u0026Fk9=\u0026G.Tu=\u0026Gc=\u0026ICWd=\u0026IZut.Xc=9r\u0026I_k=eO7KL%21L%2F5IHHKTdu%213uTHI5q3JLhOLuFqIT\u0026Ic9=\u0026IcY-IXF=\u0026Ickr=\u0026Ickx=\u0026QCtC=\u0026QZFg__g%21hC=\u0026QcfCT=\u0026RZXc=6m+New+n%21fk+4+r+B%219%21t\u0026T%21JdTt=%2AkkCf%3A%2F%2F5%2A4CTYhQiF%21k\u0026XFk_t=4%21pb%3AuPMiXdidXvidE%28%7C43pb%3A%28uid%28XidEdiP%7Cj~pb%3A%7Cp~bRm%29Db8%3AjpB83%29\u0026XfXc=y\u0026YXc=puDDq%21pc4ursZ4qq%29c4ZDc_4ZK%21IxIucPsrK\u0026YtIu=YF%21\u0026Z%21=y\u0026ZI%21=\u0026ZXc=\u0026ZXc9r=\u0026ZcT7c=\u0026_%2AF-K=xejpSKz%29j\u0026_%2AF-r=Yf9qgXFk_\u0026_TXc=Kqr%29yqqpp\u0026_Xc=pWA%29SpOKp\u0026__=Aw\u0026_c9=jKqKD\u0026_kCXc=\u0026c%21_---=\u0026c-Tu=x\u0026d5c=q\u0026dfC%21Fu=4x\u0026fXH%21=xxDqhspP\u0026fZcT7c=\u0026f_=WL\u0026fftc=%7B%22ff__%22%3A%22Aw%22%2C%22ff_kQ%22%3A%22fIF+uTIF_Xf_Y%22%2C%22ffXC%22%3A%22%22%2C%22fff_%22%3A%22WL%22%2C%22ffHXC%22%3A%22%22%7D\u0026htmlsrc=1\u0026kf_%21=BxKDK\u0026kkdd=h%7Cu%7C9AnH3%2A\u0026tpid=\u0026trkQC%21=c-YtI\u0026uf=","be":"0","nmerr":"1"},"w":"100%","h":"100%","scr":"yes","ek":"cut2FAC698y RjrwgLUqsSo71/J53V~4lPWe-0_nfBXaKTbizdvkZ|DpGMNIYHxO=QhEm","es":11,"m":{"alc":[{"ht":"https://l.cdn-fileserver.com","pt":"log","tp":"CM"},{"ht":"https://gh-proxy.net","pt":"sk-lgprxfwd.php","tp":"DM"}],"vi":"1789508394744237559","cid":"8CU7G8B38","crid":"342704488","rl":"https://gh-proxy.net","mprpslog":"LePu7oLMYJlehnajUMHnGX9wO0xW1I0wnM6YizTw0p_8DqnOy876o59nuLkoyfh6Yoo-FklNf0NnbYgFvNVf5UcaSdHYKxtmg93kyLAx2ti9THqqAJQjCxjeJBMcZYCjrvjp7ILEP3Z0POy-PlRQuOOpm0QwGqbi24uu-F8wXzYGFZV9-QWa8QXou187ZQYPzhHkq4yikc0%3D"}};(d=document.createElement("div")).className=["adclass","googleAdSense","MediumRectangleAdPanel","adv_left","browse-banner_ad","sponsored"].join(" "),d.id="abp_px",d.style.cssText="opacity: 0; visibility: hidden; width: 0; height: 0; position: absolute; top: -9999px; left: -9999px;",document.body.appendChild(d),window.setTimeout(function(){var e,t="none"===(e="display",(t=d).style[e]||(t.currentStyle?t.currentStyle[e]:document.defaultView&&document.defaultView.getComputedStyle?(e=(e=e.replace(/([A-Z])/g,"-$1")).toLowerCase(),(t=document.defaultView.getComputedStyle(t,""))&&t.getPropertyValue(e)):null));if(d.parentNode.removeChild(d),t)for(var n=i.m&&i.m.alc?i.m.alc:{},o=0;o<n.length;o++)!function(e,t){var n=new Image,o=i.m&&i.m.rl?encodeURIComponent(i.m.rl).replace(/#.*/g,""):"",d={logid:"kfk",evtid:"adpl",tp:t,cid:i.m&&i.m.cid?i.m.cid:"",crid:i.m&&i.m.crid?i.m.crid:"",vi:i.m&&i.m.vi?i.m.vi:"",requrl:o,adt1:t},t=Object.keys(d).filter(function(e){return"requrl"!==e}).map(function(e){return encodeURIComponent(e)+"="+encodeURIComponent(d[e])}).join("&");n.src=e+"?"+t+"&requrl="+o}(n[o].ht+"/"+n[o].pt,n[o].tp)},0)}();!function(){window.olaSyncCount=window.olaSyncCount||0,window.__bdata="";var e,t,n,o,c,r,i,d,a,s,u,l,m={"id":"_ol_one_1789508394744237559","l2u":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%21qq9e=P\u0026%286MR=%28.T\u0026%28gs=_RbbKT_saRSjzaKKcsazbs%2AazETMPMRsujSE\u0026%2A%21.VE=PDF_AEYcF\u0026%2A%21.VS=%28efK~g.q%2A\u0026%2A%2A=1N\u0026%2Ags=_51cA_nE_\u0026%2Aq9gs=\u0026%2Asf=FEKEb\u0026%2Awgs=EKScxKK__\u0026.VTww=P\u0026.qf=\u00266SqW9T=sV%286M\u00267s9w=x\u00267s9w%2A.eq=\u00269gs=_DFJ1pYUE\u0026GkwR=\u0026Gs=\u0026Lzgs=vp+UDN+8Teq+a+S+BTfT6\u0026M%2Aq=DnQEZTZ%2F7MHHEwXRToRwHM7KoCZOnZR.KMw\u0026M95X=\u0026Ms%28VMg.=\u0026Msf=\u0026MsqP=\u0026MsqS=\u0026MzR6kgs=fS\u0026Re=\u0026T%2Awgs=\u0026Ve9M=P\u0026W969=\u0026Wse9w=\u0026Wz.~%2A%2A~TO9=\u0026X7s=K\u0026Xe9T.R=aP\u0026e%2A=5Z\u0026ee6s=%7B%22ee%2A%2A%22%3A%221N%22%2C%22ee%2AqW%22%3A%22eM.+RwM.%2Age%2A%28%22%2C%22eeg9%22%3A%22%22%2C%22eee%2A%22%3A%225Z%22%2C%22eeHg9%22%3A%22%22%7D\u0026egHT=PPbKOj_u\u0026ezswQs=\u0026fg=Pc_ubx_EuKcKKSEcbbu\u0026g.q%2A6=aT_i%3ARu2lgXlXgIlXt-%7Cao_i%3A-RlX-glXtXlu%7CFh_i%3A%7C_hiLpcbi0%3AF_B0oc\u0026gegs=x\u0026htmlsrc=1\u0026k6eq9=x\u0026ke%219=x\u0026kkdd=H9%7CW%7CAH3hu%2A9n\u0026qe%2AT=BPEbE\u0026sT%2AVVV=\u0026sVwR=P\u0026tpid=\u0026wTCXw6=%21qq9e%3A%2F%2F7%21a9w%28OWl.Tq\u0026zMT=\u0026zT=x\u0026zgs=\u0026zgsfS=\u0026zswQs=","l2h":"acl=\u0026aclp=\u0026cl=\u0026clp=\u0026hvsid=00001789508394727008828715529378\u0026l2type=dmola\u0026lp=%7B%22ppvi%22%3A%222153705399475188413%22%2C%22wlstp%22%3A%220%22%7D\u0026matchstring=\u0026pvl=%7B%22nmerr%22%3A%221%22%7D\u0026pvlp=\u0026sbdrId=\u0026verid=","vgh":"vgd_sc=CA\u0026vgd_cmp_inj_fl=true","so":{"l2host":"https://searchresultsworld.com/sr/754870121/SAFEFRAME.html?%21_TXc=\u0026%2AkkCf=x\u0026-fCI=x\u0026.f%2AC=y\u0026.tfkC=y\u00265cCT=y\u00265cCT_Ffk=\u00269X=x%29pPDypKPq%29qqrK%29DDP\u0026CXc=pejoAmzNK\u0026F-%21TT=x\u0026Fk9=\u0026G.Tu=\u0026Gc=\u0026ICWd=\u0026IZut.Xc=9r\u0026I_k=eO7KL%21L%2F5IHHKTdu%213uTHI5q3JLhOLuFqIT\u0026Ic9=\u0026IcY-IXF=\u0026Ickr=\u0026Ickx=\u0026QCtC=\u0026QZFg__g%21hC=\u0026QcfCT=\u0026RZXc=6m+New+n%21fk+4+r+B%219%21t\u0026T%21JdTt=%2AkkCf%3A%2F%2F5%2A4CTYhQiF%21k\u0026XFk_t=4%21pb%3AuPMiXdidXvidE%28%7C43pb%3A%28uid%28XidEdiP%7Cj~pb%3A%7Cp~bRm%29Db8%3AjpB83%29\u0026XfXc=y\u0026YXc=puDDq%21pc4ursZ4qq%29c4ZDc_4ZK%21IxIucPsrK\u0026YtIu=YF%21\u0026Z%21=y\u0026ZI%21=\u0026ZXc=\u0026ZXc9r=\u0026ZcT7c=\u0026_%2AF-K=xejpSKz%29j\u0026_%2AF-r=Yf9qgXFk_\u0026_TXc=Kqr%29yqqpp\u0026_Xc=pWA%29SpOKp\u0026__=Aw\u0026_c9=jKqKD\u0026_kCXc=\u0026c%21_---=\u0026c-Tu=x\u0026d5c=q\u0026dfC%21Fu=4x\u0026fXH%21=xxDqhspP\u0026fZcT7c=\u0026f_=WL\u0026fftc=%7B%22ff__%22%3A%22Aw%22%2C%22ff_kQ%22%3A%22fIF+uTIF_Xf_Y%22%2C%22ffXC%22%3A%22%22%2C%22fff_%22%3A%22WL%22%2C%22ffHXC%22%3A%22%22%7D\u0026htmlsrc=1\u0026kf_%21=BxKDK\u0026kkdd=h%7Cu%7C9AnH3%2A\u0026tpid=\u0026trkQC%21=c-YtI\u0026uf=","be":"0","nmerr":"1"},"w":"100%","h":"100%","scr":"yes","ek":"cut2FAC698y RjrwgLUqsSo71/J53V~4lPWe-0_nfBXaKTbizdvkZ|DpGMNIYHxO=QhEm","es":11,"m":{"alc":[{"ht":"https://l.cdn-fileserver.com","pt":"log","tp":"CM"},{"ht":"https://gh-proxy.net","pt":"sk-lgprxfwd.php","tp":"DM"}],"vi":"1789508394744237559","cid":"8CU7G8B38","crid":"342704488","rl":"https://gh-proxy.net","mprpslog":"LePu7oLMYJlehnajUMHnGX9wO0xW1I0wnM6YizTw0p_8DqnOy876o59nuLkoyfh6Yoo-FklNf0NnbYgFvNVf5UcaSdHYKxtmg93kyLAx2ti9THqqAJQjCxjeJBMcZYCjrvjp7ILEP3Z0POy-PlRQuOOpm0QwGqbi24uu-F8wXzYGFZV9-QWa8QXou187ZQYPzhHkq4yikc0%3D"}};function p(){var e,t=m.cks;f(t)&&(document.body?((e=document.createElement("iframe")).id="_mN_cksync_"+window.olaSyncCount,e.width=0,e.height=0,e.style.display="none",e.style.visibility="hidden",e.setAttribute("frameborder","0"),document.body.appendChild(e),e=e,t=t,t="<!DOCTYPE html><html><head>"+["<scr",'ipt type="text/javascript">'].join("")+'var syncURL = "'+t+'" ;  function createTag() { window.location.replace(syncURL); }'+["</scr","ipt>"].join("")+'</head><body onload="createTag()"></body></html>',(e=(e=e.contentWindow||e.contentDocument).document?e.document:e).open(),e.write(t),e.close(),window.olaSyncCount++):setTimeout(p,100))}function w(e){for(var t=m.es,n=m.ek,o=(e=""+e,""),c=0;c<e.length;c++){var r=e.charAt(c),i=n.indexOf(r);o+=0<=i?n.charAt((i+t)%n.length):r}return o}function h(e){return e&&"object"==typeof e}function y(e){return"function"==typeof e}function f(e){switch(typeof e){case"string":return void 0!==e&&""!==e&&null!==e;case"object":return null!==e;case"number":case"boolean":return 1;default:return}}h(m)&&(e=Date.now(),t={prel2:e},n=m.l2u,o=m.l2h,c=m.vgh,r=m.so,i=m.m,d=m.w,a=m.h,s=m.scr,u=m.id,y(window.csRsz2)?r.resdnv2=window.csRsz2():r.resdnv2=i.cr,n=n+"&eobd="+encodeURIComponent(w(decodeURIComponent(window.__bdata)))+"&eoac="+encodeURIComponent(w(i.acid)),f(i.chnm)&&(n=n+"&eoch="+encodeURIComponent(w(i.chnm))),h(i.ssm)&&h(i.clkd)&&(i.clkd.bdata=decodeURIComponent(window.__bdata),r.ssmcr=i.ssm,r.clkTrkData=i.clkd),n=function(e,t,n){e=e.split("?");return e[0]+"?"+t+"="+encodeURIComponent(n)+"&"+e[1]}(n,"ule",n.length),n+="&ure=1",r.csip=i.csip,y(window.userFrequencyTracker)&&(0<(l=userFrequencyTracker().getLocalStorageCount())&&(c+="&vgd_lsct="+l),0<(l=userFrequencyTracker().getSessionStorageCount()))&&(c+="&vgd_ssct="+l),l=c+"&"+o+"&acid="+i.acid+"&mprpslog="+i.mprpslog+"&tchkpts="+encodeURIComponent(JSON.stringify(t))+"&stime="+e+"&l3d="+encodeURIComponent(encodeURIComponent(JSON.stringify(r))),i.prvDet&&(l+="&prvDet="+encodeURIComponent(JSON.stringify(i.prvDet))),function(){var t=!1;try{"object"==typeof window.top&&"object"==typeof window&&(t=window.top!=window)}catch(e){t=!0}return t}()&&(l+="&infr=1"),function(e){try{if(e&&e.top&&e.top.document)return 1}catch(e){}return}(window)||(l+="&twna=1"),""===s&&(s="no"),(c=document.createElement("iframe")).width=d,c.height=a,c.setAttribute("src",n+"#"+l),c.setAttribute("scrolling",s),c.setAttribute("frameborder","0"),c.setAttribute("marginheight","0"),c.setAttribute("marginwidth","0"),c.onload=function(){p()},document.getElementById(u).appendChild(c))}();</script><div >
+	<a style="display: none;height:25px;line-height:25px;color: rgb(136, 136, 136);text-align: center;line-height:25px;width: 100%;position: fixed;bottom: 0px;left: 0px;z-index: 9999;background-color: #10162c;padding: 0px 0;text-decoration: none;font-family: Arial, sans-serif;font-size: clamp(11px, 2.5vw, 15px);" id="dnslink" href="#" onclick="__cmp('showScreen'); return false">Do Not Sell or Share My Personal Information</a>
+	 </div><script>
+  function checkDNS() {
+    __cmp('getCMPData', true, function(x) {
+        var possibleKeys = ['CCPA','USVCDPA','USCPA','USUCPA','USCAPDP','USTDPSA','USOCDPA','USMTCDPA','USFDBR','USDPDPA','USICDPA','USNEDPA','USNHPA','USNJDPA','USTIPA','USMCDPA']; //add possible regulations where to show the DNS-link
+        if ('regulationKey' in x && possibleKeys.indexOf(x.regulationKey) != -1) {
+          document.getElementById('dnslink').style.display = 'block'; /* show the link*/
+          document.querySelectorAll('[id^="_ol_one_"]').forEach(el => {
+  			el.style.height = "calc(100vh - 25px)";
+          });
+        } else {
+          document.getElementById('dnslink').style.display = 'none'; /* don't show the link*/
+		  document.querySelectorAll('[id^="_ol_one_"]').forEach(el => {
+  			el.style.height = "100vh";
+          });
         }
-    
-        function getCanvasFingerprint() {
-            try {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                if (!ctx) return null;
-    
-                canvas.width = 200;
-                canvas.height = 50;
-                ctx.textBaseline = 'top';
-                ctx.font = '14px Arial';
-                ctx.textBaseline = 'alphabetic';
-                ctx.fillStyle = '#f60';
-                ctx.fillRect(125, 1, 62, 20);
-                ctx.fillStyle = '#069';
-                ctx.fillText('Cherami fingerprint', 2, 15);
-                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-                ctx.fillText('Cherami fingerprint', 4, 17);
-    
-                return canvas.toDataURL().substring(0, 100);
-            } catch (e) {
-                return null;
-            }
-        }
-    
-        function getWebGLFingerprint() {
-            try {
-                const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                if (!gl) return null;
-    
-                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                if (debugInfo) {
-                    return {
-                        vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || '',
-                        renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '',
-                    };
-                }
-                return null;
-            } catch (e) {
-                return null;
-            }
-        }
-    
-        function reportClientAttestation() {
-            try {
-                const c = window.__cherami || {};
-                if (!c || !c.sessionId) {
-                    return;
-                }
-    
-                const canvasFp = getCanvasFingerprint();
-                const webglFp = getWebGLFingerprint();
-    
-                const attestation = JSON.stringify({
-                    jsExecuted: true,
-                    screenW: window.screen.width,
-                    screenH: window.screen.height,
-                    dpr: window.devicePixelRatio || 1,
-                    maxTouchPoints: navigator.maxTouchPoints || 0,
-                    webdriver: navigator.webdriver === true,
-                    tzOffset: new Date().getTimezoneOffset(),
-                    cookieEnabled: navigator.cookieEnabled,
-                    languagesCount: navigator.languages ? navigator.languages.length : 0,
-                    platform: navigator.platform || '',
-                    canvasFp: canvasFp,
-                    webglVendor: webglFp ? webglFp.vendor : null,
-                    webglRenderer: webglFp ? webglFp.renderer : null,
-                    hardwareConcurrency: navigator.hardwareConcurrency || 0,
-                    deviceMemory: navigator.deviceMemory || 0,
-                });
-    
-                const payload = {
-                    action: 'clientCheck',
-                    wa: { extraString1: attestation, sid: c.sessionId || null },
-                    dmFeed: { extra_string1: attestation, source: c.source || null, session_id: c.sessionId || null },
-                };
-    
-                if (navigator.sendBeacon) {
-                    const blob = new Blob([JSON.stringify({ action: payload.action, payload })], {
-                        type: 'application/json',
-                    });
-                    navigator.sendBeacon(c.reportUrl, blob);
-                    return;
-                }
-    
-                fetch(c.reportUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: payload.action, payload }),
-                    keepalive: true,
-                    credentials: 'include',
-                }).catch(function() {
-                    // Silent fail - don't break page
-                });
-            } catch (err) {
-                // Silent fail - don't break page
-            }
-        }
-    
-        window.addEventListener('load', function() {
-            reportClientAttestation();
-        });
-    
-        // ─── Funnel click tracking ────────────────────────────────────────────
-        var pageOpenedAt = Date.now();
-    
-        function msSincePageOpen() {
-            return Date.now() - pageOpenedAt;
-        }
-    
-        // Which part of the result the user clicked (stored as click_zone).
-        function keywordClickZone(clicked) {
-            if (clicked.closest('.arrow') || clicked.closest('.kw-arrow')) return 'arrow';
-            if (clicked.closest('.anchortext') || clicked.closest('.kw-text')) return 'text';
-            return 'row';
-        }
-    
-        function adClickZone(clicked) {
-            if (clicked.closest('.arrow_wrap')) return 'cta';
-            if (clicked.closest('.title')) return 'title';
-            if (clicked.closest('.desc')) return 'description';
-            if (clicked.closest('.url')) return 'domain';
-            return 'ad';
-        }
-    
-        // Assembled here rather than rendered into the page, so a scrape comes away with nothing to replay.
-        function armKeywordLink(link, clicked) {
-            link.href = '/kw-click?t=' + encodeURIComponent(link.dataset.ct)
-                + '&ttc=' + msSincePageOpen()
-                + '&zone=' + encodeURIComponent(keywordClickZone(clicked));
-        }
-    
-        function trackAdClick(link, clicked) {
-            var ads = document.querySelectorAll('a.content-wrap');
-            report('adClick', {
-                dmFeed: {
-                    page: 'ads',
-                    step: 'click',
-                    ads_variant: '',
-                    test_id: '21',
-                    root_domain: 'gh-proxy.net',
-                    position: Array.prototype.indexOf.call(ads, link) + 1,
-                    click_zone: adClickZone(clicked),
-                    time_to_click_ms: msSincePageOpen()
-                }
-            });
-        }
-    
-        // pointerdown/keydown fire before the new tab's URL is locked in; click is too late.
-        function onKeywordIntent(event) {
-            try {
-                var clicked = event.target;
-                if (!clicked || !clicked.closest) return;
-                if (event.type === 'keydown' && event.key !== 'Enter') return;
-    
-                var keywordLink = clicked.closest('a[data-ct]');
-                if (keywordLink) armKeywordLink(keywordLink, clicked);
-            } catch (err) {}
-        }
-    
-        document.addEventListener('pointerdown', onKeywordIntent, true);
-        document.addEventListener('keydown', onKeywordIntent, true);
-    
-        document.addEventListener('click', function (event) {
-            try {
-                var clicked = event.target;
-                if (!clicked || !clicked.closest) return;
-    
-                var adLink = clicked.closest('a.content-wrap');
-                if (adLink) {
-                    trackAdClick(adLink, clicked);
-                }
-            } catch (err) {}
-        }, true);
-    </script>    <script>
-        (function () {
-            var props = {"trafficSrc":"intango_park_dm_1638_1","ysid":"31HG3JPLAIV7K"} || {};
-            
-    
-            var startedAt = Date.now();
-            var called = false;
-            var reported = null;
-    
-            function send(step) {
-                try {
-                    if (typeof report !== 'function') return;
-                    report('yahooBeacon', {
-                        dmFeed: {
-                            page: 'keywords',
-                            step: step,
-                            test_id: '21',
-                            root_domain: 'gh-proxy.net',
-                            
-                            kw_variant: 'keywords-test-9',
-                            extra_integer1: Date.now() - startedAt
-                        }
-                    });
-                } catch (e) {}
-            }
-    
-            function settle(step) {
-                if (reported) return;
-                reported = step;
-                send(step);
-            }
-    
-            function argument() {
-                props.ykws = Array.prototype.map.call(document.querySelectorAll('.list_1 a'), function (a) {
-                    return a.textContent ? a.textContent.trim() : '';
-                }).filter(Boolean).join(',');
-                return props;
-            }
-    
-            // Never gated on `reported`: the deadline gives up on measuring, not on billing.
-            function run() {
-                if (called) return true;
-                if (typeof window.initDMKeywords !== 'function') return false;
-    
-                called = true;
-                try {
-                    window.initDMKeywords(argument());
-                    reported ? send('late-ok') : settle('ok');
-                } catch (e) {
-                    settle('threw');
-                }
-                return true;
-            }
-    
-            function poll() {
-                if (run() || reported) return;
-                if (Date.now() - startedAt < 15000) setTimeout(poll, 50);
-                else settle('timeout');
-            }
-    
-            var script = document.createElement('script');
-            // Dated, not per-request: a unique query string made every impression a cache miss.
-            script.src = 'https://s.appreports.net/serenity.js?v=' + new Date().toISOString().slice(0, 10);
-            script.async = true;
-            script.onload = run;
-            script.onerror = function () { settle('load-failed'); };
-    
-            document.head.appendChild(script);
-            poll();
-        })();
-    </script>
-    <script>
-        window.addEventListener('load', function () {
-            try {
-                var anchors = document.querySelectorAll('.list_1 a');
-                var kws = Array.prototype.map.call(anchors, function (a) {
-                    var kwTextNode = a.querySelector('.kw-text');
-                    return (kwTextNode && kwTextNode.textContent ? kwTextNode.textContent.trim() : '');
-                }).filter(function (s) { return s.length > 0; }).join(',');
-                report('keywordsPageLoad', {
-                    wa: {
-                        extraString1: kws,
-                        extraString2: 'gh-proxy.net',
-                        extraString3: '21'
-                    },
-                    dmFeed: {
-                        page: 'keywords',
-                        step: 'load',
-                        kw_variant: 'keywords-test-9',
-                        test_id: '21',
-                        root_domain: 'gh-proxy.net',
-                        item_count: kws ? kws.split(',').length : 0
-                    }
-                });
-            } catch (e) {
-                report('keywordsPageLoad', {
-                    wa: {
-                        extraString1: '',
-                        extraString2: 'gh-proxy.net',
-                        extraString3: '21'
-                    },
-                    dmFeed: {
-                        page: 'keywords',
-                        step: 'load',
-                        kw_variant: 'keywords-test-9',
-                        test_id: '21',
-                        root_domain: 'gh-proxy.net',
-                        item_count: 0
-                    }
-                });
-            }
-        });
-    </script>
-</body>
+      });
+    }
+    setInterval(checkDNS, 1000);
+</script></body>
 </html>
