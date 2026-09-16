@@ -41,9 +41,6 @@
 
     <div class="dashboard-shell">
       <div class="life-tools" aria-label="数据工具">
-        <button type="button" class="life-tools__key" @click="openKeyModal">
-          {{ canEditMarks ? '数据密钥' : '设置数据密钥' }}
-        </button>
         <button
           type="button"
           class="life-tools__refresh"
@@ -321,27 +318,26 @@
     <Transition name="sheet">
       <div v-if="showKeyModal" class="sheet-layer info-layer life-key-layer" role="presentation" @click.self="closeKeyModal">
         <section class="life-key-panel" role="dialog" aria-modal="true" aria-labelledby="life-key-modal-title">
-          <button class="info-close" type="button" aria-label="关闭数据密钥设置" @click="closeKeyModal">×</button>
+          <button class="info-close" type="button" aria-label="关闭数据密码设置" @click="closeKeyModal">×</button>
           <p>DATA ACCESS</p>
-          <h2 id="life-key-modal-title">一生时光数据密钥</h2>
+          <h2 id="life-key-modal-title">数据密码</h2>
           <form @submit.prevent="submitKeySecret">
             <label>
-              <span>密钥</span>
+              <span>密码</span>
               <input
                 v-model="keySecret"
                 type="password"
                 autocomplete="current-password"
-                placeholder="输入数据访问密钥"
+                placeholder="输入数据访问密码"
               >
             </label>
             <button type="submit" :disabled="isSavingKey">{{ isSavingKey ? '同步中' : '保存并同步' }}</button>
           </form>
           <div class="life-key-actions">
-            <button v-if="canEditMarks" type="button" @click="clearKeySecret">清除本机密钥</button>
+            <button v-if="canEditMarks" type="button" @click="clearKeySecret">清除密码</button>
             <button type="button" @click="closeKeyModal">关闭</button>
           </div>
           <span v-if="keyMessage" class="life-key-message" :class="{ 'is-error': isKeyError }">{{ keyMessage }}</span>
-          <small>密钥仅保存在当前浏览器 localStorage 中，用于同步最新数据和修改记录。</small>
         </section>
       </div>
     </Transition>
