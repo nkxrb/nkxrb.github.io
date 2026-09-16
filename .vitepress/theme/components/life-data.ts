@@ -157,6 +157,8 @@ export interface LifeData {
   bodyMeasurements: LifeBodyMeasurement[]
 }
 
+export const PENDING_RECORDS_STORAGE_KEY = 'life-calendar-pending-records-v1'
+export const PENDING_MEASUREMENTS_STORAGE_KEY = 'life-body-measurements-pending-v1'
 const TOKEN_SECRET_STORAGE_KEY = 'life-data-token-secret'
 const REMOTE_API_BASE = `https://${'git'}${'ee.com'}/api/v5`
 const REMOTE_OWNER = 'nkxrb'
@@ -477,26 +479,65 @@ function deleteLifeRecord(records: LifeRecordDay[], locator: LifeRecordLocator) 
   return sortRecordDays(nextRecords)
 }
 
-function mergeLifeRecords(baseRecords: LifeRecordDay[], incomingRecords: LifeRecordDay[]) {
+function sortKeyFromEntry(entry: LifeRecordEntry) {
+  const match = entry.time?.match(/^(\d{1,2}):(\d{2})/)
+  return match ? Number(match[1]) * 60 + Number(match[2]) : Number.POSITIVE_INFINITY
+}
+
+function newerEntry(left: LifeRecordEntry, right: LifeRecordEntry): LifeRecordEntry {
+  if (left.created_at && right.created_at) {
+    return left.created_at >= right.created_at ? left : right
+  }
+  if (left.created_at && !right.created_at) return left
+  if (right.created_at && !left.created_at) return right
+  if (left.source === 'pending' && right.source !== 'pending') return left
+  if (right.source === 'pending' && left.source !== 'pending') return right
+  return left
+}
+
+function mergeLifeRecordsNewest(baseRecords: LifeRecordDay[], incomingRecords: LifeRecordDay[]) {
   const map = new Map<string, LifeRecordEntry[]>()
-  const seen = new Set<string>()
-  const addEntry = (date: string, entry: LifeRecordEntry) => {
-    const key = recordIdentity(date, entry)
-    if (seen.has(key)) return
-    seen.add(key)
-    const entries = map.get(date) || []
-    entries.push(cleanRecordEntry(entry))
-    map.set(date, entries)
+
+  const matchesExisting = (date: string, entry: LifeRecordEntry, item: LifeRecordEntry) => {
+    if (entry.local_id || item.local_id) {
+      if (entry.local_id && item.local_id) return entry.local_id === item.local_id
+      return entry.time === item.time && entry.note === item.note && Boolean(entry.special) === Boolean(item.special)
+    }
+    return recordIdentity(date, entry) === recordIdentity(date, item)
+  }
+
+  const add = (date: string, entry: LifeRecordEntry) => {
+    const list = map.get(date) || []
+    const existingIndex = list.findIndex(item => matchesExisting(date, entry, item))
+    if (existingIndex === -1) {
+      list.push(cleanRecordEntry(entry))
+    } else {
+      list[existingIndex] = cleanerEntry(newerEntry(list[existingIndex], entry))
+    }
+    map.set(date, list)
+  }
+
+  function cleanerEntry(entry: LifeRecordEntry) {
+    const { source: _source, ...clean } = entry
+    return cleanRecordEntry(clean as LifeRecordEntry)
   }
 
   for (const day of baseRecords) {
-    for (const entry of day.entries) addEntry(day.date, entry)
+    for (const entry of day.entries) add(day.date, entry)
   }
   for (const day of incomingRecords) {
-    for (const entry of day.entries) addEntry(day.date, entry)
+    for (const entry of day.entries) add(day.date, entry)
   }
 
-  return sortRecordDays([...map.entries()].map(([date, entries]) => ({ date, entries })))
+  return [...map.entries()]
+    .map(([date, entries]) => ({ date, entries }))
+    .map(day => ({
+      date: day.date,
+      entries: day.entries.slice().sort(
+        (a, b) => sortKeyFromEntry(a) - sortKeyFromEntry(b) || a.time.localeCompare(b.time, 'zh-CN')
+      )
+    }))
+    .sort((a, b) => a.date.localeCompare(b.date))
 }
 
 async function getRemoteContent<T>(fileName: string) {
@@ -722,7 +763,7 @@ export async function appendLifeRecordsToRemote(records: LifeRecordDay[]) {
 
   const nextRecords = await updateRemoteJson<LifeRecordDay[]>(
     NEWBORN_RECORDS_FILE,
-    currentRecords => mergeLifeRecords(currentRecords, records),
+    currentRecords => mergeLifeRecordsNewest(currentRecords, records),
     newbornRecordsJson as LifeRecordDay[],
     `chore(life): update newborn records`
   )
@@ -796,6 +837,10 @@ export async function upsertBodyMeasurementToRemote(measurement: LifeBodyMeasure
   const nextMeasurements = await updateRemoteJson<LifeBodyMeasurement[]>(
     BODY_MEASUREMENTS_FILE,
     measurements => {
+      const existing = measurements.find(item => item.date === cleanMeasurement.date)
+      if (cleanMeasurement.created_at && existing?.created_at && existing.created_at > cleanMeasurement.created_at) {
+        return measurements
+      }
       const filtered = measurements.filter(item => item.date !== cleanMeasurement.date)
       return [...filtered, cleanMeasurement].sort((a, b) => a.date.localeCompare(b.date))
     },
@@ -831,6 +876,53 @@ export async function updateVaccineRecordsToRemote(records: LifeVaccineRecords) 
   }
 
   return nextRecords
+}
+
+export function readStoredPendingRecords(): LifeRecordDay[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(PENDING_RECORDS_STORAGE_KEY) || '[]')
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .filter(day => typeof day?.date === 'string' && Array.isArray(day.entries))
+      .map(day => ({
+        date: day.date,
+        entries: day.entries.filter((entry: LifeRecordEntry) => typeof entry?.time === 'string' && typeof entry?.note === 'string')
+      }))
+  } catch {
+    return []
+  }
+}
+
+export function readStoredPendingMeasurements(): LifeBodyMeasurement[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(PENDING_MEASUREMENTS_STORAGE_KEY) || '[]')
+    return Array.isArray(parsed) ? parsed.filter(item => typeof item?.date === 'string') : []
+  } catch {
+    return []
+  }
+}
+
+export function clearPendingLifeData() {
+  if (typeof window === 'undefined') return
+  try {
+    window.localStorage.removeItem(PENDING_RECORDS_STORAGE_KEY)
+    window.localStorage.removeItem(PENDING_MEASUREMENTS_STORAGE_KEY)
+  } catch {}
+}
+
+export async function refreshLifeDataFromRemote() {
+  if (!hasLifeDataSecret()) throw new Error('缺少数据访问密钥')
+
+  const pendingRecords = readStoredPendingRecords()
+  const pendingMeasurements = readStoredPendingMeasurements()
+
+  if (pendingRecords.length) await appendLifeRecordsToRemote(pendingRecords)
+  for (const item of pendingMeasurements) await upsertBodyMeasurementToRemote(item)
+  if (pendingRecords.length || pendingMeasurements.length) clearPendingLifeData()
+
+  return ensureLifeData({ force: true })
 }
 
 export function hasLifeDataSecret() {

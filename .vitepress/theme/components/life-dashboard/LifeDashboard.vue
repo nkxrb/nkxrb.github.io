@@ -40,6 +40,21 @@
     </section>
 
     <div class="dashboard-shell">
+      <div class="life-tools" aria-label="数据工具">
+        <button type="button" class="life-tools__key" @click="openKeyModal">
+          {{ canEditMarks ? '数据密钥' : '设置数据密钥' }}
+        </button>
+        <button
+          type="button"
+          class="life-tools__refresh"
+          :disabled="isRefreshing"
+          @click="handleRefresh"
+        >
+          <span aria-hidden="true">↻</span>
+          {{ isRefreshing ? '同步中…' : '刷新数据' }}
+        </button>
+      </div>
+
       <section class="quick-record" aria-label="快速添加记录">
         <div>
           <span>DAILY RECORD</span>
@@ -302,6 +317,34 @@
         </section>
       </div>
     </Transition>
+
+    <Transition name="sheet">
+      <div v-if="showKeyModal" class="sheet-layer info-layer life-key-layer" role="presentation" @click.self="closeKeyModal">
+        <section class="life-key-panel" role="dialog" aria-modal="true" aria-labelledby="life-key-modal-title">
+          <button class="info-close" type="button" aria-label="关闭数据密钥设置" @click="closeKeyModal">×</button>
+          <p>DATA ACCESS</p>
+          <h2 id="life-key-modal-title">一生时光数据密钥</h2>
+          <form @submit.prevent="submitKeySecret">
+            <label>
+              <span>密钥</span>
+              <input
+                v-model="keySecret"
+                type="password"
+                autocomplete="current-password"
+                placeholder="输入数据访问密钥"
+              >
+            </label>
+            <button type="submit" :disabled="isSavingKey">{{ isSavingKey ? '同步中' : '保存并同步' }}</button>
+          </form>
+          <div class="life-key-actions">
+            <button v-if="canEditMarks" type="button" @click="clearKeySecret">清除本机密钥</button>
+            <button type="button" @click="closeKeyModal">关闭</button>
+          </div>
+          <span v-if="keyMessage" class="life-key-message" :class="{ 'is-error': isKeyError }">{{ keyMessage }}</span>
+          <small>密钥仅保存在当前浏览器 localStorage 中，用于同步最新数据和修改记录。</small>
+        </section>
+      </div>
+    </Transition>
     </template>
   </main>
 </template>
@@ -311,12 +354,14 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import avatarUrl from '../../../../life/assets/avatar.jpg'
 import LifeInsights from '../life-insights/LifeInsights.vue'
 import {
+  clearLifeDataSecret,
   ensureLifeData,
   hasLifeDataSecret,
   lifeData,
   lifeDataError,
   lifeDataLoading,
   lifeDataSecretRequired,
+  refreshLifeDataFromRemote,
   setLifeDataSecret,
   updateVaccineRecordsToRemote,
   type LifeAnchor,
@@ -419,6 +464,12 @@ const infoVaccine = ref<VaccineRow | null>(null)
 const importInput = ref<HTMLInputElement | null>(null)
 const highlightedId = ref<number | null>(null)
 const dataSecret = ref('')
+const keySecret = ref('')
+const isSavingKey = ref(false)
+const keyMessage = ref('')
+const isKeyError = ref(false)
+const showKeyModal = ref(false)
+const isRefreshing = ref(false)
 const canEditMarks = ref(false)
 const selectedOptionalIds = ref<Set<number>>(new Set())
 const initialSkyDate = new Date()
@@ -1803,6 +1854,80 @@ async function reloadData() {
   if (lifeData.value) {
     restoreVaccineState()
     void nextTick(startSky)
+  }
+}
+
+function openKeyModal() {
+  keySecret.value = ''
+  keyMessage.value = ''
+  isKeyError.value = false
+  showKeyModal.value = true
+}
+
+function closeKeyModal() {
+  showKeyModal.value = false
+}
+
+async function submitKeySecret() {
+  const value = keySecret.value.trim()
+  if (!value) {
+    keyMessage.value = '请输入数据访问密钥'
+    isKeyError.value = true
+    return
+  }
+
+  isSavingKey.value = true
+  keyMessage.value = ''
+  try {
+    const data = await setLifeDataSecret(value)
+    canEditMarks.value = hasLifeDataSecret()
+    keyMessage.value = data ? '密钥已保存，数据同步成功' : '密钥已保存，但数据同步失败'
+    isKeyError.value = !data
+    showToast(keyMessage.value)
+    if (lifeData.value) {
+      restoreVaccineState()
+      void nextTick(startSky)
+    }
+    if (data) showKeyModal.value = false
+  } finally {
+    isSavingKey.value = false
+  }
+}
+
+async function clearKeySecret() {
+  clearLifeDataSecret()
+  canEditMarks.value = false
+  keySecret.value = ''
+  keyMessage.value = '本机密钥已清除'
+  isKeyError.value = false
+  showKeyModal.value = false
+  await ensureLifeData({ force: true })
+  showToast('本机密钥已清除')
+  if (lifeData.value) {
+    restoreVaccineState()
+    void nextTick(startSky)
+  }
+}
+
+async function handleRefresh() {
+  if (!hasLifeDataSecret()) {
+    openKeyModal()
+    return
+  }
+  if (isRefreshing.value) return
+
+  isRefreshing.value = true
+  try {
+    const data = await refreshLifeDataFromRemote()
+    if (lifeData.value || data) {
+      restoreVaccineState()
+      void nextTick(startSky)
+    }
+    showToast('数据已刷新')
+  } catch (error) {
+    showToast(error instanceof Error ? error.message : '刷新失败')
+  } finally {
+    isRefreshing.value = false
   }
 }
 
