@@ -346,7 +346,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import avatarUrl from '../../../../life/assets/avatar.jpg'
 import LifeInsights from '../life-insights/LifeInsights.vue'
 import {
@@ -473,6 +473,7 @@ const skyCanvas = ref<HTMLCanvasElement | null>(null)
 const lifeCanvas = ref<HTMLCanvasElement | null>(null)
 const skyPhase = ref<SkyPhase>(getSkyPhase(initialSkyDate))
 
+let previousBodyOverflow = ''
 let toastTimer: ReturnType<typeof setTimeout> | undefined
 let flipTimer: ReturnType<typeof setTimeout> | undefined
 let confettiTimer: ReturnType<typeof setTimeout> | undefined
@@ -489,6 +490,16 @@ let skyResizeObserver: ResizeObserver | undefined
 let skyIntersectionObserver: IntersectionObserver | undefined
 let isSkyVisible = true
 let isSkyVisibilityListenerBound = false
+
+watch(showKeyModal, value => {
+  if (typeof document === 'undefined') return
+  if (value) {
+    previousBodyOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = previousBodyOverflow
+  }
+})
 
 const isDataLoading = computed(() => lifeDataLoading.value && !lifeData.value)
 const dataError = computed(() => !lifeData.value ? lifeDataError.value : '')
@@ -1954,6 +1965,7 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  if (typeof document !== 'undefined') document.body.style.overflow = previousBodyOverflow
   if (toastTimer) clearTimeout(toastTimer)
   if (flipTimer) clearTimeout(flipTimer)
   if (confettiTimer) clearTimeout(confettiTimer)

@@ -29,6 +29,7 @@ a {
   --paper: #f7f5ee;
   min-height: 100vh;
   overflow: hidden;
+  overflow-x: hidden;
   color: var(--ink);
   background:
     radial-gradient(circle at 4% 39%, rgb(42 157 143 / 8%), transparent 17rem),
@@ -422,7 +423,9 @@ a {
 .life-key-layer .life-key-panel {
   position: relative;
   width: min(100%, 420px);
+  max-height: min(86vh, 760px);
   padding: 30px 24px;
+  overflow-y: auto;
   border: 1px solid rgb(22 63 58 / 10%);
   border-radius: 6px;
   background: rgb(255 254 249 / 97%);
@@ -455,7 +458,7 @@ a {
   border-radius: 4px;
   color: var(--forest);
   background: white;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .life-key-layer .life-key-panel form {
