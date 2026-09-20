@@ -2,7 +2,6 @@
   <main class="calendar-app">
     <div v-if="isDataLoading" class="calendar-loading" role="status">
       <strong>正在载入成长日历</strong>
-      <span>有密钥时同步最新记录，否则读取本地静态记录</span>
     </div>
     <div v-else-if="dataError" class="calendar-loading calendar-loading--error" role="alert">
       <strong>数据加载失败</strong>
