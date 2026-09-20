@@ -2,13 +2,12 @@
   <main class="life-app">
     <div v-if="isDataLoading" class="life-loading" role="status">
       <strong>正在载入家庭数据</strong>
-      <span>有密钥时同步最新数据，否则读取本地静态数据</span>
     </div>
     <div v-else-if="dataError" class="life-loading life-loading--error" role="alert">
       <strong>数据加载失败</strong>
       <span>{{ dataError }}</span>
       <form v-if="isSecretRequired" class="life-secret-form" @submit.prevent="submitDataSecret">
-        <input v-model="dataSecret" type="password" placeholder="数据访问密钥" autocomplete="current-password">
+        <input v-model="dataSecret" type="password" placeholder="访问密码" autocomplete="current-password">
         <button type="submit">同步</button>
       </form>
       <button type="button" @click="reloadData">重试</button>
@@ -56,7 +55,7 @@
         <div>
           <span>DAILY RECORD</span>
           <strong>{{ canEditMarks ? '添加记录' : '进入成长日历' }}</strong>
-          <p>{{ canEditMarks ? '快速记录喂养、睡眠、体重、身高和备注' : '保存密钥后可添加照护与成长记录' }}</p>
+          <p>{{ canEditMarks ? '快速记录喂养、睡眠、体重、身高和备注' : '' }}</p>
         </div>
         <a class="quick-record__button" href="/life/calendar/#record-editor">
           {{ canEditMarks ? '添加记录' : '打开日历' }} <span aria-hidden="true">→</span>
@@ -1878,7 +1877,7 @@ function closeKeyModal() {
 async function submitKeySecret() {
   const value = keySecret.value.trim()
   if (!value) {
-    keyMessage.value = '请输入数据访问密钥'
+    keyMessage.value = '请输入密码'
     isKeyError.value = true
     return
   }
@@ -1888,7 +1887,7 @@ async function submitKeySecret() {
   try {
     const data = await setLifeDataSecret(value)
     canEditMarks.value = hasLifeDataSecret()
-    keyMessage.value = data ? '密钥已保存，数据同步成功' : '密钥已保存，但数据同步失败'
+    keyMessage.value = data ? '已保存，数据同步成功' : '数据同步失败'
     isKeyError.value = !data
     showToast(keyMessage.value)
     if (lifeData.value) {
@@ -1905,11 +1904,11 @@ async function clearKeySecret() {
   clearLifeDataSecret()
   canEditMarks.value = false
   keySecret.value = ''
-  keyMessage.value = '本机密钥已清除'
+  keyMessage.value = '密码已清除'
   isKeyError.value = false
   showKeyModal.value = false
   await ensureLifeData({ force: true })
-  showToast('本机密钥已清除')
+  showToast('密码已清除')
   if (lifeData.value) {
     restoreVaccineState()
     void nextTick(startSky)

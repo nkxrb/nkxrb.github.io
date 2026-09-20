@@ -282,7 +282,7 @@ function readStoredTokenSecret() {
 function getTokenSecret() {
   const fixedSecret = readStoredTokenSecret()
   lifeDataSecretRequired.value = !fixedSecret
-  if (!fixedSecret) throw new Error('缺少数据访问密钥')
+  if (!fixedSecret) throw new Error('缺少密码')
   return fixedSecret
 }
 
@@ -913,7 +913,7 @@ export function clearPendingLifeData() {
 }
 
 export async function refreshLifeDataFromRemote() {
-  if (!hasLifeDataSecret()) throw new Error('缺少数据访问密钥')
+  if (!hasLifeDataSecret()) throw new Error('缺少密码')
 
   const pendingRecords = readStoredPendingRecords()
   const pendingMeasurements = readStoredPendingMeasurements()

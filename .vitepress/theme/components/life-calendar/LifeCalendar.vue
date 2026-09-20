@@ -7,7 +7,7 @@
       <strong>数据加载失败</strong>
       <span>{{ dataError }}</span>
       <form v-if="isSecretRequired" class="calendar-secret-form" @submit.prevent="submitDataSecret">
-        <input v-model="dataSecret" type="password" placeholder="数据访问密钥" autocomplete="current-password">
+        <input v-model="dataSecret" type="password" placeholder="访问密码" autocomplete="current-password">
         <button type="submit">同步</button>
       </form>
       <button type="button" @click="reloadData">重试</button>
