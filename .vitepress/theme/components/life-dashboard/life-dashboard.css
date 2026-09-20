@@ -1076,36 +1076,6 @@ a {
   text-align: right;
 }
 
-.optional-vaccine-picker {
-  display: flex;
-  margin: 0 0 16px;
-  overflow-x: auto;
-  gap: 8px;
-  scrollbar-width: none;
-}
-
-.optional-vaccine-picker::-webkit-scrollbar {
-  display: none;
-}
-
-.optional-vaccine-picker button {
-  min-height: 38px;
-  padding: 0 12px;
-  border: 1px solid rgb(42 157 143 / 14%);
-  border-radius: 999px;
-  flex: 0 0 auto;
-  color: var(--green-deep);
-  background: rgb(220 239 233 / 42%);
-  font-size: 11px;
-}
-
-.optional-vaccine-picker button.is-selected {
-  border-color: transparent;
-  color: white;
-  background: var(--green-deep);
-  box-shadow: 0 8px 18px rgb(31 119 110 / 16%);
-}
-
 .vaccine-timeline {
   padding: 0;
   margin: 0;
@@ -1575,7 +1545,49 @@ a {
   font-size: 12px;
 }
 
+.vaccine-edit-fields {
+  display: grid;
+  margin: 0 0 16px;
+  gap: 12px;
+  text-align: left;
+}
+
+.vaccine-edit-fields label {
+  display: grid;
+  gap: 6px;
+}
+
+.vaccine-edit-fields span {
+  color: var(--green-deep);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.vaccine-edit-fields input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid rgb(22 63 58 / 14%);
+  border-radius: 3px 12px 3px 3px;
+  color: var(--forest);
+  background: #f8f7f0;
+  font: 12px/1 'Noto Sans SC', sans-serif;
+}
+
+.vaccine-edit-fields input:disabled {
+  color: #8b9692;
+  background: #eef1eb;
+  cursor: not-allowed;
+}
+
+.vaccine-edit-fields small {
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
 .sheet-primary,
+.sheet-secondary,
 .sheet-cancel {
   display: block;
   width: 100%;
@@ -1587,9 +1599,21 @@ a {
 }
 
 .sheet-primary {
+  margin-top: 8px;
   color: white;
   background: var(--green-deep);
   box-shadow: 0 10px 24px rgb(31 119 110 / 20%);
+}
+
+.sheet-secondary {
+  color: var(--green-deep);
+  background: #e7f0eb;
+}
+
+.sheet-primary:disabled,
+.sheet-secondary:disabled {
+  cursor: wait;
+  opacity: .55;
 }
 
 .sheet-cancel {

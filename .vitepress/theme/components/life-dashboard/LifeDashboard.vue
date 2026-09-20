@@ -189,19 +189,7 @@
           </div>
         </div>
 
-        <p class="timeline-help">轻触疫苗名称查看说明，轻触右侧状态完成标记</p>
-
-        <div v-if="optionalVaccines.length && canEditMarks" class="optional-vaccine-picker" aria-label="自费疫苗选择">
-          <button
-            v-for="vaccine in optionalVaccines"
-            :key="vaccine.id"
-            type="button"
-            :class="{ 'is-selected': selectedOptionalIds.has(vaccine.id) }"
-            @click="toggleOptionalVaccine(vaccine.id)"
-          >
-            {{ vaccine.name.replace('（自费', '（').replace('·第1剂', '') }}
-          </button>
-        </div>
+        <p class="timeline-help">轻触疫苗名称查看说明，轻触右侧状态编辑计划或接种日期</p>
 
         <ol class="vaccine-timeline">
           <li
@@ -268,11 +256,36 @@
           </div>
           <p class="section-kicker">VACCINE STATUS</p>
           <h2 id="sheet-title">{{ sheetTitle }}</h2>
-          <p>
-            {{ sheetVaccine.name }} ·
-            {{ sheetVaccine.status === 'completed' && sheetVaccine.actualDateIso ? `已于 ${formatDate(sheetVaccine.actualDateIso)} 接种` : `建议 ${formatDate(sheetVaccine.dateIso)}` }}
-          </p>
-          <button class="sheet-primary" type="button" @click="confirmStatusChange">{{ sheetActionText }}</button>
+          <p>{{ sheetVaccine.name }}</p>
+          <div class="vaccine-edit-fields">
+            <label>
+              <span>计划预约日期</span>
+              <input
+                v-model="sheetPlannedDate"
+                type="date"
+                :disabled="sheetVaccine.status === 'completed' || isSavingVaccine"
+              >
+              <small v-if="sheetVaccine.status === 'completed'">完成接种后计划日期已锁定</small>
+            </label>
+            <label>
+              <span>实际接种日期</span>
+              <input
+                v-model="sheetActualDate"
+                type="date"
+                :disabled="isSavingVaccine"
+              >
+              <small v-if="sheetVaccine.status !== 'completed'">确认接种时将保存此日期</small>
+            </label>
+          </div>
+          <button
+            class="sheet-secondary"
+            type="button"
+            :disabled="isSavingVaccine"
+            @click="saveVaccineDate"
+          >
+            {{ sheetVaccine.status === 'completed' ? '保存实际日期' : '保存计划日期' }}
+          </button>
+          <button class="sheet-primary" type="button" :disabled="isSavingVaccine" @click="confirmStatusChange">{{ sheetActionText }}</button>
           <button class="sheet-cancel" type="button" @click="closeSheet">取消</button>
         </section>
       </div>
@@ -360,6 +373,8 @@ import {
   setLifeDataSecret,
   updateVaccineRecordsToRemote,
   type LifeAnchor,
+  type LifeVaccineCompletion,
+  type LifeVaccinePlan,
   type LifeVaccineRecords,
   type LifeProfile,
   type LifeVaccine
@@ -438,23 +453,20 @@ const profile = computed(() => lifeData.value?.profile ?? emptyProfile)
 const anchorsData = computed(() => lifeData.value?.anchors ?? [])
 const milestonesData = computed(() => lifeData.value?.milestones ?? [])
 const allVaccinesData = computed(() => lifeData.value?.vaccines ?? [])
-const vaccineRecordsData = computed<LifeVaccineRecords>(() => lifeData.value?.vaccineRecords ?? { selected_optional_ids: [], completions: [] })
-const optionalVaccines = computed(() => allVaccinesData.value.filter(vaccine => vaccine.funding === 'self_paid'))
-const vaccinesData = computed(() => allVaccinesData.value.filter(vaccine => vaccine.funding !== 'self_paid' || selectedOptionalIds.value.has(vaccine.id)))
+const vaccineRecordsData = computed<LifeVaccineRecords>(() => lifeData.value?.vaccineRecords ?? { planned_dates: [], completions: [] })
 const recordsData = computed(() => lifeData.value?.records ?? [])
 const growthStagesData = computed(() => lifeData.value?.growthStages ?? [])
 const diaperUsageData = computed(() => lifeData.value?.diaperUsage ?? [])
 const bodyMeasurementsData = computed(() => lifeData.value?.bodyMeasurements ?? [])
 const birthDate = computed(() => parseDate(profile.value.birth_date))
 const today = ref(startOfDay(new Date()))
-const defaultCompletedIds = computed(() => vaccinesData.value
-  .filter(hasActualDate)
-  .map(vaccine => vaccine.id))
 const completedIds = ref<Set<number>>(new Set())
 const isFlipping = ref(false)
 const showConfetti = ref(false)
 const toastMessage = ref('')
 const sheetVaccine = ref<VaccineRow | null>(null)
+const sheetPlannedDate = ref('')
+const sheetActualDate = ref('')
 const infoVaccine = ref<VaccineRow | null>(null)
 const importInput = ref<HTMLInputElement | null>(null)
 const highlightedId = ref<number | null>(null)
@@ -466,7 +478,7 @@ const isKeyError = ref(false)
 const showKeyModal = ref(false)
 const isRefreshing = ref(false)
 const canEditMarks = ref(false)
-const selectedOptionalIds = ref<Set<number>>(new Set())
+const isSavingVaccine = ref(false)
 const initialSkyDate = new Date()
 const skyCanvas = ref<HTMLCanvasElement | null>(null)
 const lifeCanvas = ref<HTMLCanvasElement | null>(null)
@@ -788,8 +800,12 @@ const visibleMilestones = computed(() => milestonesData.value.map(item => ({
   isFuture: parseDate(item.date) > today.value
 })))
 
-const vaccineRows = computed<VaccineRow[]>(() => vaccinesData.value.map((vaccine: Vaccine) => {
-  const date = addMonths(birthDate.value, vaccine.offset_months)
+function vaccineScheduleDate(vaccine: Vaccine) {
+  return vaccine.planned_date ? parseDate(vaccine.planned_date) : addMonths(birthDate.value, vaccine.offset_months)
+}
+
+const vaccineRows = computed<VaccineRow[]>(() => allVaccinesData.value.map((vaccine: Vaccine) => {
+  const date = vaccineScheduleDate(vaccine)
   const daysUntil = dayDiff(date, today.value)
   const completed = completedIds.value.has(vaccine.id)
   const overdue = !completed && daysUntil < -profile.value.vaccine_grace_days
@@ -865,7 +881,7 @@ const dashboardDateCells = computed<DashboardDateCell[]>(() => Array.from({ leng
   }
 }))
 
-const sheetTitle = computed(() => sheetVaccine.value?.status === 'completed' ? '撤销已完成标记？' : '确认已接种吗？')
+const sheetTitle = computed(() => sheetVaccine.value?.status === 'completed' ? '编辑接种记录' : '编辑疫苗计划')
 const sheetActionText = computed(() => sheetVaccine.value?.status === 'completed' ? '撤销标记' : '确认已接种')
 
 function formatNumber(value: number) {
@@ -1716,10 +1732,14 @@ function closeVaccineInfo() {
 function openStatusSheet(row: VaccineRow) {
   if (!canEditMarks.value) return
   sheetVaccine.value = row
+  sheetPlannedDate.value = row.dateIso
+  sheetActualDate.value = row.actualDateIso || toIsoDate(today.value)
 }
 
 function closeSheet() {
   sheetVaccine.value = null
+  sheetPlannedDate.value = ''
+  sheetActualDate.value = ''
 }
 
 function vaccineBeforeNotes(vaccine: Vaccine) {
@@ -1734,16 +1754,18 @@ function vaccineAfterNotes(vaccine: Vaccine) {
     : ['接种后在现场留观30分钟。', '回家后观察体温、精神、吃奶和局部红肿，反应较重或持续异常应及时就医。']
 }
 
-function currentVaccineRecords(nextIds = completedIds.value, nextOptionalIds = selectedOptionalIds.value): LifeVaccineRecords {
-  const existingCompletionMap = new Map(vaccineRecordsData.value.completions.map(item => [item.id, item.actual_date]))
+function currentVaccineRecords(
+  nextCompletions = vaccineRecordsData.value.completions,
+  nextPlans = vaccineRecordsData.value.planned_dates
+): LifeVaccineRecords {
+  const plannedDateMap = new Map(nextPlans.map(item => [item.id, item.planned_date]))
   return {
-    selected_optional_ids: [...nextOptionalIds].sort((a, b) => a - b),
-    completions: [...nextIds]
-      .sort((a, b) => a - b)
-      .map(id => ({
-        id,
-        actual_date: existingCompletionMap.get(id) || toIsoDate(today.value)
-      }))
+    planned_dates: [...plannedDateMap.entries()]
+      .sort(([left], [right]) => left - right)
+      .map(([id, planned_date]) => ({ id, planned_date })),
+    completions: [...nextCompletions]
+      .sort((left, right) => left.id - right.id)
+      .map(item => ({ ...item }))
   }
 }
 
@@ -1757,24 +1779,86 @@ async function saveVaccineRecords(records: LifeVaccineRecords, successMessage: s
 async function confirmStatusChange() {
   if (!canEditMarks.value) return
   if (!sheetVaccine.value) return
-  const nextIds = new Set(completedIds.value)
-  const wasCompleted = nextIds.has(sheetVaccine.value.id)
-  wasCompleted ? nextIds.delete(sheetVaccine.value.id) : nextIds.add(sheetVaccine.value.id)
+  const row = sheetVaccine.value
+  const wasCompleted = row.status === 'completed'
+  const nextCompletions = new Map(vaccineRecordsData.value.completions.map(item => [item.id, item]))
 
   try {
+    if (wasCompleted) {
+      nextCompletions.delete(row.id)
+    } else {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(sheetActualDate.value)) {
+        showToast('请选择实际接种日期')
+        return
+      }
+      nextCompletions.set(row.id, {
+        id: row.id,
+        actual_date: sheetActualDate.value
+      })
+    }
+
+    isSavingVaccine.value = true
     await saveVaccineRecords(
-      currentVaccineRecords(nextIds),
+      currentVaccineRecords([...nextCompletions.values()]),
       wasCompleted ? '已撤销完成标记' : '更新成功'
     )
-    completedIds.value = nextIds
     if (!wasCompleted) {
-      highlightedId.value = sheetVaccine.value.id
+      highlightedId.value = row.id
       if (highlightTimer) clearTimeout(highlightTimer)
       highlightTimer = setTimeout(() => { highlightedId.value = null }, 1100)
     }
     closeSheet()
   } catch {
     showToast('更新失败')
+  } finally {
+    isSavingVaccine.value = false
+  }
+}
+
+async function saveVaccineDate() {
+  if (!canEditMarks.value || !sheetVaccine.value) return
+  const row = sheetVaccine.value
+  const isValidDate = /^\d{4}-\d{2}-\d{2}$/
+
+  if (row.status === 'completed') {
+    if (!isValidDate.test(sheetActualDate.value)) {
+      showToast('请选择实际接种日期')
+      return
+    }
+
+    const nextCompletions = vaccineRecordsData.value.completions.map(item => (
+      item.id === row.id ? { ...item, actual_date: sheetActualDate.value } : item
+    ))
+
+    try {
+      isSavingVaccine.value = true
+      await saveVaccineRecords(currentVaccineRecords(nextCompletions), '实际接种日期已更新')
+      closeSheet()
+    } catch {
+      showToast('更新失败')
+    } finally {
+      isSavingVaccine.value = false
+    }
+    return
+  }
+
+  if (!isValidDate.test(sheetPlannedDate.value)) {
+    showToast('请选择计划预约日期')
+    return
+  }
+
+  const nextPlans = vaccineRecordsData.value.planned_dates.map(item => (
+    item.id === row.id ? { ...item, planned_date: sheetPlannedDate.value } : item
+  ))
+
+  try {
+    isSavingVaccine.value = true
+    await saveVaccineRecords(currentVaccineRecords(vaccineRecordsData.value.completions, nextPlans), '计划预约日期已更新')
+    closeSheet()
+  } catch {
+    showToast('更新失败')
+  } finally {
+    isSavingVaccine.value = false
   }
 }
 
@@ -1812,11 +1896,15 @@ async function importMarks(event: Event) {
       ? payload.completed_vaccine_ids
       : payload.vaccine_records?.completions?.map((item: { id: number }) => item.id)
     if (!Array.isArray(sourceIds)) throw new Error('invalid data')
-    const validIds = new Set(vaccinesData.value.map(item => item.id))
+    const validIds = new Set(allVaccinesData.value.map(item => item.id))
     const restored = sourceIds
       .map(Number)
       .filter((id: number) => Number.isInteger(id) && validIds.has(id))
-    await saveVaccineRecords(currentVaccineRecords(new Set(restored)), `已恢复 ${restored.length} 条接种标记`)
+    const restoredCompletions = restored.map(id => ({
+      id,
+      actual_date: vaccineRecordsData.value.completions.find(item => item.id === id)?.actual_date || toIsoDate(today.value)
+    }))
+    await saveVaccineRecords(currentVaccineRecords(restoredCompletions), `已恢复 ${restored.length} 条接种标记`)
   } catch {
     showToast('导入失败：请选择本页面导出的 JSON 文件')
   } finally {
@@ -1834,25 +1922,8 @@ function confettiStyle(piece: number) {
   }
 }
 
-async function toggleOptionalVaccine(id: number) {
-  if (!canEditMarks.value) return
-  const nextOptionalIds = new Set(selectedOptionalIds.value)
-  nextOptionalIds.has(id) ? nextOptionalIds.delete(id) : nextOptionalIds.add(id)
-  try {
-    await saveVaccineRecords(currentVaccineRecords(completedIds.value, nextOptionalIds), '自费疫苗选择已更新')
-  } catch {
-    showToast('更新失败')
-  }
-}
-
 function restoreVaccineState() {
-  const nextIds = new Set(defaultCompletedIds.value)
-  selectedOptionalIds.value = new Set(vaccineRecordsData.value.selected_optional_ids)
-  if (!canEditMarks.value) {
-    completedIds.value = nextIds
-    return
-  }
-  completedIds.value = nextIds
+  completedIds.value = new Set(vaccineRecordsData.value.completions.map(item => item.id))
 }
 
 async function reloadData() {
@@ -1948,7 +2019,8 @@ async function submitDataSecret() {
 
 onMounted(async () => {
   canEditMarks.value = hasLifeDataSecret()
-  await ensureLifeData()
+  // A shared module can still contain a snapshot from another route.
+  await ensureLifeData({ force: canEditMarks.value })
   if (!lifeData.value) return
   restoreVaccineState()
   void nextTick(startSky)

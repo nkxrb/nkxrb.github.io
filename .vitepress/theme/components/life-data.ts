@@ -45,6 +45,7 @@ export interface LifeVaccine {
   name: string
   age: string
   offset_months: number
+  planned_date?: string
   actual_date?: string
   funding?: 'free' | 'self_paid'
   type: string
@@ -127,8 +128,13 @@ export interface LifeVaccineCompletion {
   note?: string
 }
 
+export interface LifeVaccinePlan {
+  id: number
+  planned_date: string
+}
+
 export interface LifeVaccineRecords {
-  selected_optional_ids: number[]
+  planned_dates: LifeVaccinePlan[]
   completions: LifeVaccineCompletion[]
 }
 
@@ -653,25 +659,53 @@ async function updateRemoteJson<T>(fileName: string, updater: (data: T) => T, fa
   }
 }
 
-function normalizeVaccineRecords(records: LifeVaccineRecords): LifeVaccineRecords {
+function normalizeVaccineRecords(
+  records: Partial<LifeVaccineRecords> | null | undefined,
+  fallbackPlans: LifeVaccinePlan[] = []
+): LifeVaccineRecords {
+  const plannedDateMap = new Map<number, LifeVaccinePlan>()
+  for (const plan of fallbackPlans) {
+    const id = Number(plan.id)
+    if (Number.isInteger(id) && typeof plan.planned_date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(plan.planned_date)) {
+      plannedDateMap.set(id, { id, planned_date: plan.planned_date })
+    }
+  }
+
+  for (const plan of Array.isArray(records?.planned_dates) ? records.planned_dates : []) {
+    const id = Number(plan.id)
+    if (Number.isInteger(id) && typeof plan.planned_date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(plan.planned_date)) {
+      plannedDateMap.set(id, { id, planned_date: plan.planned_date })
+    }
+  }
+
+  const completionMap = new Map<number, LifeVaccineCompletion>()
+  for (const item of Array.isArray(records?.completions) ? records.completions : []) {
+    const id = Number(item.id)
+    if (!Number.isInteger(id) || typeof item.actual_date !== 'string') continue
+    completionMap.set(id, {
+      id,
+      actual_date: item.actual_date,
+      ...(item.note ? { note: item.note } : {})
+    })
+  }
+
   return {
-    selected_optional_ids: Array.isArray(records.selected_optional_ids)
-      ? records.selected_optional_ids.map(Number).filter(Number.isInteger)
-      : [],
-    completions: Array.isArray(records.completions)
-      ? records.completions
-        .filter(item => Number.isInteger(Number(item.id)) && typeof item.actual_date === 'string')
-        .map(item => ({ id: Number(item.id), actual_date: item.actual_date, ...(item.note ? { note: item.note } : {}) }))
-      : []
+    planned_dates: [...plannedDateMap.values()].sort((left, right) => left.id - right.id),
+    completions: [...completionMap.values()].sort((left, right) => left.id - right.id)
   }
 }
 
 function mergeVaccineRecords(vaccines: LifeVaccine[], records: LifeVaccineRecords) {
+  const plannedDateMap = new Map(records.planned_dates.map(item => [item.id, item.planned_date]))
   const completionMap = new Map(records.completions.map(item => [item.id, item.actual_date]))
-  return vaccines.map(vaccine => ({
-    ...vaccine,
-    ...(completionMap.has(vaccine.id) ? { actual_date: completionMap.get(vaccine.id) } : {})
-  }))
+  return vaccines.map(vaccine => {
+    const { actual_date: _legacyActualDate, planned_date: _legacyPlannedDate, ...definition } = vaccine
+    return {
+      ...definition,
+      ...(plannedDateMap.has(vaccine.id) ? { planned_date: plannedDateMap.get(vaccine.id) } : {}),
+      ...(completionMap.has(vaccine.id) ? { actual_date: completionMap.get(vaccine.id) } : {})
+    }
+  })
 }
 
 async function loadLifeData() {
@@ -695,7 +729,7 @@ async function loadLifeData() {
       mutable = {
         records,
         diaperUsage,
-        vaccineRecords: normalizeVaccineRecords(vaccineRecords),
+        vaccineRecords: normalizeVaccineRecords(vaccineRecords, staticVaccineRecords.planned_dates),
         bodyMeasurements
       }
     } catch (error) {

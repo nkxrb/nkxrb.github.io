@@ -1034,7 +1034,7 @@ onMounted(async () => {
   recordForm.time = currentTime()
   restorePendingRecords()
   restorePendingMeasurements()
-  await ensureLifeData()
+  await ensureLifeData({ force: canEditRecords.value })
   syncInitialSelection(recordsData.value)
   if (canEditRecords.value && window.location.hash === '#record-editor') openNewRecordModal()
   void flushPendingRecords()
