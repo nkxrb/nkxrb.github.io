@@ -1,23 +1,23 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-26T16:36:15.185Z",
+  "generatedAt": "2026-09-26T21:23:50.852Z",
   "summary": {
     "upstreams": 4,
-    "androidSites": 815,
-    "macosSites": 162,
-    "sharedSites": 162,
-    "jarFiles": 116,
-    "unsupportedOnMacOS": 4584,
-    "filteredSites": 4860,
+    "androidSites": 830,
+    "macosSites": 173,
+    "sharedSites": 173,
+    "jarFiles": 117,
+    "unsupportedOnMacOS": 4672,
+    "filteredSites": 4919,
     "filteredEntries": 12,
-    "speedRankings": 28,
-    "fastSites": 25,
-    "fastHttpSites": 15,
-    "fastMeasuredSites": 14,
+    "speedRankings": 26,
+    "fastSites": 24,
+    "fastHttpSites": 14,
+    "fastMeasuredSites": 13,
     "fastJarSites": 10,
-    "macosFastSites": 25,
-    "macosFastHttpSites": 15,
-    "macosFastMeasuredSites": 14,
+    "macosFastSites": 24,
+    "macosFastHttpSites": 14,
+    "macosFastMeasuredSites": 13,
     "macosFastJavaScriptSites": 10,
     "speedProbeMaxCandidates": 80,
     "speedRankingPolicy": "HTTP 源先按连通预检筛选候选，再按 rankScoreMs 排序；rankScoreMs = scoreMs - qualityBoostMs，scoreMs = searchMs + avgPlaybackMs。",
@@ -86,24 +86,6 @@
           "error": "连接失败"
         },
         {
-          "name": "少儿频道",
-          "url": "https://jihulab.com/ymz1231/xymz/-/raw/main/ymshaoer",
-          "status": "error",
-          "error": "Timeout after 10000ms"
-        },
-        {
-          "name": "二月红接口",
-          "url": "https://700sjro44343.vicp.fun/eggp/0211/tv.json",
-          "status": "error",
-          "error": "Timeout after 10000ms"
-        },
-        {
-          "name": "影视仓",
-          "url": "http://xn--5mqx81b535a.com/",
-          "status": "error",
-          "error": "Timeout after 10000ms"
-        },
-        {
           "name": "王二小",
           "url": "https://9280.kstore.vip/newwex.json",
           "resolvedUrl": "https://9280.kstore.vip/newwex.json",
@@ -113,22 +95,20 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 680,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":680}"
+            "ms": 1264,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1264}"
           }
         },
         {
-          "name": "饭太硬",
-          "url": "https://qist.wyfc.qzz.io/fty.json",
-          "resolvedUrl": "https://qist.wyfc.qzz.io/fty.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 47,
+          "name": "少儿频道",
+          "url": "https://jihulab.com/ymz1231/xymz/-/raw/main/ymshaoer",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 69,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":69}"
+            "ms": 551,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":551}"
           }
         },
         {
@@ -141,8 +121,68 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1741,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1741}"
+            "ms": 1649,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1649}"
+          }
+        },
+        {
+          "name": "王二小接口",
+          "url": "http://tvbox.xn--4kq62z5rby2qupq9ub.top/",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 956,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":956}"
+          }
+        },
+        {
+          "name": "王二小放牛娃",
+          "url": "http://tv.999888987.xyz/",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 1156,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1156}"
+          }
+        },
+        {
+          "name": "影视仓",
+          "url": "http://xn--5mqx81b535a.com/",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 165,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":165}"
+          }
+        },
+        {
+          "name": "小盒子4K",
+          "url": "http://xhztv.top/4k.json",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 356,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":356}"
+          }
+        },
+        {
+          "name": "欧歌免费",
+          "url": "https://tv.nxog.top/m/111.php?ou=%E5%85%AC%E4%BC%97%E5%8F%B7%E6%AC%A7%E6%AD%8Capp&mz=index&jar=index&123&b=tv",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 243,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":243}"
           }
         },
         {
@@ -155,20 +195,28 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 260,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":260}"
+            "ms": 58,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":58}"
           }
         },
         {
-          "name": "小盒子4K",
-          "url": "http://xhztv.top/4k.json",
+          "name": "fmys",
+          "url": "http://fmys.top/fmys.json",
           "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "error": "{\"status\":\"fail\",\"code\":404,\"ms\":200}"
+        },
+        {
+          "name": "饭太硬",
+          "url": "https://qist.wyfc.qzz.io/fty.json",
+          "resolvedUrl": "https://qist.wyfc.qzz.io/fty.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 47,
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 360,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":360}"
+            "ms": 51,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":51}"
           }
         },
         {
@@ -181,26 +229,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1200,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1200}"
-          }
-        },
-        {
-          "name": "fmys",
-          "url": "http://fmys.top/fmys.json",
-          "status": "error",
-          "error": "{\"status\":\"fail\",\"code\":404,\"ms\":185}"
-        },
-        {
-          "name": "欧歌免费",
-          "url": "https://tv.nxog.top/m/111.php?ou=%E5%85%AC%E4%BC%97%E5%8F%B7%E6%AC%A7%E6%AD%8Capp&mz=index&jar=index&123&b=tv",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 254,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":254}"
+            "ms": 1009,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1009}"
           }
         },
         {
@@ -211,102 +241,8 @@
           "check": {
             "ok": true,
             "code": 401,
-            "ms": 744,
-            "message": "{\"status\":\"ok\",\"code\":401,\"ms\":744}"
-          }
-        },
-        {
-          "name": "宝盒接口",
-          "url": "http://xn--6orr3pi6g9uu.top/",
-          "resolvedUrl": "https://play.iptv365.org/%E6%AC%A7%E6%AD%8C/api.json",
-          "status": "ok",
-          "format": "html-link:json",
-          "sites": 106,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 2396,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2396}"
-          }
-        },
-        {
-          "name": "王二小放牛娃",
-          "url": "http://tv.999888987.xyz/",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 653,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":653}"
-          }
-        },
-        {
-          "name": "ok",
-          "url": "https://raw.liucn.cc/box/m.json",
-          "resolvedUrl": "https://raw.liucn.cc/box/m.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 234,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 13,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":13}"
-          }
-        },
-        {
-          "name": "荐片",
-          "url": "https://tv.203511.xyz/0821.json",
-          "resolvedUrl": "https://tv.203511.xyz/0821.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 28,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 61,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":61}"
-          }
-        },
-        {
-          "name": "王二小接口",
-          "url": "http://tvbox.xn--4kq62z5rby2qupq9ub.top/",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 1312,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1312}"
-          }
-        },
-        {
-          "name": "my interface",
-          "url": "http://124.223.214.31:8/api.json",
-          "resolvedUrl": "http://124.223.214.31:8/api.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 2,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 640,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":640}"
-          }
-        },
-        {
-          "name": "新接口",
-          "url": "https://www.iyouhun.com/tv/wex",
-          "resolvedUrl": "https://www.iyouhun.com/tv/wex",
-          "status": "ok",
-          "format": "json",
-          "sites": 63,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 1878,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1878}"
+            "ms": 981,
+            "message": "{\"status\":\"ok\",\"code\":401,\"ms\":981}"
           }
         },
         {
@@ -319,20 +255,36 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 198,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":198}"
+            "ms": 246,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":246}"
           }
         },
         {
-          "name": "cs",
-          "url": "http://tv.nxog.top/m/",
-          "status": "error",
-          "error": "HTTP 403",
+          "name": "ok",
+          "url": "https://raw.liucn.cc/box/m.json",
+          "resolvedUrl": "https://raw.liucn.cc/box/m.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 234,
           "check": {
             "ok": true,
-            "code": 403,
-            "ms": 227,
-            "message": "{\"status\":\"ok\",\"code\":403,\"ms\":227}"
+            "code": 200,
+            "ms": 500,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":500}"
+          }
+        },
+        {
+          "name": "荐片",
+          "url": "https://tv.203511.xyz/0821.json",
+          "resolvedUrl": "https://tv.203511.xyz/0821.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 28,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 310,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":310}"
           }
         },
         {
@@ -343,8 +295,50 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 140,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":140}"
+            "ms": 165,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":165}"
+          }
+        },
+        {
+          "name": "宝盒接口",
+          "url": "http://xn--6orr3pi6g9uu.top/",
+          "resolvedUrl": "https://play.iptv365.org/%E6%AC%A7%E6%AD%8C/api.json",
+          "status": "ok",
+          "format": "html-link:json",
+          "sites": 106,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 1610,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1610}"
+          }
+        },
+        {
+          "name": "my interface",
+          "url": "http://124.223.214.31:8/api.json",
+          "resolvedUrl": "http://124.223.214.31:8/api.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 2,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 623,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":623}"
+          }
+        },
+        {
+          "name": "新接口",
+          "url": "https://www.iyouhun.com/tv/wex",
+          "resolvedUrl": "https://www.iyouhun.com/tv/wex",
+          "status": "ok",
+          "format": "json",
+          "sites": 63,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 1493,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1493}"
           }
         },
         {
@@ -357,22 +351,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 11,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":11}"
-          }
-        },
-        {
-          "name": "饭太硬",
-          "url": "http://fty.888484.xyz/tv",
-          "resolvedUrl": "http://fty.xxooo.cf/tv",
-          "status": "ok",
-          "format": "html-link:embedded-base64",
-          "sites": 47,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 174,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":174}"
+            "ms": 229,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":229}"
           }
         },
         {
@@ -390,29 +370,29 @@
           }
         },
         {
-          "name": "摸鱼儿",
-          "url": "https://6800.kstore.vip/fish.json",
-          "status": "error",
-          "error": "HTTP 401",
-          "check": {
-            "ok": true,
-            "code": 401,
-            "ms": 815,
-            "message": "{\"status\":\"ok\",\"code\":401,\"ms\":815}"
-          }
-        },
-        {
-          "name": "牛儿",
-          "url": "https://9280.kstore.space/wex.json",
-          "resolvedUrl": "https://9280.kstore.space/wex.json",
+          "name": "饭太硬",
+          "url": "http://fty.888484.xyz/tv",
+          "resolvedUrl": "http://fty.xxooo.cf/tv",
           "status": "ok",
-          "format": "json",
-          "sites": 63,
+          "format": "html-link:embedded-base64",
+          "sites": 47,
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 2674,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2674}"
+            "ms": 113,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":113}"
+          }
+        },
+        {
+          "name": "cs",
+          "url": "http://tv.nxog.top/m/",
+          "status": "error",
+          "error": "HTTP 403",
+          "check": {
+            "ok": true,
+            "code": 403,
+            "ms": 183,
+            "message": "{\"status\":\"ok\",\"code\":403,\"ms\":183}"
           }
         },
         {
@@ -425,28 +405,20 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1710,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1710}"
+            "ms": 393,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":393}"
           }
         },
         {
-          "name": "2",
-          "url": "https://gitee.com/fuleishu/fulei/raw/master/fuleixyx.json",
+          "name": "摸鱼儿",
+          "url": "https://6800.kstore.vip/fish.json",
           "status": "error",
-          "error": "Timeout after 10000ms"
-        },
-        {
-          "name": "1",
-          "url": "https://9280.kstore.vip/aiwex.json",
-          "resolvedUrl": "https://9280.kstore.vip/aiwex.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 96,
+          "error": "HTTP 401",
           "check": {
             "ok": true,
-            "code": 200,
-            "ms": 887,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":887}"
+            "code": 401,
+            "ms": 585,
+            "message": "{\"status\":\"ok\",\"code\":401,\"ms\":585}"
           }
         },
         {
@@ -459,34 +431,22 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1978,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1978}"
+            "ms": 1792,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1792}"
           }
         },
         {
-          "name": "蚂蚁",
-          "url": "https://www.mayi520.org/",
-          "status": "error",
-          "error": "connect ECONNREFUSED 127.0.0.1:443",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 8,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":8}"
-          }
-        },
-        {
-          "name": "http://www.xn--sss604efuw.net/tv",
-          "url": "http://www.xn--sss604efuw.net/tv",
-          "resolvedUrl": "http://fty.xxooo.cf/tv",
+          "name": "牛儿",
+          "url": "https://9280.kstore.space/wex.json",
+          "resolvedUrl": "https://9280.kstore.space/wex.json",
           "status": "ok",
-          "format": "html-link:embedded-base64",
-          "sites": 47,
+          "format": "json",
+          "sites": 63,
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 53,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":53}"
+            "ms": 2113,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2113}"
           }
         },
         {
@@ -497,48 +457,22 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 3080,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":3080}"
+            "ms": 2444,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2444}"
           }
         },
         {
-          "name": "饭太硬",
-          "url": "http://fty.333232.xyz/tv",
-          "resolvedUrl": "http://fty.xxooo.cf/tv",
-          "status": "ok",
-          "format": "html-link:embedded-base64",
-          "sites": 47,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 87,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":87}"
-          }
-        },
-        {
-          "name": "https://m.ytdrying.com/play/166997/1-1.html",
-          "url": "https://m.ytdrying.com/play/166997/1-1.html",
-          "status": "error",
-          "error": "HTTP 403",
-          "check": {
-            "ok": true,
-            "code": 403,
-            "ms": 142,
-            "message": "{\"status\":\"ok\",\"code\":403,\"ms\":142}"
-          }
-        },
-        {
-          "name": "【8月8日】最新【影视仓】高清【1080P】高速接口地址【支持弹幕】",
-          "url": "http://124.223.214.31:16/8888",
-          "resolvedUrl": "http://124.223.214.31:16/8888",
+          "name": "1",
+          "url": "https://9280.kstore.vip/aiwex.json",
+          "resolvedUrl": "https://9280.kstore.vip/aiwex.json",
           "status": "ok",
           "format": "json",
-          "sites": 27,
+          "sites": 96,
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 666,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":666}"
+            "ms": 821,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":821}"
           }
         },
         {
@@ -551,8 +485,48 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 2725,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2725}"
+            "ms": 858,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":858}"
+          }
+        },
+        {
+          "name": "http://www.xn--sss604efuw.net/tv",
+          "url": "http://www.xn--sss604efuw.net/tv",
+          "resolvedUrl": "http://fty.xxooo.cf/tv",
+          "status": "ok",
+          "format": "html-link:embedded-base64",
+          "sites": 47,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 29,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":29}"
+          }
+        },
+        {
+          "name": "蚂蚁",
+          "url": "https://www.mayi520.org/",
+          "status": "error",
+          "error": "connect ECONNREFUSED 127.0.0.1:443",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 191,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":191}"
+          }
+        },
+        {
+          "name": "2",
+          "url": "https://gitee.com/fuleishu/fulei/raw/master/fuleixyx.json",
+          "resolvedUrl": "https://raw.giteeusercontent.com/fuleishu/fulei/raw/master/fuleixyx.json?metadata=eyJyIjoibWFzdGVyIiwiZnAiOiJmdWxlaXh5eC5qc29uIiwicGlkIjo0MDMxODExMCwic3RvIjoiZ2l0LXNoYXJkaW5nLXN0by0xMHQtMDQwIiwicnAiOiJyZXBvcy8wNy80Yy8wNzRjMjAzZTMxYTJmMzJjOWI5NWJjOWIzMzVjNGFjMjUyMjBlNDk3ZDNmNWY4ZGM1NWRhZTY0NjczZGU5ZWQ2LmdpdCIsImlzcCI6dHJ1ZSwiZXhwaXJlX2F0IjoxNzkwNDU4ODAwfQ&signature=2o0vKIedI3naFksYMySCRB02xciWKDcbRijX26dBtlQ",
+          "status": "ok",
+          "format": "json",
+          "sites": 97,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 4349,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":4349}"
           }
         },
         {
@@ -565,27 +539,81 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 2481,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2481}"
+            "ms": 2179,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2179}"
           }
         },
         {
-          "name": "11",
-          "url": "https://ghfast.top/raw.githubusercontent.com/yigedashu/xwck/refs/heads/main/shiba1.txt",
+          "name": "https://m.ytdrying.com/play/166997/1-1.html",
+          "url": "https://m.ytdrying.com/play/166997/1-1.html",
+          "status": "error",
+          "error": "HTTP 403",
+          "check": {
+            "ok": true,
+            "code": 403,
+            "ms": 20,
+            "message": "{\"status\":\"ok\",\"code\":403,\"ms\":20}"
+          }
+        },
+        {
+          "name": "饭太硬",
+          "url": "http://fty.333232.xyz/tv",
+          "resolvedUrl": "http://fty.xxooo.cf/tv",
+          "status": "ok",
+          "format": "html-link:embedded-base64",
+          "sites": 47,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 74,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":74}"
+          }
+        },
+        {
+          "name": "【8月8日】最新【影视仓】高清【1080P】高速接口地址【支持弹幕】",
+          "url": "http://124.223.214.31:16/8888",
+          "resolvedUrl": "http://124.223.214.31:16/8888",
+          "status": "ok",
+          "format": "json",
+          "sites": 27,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 640,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":640}"
+          }
+        },
+        {
+          "name": "二月红接口",
+          "url": "https://700sjro44343.vicp.fun/eggp/0211/tv.json",
           "status": "error",
           "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 773,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":773}"
+            "ms": 1268,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1268}"
+          }
+        },
+        {
+          "name": "5",
+          "url": "https://gh-proxy.org/https://raw.github.com/tly824/TM-TY/main/8.10.json",
+          "resolvedUrl": "https://gh-proxy.org/https://raw.github.com/tly824/TM-TY/main/8.10.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 56,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 1168,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1168}"
           }
         },
         {
           "name": "tvbox",
           "url": "https://tv.nxog.top/apitv.php?id=2",
           "status": "error",
-          "error": "{\"status\":\"fail\",\"code\":404,\"ms\":425}"
+          "error": "{\"status\":\"fail\",\"code\":404,\"ms\":235}"
         },
         {
           "name": "我的欧歌",
@@ -603,8 +631,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 10,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":10}"
+            "ms": 231,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":231}"
           }
         },
         {
@@ -617,22 +645,32 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 11,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":11}"
+            "ms": 269,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":269}"
           }
         },
         {
-          "name": "5",
-          "url": "https://gh-proxy.org/https://raw.github.com/tly824/TM-TY/main/8.10.json",
-          "resolvedUrl": "https://gh-proxy.org/https://raw.github.com/tly824/TM-TY/main/8.10.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 56,
+          "name": "11",
+          "url": "https://ghfast.top/raw.githubusercontent.com/yigedashu/xwck/refs/heads/main/shiba1.txt",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1196,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1196}"
+            "ms": 883,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":883}"
+          }
+        },
+        {
+          "name": "1",
+          "url": "https://700sjro44343.vicp.fun/vip/vip/tv.json",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 2071,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2071}"
           }
         },
         {
@@ -645,8 +683,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 88,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":88}"
+            "ms": 47,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":47}"
           }
         },
         {
@@ -659,9 +697,29 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 585,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":585}"
+            "ms": 670,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":670}"
           }
+        },
+        {
+          "name": "apple",
+          "url": "https://raw.githubusercontent.com/supermeguo/BoxRes/main/Myuse/catcr.json",
+          "resolvedUrl": "https://raw.githubusercontent.com/supermeguo/BoxRes/main/Myuse/catcr.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 64,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 292,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":292}"
+          }
+        },
+        {
+          "name": "歐哥",
+          "url": "https://xn--flwh.v.nxog.top/m",
+          "status": "error",
+          "error": "连接失败"
         },
         {
           "name": "01",
@@ -671,8 +729,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 398,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":398}"
+            "ms": 337,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":337}"
           }
         },
         {
@@ -685,54 +743,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1065,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1065}"
-          }
-        },
-        {
-          "name": "歐哥",
-          "url": "https://xn--flwh.v.nxog.top/m",
-          "status": "error",
-          "error": "连接失败"
-        },
-        {
-          "name": "apple",
-          "url": "https://raw.githubusercontent.com/supermeguo/BoxRes/main/Myuse/catcr.json",
-          "resolvedUrl": "https://raw.githubusercontent.com/supermeguo/BoxRes/main/Myuse/catcr.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 64,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 11,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":11}"
-          }
-        },
-        {
-          "name": "哦",
-          "url": "https://a.nxog.top/?mm=328&ou=%E8%A3%85%F0%9F%85%B1",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 139,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":139}"
-          }
-        },
-        {
-          "name": "御制(无采集)-加速",
-          "url": "https://yqx.imgos.cn/yqx/tv/yqx2.json",
-          "resolvedUrl": "https://yqx.imgos.cn/yqx/tv/yqx2.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 63,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 142,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":142}"
+            "ms": 624,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":624}"
           }
         },
         {
@@ -743,8 +755,20 @@
           "check": {
             "ok": true,
             "code": 403,
-            "ms": 327,
-            "message": "{\"status\":\"ok\",\"code\":403,\"ms\":327}"
+            "ms": 368,
+            "message": "{\"status\":\"ok\",\"code\":403,\"ms\":368}"
+          }
+        },
+        {
+          "name": "哦",
+          "url": "https://a.nxog.top/?mm=328&ou=%E8%A3%85%F0%9F%85%B1",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 147,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":147}"
           }
         },
         {
@@ -758,7 +782,7 @@
               "name": "欧歌💜线路",
               "url": "https://xn--oaao-mb1gy821b.v.nxog.top/apia?id=1",
               "status": "error",
-              "error": "write EPROTO 40AD89807A7F0000:error:0A000410:SSL routines:ssl3_read_bytes:ssl/tls alert handshake failure:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert number 40\n"
+              "error": "write EPROTO 40ADCCFCAA7F0000:error:0A000410:SSL routines:ssl3_read_bytes:ssl/tls alert handshake failure:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert number 40\n"
             },
             {
               "name": "O K💜线路",
@@ -794,8 +818,22 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 278,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":278}"
+            "ms": 467,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":467}"
+          }
+        },
+        {
+          "name": "御制(无采集)-加速",
+          "url": "https://yqx.imgos.cn/yqx/tv/yqx2.json",
+          "resolvedUrl": "https://yqx.imgos.cn/yqx/tv/yqx2.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 63,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 30,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":30}"
           }
         },
         {
@@ -808,8 +846,61 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 11,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":11}"
+            "ms": 233,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":233}"
+          }
+        },
+        {
+          "name": "liu123",
+          "url": "http://xhztv.top/dc",
+          "resolvedUrl": "http://xhztv.top/dc/",
+          "status": "ok",
+          "format": "warehouse:json",
+          "entries": [
+            {
+              "name": "🍯毒盒",
+              "url": "https://xn--8owq8u.com/tv",
+              "status": "error",
+              "error": "getaddrinfo ENOTFOUND xn--8owq8u.com"
+            },
+            {
+              "name": "🐔肥猫",
+              "url": "http://xn--ihqu10cn4c.xn--z7x900a.live/%E6%8E%A5%E5%8F%A3%E7%A6%81%E6%AD%A2%E8%B4%A9%E5%8D%96",
+              "status": "error",
+              "error": "HTTP 404"
+            },
+            {
+              "name": "🚀小盒子",
+              "url": "http://xhztv.top/xhz",
+              "resolvedUrl": "http://xhztv.top/xhz/",
+              "status": "ok",
+              "format": "json",
+              "sites": 54
+            },
+            {
+              "name": "🍯影视仓",
+              "url": "https://download.kstore.space/download/2883/nzk/nzk0722.json",
+              "status": "error",
+              "error": "HTTP 401"
+            },
+            {
+              "name": "🍯PG线路",
+              "url": "https://git.acwing.com/iduoduo/orange/-/raw/main/jsm.json",
+              "status": "error",
+              "error": "HTTP 403"
+            },
+            {
+              "name": "🐟 摸 鱼",
+              "url": "http://xn--ihqu10cn4c.xn--v4q818bf34b.top/",
+              "status": "error",
+              "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接"
+            }
+          ],
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 868,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":868}"
           }
         },
         {
@@ -871,8 +962,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 453,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":453}"
+            "ms": 474,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":474}"
           }
         },
         {
@@ -883,32 +974,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 123,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":123}"
-          }
-        },
-        {
-          "name": "宝盒VIP",
-          "url": "https://raw.githubusercontent.com/guot55/YGBH/main/vip2.json",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 12,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":12}"
-          }
-        },
-        {
-          "name": "高级的很",
-          "url": "https://gh-proxy.org/https://raw.githubusercontent.com/n3rddd/N3RD/master/JN/lemj.json",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 33,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":33}"
+            "ms": 91,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":91}"
           }
         },
         {
@@ -921,8 +988,20 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 540,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":540}"
+            "ms": 409,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":409}"
+          }
+        },
+        {
+          "name": "宝盒VIP",
+          "url": "https://raw.githubusercontent.com/guot55/YGBH/main/vip2.json",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 247,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":247}"
           }
         },
         {
@@ -933,8 +1012,26 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 477,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":477}"
+            "ms": 37,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":37}"
+          }
+        },
+        {
+          "name": "青苹果",
+          "url": "https://xn--biib-rp5imh.v.nxog.top/apitv.php",
+          "status": "error",
+          "error": "连接失败"
+        },
+        {
+          "name": "高级的很",
+          "url": "https://gh-proxy.org/https://raw.githubusercontent.com/n3rddd/N3RD/master/JN/lemj.json",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 344,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":344}"
           }
         },
         {
@@ -945,15 +1042,15 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 14,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":14}"
+            "ms": 293,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":293}"
           }
         },
         {
-          "name": "青苹果",
-          "url": "https://xn--biib-rp5imh.v.nxog.top/apitv.php",
+          "name": "https://bitbucket.org/xduo/duoapi/raw/master/xpg.json",
+          "url": "https://bitbucket.org/xduo/duoapi/raw/master/xpg.json",
           "status": "error",
-          "error": "连接失败"
+          "error": "{\"status\":\"fail\",\"code\":404,\"ms\":365}"
         },
         {
           "name": "https://www.ls660.com/TV/feimao.json",
@@ -965,68 +1062,9 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 122,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":122}"
+            "ms": 295,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":295}"
           }
-        },
-        {
-          "name": "liu123",
-          "url": "http://xhztv.top/dc",
-          "resolvedUrl": "http://xhztv.top/dc/",
-          "status": "ok",
-          "format": "warehouse:json",
-          "entries": [
-            {
-              "name": "🍯毒盒",
-              "url": "https://xn--8owq8u.com/tv",
-              "status": "error",
-              "error": "getaddrinfo ENOTFOUND xn--8owq8u.com"
-            },
-            {
-              "name": "🐔肥猫",
-              "url": "http://xn--ihqu10cn4c.xn--z7x900a.live/%E6%8E%A5%E5%8F%A3%E7%A6%81%E6%AD%A2%E8%B4%A9%E5%8D%96",
-              "status": "error",
-              "error": "HTTP 404"
-            },
-            {
-              "name": "🍯影视仓",
-              "url": "https://download.kstore.space/download/2883/nzk/nzk0722.json",
-              "status": "error",
-              "error": "HTTP 401"
-            },
-            {
-              "name": "🚀小盒子",
-              "url": "http://xhztv.top/xhz",
-              "resolvedUrl": "http://xhztv.top/xhz/",
-              "status": "ok",
-              "format": "json",
-              "sites": 54
-            },
-            {
-              "name": "🍯PG线路",
-              "url": "https://git.acwing.com/iduoduo/orange/-/raw/main/jsm.json",
-              "status": "error",
-              "error": "HTTP 403"
-            },
-            {
-              "name": "🐟 摸 鱼",
-              "url": "http://xn--ihqu10cn4c.xn--v4q818bf34b.top/",
-              "status": "error",
-              "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接"
-            }
-          ],
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 715,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":715}"
-          }
-        },
-        {
-          "name": "https://bitbucket.org/xduo/duoapi/raw/master/xpg.json",
-          "url": "https://bitbucket.org/xduo/duoapi/raw/master/xpg.json",
-          "status": "error",
-          "error": "{\"status\":\"fail\",\"code\":404,\"ms\":604}"
         },
         {
           "name": "极速",
@@ -1036,9 +1074,15 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 805,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":805}"
+            "ms": 508,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":508}"
           }
+        },
+        {
+          "name": "自己修改",
+          "url": "https://jihulab.com/fyouhai/tvbox/-/raw/main/%E8%87%AA%E5%B7%B1%E4%BF%AE%E6%94%B9.json",
+          "status": "error",
+          "error": "{\"status\":\"fail\",\"code\":404,\"ms\":1050}"
         },
         {
           "name": "月光宝盒",
@@ -1066,16 +1110,16 @@
               "error": "getaddrinfo ENOTFOUND xn--ihqu10cn4c.xn--z7x900a.love"
             },
             {
-              "name": "🏄️荷城茶秀〔多条线路〕",
-              "url": "http://rihou.cc:88/%E8%8D%B7%E5%9F%8E%E8%8C%B6%E7%A7%80",
-              "status": "error",
-              "error": "HTTP 404"
-            },
-            {
               "name": "🚀香雅情线路〔多条线路〕",
               "url": "https://ghproxy.com/raw.githubusercontent.com/gaotianliuyun/gao/master/XYQ.json",
               "status": "error",
               "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接"
+            },
+            {
+              "name": "🏄️荷城茶秀〔多条线路〕",
+              "url": "http://rihou.cc:88/%E8%8D%B7%E5%9F%8E%E8%8C%B6%E7%A7%80",
+              "status": "error",
+              "error": "HTTP 404"
             },
             {
               "name": "💖饭太硬〔多条线路〕",
@@ -1087,26 +1131,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 942,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":942}"
-          }
-        },
-        {
-          "name": "自己修改",
-          "url": "https://jihulab.com/fyouhai/tvbox/-/raw/main/%E8%87%AA%E5%B7%B1%E4%BF%AE%E6%94%B9.json",
-          "status": "error",
-          "error": "{\"status\":\"fail\",\"code\":404,\"ms\":588}"
-        },
-        {
-          "name": "1",
-          "url": "https://700sjro44343.vicp.fun/vip/vip/tv.json",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 3620,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":3620}"
+            "ms": 355,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":355}"
           }
         },
         {
@@ -1117,12 +1143,12 @@
           "format": "warehouse:json",
           "entries": [
             {
-              "name": "🚀6-FongMI线路",
-              "url": "https://gh-proxy.com/raw.githubusercontent.com//gaotianliuyun/gao/master/0827.json",
-              "resolvedUrl": "https://gh-proxy.com/raw.githubusercontent.com//gaotianliuyun/gao/master/0827.json",
+              "name": "🚀5-Clun在线",
+              "url": "https://clun.top/box.json",
+              "resolvedUrl": "https://clun.top/box.json",
               "status": "ok",
               "format": "json",
-              "sites": 33
+              "sites": 92
             },
             {
               "name": "🚀1-心魔在线",
@@ -1133,12 +1159,12 @@
               "sites": 151
             },
             {
-              "name": "🚀5-Clun在线",
-              "url": "https://clun.top/box.json",
-              "resolvedUrl": "https://clun.top/box.json",
+              "name": "🚀6-FongMI线路",
+              "url": "https://gh-proxy.com/raw.githubusercontent.com//gaotianliuyun/gao/master/0827.json",
+              "resolvedUrl": "https://gh-proxy.com/raw.githubusercontent.com//gaotianliuyun/gao/master/0827.json",
               "status": "ok",
               "format": "json",
-              "sites": 92
+              "sites": 33
             },
             {
               "name": "🚀4-健康家用",
@@ -1168,8 +1194,64 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 85,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":85}"
+            "ms": 283,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":283}"
+          }
+        },
+        {
+          "name": "11",
+          "url": "http://a.nxog.top/m/111.php?ou=%E5%85%AC%E4%BC%97%E5%8F%B7%E6%AC%A7%E6%AD%8Capp&mz=index&jar=index&123&b=tv",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 81,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":81}"
+          }
+        },
+        {
+          "name": "我的",
+          "url": "https://gh-proxy.org/https://raw.githubusercontent.com/ggrrttyyiii/CatVodSpider/refs/heads/main/json/demo.json",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 336,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":336}"
+          }
+        },
+        {
+          "name": "我的",
+          "url": "https://gh-proxy.org/raw.githubusercontent.com/bin1site1/bin1site1.github.io/refs/heads/main/OS.json",
+          "resolvedUrl": "https://gh-proxy.org/raw.githubusercontent.com/bin1site1/bin1site1.github.io/refs/heads/main/OS.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 44,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 356,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":356}"
+          }
+        },
+        {
+          "name": "新",
+          "url": "https://xn--7gq455ajscss5d.v.nxog.top/apia?id=1",
+          "status": "error",
+          "error": "连接失败"
+        },
+        {
+          "name": "装歌",
+          "url": "https://tv.nxog.top/m/111.php",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 278,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":278}"
           }
         },
         {
@@ -1182,52 +1264,26 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 265,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":265}"
+            "ms": 299,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":299}"
           }
         },
         {
-          "name": "我的",
-          "url": "https://gh-proxy.org/https://raw.githubusercontent.com/ggrrttyyiii/CatVodSpider/refs/heads/main/json/demo.json",
+          "name": "央视",
+          "url": "http://112.27.235.94:8000/hls/1/index.m3u8",
+          "status": "error",
+          "error": "{\"status\":\"fail\",\"code\":500,\"ms\":432}"
+        },
+        {
+          "name": "广东体育",
+          "url": "https://epg.pw/stream/7b470f9fc5c305db0c8622117b7b25ca00eb35ba3e93e865cf0ff9df5c736681.m3u8",
           "status": "error",
           "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 42,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":42}"
-          }
-        },
-        {
-          "name": "11",
-          "url": "http://a.nxog.top/m/111.php?ou=%E5%85%AC%E4%BC%97%E5%8F%B7%E6%AC%A7%E6%AD%8Capp&mz=index&jar=index&123&b=tv",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 158,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":158}"
-          }
-        },
-        {
-          "name": "新",
-          "url": "https://xn--7gq455ajscss5d.v.nxog.top/apia?id=1",
-          "status": "error",
-          "error": "连接失败"
-        },
-        {
-          "name": "我的",
-          "url": "https://gh-proxy.org/raw.githubusercontent.com/bin1site1/bin1site1.github.io/refs/heads/main/OS.json",
-          "resolvedUrl": "https://gh-proxy.org/raw.githubusercontent.com/bin1site1/bin1site1.github.io/refs/heads/main/OS.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 44,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 62,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":62}"
+            "ms": 272,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":272}"
           }
         },
         {
@@ -1240,56 +1296,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 109,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":109}"
-          }
-        },
-        {
-          "name": "央视",
-          "url": "http://112.27.235.94:8000/hls/1/index.m3u8",
-          "status": "error",
-          "error": "{\"status\":\"fail\",\"code\":500,\"ms\":1159}"
-        },
-        {
-          "name": "广东体育",
-          "url": "https://epg.pw/stream/7b470f9fc5c305db0c8622117b7b25ca00eb35ba3e93e865cf0ff9df5c736681.m3u8",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 280,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":280}"
-          }
-        },
-        {
-          "name": "装歌",
-          "url": "https://tv.nxog.top/m/111.php",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 157,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":157}"
-          }
-        },
-        {
-          "name": "摸鱼主用二",
-          "url": "https://xn--ihqu10cn4c.xn--v4q818bf34b.cc/",
-          "status": "error",
-          "error": "Timeout after 10000ms"
-        },
-        {
-          "name": "拾光多仓",
-          "url": "http://xmbjm.fh4u.org/dc.txt",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 335,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":335}"
+            "ms": 323,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":323}"
           }
         },
         {
@@ -1330,58 +1338,38 @@
               "sites": 19
             },
             {
-              "name": "小盒子4K",
-              "url": "http://xhztv.top/4k.json",
-              "status": "error",
-              "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接"
-            },
-            {
               "name": "新地址",
               "url": "http://124.223.214.31:55316/9981",
               "resolvedUrl": "http://124.223.214.31:55316/9981",
               "status": "ok",
               "format": "json",
               "sites": 117
+            },
+            {
+              "name": "小盒子4K",
+              "url": "http://xhztv.top/4k.json",
+              "status": "error",
+              "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接"
             }
           ],
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 698,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":698}"
+            "ms": 914,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":914}"
           }
         },
         {
-          "name": "|号线路",
-          "url": "https://cnb.cool/srka/aow/-/git/raw/main/config",
-          "resolvedUrl": "https://cnb.cool/srka/aow/-/git/raw/main/config",
-          "status": "ok",
-          "format": "embedded-base64",
-          "sites": 48,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 173,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":173}"
-          }
-        },
-        {
-          "name": "嘎嘎好",
-          "url": "https://pastebin.com/raw/gtbKvnE1",
+          "name": "拾光多仓",
+          "url": "http://xmbjm.fh4u.org/dc.txt",
           "status": "error",
           "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 31,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":31}"
+            "ms": 355,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":355}"
           }
-        },
-        {
-          "name": "https://xn--sdds-rp5imh.v.nxog.top/apitv.php?id-3",
-          "url": "https://xn--sdds-rp5imh.v.nxog.top/apitv.php?id-3",
-          "status": "error",
-          "error": "连接失败"
         },
         {
           "name": "直播",
@@ -1393,15 +1381,9 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1097,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1097}"
+            "ms": 884,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":884}"
           }
-        },
-        {
-          "name": "欧",
-          "url": "https://xn--zq2ao005e.u.xn--dkw.xn--6qq986b3xl/apia.php?id=1",
-          "status": "error",
-          "error": "连接失败"
         },
         {
           "name": "1",
@@ -1420,48 +1402,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1922,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1922}"
-          }
-        },
-        {
-          "name": "大嗷呜",
-          "url": "https://9763.kstore.vip/aowu.json",
-          "resolvedUrl": "https://9763.kstore.vip/aowu.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 78,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 2458,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2458}"
-          }
-        },
-        {
-          "name": "饭太硬",
-          "url": "http://fty.xxooo.cf/tv",
-          "resolvedUrl": "http://fty.xxooo.cf/tv",
-          "status": "ok",
-          "format": "embedded-base64",
-          "sites": 47,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 836,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":836}"
-          }
-        },
-        {
-          "name": "欧拉",
-          "url": "http://tv.nxog.top/",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 304,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":304}"
+            "ms": 1101,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1101}"
           }
         },
         {
@@ -1481,32 +1423,98 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 5427,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":5427}"
+            "ms": 3134,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":3134}"
           }
         },
         {
-          "name": "我的",
-          "url": "https://iptv-org.github.io/iptv/categories/news.m3u",
+          "name": "https://xn--sdds-rp5imh.v.nxog.top/apitv.php?id-3",
+          "url": "https://xn--sdds-rp5imh.v.nxog.top/apitv.php?id-3",
+          "status": "error",
+          "error": "连接失败"
+        },
+        {
+          "name": "|号线路",
+          "url": "https://cnb.cool/srka/aow/-/git/raw/main/config",
+          "resolvedUrl": "https://cnb.cool/srka/aow/-/git/raw/main/config",
+          "status": "ok",
+          "format": "embedded-base64",
+          "sites": 48,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 175,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":175}"
+          }
+        },
+        {
+          "name": "欧",
+          "url": "https://xn--zq2ao005e.u.xn--dkw.xn--6qq986b3xl/apia.php?id=1",
+          "status": "error",
+          "error": "连接失败"
+        },
+        {
+          "name": "嘎嘎好",
+          "url": "https://pastebin.com/raw/gtbKvnE1",
           "status": "error",
           "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 13,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":13}"
+            "ms": 24,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":24}"
           }
         },
         {
-          "name": "王二小放牛娃",
-          "url": "https://www.xn--4kq62z5rby2qupq9ub.top/",
+          "name": "大嗷呜",
+          "url": "https://9763.kstore.vip/aowu.json",
+          "resolvedUrl": "https://9763.kstore.vip/aowu.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 78,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 630,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":630}"
+          }
+        },
+        {
+          "name": "饭太硬",
+          "url": "http://fty.xxooo.cf/tv",
+          "resolvedUrl": "http://fty.xxooo.cf/tv",
+          "status": "ok",
+          "format": "embedded-base64",
+          "sites": 47,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 935,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":935}"
+          }
+        },
+        {
+          "name": "欧拉",
+          "url": "http://tv.nxog.top/",
           "status": "error",
           "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 499,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":499}"
+            "ms": 141,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":141}"
+          }
+        },
+        {
+          "name": "1",
+          "url": "https://gitee.com/pp-pangpang/2026/raw/master/mylive.webp",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 3653,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":3653}"
           }
         },
         {
@@ -1539,12 +1547,12 @@
               "sites": 164
             },
             {
-              "name": "2.饭太硬备用接口..............................公众号搜:PlayTV",
-              "url": "http://www.xn--sss604efuw.net/tv",
-              "resolvedUrl": "http://fty.xxooo.cf/tv",
+              "name": "1.爱奇艺腾讯优酷高速接口【支持TVBOX/影视仓】支持V3版本..............................公众号搜:PlayTV",
+              "url": "http://47.96.82.41:5188/config.json",
+              "resolvedUrl": "http://47.96.82.41:5188/config.json",
               "status": "ok",
-              "format": "html-link:embedded-base64",
-              "sites": 47
+              "format": "json",
+              "sites": 21
             },
             {
               "name": "6.小米..............................公众号搜:PlayTV",
@@ -1555,19 +1563,55 @@
               "sites": 136
             },
             {
-              "name": "1.爱奇艺腾讯优酷高速接口【支持TVBOX/影视仓】支持V3版本..............................公众号搜:PlayTV",
-              "url": "http://47.96.82.41:5188/config.json",
-              "resolvedUrl": "http://47.96.82.41:5188/config.json",
+              "name": "2.饭太硬备用接口..............................公众号搜:PlayTV",
+              "url": "http://www.xn--sss604efuw.net/tv",
+              "resolvedUrl": "http://fty.xxooo.cf/tv",
               "status": "ok",
-              "format": "json",
-              "sites": 21
+              "format": "html-link:embedded-base64",
+              "sites": 47
             }
           ],
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 362,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":362}"
+            "ms": 507,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":507}"
+          }
+        },
+        {
+          "name": "王二小放牛娃",
+          "url": "https://www.xn--4kq62z5rby2qupq9ub.top/",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 206,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":206}"
+          }
+        },
+        {
+          "name": "我的",
+          "url": "https://iptv-org.github.io/iptv/categories/news.m3u",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 242,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":242}"
+          }
+        },
+        {
+          "name": "摸鱼主用二",
+          "url": "https://xn--ihqu10cn4c.xn--v4q818bf34b.cc/",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 1096,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1096}"
           }
         },
         {
@@ -1580,54 +1624,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 278,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":278}"
-          }
-        },
-        {
-          "name": "1",
-          "url": "https://gitee.com/zhel-yong/doudou-movies--tv/blob/master/%E8%B1%86%E8%B1%86%E5%BD%B1%E8%A7%86.json",
-          "status": "error",
-          "error": "Timeout after 10000ms"
-        },
-        {
-          "name": "猎人IPTV",
-          "url": "https://github.com/xisohi/CHINA-IPTV",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 459,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":459}"
-          }
-        },
-        {
-          "name": "hhh",
-          "url": "https://www.iyouhun.com/tv/fty",
-          "resolvedUrl": "https://www.iyouhun.com/tv/fty",
-          "status": "ok",
-          "format": "json",
-          "sites": 47,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 1204,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1204}"
-          }
-        },
-        {
-          "name": "TvBox 单仓",
-          "url": "https://gh-proxy.com/https://raw.githubusercontent.com/1771245847/TvBox/master/tvbox.json",
-          "resolvedUrl": "https://gh-proxy.com/https://raw.githubusercontent.com/1771245847/TvBox/master/tvbox.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 16,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 60,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":60}"
+            "ms": 412,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":412}"
           }
         },
         {
@@ -1687,20 +1685,60 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1703,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1703}"
+            "ms": 1667,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1667}"
           }
         },
         {
-          "name": "1",
-          "url": "https://gitee.com/pp-pangpang/2026/raw/master/mylive.webp",
+          "name": "猎人IPTV",
+          "url": "https://github.com/xisohi/CHINA-IPTV",
           "status": "error",
           "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
           "check": {
             "ok": true,
-            "code": 302,
-            "ms": 8545,
-            "message": "{\"status\":\"ok\",\"code\":302,\"ms\":8545}"
+            "code": 200,
+            "ms": 555,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":555}"
+          }
+        },
+        {
+          "name": "TvBox 单仓",
+          "url": "https://gh-proxy.com/https://raw.githubusercontent.com/1771245847/TvBox/master/tvbox.json",
+          "resolvedUrl": "https://gh-proxy.com/https://raw.githubusercontent.com/1771245847/TvBox/master/tvbox.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 16,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 260,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":260}"
+          }
+        },
+        {
+          "name": "hhh",
+          "url": "https://www.iyouhun.com/tv/fty",
+          "resolvedUrl": "https://www.iyouhun.com/tv/fty",
+          "status": "ok",
+          "format": "json",
+          "sites": 47,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 1032,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1032}"
+          }
+        },
+        {
+          "name": "影视仓2",
+          "url": "http://link3.cc/uuccc",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 27,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":27}"
           }
         },
         {
@@ -1713,20 +1751,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 161,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":161}"
-          }
-        },
-        {
-          "name": "影视仓2",
-          "url": "http://link3.cc/uuccc",
-          "status": "error",
-          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 101,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":101}"
+            "ms": 295,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":295}"
           }
         },
         {
@@ -1737,22 +1763,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1632,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1632}"
-          }
-        },
-        {
-          "name": "tv",
-          "url": "https://www.252035.xyz/z/FongMi.json",
-          "resolvedUrl": "https://www.252035.xyz/z/FongMi.json",
-          "status": "ok",
-          "format": "json",
-          "sites": 43,
-          "check": {
-            "ok": true,
-            "code": 200,
-            "ms": 232,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":232}"
+            "ms": 153,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":153}"
           }
         },
         {
@@ -1786,8 +1798,34 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 62,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":62}"
+            "ms": 282,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":282}"
+          }
+        },
+        {
+          "name": "https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/ipv6/result.m3u",
+          "url": "https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/ipv6/result.m3u",
+          "status": "error",
+          "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 294,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":294}"
+          }
+        },
+        {
+          "name": "tv",
+          "url": "https://www.252035.xyz/z/FongMi.json",
+          "resolvedUrl": "https://www.252035.xyz/z/FongMi.json",
+          "status": "ok",
+          "format": "json",
+          "sites": 43,
+          "check": {
+            "ok": true,
+            "code": 200,
+            "ms": 299,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":299}"
           }
         },
         {
@@ -1800,8 +1838,8 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 277,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":277}"
+            "ms": 256,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":256}"
           }
         },
         {
@@ -1836,20 +1874,20 @@
               "sites": 89
             },
             {
-              "name": "🚀游魂┃东篱",
-              "url": "https://www.iyouhun.com/tv/dongli",
-              "resolvedUrl": "https://www.iyouhun.com/tv/dongli",
-              "status": "ok",
-              "format": "json",
-              "sites": 93
-            },
-            {
               "name": "🚀游魂┃PG",
               "url": "https://www.iyouhun.com/tv/pg",
               "resolvedUrl": "https://www.iyouhun.com/tv/pg",
               "status": "ok",
               "format": "json",
               "sites": 74
+            },
+            {
+              "name": "🚀游魂┃东篱",
+              "url": "https://www.iyouhun.com/tv/dongli",
+              "resolvedUrl": "https://www.iyouhun.com/tv/dongli",
+              "status": "ok",
+              "format": "json",
+              "sites": 93
             },
             {
               "name": "🚀游魂┃南风",
@@ -1861,34 +1899,35 @@
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 1302,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1302}"
+            "ms": 1000,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":1000}"
           }
         },
         {
-          "name": "https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/ipv6/result.m3u",
-          "url": "https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/ipv6/result.m3u",
+          "name": "1",
+          "url": "https://gitee.com/zhel-yong/doudou-movies--tv/blob/master/%E8%B1%86%E8%B1%86%E5%BD%B1%E8%A7%86.json",
           "status": "error",
           "error": "响应不是 TVBox 配置，也没有发现可用的内嵌配置链接",
           "check": {
             "ok": true,
             "code": 200,
-            "ms": 11,
-            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":11}"
+            "ms": 2216,
+            "message": "{\"status\":\"ok\",\"code\":200,\"ms\":2216}"
           }
         }
       ],
-      "sites": 5615
+      "sites": 5712
     }
   ],
   "diagnostics": {
     "unsupportedOnMacOS": {
-      "total": 4584,
+      "total": 4672,
       "byReason": {
-        "MacOS 端没有可执行 JAR，且未匹配到 JS 迁移脚本。": 4584
+        "MacOS 端没有可执行 JAR，且未匹配到 JS 迁移脚本。": 4672
       },
       "byOrigin": {
         "1": 144,
+        "2": 88,
         "5": 20,
         "11": 168,
         "王二小": 192,
@@ -2205,20 +2244,20 @@
       ]
     },
     "filteredSites": {
-      "total": 4860,
+      "total": 4919,
       "byReason": {
         "comic-drama": 31,
-        "short-drama": 179,
-        "audio-book": 126,
-        "adult-content": 150,
+        "short-drama": 185,
+        "audio-book": 127,
+        "adult-content": 151,
         "kuafu": 21,
-        "aliyun-drive": 11,
-        "unreachable": 355,
-        "duplicate-api": 3987
+        "aliyun-drive": 12,
+        "unreachable": 349,
+        "duplicate-api": 4043
       },
       "byPlatform": {
-        "android": 3971,
-        "macos": 889
+        "android": 4032,
+        "macos": 887
       },
       "sample": [
         {
@@ -2526,7 +2565,7 @@
       "sample": []
     },
     "jarManifest": {
-      "total": 116,
+      "total": 117,
       "file": "jar-manifest.json"
     }
   },
@@ -2553,100 +2592,26 @@
   "speedRankings": [
     {
       "platform": "android",
-      "key": "玉兔",
-      "name": "玉兔 | 采集",
-      "type": 1,
-      "api": "https://apiyutu.com/api.php/provide/vod/",
-      "scoreMs": 347,
-      "rankScoreMs": 347,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 177,
-      "avgPlaybackMs": 170,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://apiyutu.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 450,
-      "samples": [
-        {
-          "vodId": "309566",
-          "name": "陈紫函老公戴向宇被庆余年太子扮演者张昊唯爆出嫖娼录.音曝光团队紧急回应",
-          "detailMs": 86,
-          "playbackOpenMs": 81,
-          "playbackBytes": 118,
-          "playbackStatus": 206,
-          "playbackUrl": "https://lsbbf10.com/20260616/b0Fk33j1/index.m3u8"
-        },
-        {
-          "vodId": "278457",
-          "name": "塌房泄密视频曝光庆余年二皇子刘瑞瑞与女子共度一宿酒店啪啪视频曝光",
-          "detailMs": 89,
-          "playbackOpenMs": 83,
-          "playbackBytes": 118,
-          "playbackStatus": 206,
-          "playbackUrl": "https://lsbbf9.com/20260118/TRn8AOkM/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "macos",
-      "key": "玉兔",
-      "name": "玉兔 | 采集",
-      "type": 1,
-      "api": "https://apiyutu.com/api.php/provide/vod/",
-      "scoreMs": 347,
-      "rankScoreMs": 347,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 177,
-      "avgPlaybackMs": 170,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://apiyutu.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 450,
-      "samples": [
-        {
-          "vodId": "309566",
-          "name": "陈紫函老公戴向宇被庆余年太子扮演者张昊唯爆出嫖娼录.音曝光团队紧急回应",
-          "detailMs": 86,
-          "playbackOpenMs": 81,
-          "playbackBytes": 118,
-          "playbackStatus": 206,
-          "playbackUrl": "https://lsbbf10.com/20260616/b0Fk33j1/index.m3u8"
-        },
-        {
-          "vodId": "278457",
-          "name": "塌房泄密视频曝光庆余年二皇子刘瑞瑞与女子共度一宿酒店啪啪视频曝光",
-          "detailMs": 89,
-          "playbackOpenMs": 83,
-          "playbackBytes": 118,
-          "playbackStatus": 206,
-          "playbackUrl": "https://lsbbf9.com/20260118/TRn8AOkM/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "android",
       "key": "光速资源",
       "name": "🎀光速┃采集",
       "type": 1,
       "api": "http://api.guangsuapi.com/api.php/provide/vod/",
-      "scoreMs": 525,
-      "rankScoreMs": 525,
+      "scoreMs": 623,
+      "rankScoreMs": 623,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 212,
-      "avgPlaybackMs": 313,
+      "searchMs": 268,
+      "avgPlaybackMs": 355,
       "sampleCount": 2,
       "keyword": "庆余年",
       "searchUrl": "https://api.guangsuapi.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 537,
+      "connectivityMs": 233,
       "samples": [
         {
           "vodId": "197089",
           "name": "庆余年之风起沧州",
-          "detailMs": 140,
-          "playbackOpenMs": 296,
+          "detailMs": 292,
+          "playbackOpenMs": 119,
           "playbackBytes": 108,
           "playbackStatus": 200,
           "playbackUrl": "https://v.gsuus.com/play/mepy5gya/index.m3u8"
@@ -2654,8 +2619,8 @@
         {
           "vodId": "197401",
           "name": "庆余年之帝王业",
-          "detailMs": 144,
-          "playbackOpenMs": 46,
+          "detailMs": 277,
+          "playbackOpenMs": 22,
           "playbackBytes": 108,
           "playbackStatus": 200,
           "playbackUrl": "https://v.gsuus.com/play/DdwW02md/index.m3u8"
@@ -2668,22 +2633,22 @@
       "name": "🎀光速┃采集",
       "type": 1,
       "api": "http://api.guangsuapi.com/api.php/provide/vod/",
-      "scoreMs": 525,
-      "rankScoreMs": 525,
+      "scoreMs": 623,
+      "rankScoreMs": 623,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 212,
-      "avgPlaybackMs": 313,
+      "searchMs": 268,
+      "avgPlaybackMs": 355,
       "sampleCount": 2,
       "keyword": "庆余年",
       "searchUrl": "https://api.guangsuapi.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 537,
+      "connectivityMs": 233,
       "samples": [
         {
           "vodId": "197089",
           "name": "庆余年之风起沧州",
-          "detailMs": 140,
-          "playbackOpenMs": 296,
+          "detailMs": 292,
+          "playbackOpenMs": 119,
           "playbackBytes": 108,
           "playbackStatus": 200,
           "playbackUrl": "https://v.gsuus.com/play/mepy5gya/index.m3u8"
@@ -2691,8 +2656,8 @@
         {
           "vodId": "197401",
           "name": "庆余年之帝王业",
-          "detailMs": 144,
-          "playbackOpenMs": 46,
+          "detailMs": 277,
+          "playbackOpenMs": 22,
           "playbackBytes": 108,
           "playbackStatus": 200,
           "playbackUrl": "https://v.gsuus.com/play/DdwW02md/index.m3u8"
@@ -2701,109 +2666,35 @@
     },
     {
       "platform": "android",
-      "key": "虎牙",
-      "name": "🐯虎牙采集",
-      "type": 1,
-      "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
-      "scoreMs": 695,
-      "rankScoreMs": 695,
+      "key": "新浪资源",
+      "name": "新浪资源",
+      "type": 0,
+      "api": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/",
+      "scoreMs": 703,
+      "rankScoreMs": 703,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 275,
-      "avgPlaybackMs": 420,
+      "searchMs": 396,
+      "avgPlaybackMs": 307,
       "sampleCount": 2,
       "keyword": "庆余年",
-      "searchUrl": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 557,
+      "searchUrl": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 689,
       "samples": [
         {
-          "vodId": "132364",
-          "name": "庆余年之风起沧州",
-          "detailMs": 116,
-          "playbackOpenMs": 323,
-          "playbackBytes": 15986,
-          "playbackStatus": 200,
-          "playbackUrl": "https://1080p.huyall.com/play/YerA40Ld/index.m3u8"
-        },
-        {
-          "vodId": "132836",
-          "name": "庆余年之帝王业",
-          "detailMs": 182,
-          "playbackOpenMs": 219,
-          "playbackBytes": 15986,
-          "playbackStatus": 200,
-          "playbackUrl": "https://1080p.huyall.com/play/PdyYw7wd/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "macos",
-      "key": "虎牙",
-      "name": "🐯虎牙采集",
-      "type": 1,
-      "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
-      "scoreMs": 695,
-      "rankScoreMs": 695,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 275,
-      "avgPlaybackMs": 420,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 557,
-      "samples": [
-        {
-          "vodId": "132364",
-          "name": "庆余年之风起沧州",
-          "detailMs": 116,
-          "playbackOpenMs": 323,
-          "playbackBytes": 15986,
-          "playbackStatus": 200,
-          "playbackUrl": "https://1080p.huyall.com/play/YerA40Ld/index.m3u8"
-        },
-        {
-          "vodId": "132836",
-          "name": "庆余年之帝王业",
-          "detailMs": 182,
-          "playbackOpenMs": 219,
-          "playbackBytes": 15986,
-          "playbackStatus": 200,
-          "playbackUrl": "https://1080p.huyall.com/play/PdyYw7wd/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "android",
-      "key": "速播",
-      "name": "速播 | 采集",
-      "type": 1,
-      "api": "https://subocaiji.com/api.php/provide/vod/",
-      "scoreMs": 736,
-      "rankScoreMs": 736,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 300,
-      "avgPlaybackMs": 436,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://subocaiji.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 140,
-      "samples": [
-        {
-          "vodId": "59631",
+          "vodId": "110772",
           "name": "庆余年 第二季",
-          "detailMs": 227,
-          "playbackOpenMs": 245,
+          "detailMs": 172,
+          "playbackOpenMs": 192,
           "playbackBytes": 15986,
           "playbackStatus": 200,
           "playbackUrl": "https://play.xluuss.com/play/9aAjlRPb/index.m3u8"
         },
         {
-          "vodId": "140408",
+          "vodId": "210887",
           "name": "庆余年之帝王业",
-          "detailMs": 226,
-          "playbackOpenMs": 173,
+          "detailMs": 151,
+          "playbackOpenMs": 98,
           "playbackBytes": 15986,
           "playbackStatus": 200,
           "playbackUrl": "https://play.xluuss.com/play/7axX68na/index.m3u8"
@@ -2812,186 +2703,38 @@
     },
     {
       "platform": "macos",
-      "key": "速播",
-      "name": "速播 | 采集",
-      "type": 1,
-      "api": "https://subocaiji.com/api.php/provide/vod/",
-      "scoreMs": 736,
-      "rankScoreMs": 736,
+      "key": "新浪资源",
+      "name": "新浪资源",
+      "type": 0,
+      "api": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/",
+      "scoreMs": 703,
+      "rankScoreMs": 703,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 300,
-      "avgPlaybackMs": 436,
+      "searchMs": 396,
+      "avgPlaybackMs": 307,
       "sampleCount": 2,
       "keyword": "庆余年",
-      "searchUrl": "https://subocaiji.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 140,
+      "searchUrl": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 689,
       "samples": [
         {
-          "vodId": "59631",
+          "vodId": "110772",
           "name": "庆余年 第二季",
-          "detailMs": 227,
-          "playbackOpenMs": 245,
+          "detailMs": 172,
+          "playbackOpenMs": 192,
           "playbackBytes": 15986,
           "playbackStatus": 200,
           "playbackUrl": "https://play.xluuss.com/play/9aAjlRPb/index.m3u8"
         },
         {
-          "vodId": "140408",
+          "vodId": "210887",
           "name": "庆余年之帝王业",
-          "detailMs": 226,
-          "playbackOpenMs": 173,
+          "detailMs": 151,
+          "playbackOpenMs": 98,
           "playbackBytes": 15986,
           "playbackStatus": 200,
           "playbackUrl": "https://play.xluuss.com/play/7axX68na/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "android",
-      "key": "csp_xml_ikun",
-      "name": "🥣爱坤┃影视",
-      "type": 1,
-      "api": "https://ikunzyapi.com/api.php/provide/vod/from/ikm3u8/at/json",
-      "scoreMs": 886,
-      "rankScoreMs": 886,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 563,
-      "avgPlaybackMs": 323,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://ikunzyapi.com/api.php/provide/vod/from/ikm3u8/at/json?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 346,
-      "samples": [
-        {
-          "vodId": "57075",
-          "name": "庆余年第二季",
-          "detailMs": 112,
-          "playbackOpenMs": 397,
-          "playbackBytes": 100,
-          "playbackStatus": 200,
-          "playbackUrl": "https://bfikuncdn.com/20240523/6Z9jGK4r/index.m3u8"
-        },
-        {
-          "vodId": "57034",
-          "name": "庆余年 第一季 特别版",
-          "detailMs": 85,
-          "playbackOpenMs": 51,
-          "playbackBytes": 100,
-          "playbackStatus": 200,
-          "playbackUrl": "https://bfikuncdn.com/20240508/5kmtk9ly/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "macos",
-      "key": "csp_xml_ikun",
-      "name": "🥣爱坤┃影视",
-      "type": 1,
-      "api": "https://ikunzyapi.com/api.php/provide/vod/from/ikm3u8/at/json",
-      "scoreMs": 886,
-      "rankScoreMs": 886,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 563,
-      "avgPlaybackMs": 323,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://ikunzyapi.com/api.php/provide/vod/from/ikm3u8/at/json?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 346,
-      "samples": [
-        {
-          "vodId": "57075",
-          "name": "庆余年第二季",
-          "detailMs": 112,
-          "playbackOpenMs": 397,
-          "playbackBytes": 100,
-          "playbackStatus": 200,
-          "playbackUrl": "https://bfikuncdn.com/20240523/6Z9jGK4r/index.m3u8"
-        },
-        {
-          "vodId": "57034",
-          "name": "庆余年 第一季 特别版",
-          "detailMs": 85,
-          "playbackOpenMs": 51,
-          "playbackBytes": 100,
-          "playbackStatus": 200,
-          "playbackUrl": "https://bfikuncdn.com/20240508/5kmtk9ly/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "android",
-      "key": "魔都资源",
-      "name": "🤣魔都┃动漫",
-      "type": 1,
-      "api": "https://caiji.moduapi.cc/api.php/provide/vod/?ac=list",
-      "scoreMs": 1085,
-      "rankScoreMs": 1085,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 176,
-      "avgPlaybackMs": 909,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://caiji.moduapi.cc/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 1067,
-      "samples": [
-        {
-          "vodId": "16636",
-          "name": "庆余年第一季",
-          "detailMs": 830,
-          "playbackOpenMs": 646,
-          "playbackBytes": 101,
-          "playbackStatus": 200,
-          "playbackUrl": "https://play.modujx13.com/20240720/VrFtPiml/index.m3u8"
-        },
-        {
-          "vodId": "16302",
-          "name": "庆余年",
-          "detailMs": 313,
-          "playbackOpenMs": 28,
-          "playbackBytes": 101,
-          "playbackStatus": 200,
-          "playbackUrl": "https://play.modujx13.com/20240721/PmYCNEBT/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "macos",
-      "key": "魔都资源",
-      "name": "🤣魔都┃动漫",
-      "type": 1,
-      "api": "https://caiji.moduapi.cc/api.php/provide/vod/?ac=list",
-      "scoreMs": 1085,
-      "rankScoreMs": 1085,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 176,
-      "avgPlaybackMs": 909,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://caiji.moduapi.cc/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 1067,
-      "samples": [
-        {
-          "vodId": "16636",
-          "name": "庆余年第一季",
-          "detailMs": 830,
-          "playbackOpenMs": 646,
-          "playbackBytes": 101,
-          "playbackStatus": 200,
-          "playbackUrl": "https://play.modujx13.com/20240720/VrFtPiml/index.m3u8"
-        },
-        {
-          "vodId": "16302",
-          "name": "庆余年",
-          "detailMs": 313,
-          "playbackOpenMs": 28,
-          "playbackBytes": 101,
-          "playbackStatus": 200,
-          "playbackUrl": "https://play.modujx13.com/20240721/PmYCNEBT/index.m3u8"
         }
       ]
     },
@@ -3001,22 +2744,22 @@
       "name": "🦊火狐采集",
       "type": 1,
       "api": "https://hhzyapi.com/api.php/provide/vod/",
-      "scoreMs": 1128,
-      "rankScoreMs": 1128,
+      "scoreMs": 756,
+      "rankScoreMs": 756,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 682,
-      "avgPlaybackMs": 446,
+      "searchMs": 317,
+      "avgPlaybackMs": 439,
       "sampleCount": 2,
       "keyword": "庆余年",
       "searchUrl": "https://hhzyapi.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 136,
+      "connectivityMs": 70,
       "samples": [
         {
           "vodId": "79676",
           "name": "庆余年 第二季",
-          "detailMs": 250,
-          "playbackOpenMs": 206,
+          "detailMs": 269,
+          "playbackOpenMs": 177,
           "playbackBytes": 15986,
           "playbackStatus": 200,
           "playbackUrl": "https://play.hhuus.com/play/DbDpoXqb/index.m3u8"
@@ -3024,8 +2767,8 @@
         {
           "vodId": "154253",
           "name": "庆余年之帝王业",
-          "detailMs": 235,
-          "playbackOpenMs": 200,
+          "detailMs": 290,
+          "playbackOpenMs": 142,
           "playbackBytes": 15986,
           "playbackStatus": 200,
           "playbackUrl": "https://play.hhuus.com/play/kazZ6Q7a/index.m3u8"
@@ -3038,22 +2781,22 @@
       "name": "🦊火狐采集",
       "type": 1,
       "api": "https://hhzyapi.com/api.php/provide/vod/",
-      "scoreMs": 1128,
-      "rankScoreMs": 1128,
+      "scoreMs": 756,
+      "rankScoreMs": 756,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 682,
-      "avgPlaybackMs": 446,
+      "searchMs": 317,
+      "avgPlaybackMs": 439,
       "sampleCount": 2,
       "keyword": "庆余年",
       "searchUrl": "https://hhzyapi.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 136,
+      "connectivityMs": 70,
       "samples": [
         {
           "vodId": "79676",
           "name": "庆余年 第二季",
-          "detailMs": 250,
-          "playbackOpenMs": 206,
+          "detailMs": 269,
+          "playbackOpenMs": 177,
           "playbackBytes": 15986,
           "playbackStatus": 200,
           "playbackUrl": "https://play.hhuus.com/play/DbDpoXqb/index.m3u8"
@@ -3061,8 +2804,8 @@
         {
           "vodId": "154253",
           "name": "庆余年之帝王业",
-          "detailMs": 235,
-          "playbackOpenMs": 200,
+          "detailMs": 290,
+          "playbackOpenMs": 142,
           "playbackBytes": 15986,
           "playbackStatus": 200,
           "playbackUrl": "https://play.hhuus.com/play/kazZ6Q7a/index.m3u8"
@@ -3071,230 +2814,26 @@
     },
     {
       "platform": "android",
-      "key": "电影天堂_beaba6",
-      "name": "🎞️天堂采集",
-      "type": 1,
-      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/",
-      "scoreMs": 1213,
-      "rankScoreMs": 1213,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 410,
-      "avgPlaybackMs": 803,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 402,
-      "samples": [
-        {
-          "vodId": "35200",
-          "name": "庆余年 第一季",
-          "detailMs": 48,
-          "playbackOpenMs": 866,
-          "playbackBytes": 97,
-          "playbackStatus": 206,
-          "playbackUrl": "https://vip.dytt-tvs.com/20251221/8140_e2db7186/index.m3u8"
-        },
-        {
-          "vodId": "35210",
-          "name": "庆余年 第二季",
-          "detailMs": 39,
-          "playbackOpenMs": 652,
-          "playbackBytes": 97,
-          "playbackStatus": 206,
-          "playbackUrl": "https://vip.dytt-play.com/20250417/13478_90ccff10/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "macos",
-      "key": "电影天堂",
-      "name": "🎞️天堂采集",
-      "type": 1,
-      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/",
-      "scoreMs": 1213,
-      "rankScoreMs": 1213,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 410,
-      "avgPlaybackMs": 803,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 402,
-      "samples": [
-        {
-          "vodId": "35200",
-          "name": "庆余年 第一季",
-          "detailMs": 48,
-          "playbackOpenMs": 866,
-          "playbackBytes": 97,
-          "playbackStatus": 206,
-          "playbackUrl": "https://vip.dytt-tvs.com/20251221/8140_e2db7186/index.m3u8"
-        },
-        {
-          "vodId": "35210",
-          "name": "庆余年 第二季",
-          "detailMs": 39,
-          "playbackOpenMs": 652,
-          "playbackBytes": 97,
-          "playbackStatus": 206,
-          "playbackUrl": "https://vip.dytt-play.com/20250417/13478_90ccff10/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "android",
-      "key": "新浪资源",
-      "name": "新浪资源",
-      "type": 0,
-      "api": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/",
-      "scoreMs": 1234,
-      "rankScoreMs": 1234,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 435,
-      "avgPlaybackMs": 799,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 889,
-      "samples": [
-        {
-          "vodId": "110772",
-          "name": "庆余年 第二季",
-          "detailMs": 217,
-          "playbackOpenMs": 176,
-          "playbackBytes": 15986,
-          "playbackStatus": 200,
-          "playbackUrl": "https://play.xluuss.com/play/9aAjlRPb/index.m3u8"
-        },
-        {
-          "vodId": "210887",
-          "name": "庆余年之帝王业",
-          "detailMs": 202,
-          "playbackOpenMs": 1003,
-          "playbackBytes": 15982,
-          "playbackStatus": 200,
-          "playbackUrl": "https://play.xluuss.com/play/7axX68na/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "macos",
-      "key": "新浪资源",
-      "name": "新浪资源",
-      "type": 0,
-      "api": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/",
-      "scoreMs": 1234,
-      "rankScoreMs": 1234,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 435,
-      "avgPlaybackMs": 799,
-      "sampleCount": 2,
-      "keyword": "庆余年",
-      "searchUrl": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 889,
-      "samples": [
-        {
-          "vodId": "110772",
-          "name": "庆余年 第二季",
-          "detailMs": 217,
-          "playbackOpenMs": 176,
-          "playbackBytes": 15986,
-          "playbackStatus": 200,
-          "playbackUrl": "https://play.xluuss.com/play/9aAjlRPb/index.m3u8"
-        },
-        {
-          "vodId": "210887",
-          "name": "庆余年之帝王业",
-          "detailMs": 202,
-          "playbackOpenMs": 1003,
-          "playbackBytes": 15982,
-          "playbackStatus": 200,
-          "playbackUrl": "https://play.xluuss.com/play/7axX68na/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "android",
-      "key": "大奶子",
-      "name": "大奶子 | 采集",
-      "type": 1,
-      "api": "https://apidanaizi.com/api.php/provide/vod",
-      "scoreMs": 1438,
-      "rankScoreMs": 1438,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 1163,
-      "avgPlaybackMs": 275,
-      "sampleCount": 1,
-      "keyword": "庆余年",
-      "searchUrl": "https://apidanaizi.com/api.php/provide/vod?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 626,
-      "samples": [
-        {
-          "vodId": "40899",
-          "name": "短发气质美少妇约跑友到酒店里面看着庆余年花样多样啪啪无套做爱",
-          "detailMs": 94,
-          "playbackOpenMs": 181,
-          "playbackBytes": 4096,
-          "playbackStatus": 206,
-          "playbackUrl": "https://voddadaizi6.com:52866/videos/202505/09/681de89dc57e27066997689e/678979/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "macos",
-      "key": "大奶子",
-      "name": "大奶子 | 采集",
-      "type": 1,
-      "api": "https://apidanaizi.com/api.php/provide/vod",
-      "scoreMs": 1438,
-      "rankScoreMs": 1438,
-      "qualityBoostMs": 0,
-      "preferredPattern": "",
-      "searchMs": 1163,
-      "avgPlaybackMs": 275,
-      "sampleCount": 1,
-      "keyword": "庆余年",
-      "searchUrl": "https://apidanaizi.com/api.php/provide/vod?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 626,
-      "samples": [
-        {
-          "vodId": "40899",
-          "name": "短发气质美少妇约跑友到酒店里面看着庆余年花样多样啪啪无套做爱",
-          "detailMs": 94,
-          "playbackOpenMs": 181,
-          "playbackBytes": 4096,
-          "playbackStatus": 206,
-          "playbackUrl": "https://voddadaizi6.com:52866/videos/202505/09/681de89dc57e27066997689e/678979/index.m3u8"
-        }
-      ]
-    },
-    {
-      "platform": "android",
       "key": "滴滴",
       "name": "滴滴 | 采集",
       "type": 1,
       "api": "https://api.ddapi.cc/api.php/provide/vod/",
-      "scoreMs": 1647,
-      "rankScoreMs": 1647,
+      "scoreMs": 840,
+      "rankScoreMs": 840,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 638,
-      "avgPlaybackMs": 1009,
+      "searchMs": 540,
+      "avgPlaybackMs": 300,
       "sampleCount": 1,
       "keyword": "庆余年",
       "searchUrl": "https://api.ddapi.cc/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 573,
+      "connectivityMs": 548,
       "samples": [
         {
           "vodId": "16520",
           "name": "短发气质美少妇约跑友到酒店里面看着庆余年花样多样啪啪无套做爱，战后的逼逼湿漉漉的水很多",
-          "detailMs": 76,
-          "playbackOpenMs": 933,
+          "detailMs": 30,
+          "playbackOpenMs": 270,
           "playbackBytes": 118,
           "playbackStatus": 200,
           "playbackUrl": "https://v.didibo2.com/20230727/aoziCrab/index.m3u8"
@@ -3307,22 +2846,22 @@
       "name": "滴滴 | 采集",
       "type": 1,
       "api": "https://api.ddapi.cc/api.php/provide/vod/",
-      "scoreMs": 1647,
-      "rankScoreMs": 1647,
+      "scoreMs": 840,
+      "rankScoreMs": 840,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 638,
-      "avgPlaybackMs": 1009,
+      "searchMs": 540,
+      "avgPlaybackMs": 300,
       "sampleCount": 1,
       "keyword": "庆余年",
       "searchUrl": "https://api.ddapi.cc/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 573,
+      "connectivityMs": 548,
       "samples": [
         {
           "vodId": "16520",
           "name": "短发气质美少妇约跑友到酒店里面看着庆余年花样多样啪啪无套做爱，战后的逼逼湿漉漉的水很多",
-          "detailMs": 76,
-          "playbackOpenMs": 933,
+          "detailMs": 30,
+          "playbackOpenMs": 270,
           "playbackBytes": 118,
           "playbackStatus": 200,
           "playbackUrl": "https://v.didibo2.com/20230727/aoziCrab/index.m3u8"
@@ -3331,75 +2870,427 @@
     },
     {
       "platform": "android",
-      "key": "精品资源站",
-      "name": "精品 | 采集",
+      "key": "魔都资源_85527f",
+      "name": "魔都资源",
       "type": 1,
-      "api": "https://www.jingpinx.com/api.php/provide/vod/",
-      "scoreMs": 1834,
-      "rankScoreMs": 1834,
+      "api": "https://www.mdzyapi.com/api.php/provide/vod/?ac=list",
+      "scoreMs": 979,
+      "rankScoreMs": 979,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 1258,
-      "avgPlaybackMs": 576,
+      "searchMs": 317,
+      "avgPlaybackMs": 662,
       "sampleCount": 2,
       "keyword": "庆余年",
-      "searchUrl": "https://www.jingpinx.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 1005,
+      "searchUrl": "https://www.mdzyapi.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 874,
       "samples": [
         {
-          "vodId": "116853",
-          "name": "【光看预览就射了！许我耀眼vs庆余年ai脱衣做爱】许妍女神真的太美了，还有庆余年长公主！这ai的毫无",
-          "detailMs": 430,
-          "playbackOpenMs": 164,
-          "playbackBytes": 16001,
+          "vodId": "16636",
+          "name": "庆余年第一季",
+          "detailMs": 139,
+          "playbackOpenMs": 963,
+          "playbackBytes": 101,
           "playbackStatus": 200,
-          "playbackUrl": "https://jpxm3u8.com/20260908/230ebbd3b8619cc0/index.m3u8"
+          "playbackUrl": "https://play.modujx13.com/20240720/VrFtPiml/index.m3u8"
         },
         {
-          "vodId": "85100",
-          "name": "AI去衣，庆余年#性交#媚黑母狗#ai去衣",
-          "detailMs": 463,
-          "playbackOpenMs": 95,
-          "playbackBytes": 97,
+          "vodId": "16302",
+          "name": "庆余年",
+          "detailMs": 153,
+          "playbackOpenMs": 68,
+          "playbackBytes": 101,
           "playbackStatus": 200,
-          "playbackUrl": "https://jpxm3u8.com/20251222/4frUgYyj/index.m3u8"
+          "playbackUrl": "https://play.modujx13.com/20240721/PmYCNEBT/index.m3u8"
         }
       ]
     },
     {
       "platform": "macos",
-      "key": "精品资源站",
-      "name": "精品 | 采集",
+      "key": "魔都资源_a7728d",
+      "name": "魔都资源",
       "type": 1,
-      "api": "https://www.jingpinx.com/api.php/provide/vod/",
-      "scoreMs": 1834,
-      "rankScoreMs": 1834,
+      "api": "https://www.mdzyapi.com/api.php/provide/vod/?ac=list",
+      "scoreMs": 979,
+      "rankScoreMs": 979,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 1258,
-      "avgPlaybackMs": 576,
+      "searchMs": 317,
+      "avgPlaybackMs": 662,
       "sampleCount": 2,
       "keyword": "庆余年",
-      "searchUrl": "https://www.jingpinx.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 1005,
+      "searchUrl": "https://www.mdzyapi.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 874,
       "samples": [
         {
-          "vodId": "116853",
-          "name": "【光看预览就射了！许我耀眼vs庆余年ai脱衣做爱】许妍女神真的太美了，还有庆余年长公主！这ai的毫无",
-          "detailMs": 430,
-          "playbackOpenMs": 164,
-          "playbackBytes": 16001,
+          "vodId": "16636",
+          "name": "庆余年第一季",
+          "detailMs": 139,
+          "playbackOpenMs": 963,
+          "playbackBytes": 101,
           "playbackStatus": 200,
-          "playbackUrl": "https://jpxm3u8.com/20260908/230ebbd3b8619cc0/index.m3u8"
+          "playbackUrl": "https://play.modujx13.com/20240720/VrFtPiml/index.m3u8"
         },
         {
-          "vodId": "85100",
-          "name": "AI去衣，庆余年#性交#媚黑母狗#ai去衣",
-          "detailMs": 463,
-          "playbackOpenMs": 95,
-          "playbackBytes": 97,
+          "vodId": "16302",
+          "name": "庆余年",
+          "detailMs": 153,
+          "playbackOpenMs": 68,
+          "playbackBytes": 101,
           "playbackStatus": 200,
-          "playbackUrl": "https://jpxm3u8.com/20251222/4frUgYyj/index.m3u8"
+          "playbackUrl": "https://play.modujx13.com/20240721/PmYCNEBT/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "android",
+      "key": "虎牙",
+      "name": "🐯虎牙采集",
+      "type": 1,
+      "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
+      "scoreMs": 1054,
+      "rankScoreMs": 1054,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 405,
+      "avgPlaybackMs": 649,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 402,
+      "samples": [
+        {
+          "vodId": "132364",
+          "name": "庆余年之风起沧州",
+          "detailMs": 278,
+          "playbackOpenMs": 195,
+          "playbackBytes": 15986,
+          "playbackStatus": 200,
+          "playbackUrl": "https://1080p.huyall.com/play/YerA40Ld/index.m3u8"
+        },
+        {
+          "vodId": "132836",
+          "name": "庆余年之帝王业",
+          "detailMs": 253,
+          "playbackOpenMs": 571,
+          "playbackBytes": 15986,
+          "playbackStatus": 200,
+          "playbackUrl": "https://1080p.huyall.com/play/PdyYw7wd/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "macos",
+      "key": "虎牙",
+      "name": "🐯虎牙采集",
+      "type": 1,
+      "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
+      "scoreMs": 1054,
+      "rankScoreMs": 1054,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 405,
+      "avgPlaybackMs": 649,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 402,
+      "samples": [
+        {
+          "vodId": "132364",
+          "name": "庆余年之风起沧州",
+          "detailMs": 278,
+          "playbackOpenMs": 195,
+          "playbackBytes": 15986,
+          "playbackStatus": 200,
+          "playbackUrl": "https://1080p.huyall.com/play/YerA40Ld/index.m3u8"
+        },
+        {
+          "vodId": "132836",
+          "name": "庆余年之帝王业",
+          "detailMs": 253,
+          "playbackOpenMs": 571,
+          "playbackBytes": 15986,
+          "playbackStatus": 200,
+          "playbackUrl": "https://1080p.huyall.com/play/PdyYw7wd/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "android",
+      "key": "速播",
+      "name": "速播 | 采集",
+      "type": 1,
+      "api": "https://subocaiji.com/api.php/provide/vod/",
+      "scoreMs": 1166,
+      "rankScoreMs": 1166,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 750,
+      "avgPlaybackMs": 416,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://subocaiji.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 174,
+      "samples": [
+        {
+          "vodId": "59631",
+          "name": "庆余年 第二季",
+          "detailMs": 273,
+          "playbackOpenMs": 189,
+          "playbackBytes": 15986,
+          "playbackStatus": 200,
+          "playbackUrl": "https://play.xluuss.com/play/9aAjlRPb/index.m3u8"
+        },
+        {
+          "vodId": "140408",
+          "name": "庆余年之帝王业",
+          "detailMs": 272,
+          "playbackOpenMs": 97,
+          "playbackBytes": 15986,
+          "playbackStatus": 200,
+          "playbackUrl": "https://play.xluuss.com/play/7axX68na/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "macos",
+      "key": "速播",
+      "name": "速播 | 采集",
+      "type": 1,
+      "api": "https://subocaiji.com/api.php/provide/vod/",
+      "scoreMs": 1166,
+      "rankScoreMs": 1166,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 750,
+      "avgPlaybackMs": 416,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://subocaiji.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 174,
+      "samples": [
+        {
+          "vodId": "59631",
+          "name": "庆余年 第二季",
+          "detailMs": 273,
+          "playbackOpenMs": 189,
+          "playbackBytes": 15986,
+          "playbackStatus": 200,
+          "playbackUrl": "https://play.xluuss.com/play/9aAjlRPb/index.m3u8"
+        },
+        {
+          "vodId": "140408",
+          "name": "庆余年之帝王业",
+          "detailMs": 272,
+          "playbackOpenMs": 97,
+          "playbackBytes": 15986,
+          "playbackStatus": 200,
+          "playbackUrl": "https://play.xluuss.com/play/7axX68na/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "android",
+      "key": "大奶子",
+      "name": "大奶子 | 采集",
+      "type": 1,
+      "api": "https://apidanaizi.com/api.php/provide/vod",
+      "scoreMs": 1559,
+      "rankScoreMs": 1559,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 1166,
+      "avgPlaybackMs": 393,
+      "sampleCount": 1,
+      "keyword": "庆余年",
+      "searchUrl": "https://apidanaizi.com/api.php/provide/vod?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 590,
+      "samples": [
+        {
+          "vodId": "40899",
+          "name": "短发气质美少妇约跑友到酒店里面看着庆余年花样多样啪啪无套做爱",
+          "detailMs": 125,
+          "playbackOpenMs": 268,
+          "playbackBytes": 4096,
+          "playbackStatus": 206,
+          "playbackUrl": "https://voddadaizi6.com:52866/videos/202505/09/681de89dc57e27066997689e/678979/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "macos",
+      "key": "大奶子",
+      "name": "大奶子 | 采集",
+      "type": 1,
+      "api": "https://apidanaizi.com/api.php/provide/vod",
+      "scoreMs": 1559,
+      "rankScoreMs": 1559,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 1166,
+      "avgPlaybackMs": 393,
+      "sampleCount": 1,
+      "keyword": "庆余年",
+      "searchUrl": "https://apidanaizi.com/api.php/provide/vod?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 590,
+      "samples": [
+        {
+          "vodId": "40899",
+          "name": "短发气质美少妇约跑友到酒店里面看着庆余年花样多样啪啪无套做爱",
+          "detailMs": 125,
+          "playbackOpenMs": 268,
+          "playbackBytes": 4096,
+          "playbackStatus": 206,
+          "playbackUrl": "https://voddadaizi6.com:52866/videos/202505/09/681de89dc57e27066997689e/678979/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "android",
+      "key": "csp_xml_ikun",
+      "name": "🥣爱坤┃影视",
+      "type": 1,
+      "api": "https://ikunzyapi.com/api.php/provide/vod/from/ikm3u8/at/json",
+      "scoreMs": 1669,
+      "rankScoreMs": 1669,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 1302,
+      "avgPlaybackMs": 367,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://ikunzyapi.com/api.php/provide/vod/from/ikm3u8/at/json?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 397,
+      "samples": [
+        {
+          "vodId": "57075",
+          "name": "庆余年第二季",
+          "detailMs": 136,
+          "playbackOpenMs": 421,
+          "playbackBytes": 100,
+          "playbackStatus": 200,
+          "playbackUrl": "https://bfikuncdn.com/20240523/6Z9jGK4r/index.m3u8"
+        },
+        {
+          "vodId": "57034",
+          "name": "庆余年 第一季 特别版",
+          "detailMs": 130,
+          "playbackOpenMs": 46,
+          "playbackBytes": 100,
+          "playbackStatus": 200,
+          "playbackUrl": "https://bfikuncdn.com/20240508/5kmtk9ly/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "macos",
+      "key": "csp_xml_ikun",
+      "name": "🥣爱坤┃影视",
+      "type": 1,
+      "api": "https://ikunzyapi.com/api.php/provide/vod/from/ikm3u8/at/json",
+      "scoreMs": 1669,
+      "rankScoreMs": 1669,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 1302,
+      "avgPlaybackMs": 367,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://ikunzyapi.com/api.php/provide/vod/from/ikm3u8/at/json?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 397,
+      "samples": [
+        {
+          "vodId": "57075",
+          "name": "庆余年第二季",
+          "detailMs": 136,
+          "playbackOpenMs": 421,
+          "playbackBytes": 100,
+          "playbackStatus": 200,
+          "playbackUrl": "https://bfikuncdn.com/20240523/6Z9jGK4r/index.m3u8"
+        },
+        {
+          "vodId": "57034",
+          "name": "庆余年 第一季 特别版",
+          "detailMs": 130,
+          "playbackOpenMs": 46,
+          "playbackBytes": 100,
+          "playbackStatus": 200,
+          "playbackUrl": "https://bfikuncdn.com/20240508/5kmtk9ly/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "android",
+      "key": "a红牛资源",
+      "name": "🐂红牛┃采集",
+      "type": 1,
+      "api": "https://www.hongniuzy2.com/api.php/provide/vod/",
+      "scoreMs": 1738,
+      "rankScoreMs": 1738,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 266,
+      "avgPlaybackMs": 1472,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://www.hongniuzy2.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 325,
+      "samples": [
+        {
+          "vodId": "90305",
+          "name": "庆余年 第二季",
+          "detailMs": 200,
+          "playbackOpenMs": 1463,
+          "playbackBytes": 4096,
+          "playbackStatus": 206,
+          "playbackUrl": "https://hn.bfvvs.com/play/PdyQyqPd/index.m3u8"
+        },
+        {
+          "vodId": "171724",
+          "name": "庆余年之风起沧州",
+          "detailMs": 203,
+          "playbackOpenMs": 1077,
+          "playbackBytes": 4096,
+          "playbackStatus": 206,
+          "playbackUrl": "https://hn.bfvvs.com/play/xbox4YLd/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "macos",
+      "key": "a红牛资源",
+      "name": "🐂红牛┃采集",
+      "type": 1,
+      "api": "https://www.hongniuzy2.com/api.php/provide/vod/",
+      "scoreMs": 1738,
+      "rankScoreMs": 1738,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 266,
+      "avgPlaybackMs": 1472,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://www.hongniuzy2.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 325,
+      "samples": [
+        {
+          "vodId": "90305",
+          "name": "庆余年 第二季",
+          "detailMs": 200,
+          "playbackOpenMs": 1463,
+          "playbackBytes": 4096,
+          "playbackStatus": 206,
+          "playbackUrl": "https://hn.bfvvs.com/play/PdyQyqPd/index.m3u8"
+        },
+        {
+          "vodId": "171724",
+          "name": "庆余年之风起沧州",
+          "detailMs": 203,
+          "playbackOpenMs": 1077,
+          "playbackBytes": 4096,
+          "playbackStatus": 206,
+          "playbackUrl": "https://hn.bfvvs.com/play/xbox4YLd/index.m3u8"
         }
       ]
     },
@@ -3409,22 +3300,22 @@
       "name": "🔰金鹰┃影视",
       "type": 1,
       "api": "https://jyzyapi.com/provide/vod/",
-      "scoreMs": 2094,
-      "rankScoreMs": 2094,
+      "scoreMs": 1822,
+      "rankScoreMs": 1822,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 309,
-      "avgPlaybackMs": 1785,
+      "searchMs": 376,
+      "avgPlaybackMs": 1446,
       "sampleCount": 2,
       "keyword": "庆余年",
       "searchUrl": "https://jyzyapi.com/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 517,
+      "connectivityMs": 345,
       "samples": [
         {
           "vodId": "132479",
           "name": "庆余年之风起沧州",
-          "detailMs": 122,
-          "playbackOpenMs": 2503,
+          "detailMs": 241,
+          "playbackOpenMs": 1652,
           "playbackBytes": 4096,
           "playbackStatus": 206,
           "playbackUrl": "https://hd.kuktxu.com/play/YerA40Ld/index.m3u8"
@@ -3432,8 +3323,8 @@
         {
           "vodId": "132931",
           "name": "庆余年之帝王业",
-          "detailMs": 171,
-          "playbackOpenMs": 774,
+          "detailMs": 247,
+          "playbackOpenMs": 751,
           "playbackBytes": 4096,
           "playbackStatus": 206,
           "playbackUrl": "https://hd.kuktxu.com/play/PdyYw7wd/index.m3u8"
@@ -3446,22 +3337,22 @@
       "name": "🔰金鹰┃影视",
       "type": 1,
       "api": "https://jyzyapi.com/provide/vod/",
-      "scoreMs": 2094,
-      "rankScoreMs": 2094,
+      "scoreMs": 1822,
+      "rankScoreMs": 1822,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 309,
-      "avgPlaybackMs": 1785,
+      "searchMs": 376,
+      "avgPlaybackMs": 1446,
       "sampleCount": 2,
       "keyword": "庆余年",
       "searchUrl": "https://jyzyapi.com/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 517,
+      "connectivityMs": 345,
       "samples": [
         {
           "vodId": "132479",
           "name": "庆余年之风起沧州",
-          "detailMs": 122,
-          "playbackOpenMs": 2503,
+          "detailMs": 241,
+          "playbackOpenMs": 1652,
           "playbackBytes": 4096,
           "playbackStatus": 206,
           "playbackUrl": "https://hd.kuktxu.com/play/YerA40Ld/index.m3u8"
@@ -3469,11 +3360,85 @@
         {
           "vodId": "132931",
           "name": "庆余年之帝王业",
-          "detailMs": 171,
-          "playbackOpenMs": 774,
+          "detailMs": 247,
+          "playbackOpenMs": 751,
           "playbackBytes": 4096,
           "playbackStatus": 206,
           "playbackUrl": "https://hd.kuktxu.com/play/PdyYw7wd/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "android",
+      "key": "玉兔",
+      "name": "玉兔 | 采集",
+      "type": 1,
+      "api": "https://apiyutu.com/api.php/provide/vod/",
+      "scoreMs": 2211,
+      "rankScoreMs": 2211,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 1537,
+      "avgPlaybackMs": 674,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://apiyutu.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 249,
+      "samples": [
+        {
+          "vodId": "309566",
+          "name": "陈紫函老公戴向宇被庆余年太子扮演者张昊唯爆出嫖娼录.音曝光团队紧急回应",
+          "detailMs": 129,
+          "playbackOpenMs": 657,
+          "playbackBytes": 118,
+          "playbackStatus": 206,
+          "playbackUrl": "https://lsbbf10.com/20260616/b0Fk33j1/index.m3u8"
+        },
+        {
+          "vodId": "278457",
+          "name": "塌房泄密视频曝光庆余年二皇子刘瑞瑞与女子共度一宿酒店啪啪视频曝光",
+          "detailMs": 90,
+          "playbackOpenMs": 472,
+          "playbackBytes": 118,
+          "playbackStatus": 206,
+          "playbackUrl": "https://lsbbf9.com/20260118/TRn8AOkM/index.m3u8"
+        }
+      ]
+    },
+    {
+      "platform": "macos",
+      "key": "玉兔",
+      "name": "玉兔 | 采集",
+      "type": 1,
+      "api": "https://apiyutu.com/api.php/provide/vod/",
+      "scoreMs": 2211,
+      "rankScoreMs": 2211,
+      "qualityBoostMs": 0,
+      "preferredPattern": "",
+      "searchMs": 1537,
+      "avgPlaybackMs": 674,
+      "sampleCount": 2,
+      "keyword": "庆余年",
+      "searchUrl": "https://apiyutu.com/api.php/provide/vod/?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
+      "connectivityMs": 249,
+      "samples": [
+        {
+          "vodId": "309566",
+          "name": "陈紫函老公戴向宇被庆余年太子扮演者张昊唯爆出嫖娼录.音曝光团队紧急回应",
+          "detailMs": 129,
+          "playbackOpenMs": 657,
+          "playbackBytes": 118,
+          "playbackStatus": 206,
+          "playbackUrl": "https://lsbbf10.com/20260616/b0Fk33j1/index.m3u8"
+        },
+        {
+          "vodId": "278457",
+          "name": "塌房泄密视频曝光庆余年二皇子刘瑞瑞与女子共度一宿酒店啪啪视频曝光",
+          "detailMs": 90,
+          "playbackOpenMs": 472,
+          "playbackBytes": 118,
+          "playbackStatus": 206,
+          "playbackUrl": "https://lsbbf9.com/20260118/TRn8AOkM/index.m3u8"
         }
       ]
     },
@@ -3483,22 +3448,22 @@
       "name": "爱奇艺资源",
       "type": 1,
       "api": "https://iqiyizyapi.com/api.php/provide/vod",
-      "scoreMs": 4083,
-      "rankScoreMs": 4083,
+      "scoreMs": 3368,
+      "rankScoreMs": 3368,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 1891,
-      "avgPlaybackMs": 2192,
+      "searchMs": 1840,
+      "avgPlaybackMs": 1528,
       "sampleCount": 2,
       "keyword": "庆余年",
       "searchUrl": "https://iqiyizyapi.com/api.php/provide/vod?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 806,
+      "connectivityMs": 877,
       "samples": [
         {
           "vodId": "55212",
           "name": "庆余年第二季",
-          "detailMs": 691,
-          "playbackOpenMs": 1653,
+          "detailMs": 652,
+          "playbackOpenMs": 1132,
           "playbackBytes": 4096,
           "playbackStatus": 206,
           "playbackUrl": "https://play.ly166.com:65/videos/20250722/687f3d0b80eee9b955fe6960/e08efg/index.m3u8"
@@ -3506,8 +3471,8 @@
         {
           "vodId": "16636",
           "name": "庆余年第一季",
-          "detailMs": 741,
-          "playbackOpenMs": 1298,
+          "detailMs": 307,
+          "playbackOpenMs": 965,
           "playbackBytes": 4096,
           "playbackStatus": 206,
           "playbackUrl": "https://play.ly166.com:65/videos/20250722/687f543f80eee9b95510c5ad/2gff8g/index.m3u8"
@@ -3520,22 +3485,22 @@
       "name": "爱奇艺资源",
       "type": 1,
       "api": "https://iqiyizyapi.com/api.php/provide/vod",
-      "scoreMs": 4083,
-      "rankScoreMs": 4083,
+      "scoreMs": 3368,
+      "rankScoreMs": 3368,
       "qualityBoostMs": 0,
       "preferredPattern": "",
-      "searchMs": 1891,
-      "avgPlaybackMs": 2192,
+      "searchMs": 1840,
+      "avgPlaybackMs": 1528,
       "sampleCount": 2,
       "keyword": "庆余年",
       "searchUrl": "https://iqiyizyapi.com/api.php/provide/vod?ac=videolist&wd=%E5%BA%86%E4%BD%99%E5%B9%B4",
-      "connectivityMs": 806,
+      "connectivityMs": 877,
       "samples": [
         {
           "vodId": "55212",
           "name": "庆余年第二季",
-          "detailMs": 691,
-          "playbackOpenMs": 1653,
+          "detailMs": 652,
+          "playbackOpenMs": 1132,
           "playbackBytes": 4096,
           "playbackStatus": 206,
           "playbackUrl": "https://play.ly166.com:65/videos/20250722/687f3d0b80eee9b955fe6960/e08efg/index.m3u8"
@@ -3543,8 +3508,8 @@
         {
           "vodId": "16636",
           "name": "庆余年第一季",
-          "detailMs": 741,
-          "playbackOpenMs": 1298,
+          "detailMs": 307,
+          "playbackOpenMs": 965,
           "playbackBytes": 4096,
           "playbackStatus": 206,
           "playbackUrl": "https://play.ly166.com:65/videos/20250722/687f543f80eee9b95510c5ad/2gff8g/index.m3u8"
@@ -3552,12 +3517,12 @@
       ]
     }
   ],
-  "fastSites": 25,
-  "fastHttpSites": 15,
-  "fastMeasuredSites": 14,
+  "fastSites": 24,
+  "fastHttpSites": 14,
+  "fastMeasuredSites": 13,
   "fastJarSites": 10,
-  "macosFastSites": 25,
-  "macosFastHttpSites": 15,
-  "macosFastMeasuredSites": 14,
+  "macosFastSites": 24,
+  "macosFastHttpSites": 14,
+  "macosFastMeasuredSites": 13,
   "macosFastJavaScriptSites": 10
 }
