@@ -15,7 +15,7 @@
     <template v-else>
       <header class="calendar-hero">
         <a href="/life/" class="back-link"><span aria-hidden="true">←</span> 守护板</a>
-        <img :src="avatarUrl" :alt="`${profile.name}的头像`">
+        <img :src="lifeAvatarUrl || avatarUrl" :alt="`${profile.name}的头像`">
         <div>
           <p>GROWTH CALENDAR</p>
           <h1>{{ profile.name }}的成长日历</h1>
@@ -245,11 +245,13 @@ import {
   deleteLifeRecordFromRemote,
   ensureLifeData,
   hasLifeDataSecret,
+  lifeAvatarUrl,
   lifeData,
   lifeDataError,
   lifeDataLoading,
   lifeDataSecretRequired,
   setLifeDataSecret,
+  refreshLifeAvatarFromRemote,
   updateLifeRecordInRemote,
   upsertBodyMeasurementToRemote,
   type LifeBodyMeasurement,
@@ -1001,6 +1003,7 @@ async function reloadData() {
 async function submitDataSecret() {
   await setLifeDataSecret(dataSecret.value)
   canEditRecords.value = hasLifeDataSecret()
+  void refreshLifeAvatarFromRemote().catch(() => {})
   restorePendingRecords()
   restorePendingMeasurements()
   syncInitialSelection(recordsData.value)
@@ -1035,6 +1038,7 @@ onMounted(async () => {
   restorePendingRecords()
   restorePendingMeasurements()
   await ensureLifeData({ force: canEditRecords.value })
+  if (canEditRecords.value) void refreshLifeAvatarFromRemote().catch(() => {})
   syncInitialSelection(recordsData.value)
   if (canEditRecords.value && window.location.hash === '#record-editor') openNewRecordModal()
   void flushPendingRecords()

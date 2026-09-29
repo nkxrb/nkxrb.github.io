@@ -68,6 +68,30 @@
   box-shadow: 0 16px 45px rgb(23 61 54 / 7%);
 }
 
+.album-cloud {
+  display: grid;
+  padding: 16px;
+  border: 1px solid rgb(39 123 109 / 16%);
+  border-radius: 3px 18px 3px 3px;
+  margin-bottom: 28px;
+  gap: 11px;
+  background: #edf4ed;
+}
+
+.album-cloud span,
+.album-cloud strong,
+.album-cloud small { display: block; }
+.album-cloud span { color: #277b6d; font: 600 9px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .18em; }
+.album-cloud strong { margin-top: 3px; font-size: 14px; }
+.album-cloud small { margin-top: 4px; color: var(--muted); font-size: 10px; }
+.album-cloud form,
+.album-cloud__actions { display: flex; min-width: 0; gap: 7px; }
+.album-cloud input { width: 100%; min-width: 0; min-height: 38px; padding: 0 10px; border: 1px solid rgb(23 61 54 / 17%); border-radius: 4px; color: var(--forest); background: white; font-size: 13px; }
+.album-cloud button { min-height: 38px; padding: 0 11px; border: 0; border-radius: 4px; color: white; background: #277b6d; font-size: 11px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.album-cloud__actions button:first-child { color: #277b6d; background: white; }
+.album-cloud button:disabled { opacity: .5; cursor: default; }
+.album-cloud > p { margin: 0; color: #277b6d; font-size: 10px; line-height: 1.6; }
+
 .album-section-heading > span,
 .album-preview__heading span { color: #a47743; }
 .album-section-heading h2,
@@ -101,10 +125,11 @@
 .album-photo-item { display: grid; min-width: 0; padding: 10px; border: 1px solid rgb(23 61 54 / 9%); border-radius: 3px 15px 3px 3px; grid-template-columns: 85px minmax(0, 1fr); gap: 12px; background: #faf8f1; }
 .album-photo-item img { width: 85px; height: 110px; border-radius: 2px; object-fit: cover; }
 .album-photo-fields { display: grid; min-width: 0; gap: 7px; }
-.album-photo-fields__top { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+.album-photo-fields__top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 5px; }
 .album-photo-fields__top strong { font-size: 11px; }
-.album-photo-fields__top > div { display: flex; gap: 3px; }
+.album-photo-fields__top > div { display: flex; flex-wrap: wrap; gap: 3px; }
 .album-photo-fields__top button { min-height: 28px; padding: 0 7px; border: 0; border-radius: 4px; color: #277b6d; background: #e5eee8; font-size: 10px; cursor: pointer; }
+.album-photo-fields__top button.is-avatar { color: white; background: #277b6d; }
 .album-photo-fields__top button:disabled { opacity: .4; cursor: default; }
 .album-photo-fields label,
 .album-general-fields label,

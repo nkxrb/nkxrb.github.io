@@ -26,7 +26,7 @@
         <i v-for="piece in 18" :key="piece" :style="confettiStyle(piece)" />
       </div>
 
-      <img class="hero__avatar" :src="avatarUrl" :alt="`${profile.name}的头像`">
+      <img class="hero__avatar" :src="lifeAvatarUrl || avatarUrl" :alt="`${profile.name}的头像`">
       <p class="hero__eyebrow">{{ profile.name }} · LIFETIME</p>
       <div class="hero__number" aria-live="polite">{{ formatNumber(totalDays) }}</div>
       <p class="hero__unit">{{ nameInterpretation }}</p>
@@ -416,6 +416,8 @@ import {
   lifeDataError,
   lifeDataLoading,
   lifeDataSecretRequired,
+  lifeAvatarUrl,
+  refreshLifeAvatarFromRemote,
   refreshLifeDataFromRemote,
   setLifeDataSecret,
   updateVaccineRecordsToRemote,
@@ -2057,6 +2059,7 @@ async function submitKeySecret() {
       restoreVaccineState()
       void nextTick(startSky)
     }
+    void refreshLifeAvatarFromRemote().catch(() => {})
     if (data) showKeyModal.value = false
   } finally {
     isSavingKey.value = false
@@ -2092,6 +2095,7 @@ async function handleRefresh() {
       restoreVaccineState()
       void nextTick(startSky)
     }
+    void refreshLifeAvatarFromRemote().catch(() => {})
     showToast('数据已刷新')
   } catch (error) {
     showToast(error instanceof Error ? error.message : '刷新失败')
@@ -2103,6 +2107,7 @@ async function handleRefresh() {
 async function submitDataSecret() {
   await setLifeDataSecret(dataSecret.value)
   canEditMarks.value = hasLifeDataSecret()
+  void refreshLifeAvatarFromRemote().catch(() => {})
   if (lifeData.value) {
     restoreVaccineState()
     void nextTick(startSky)
@@ -2114,6 +2119,7 @@ onMounted(async () => {
   // A shared module can still contain a snapshot from another route.
   await ensureLifeData({ force: canEditMarks.value })
   if (!lifeData.value) return
+  if (canEditMarks.value) void refreshLifeAvatarFromRemote().catch(() => {})
   restoreVaccineState()
   void nextTick(startSky)
   await nextTick()

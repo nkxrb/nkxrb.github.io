@@ -11,14 +11,31 @@
 
     <div class="album-workspace">
       <section class="album-editor" aria-labelledby="album-editor-title">
+        <div class="album-cloud">
+          <div>
+            <span>FAMILY STORAGE</span>
+            <strong>{{ connected ? '已连接家庭存储' : '当前为本地创作' }}</strong>
+            <small>{{ connected ? '保存后，使用同一家庭密码可以再次读取。' : '输入家庭密码后可上传并保存照片。' }}</small>
+          </div>
+          <form v-if="!connected" @submit.prevent="connectCloud">
+            <input v-model="secretInput" type="password" autocomplete="current-password" placeholder="家庭数据密码" aria-label="家庭数据密码">
+            <button type="submit" :disabled="isSyncing">{{ isSyncing ? '连接中…' : '连接' }}</button>
+          </form>
+          <div v-else class="album-cloud__actions">
+            <button type="button" :disabled="isSyncing" @click="loadSavedAlbum">读取已保存</button>
+            <button type="button" :disabled="isSyncing || !photos.length" @click="saveAlbum">{{ isSyncing ? '保存中…' : '保存到家庭存储' }}</button>
+          </div>
+          <p v-if="cloudMessage" role="status">{{ cloudMessage }}</p>
+        </div>
+
         <div class="album-section-heading">
           <span>01 / 收集片刻</span>
           <h2 id="album-editor-title">选择照片</h2>
-          <p>最多 12 张。照片只在当前浏览器中处理，不会上传到服务器。</p>
+          <p>最多 12 张。照片先在本机预览，点击“保存到家庭存储”后才会上传。</p>
         </div>
 
         <label class="album-upload">
-          <input type="file" accept="image/*" multiple @change="addPhotos">
+          <input type="file" accept="image/*" multiple :disabled="isSyncing" @change="addPhotos">
           <span aria-hidden="true">＋</span>
           <strong>点击上传照片</strong>
           <small>支持浏览器可打开的图片，单张不超过 15 MB</small>
@@ -34,6 +51,7 @@
                 <div>
                   <button type="button" :disabled="index === 0" :aria-label="`将第 ${index + 1} 张照片前移`" @click="movePhoto(index, -1)">↑</button>
                   <button type="button" :disabled="index === photos.length - 1" :aria-label="`将第 ${index + 1} 张照片后移`" @click="movePhoto(index, 1)">↓</button>
+                  <button type="button" :class="{ 'is-avatar': avatarPhotoId === photo.id }" :aria-pressed="avatarPhotoId === photo.id" @click="avatarPhotoId = avatarPhotoId === photo.id ? '' : photo.id">{{ avatarPhotoId === photo.id ? '已设头像' : '设为头像' }}</button>
                   <button type="button" :aria-label="`移除第 ${index + 1} 张照片`" @click="removePhoto(index)">移除</button>
                 </div>
               </div>
@@ -68,7 +86,7 @@
         <div v-if="!generated" class="album-empty">
           <span aria-hidden="true">✦</span>
           <strong>故事从一张照片开始</strong>
-          <p>上传照片并写下一句话，再生成可保存的纪念册。</p>
+          <p>选择照片并写下一句话，再生成可保存的纪念册。</p>
         </div>
 
         <div v-else>
@@ -104,15 +122,29 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import profile from '../../../../life/data/profile.json'
 import milestones from '../../../../life/data/milestones.json'
+import {
+  clearLifeDataSecret,
+  hasLifeDataSecret,
+  loadLifeAlbumFromRemote,
+  loadLifeAlbumImageFromRemote,
+  refreshLifeAvatarFromRemote,
+  saveLifeAlbumToRemote,
+  setLifeDataSecret,
+  uploadLifeAlbumImageToRemote,
+  verifyLifeDataRemoteAccess,
+  type LifeAlbumManifest
+} from '../life-data'
 
 interface AlbumPhoto {
   id: string
   url: string
   date: string
   caption: string
+  file?: File
+  remotePath?: string
 }
 
 const MAX_PHOTOS = 12
@@ -123,6 +155,11 @@ const dedication = ref('愿你带着爱，慢慢长大。')
 const story = ref('')
 const generated = ref(false)
 const uploadMessage = ref('')
+const avatarPhotoId = ref('')
+const connected = ref(false)
+const isSyncing = ref(false)
+const secretInput = ref('')
+const cloudMessage = ref('')
 
 function addPhotos(event: Event) {
   const input = event.target as HTMLInputElement
@@ -134,7 +171,8 @@ function addPhotos(event: Event) {
       id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       url: URL.createObjectURL(file),
       date: '',
-      caption: ''
+      caption: '',
+      file
     })
   }
   if (accepted.length) generated.value = false
@@ -147,6 +185,7 @@ function addPhotos(event: Event) {
 function removePhoto(index: number) {
   const [photo] = photos.value.splice(index, 1)
   if (photo) URL.revokeObjectURL(photo.url)
+  if (photo?.id === avatarPhotoId.value) avatarPhotoId.value = ''
   generated.value = false
 }
 
@@ -192,6 +231,139 @@ function generateStory() {
 function printAlbum() {
   window.print()
 }
+
+async function compressPhoto(file: File) {
+  const bitmap = await createImageBitmap(file)
+  try {
+    const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height))
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale))
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale))
+    const context = canvas.getContext('2d')
+    if (!context) throw new Error('当前浏览器无法处理图片')
+    context.fillStyle = '#fff'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+    for (const quality of [.82, .72, .6, .48]) {
+      const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/jpeg', quality))
+      if (!blob) throw new Error('图片压缩失败')
+      if (blob.size <= 900_000) return blob
+    }
+    throw new Error('照片压缩后仍过大，请换一张尺寸更小的图片')
+  } finally {
+    bitmap.close()
+  }
+}
+
+async function loadSavedAlbum() {
+  if (!connected.value || isSyncing.value) return
+  isSyncing.value = true
+  cloudMessage.value = '正在读取纪念册…'
+  try {
+    const album = await loadLifeAlbumFromRemote()
+    const ready: AlbumPhoto[] = []
+    try {
+      for (const item of album.photos) {
+        const image = await loadLifeAlbumImageFromRemote(item.path)
+        ready.push({
+          id: item.id,
+          url: URL.createObjectURL(image),
+          date: item.date,
+          caption: item.caption,
+          remotePath: item.path
+        })
+      }
+    } catch (error) {
+      for (const photo of ready) URL.revokeObjectURL(photo.url)
+      throw error
+    }
+    for (const photo of photos.value) URL.revokeObjectURL(photo.url)
+    photos.value = ready
+    bookTitle.value = album.title || `${profile.name}的成长纪念册`
+    dedication.value = album.dedication || '愿你带着爱，慢慢长大。'
+    story.value = album.story
+    avatarPhotoId.value = ready.find(photo => photo.remotePath === album.avatar_path)?.id || ''
+    generated.value = ready.length > 0
+    cloudMessage.value = album.photos.length
+      ? `已读取 ${ready.length} 张照片`
+      : '云端还没有纪念册，上传照片后可以保存。'
+  } catch (error) {
+    cloudMessage.value = error instanceof Error ? error.message : '读取失败'
+  } finally {
+    isSyncing.value = false
+  }
+}
+
+async function connectCloud() {
+  if (!secretInput.value.trim() || isSyncing.value) return
+  isSyncing.value = true
+  cloudMessage.value = '正在连接家庭存储…'
+  try {
+    await setLifeDataSecret(secretInput.value)
+    await verifyLifeDataRemoteAccess()
+    connected.value = true
+    secretInput.value = ''
+    cloudMessage.value = '已连接，可保存照片和纪念册。'
+  } catch (error) {
+    clearLifeDataSecret()
+    connected.value = false
+    cloudMessage.value = error instanceof Error ? error.message : '连接失败，请检查密码'
+  } finally {
+    isSyncing.value = false
+  }
+  if (connected.value && !photos.value.length) await loadSavedAlbum()
+}
+
+async function saveAlbum() {
+  if (!connected.value || isSyncing.value || !photos.value.length) return
+  isSyncing.value = true
+  try {
+    if (!generated.value || !story.value.trim()) generateStory()
+    for (const [index, photo] of photos.value.entries()) {
+      if (photo.remotePath) continue
+      if (!photo.file) throw new Error('原始照片不可用，请重新选择')
+      cloudMessage.value = `正在上传第 ${index + 1} / ${photos.value.length} 张照片…`
+      const compressed = await compressPhoto(photo.file)
+      photo.remotePath = await uploadLifeAlbumImageToRemote(photo.id, compressed)
+    }
+    const manifest: LifeAlbumManifest = {
+      title: bookTitle.value.trim(),
+      dedication: dedication.value.trim(),
+      story: story.value.trim(),
+      avatar_path: photos.value.find(photo => photo.id === avatarPhotoId.value)?.remotePath || '',
+      photos: photos.value.map(photo => ({
+        id: photo.id,
+        path: photo.remotePath!,
+        date: photo.date,
+        caption: photo.caption.trim()
+      }))
+    }
+    await saveLifeAlbumToRemote(manifest)
+    try {
+      await refreshLifeAvatarFromRemote()
+      cloudMessage.value = `已保存 ${photos.value.length} 张照片和纪念册${manifest.avatar_path ? '，首页头像已更新' : ''}。`
+    } catch {
+      cloudMessage.value = `已保存 ${photos.value.length} 张照片和纪念册；头像稍后刷新可见。`
+    }
+  } catch (error) {
+    cloudMessage.value = error instanceof Error ? error.message : '保存失败，请重试'
+  } finally {
+    isSyncing.value = false
+  }
+}
+
+onMounted(async () => {
+  connected.value = hasLifeDataSecret()
+  if (!connected.value) return
+  try {
+    await verifyLifeDataRemoteAccess()
+    await loadSavedAlbum()
+  } catch (error) {
+    clearLifeDataSecret()
+    connected.value = false
+    cloudMessage.value = error instanceof Error ? error.message : '家庭存储连接失败'
+  }
+})
 
 onBeforeUnmount(() => {
   for (const photo of photos.value) URL.revokeObjectURL(photo.url)

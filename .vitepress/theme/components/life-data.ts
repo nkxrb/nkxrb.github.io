@@ -138,6 +138,21 @@ export interface LifeVaccineRecords {
   completions: LifeVaccineCompletion[]
 }
 
+export interface LifeAlbumPhoto {
+  id: string
+  path: string
+  date: string
+  caption: string
+}
+
+export interface LifeAlbumManifest {
+  title: string
+  dedication: string
+  story: string
+  avatar_path: string
+  photos: LifeAlbumPhoto[]
+}
+
 export interface LifeBodyMeasurement {
   date: string
   time?: string
@@ -176,6 +191,8 @@ const NEWBORN_RECORDS_FILE = 'newborn-records.json'
 const DIAPER_USAGE_FILE = 'diaper-usage.json'
 const VACCINE_RECORDS_FILE = 'vaccine-records.json'
 const BODY_MEASUREMENTS_FILE = 'body-measurements.json'
+const REMOTE_MEDIA_DIR = 'life/media'
+const ALBUM_FILE = `${REMOTE_MEDIA_DIR}/album.json`
 const DEFAULT_KDF_ITERATIONS = 310000
 const encoder = new TextEncoder()
 const decoder = new TextDecoder()
@@ -212,6 +229,7 @@ export const lifeData = shallowRef<LifeData | null>(null)
 export const lifeDataLoading = shallowRef(true)
 export const lifeDataError = shallowRef('')
 export const lifeDataSecretRequired = shallowRef(false)
+export const lifeAvatarUrl = shallowRef<string | null>(null)
 
 let dataPromise: Promise<LifeData | null> | null = null
 let tokenPromise: Promise<string> | null = null
@@ -224,6 +242,10 @@ function siteAssetUrl(path: string) {
 
 function encodePath(path: string) {
   return path.split('/').map(encodeURIComponent).join('/')
+}
+
+function remoteContentPath(fileName: string) {
+  return fileName.includes('/') ? fileName : `${REMOTE_DATA_DIR}/${fileName}`
 }
 
 function formatKeyPrefix(date: Date, timeZone: string, keyPrefixFormat: string) {
@@ -392,6 +414,20 @@ function decodeBase64Utf8(value: string) {
   return decoder.decode(bytes)
 }
 
+function decodeBase64Bytes(value: string) {
+  const binary = atob(value.replace(/\s/g, ''))
+  return Uint8Array.from(binary, char => char.charCodeAt(0))
+}
+
+function encodeBase64Bytes(bytes: Uint8Array) {
+  let binary = ''
+  const chunkSize = 0x8000
+  for (let index = 0; index < bytes.length; index += chunkSize) {
+    binary += String.fromCharCode(...bytes.slice(index, index + chunkSize))
+  }
+  return btoa(binary)
+}
+
 function encodeBase64Utf8(value: string) {
   const bytes = encoder.encode(value)
   let binary = ''
@@ -548,7 +584,7 @@ function mergeLifeRecordsNewest(baseRecords: LifeRecordDay[], incomingRecords: L
 
 async function getRemoteContent<T>(fileName: string) {
   const token = await getRemoteToken()
-  const url = new URL(`${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(`${REMOTE_DATA_DIR}/${fileName}`)}`)
+  const url = new URL(`${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(remoteContentPath(fileName))}`)
   url.searchParams.set('access_token', token)
   if (REMOTE_REF) url.searchParams.set('ref', REMOTE_REF)
 
@@ -582,7 +618,7 @@ async function getRemoteContent<T>(fileName: string) {
 
 async function updateRemoteContent(fileName: string, content: string, sha: string, message: string) {
   const token = await getRemoteToken()
-  const url = new URL(`${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(`${REMOTE_DATA_DIR}/${fileName}`)}`)
+  const url = new URL(`${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(remoteContentPath(fileName))}`)
   url.searchParams.set('access_token', token)
 
   const response = await fetch(url, {
@@ -610,7 +646,7 @@ async function updateRemoteContent(fileName: string, content: string, sha: strin
 
 async function createRemoteContent(fileName: string, content: string, message: string) {
   const token = await getRemoteToken()
-  const url = new URL(`${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(`${REMOTE_DATA_DIR}/${fileName}`)}`)
+  const url = new URL(`${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(remoteContentPath(fileName))}`)
   url.searchParams.set('access_token', token)
 
   const response = await fetch(url, {
@@ -657,6 +693,107 @@ async function updateRemoteJson<T>(fileName: string, updater: (data: T) => T, fa
     await createRemoteContent(fileName, `${JSON.stringify(nextData, null, 2)}\n`, message)
     return nextData
   }
+}
+
+function remoteFileUrl(path: string) {
+  return `${REMOTE_API_BASE}/repos/${REMOTE_OWNER}/${REMOTE_REPO}/contents/${encodePath(path)}`
+}
+
+function validMediaPath(path: string) {
+  return /^life\/media\/[a-z0-9-]+\.jpg$/.test(path)
+}
+
+const emptyAlbum: LifeAlbumManifest = {
+  title: '',
+  dedication: '',
+  story: '',
+  avatar_path: '',
+  photos: []
+}
+
+export async function verifyLifeDataRemoteAccess() {
+  if (!hasLifeDataSecret()) throw new Error('请先连接家庭存储')
+  await getRemoteContent<LifeRecordDay[]>(NEWBORN_RECORDS_FILE)
+}
+
+export async function loadLifeAlbumFromRemote(): Promise<LifeAlbumManifest> {
+  if (!hasLifeDataSecret()) throw new Error('请先连接家庭存储')
+  const data = await fetchOptionalRemoteJson<Partial<LifeAlbumManifest>>(ALBUM_FILE, emptyAlbum)
+  return {
+    title: typeof data.title === 'string' ? data.title : '',
+    dedication: typeof data.dedication === 'string' ? data.dedication : '',
+    story: typeof data.story === 'string' ? data.story : '',
+    avatar_path: typeof data.avatar_path === 'string' && validMediaPath(data.avatar_path) ? data.avatar_path : '',
+    photos: Array.isArray(data.photos) ? data.photos.filter(item =>
+      typeof item.id === 'string' &&
+      typeof item.path === 'string' && validMediaPath(item.path) &&
+      typeof item.date === 'string' && typeof item.caption === 'string'
+    ) : []
+  }
+}
+
+export async function saveLifeAlbumToRemote(album: LifeAlbumManifest) {
+  if (!hasLifeDataSecret()) throw new Error('请先连接家庭存储')
+  const next = await updateRemoteJson<LifeAlbumManifest>(
+    ALBUM_FILE,
+    () => album,
+    emptyAlbum,
+    'chore(life): update memory book'
+  )
+  return next
+}
+
+export async function uploadLifeAlbumImageToRemote(id: string, image: Blob) {
+  if (!hasLifeDataSecret()) throw new Error('请先连接家庭存储')
+  if (!/^[a-z0-9-]+$/.test(id)) throw new Error('图片编号无效')
+  const path = `${REMOTE_MEDIA_DIR}/${id}.jpg`
+  const token = await getRemoteToken()
+  const url = new URL(remoteFileUrl(path))
+  url.searchParams.set('access_token', token)
+  const bytes = new Uint8Array(await image.arrayBuffer())
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: 'chore(life): upload memory photo',
+      content: encodeBase64Bytes(bytes),
+      ...(REMOTE_REF ? { branch: REMOTE_REF } : {})
+    })
+  })
+  if (!response.ok) throw new Error(`图片上传失败：${response.status}`)
+  return path
+}
+
+export async function loadLifeAlbumImageFromRemote(path: string) {
+  if (!hasLifeDataSecret()) throw new Error('请先连接家庭存储')
+  if (!validMediaPath(path)) throw new Error('图片路径无效')
+  const token = await getRemoteToken()
+  const url = new URL(remoteFileUrl(path))
+  url.searchParams.set('access_token', token)
+  if (REMOTE_REF) url.searchParams.set('ref', REMOTE_REF)
+  const response = await fetch(url, { headers: { Accept: 'application/json' }, cache: 'no-store' })
+  if (!response.ok) throw new Error(`图片读取失败：${response.status}`)
+  const payload = await response.json() as RemoteContentResponse
+  if (!payload.content) throw new Error('图片内容为空')
+  return new Blob([decodeBase64Bytes(payload.content)], { type: 'image/jpeg' })
+}
+
+export async function refreshLifeAvatarFromRemote() {
+  if (!hasLifeDataSecret()) {
+    lifeAvatarUrl.value = null
+    return null
+  }
+  const album = await loadLifeAlbumFromRemote()
+  if (!album.avatar_path) {
+    lifeAvatarUrl.value = null
+    return null
+  }
+  const image = await loadLifeAlbumImageFromRemote(album.avatar_path)
+  const url = URL.createObjectURL(image)
+  const previous = lifeAvatarUrl.value
+  lifeAvatarUrl.value = url
+  if (previous?.startsWith('blob:')) URL.revokeObjectURL(previous)
+  return url
 }
 
 function normalizeVaccineRecords(
@@ -776,6 +913,7 @@ export async function ensureLifeData(options: { force?: boolean } = {}) {
 export async function setLifeDataSecret(secret: string) {
   runtimeTokenSecret = secret.trim()
   tokenPromise = null
+  lifeAvatarUrl.value = null
   lifeDataError.value = ''
   lifeDataSecretRequired.value = false
 
@@ -966,6 +1104,7 @@ export function hasLifeDataSecret() {
 export function clearLifeDataSecret() {
   runtimeTokenSecret = ''
   tokenPromise = null
+  lifeAvatarUrl.value = null
   lifeDataError.value = ''
   lifeDataSecretRequired.value = false
 
