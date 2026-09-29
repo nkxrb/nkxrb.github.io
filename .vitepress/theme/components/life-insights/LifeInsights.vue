@@ -1,5 +1,5 @@
 <template>
-  <section class="dashboard-section growth-section" aria-labelledby="growth-title">
+  <section id="growth" class="dashboard-section growth-section" aria-labelledby="growth-title">
     <header class="section-heading">
       <div>
         <p class="section-kicker">GROWTH MAP</p>

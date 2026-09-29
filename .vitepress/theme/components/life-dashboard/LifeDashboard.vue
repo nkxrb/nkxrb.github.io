@@ -38,6 +38,10 @@
       <p class="hero__hint"><span aria-hidden="true">⌁</span> 轻触数字，重温这一刻</p>
     </section>
 
+    <nav class="life-route-nav" aria-label="成长页面导航">
+      <a v-for="item in routeSections" :key="item.id" :href="`#${item.id}`" :aria-current="activeSection === item.id ? 'location' : undefined" @click="activeSection = item.id">{{ item.label }}</a>
+    </nav>
+
     <div class="dashboard-shell">
       <div class="life-tools" aria-label="数据工具">
         <button
@@ -51,18 +55,40 @@
         </button>
       </div>
 
-      <section class="quick-record" aria-label="快速添加记录">
-        <div>
-          <span>DAILY RECORD</span>
-          <strong>{{ canEditMarks ? '添加记录' : '进入成长日历' }}</strong>
-          <p>{{ canEditMarks ? '快速记录喂养、睡眠、体重、身高和备注' : '' }}</p>
+      <section id="today" class="today-cockpit" aria-labelledby="today-title">
+        <header class="today-cockpit__header">
+          <div>
+            <p class="section-kicker">TODAY'S VIEW</p>
+            <h1 id="today-title">今天，{{ profile.name }}正在长大</h1>
+            <p class="today-cockpit__lead">出生第 {{ formatNumber(totalDays) }} 天 · {{ todayRecordLabel }}</p>
+          </div>
+          <div class="today-cockpit__actions">
+            <a class="today-cockpit__primary" href="/life/calendar/#record-editor">
+              {{ canEditMarks ? '记录今天' : '打开日历' }} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </header>
+
+        <div class="today-cockpit__cards">
+          <article class="today-cockpit__card today-cockpit__card--age">
+            <span>现在</span>
+            <strong>{{ ageText }}</strong>
+            <small>每一天都值得留下来</small>
+          </article>
+          <article class="today-cockpit__card">
+            <span>下一个特别时刻</span>
+            <strong>{{ nextMilestone?.title || '继续记录新日子' }}</strong>
+            <small>{{ nextMilestone ? `${formatDate(nextMilestone.date)} · ${nextMilestone.detail}` : '新的成长会在记录里出现' }}</small>
+          </article>
+          <article class="today-cockpit__card today-cockpit__card--reminder">
+            <span>健康提醒</span>
+            <strong>{{ nextReminder.title }}</strong>
+            <small>{{ nextReminder.detail }}</small>
+          </article>
         </div>
-        <a class="quick-record__button" href="/life/calendar/#record-editor">
-          {{ canEditMarks ? '添加记录' : '打开日历' }} <span aria-hidden="true">→</span>
-        </a>
       </section>
 
-      <section class="daily-calendar" aria-label="近日日历">
+      <section id="diary" class="daily-calendar" aria-label="近日日历">
         <header>
           <div>
             <span>RECENT DAYS</span>
@@ -86,11 +112,22 @@
         </div>
       </section>
 
-      <section class="identity-card" aria-label="出生信息">
-        <div class="identity-card__intro">
+      <section class="memory-entry" aria-labelledby="memory-entry-title">
+        <div class="memory-entry__art" aria-hidden="true"><span>✦</span><span>✳</span><span>✦</span></div>
+        <div class="memory-entry__copy">
+          <p class="section-kicker">MEMORY BOOK</p>
+          <h2 id="memory-entry-title">把照片写成一段成长故事</h2>
+          <p>选择照片，补上日期和一句话，生成一册可以预览、打印保存的纪念册。</p>
+        </div>
+        <a href="/life/album/" class="memory-entry__action">上传照片 · 制作纪念册 <span aria-hidden="true">→</span></a>
+      </section>
+
+      <details class="identity-card">
+        <summary class="identity-card__intro">
           <span>生辰八字</span>
           <strong>四柱留印 · 岁月作笺</strong>
-        </div>
+          <em aria-hidden="true">展开档案 ↓</em>
+        </summary>
         <div class="identity-card__details">
           <div class="bazi-grid">
             <div v-for="(pillar, index) in profile.bazi" :key="pillar">
@@ -106,9 +143,9 @@
             </div>
           </div>
         </div>
-      </section>
+      </details>
 
-      <section class="dashboard-section anchor-section" aria-labelledby="anchor-title">
+      <section id="timeline" class="dashboard-section anchor-section" aria-labelledby="anchor-title">
         <header class="section-heading">
           <div>
             <p class="section-kicker">TIME MARKS</p>
@@ -117,7 +154,7 @@
           <p class="section-note">每一个日子，都在认真生长</p>
         </header>
 
-        <div class="anchor-carousel" aria-label="时光锚点卡片">
+        <div class="anchor-carousel" :class="{ 'is-single': anchorCards.length === 1 }" aria-label="时光锚点卡片">
           <article v-for="anchor in anchorCards" :key="anchor.id" class="anchor-card">
             <div class="anchor-card__top">
               <span class="anchor-card__icon" aria-hidden="true">{{ anchor.icon }}</span>
@@ -134,7 +171,7 @@
             </div>
           </article>
         </div>
-        <div class="swipe-cue" aria-hidden="true"><span /><span /><span /></div>
+        <div v-if="anchorCards.length > 1" class="swipe-cue" aria-hidden="true"><span /><span /><span /></div>
       </section>
 
       <div class="journey-divider" aria-hidden="true"><span /><i /><span /></div>
@@ -171,7 +208,7 @@
         :today="today"
       />
 
-      <section class="dashboard-section vaccine-section" aria-labelledby="vaccine-title">
+      <section id="health" class="dashboard-section vaccine-section" aria-labelledby="vaccine-title">
         <header class="section-heading section-heading--vaccines">
           <div>
             <p class="section-kicker">VACCINE PLAN</p>
@@ -193,7 +230,7 @@
 
         <ol class="vaccine-timeline">
           <li
-            v-for="row in vaccineRows"
+            v-for="row in visibleVaccineRows"
             :key="row.id"
             class="vaccine-row"
             :class="[
@@ -212,6 +249,7 @@
             <div class="vaccine-row__content">
               <strong>{{ row.name }}<em v-if="row.funding === 'self_paid'">自费</em></strong>
               <time v-if="row.status === 'completed' && row.actualDateIso" :datetime="row.actualDateIso">已于 {{ formatDate(row.actualDateIso) }} 接种</time>
+              <span v-else-if="row.status === 'completed'" class="vaccine-row__missing-date">实际接种日期未记录</span>
               <time v-else :datetime="row.dateIso">建议 {{ formatDate(row.dateIso) }}</time>
             </div>
             <button
@@ -229,6 +267,15 @@
             </span>
           </li>
         </ol>
+        <button
+          v-if="vaccineRows.length > vaccinePreviewRows.length"
+          type="button"
+          class="vaccine-expand"
+          @click="showAllVaccines = !showAllVaccines"
+        >
+          {{ showAllVaccines ? '收起完整计划' : `查看全部 ${vaccineRows.length} 项计划` }}
+          <span aria-hidden="true">{{ showAllVaccines ? '↑' : '↓' }}</span>
+        </button>
       </section>
 
       <footer class="dashboard-footer">
@@ -479,6 +526,15 @@ const showKeyModal = ref(false)
 const isRefreshing = ref(false)
 const canEditMarks = ref(false)
 const isSavingVaccine = ref(false)
+const showAllVaccines = ref(false)
+const routeSections = [
+  { id: 'today', label: '此刻' },
+  { id: 'diary', label: '日记' },
+  { id: 'timeline', label: '时光' },
+  { id: 'growth', label: '成长' },
+  { id: 'health', label: '健康' }
+] as const
+const activeSection = ref<string>('today')
 const initialSkyDate = new Date()
 const skyCanvas = ref<HTMLCanvasElement | null>(null)
 const lifeCanvas = ref<HTMLCanvasElement | null>(null)
@@ -800,6 +856,17 @@ const visibleMilestones = computed(() => milestonesData.value.map(item => ({
   isFuture: parseDate(item.date) > today.value
 })))
 
+const nextMilestone = computed(() => [...milestonesData.value]
+  .sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime())
+  .find(item => parseDate(item.date) >= today.value) ?? null)
+
+const todayRecordCount = computed(() => recordsData.value
+  .find(day => day.date === toIsoDate(today.value))?.entries.length ?? 0)
+
+const todayRecordLabel = computed(() => todayRecordCount.value
+  ? `${todayRecordCount.value} 条照护记录`
+  : '还没有今天的记录')
+
 function vaccineScheduleDate(vaccine: Vaccine) {
   return vaccine.planned_date ? parseDate(vaccine.planned_date) : addMonths(birthDate.value, vaccine.offset_months)
 }
@@ -828,6 +895,13 @@ const vaccineRows = computed<VaccineRow[]>(() => allVaccinesData.value.map((vacc
     urgent: !completed && daysUntil >= 0 && daysUntil <= 7
   }
 }))
+
+const vaccinePreviewRows = computed(() => {
+  const incomplete = vaccineRows.value.filter(item => item.status !== 'completed')
+  return (incomplete.length ? incomplete : vaccineRows.value).slice(0, 6)
+})
+
+const visibleVaccineRows = computed(() => showAllVaccines.value ? vaccineRows.value : vaccinePreviewRows.value)
 
 const completedCount = computed(() => vaccineRows.value.filter(item => item.status === 'completed').length)
 const nextReminder = computed(() => {
@@ -1733,7 +1807,19 @@ function openStatusSheet(row: VaccineRow) {
   if (!canEditMarks.value) return
   sheetVaccine.value = row
   sheetPlannedDate.value = row.dateIso
-  sheetActualDate.value = row.actualDateIso || toIsoDate(today.value)
+  sheetActualDate.value = row.actualDateIso || ''
+}
+
+function updateActiveSection() {
+  const threshold = window.innerHeight * .42
+  for (const item of [...routeSections].reverse()) {
+    const section = document.getElementById(item.id)
+    if (section && section.getBoundingClientRect().top <= threshold) {
+      activeSection.value = item.id
+      return
+    }
+  }
+  activeSection.value = routeSections[0].id
 }
 
 function closeSheet() {
@@ -1892,9 +1978,13 @@ async function importMarks(event: Event) {
 
   try {
     const payload = JSON.parse(await file.text())
+    const sourceCompletions: Array<{ id: number; actual_date?: string }> = Array.isArray(payload.vaccine_records?.completions)
+      ? payload.vaccine_records.completions
+      : []
+    const sourceDates = new Map(sourceCompletions.map(item => [Number(item.id), item.actual_date]))
     const sourceIds = Array.isArray(payload.completed_vaccine_ids)
       ? payload.completed_vaccine_ids
-      : payload.vaccine_records?.completions?.map((item: { id: number }) => item.id)
+      : sourceCompletions.map(item => item.id)
     if (!Array.isArray(sourceIds)) throw new Error('invalid data')
     const validIds = new Set(allVaccinesData.value.map(item => item.id))
     const restored = sourceIds
@@ -1902,7 +1992,9 @@ async function importMarks(event: Event) {
       .filter((id: number) => Number.isInteger(id) && validIds.has(id))
     const restoredCompletions = restored.map(id => ({
       id,
-      actual_date: vaccineRecordsData.value.completions.find(item => item.id === id)?.actual_date || toIsoDate(today.value)
+      actual_date: sourceDates.has(id)
+        ? (typeof sourceDates.get(id) === 'string' ? sourceDates.get(id) as string : '')
+        : vaccineRecordsData.value.completions.find(item => item.id === id)?.actual_date || ''
     }))
     await saveVaccineRecords(currentVaccineRecords(restoredCompletions), `已恢复 ${restored.length} 条接种标记`)
   } catch {
@@ -2024,6 +2116,9 @@ onMounted(async () => {
   if (!lifeData.value) return
   restoreVaccineState()
   void nextTick(startSky)
+  await nextTick()
+  updateActiveSection()
+  window.addEventListener('scroll', updateActiveSection, { passive: true })
 
   if (totalDays.value > 0 && totalDays.value % 100 === 0) {
     const celebrationKey = `life-dashboard-celebration-${toIsoDate(today.value)}`
@@ -2036,6 +2131,7 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  window.removeEventListener('scroll', updateActiveSection)
   if (typeof document !== 'undefined') document.body.style.overflow = previousBodyOverflow
   if (toastTimer) clearTimeout(toastTimer)
   if (flipTimer) clearTimeout(flipTimer)
