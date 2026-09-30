@@ -27,7 +27,7 @@
       </div>
 
       <img class="hero__avatar" :src="lifeAvatarUrl || avatarUrl" :alt="`${profile.name}的头像`">
-      <p class="hero__eyebrow">{{ profile.name }} · LIFETIME</p>
+      <p class="hero__eyebrow">翊安小朋友 · LIFETIME</p>
       <div class="hero__number" aria-live="polite">{{ formatNumber(totalDays) }}</div>
       <p class="hero__unit">{{ nameInterpretation }}</p>
       <div class="hero__rule"><span /></div>
@@ -59,7 +59,7 @@
         <header class="today-cockpit__header">
           <div>
             <p class="section-kicker">TODAY'S VIEW</p>
-            <h1 id="today-title">今天，{{ profile.name }}正在长大</h1>
+            <h1 id="today-title">我们的安崽正在长大</h1>
             <p class="today-cockpit__lead">出生第 {{ formatNumber(totalDays) }} 天 · {{ todayRecordLabel }}</p>
           </div>
           <div class="today-cockpit__actions">
@@ -119,7 +119,7 @@
           <h2 id="memory-entry-title">把照片写成一段成长故事</h2>
           <p>选择照片，补上日期和一句话，生成一册可以预览、打印保存的纪念册。</p>
         </div>
-        <a href="/life/album/" class="memory-entry__action">上传照片 · 制作纪念册 <span aria-hidden="true">→</span></a>
+        <a href="/life/album/" class="memory-entry__action">打开成长纪念册 <span aria-hidden="true">→</span></a>
       </section>
 
       <details class="identity-card">
