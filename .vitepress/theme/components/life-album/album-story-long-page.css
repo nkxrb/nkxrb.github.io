@@ -23,6 +23,20 @@
   isolation: isolate;
 }
 
+.story-reader:not(.is-motion-ready) .story-reveal-copy,
+.story-reader:not(.is-motion-ready) .story-reveal-media,
+.story-reader:not(.is-motion-ready) .story-reveal-svg,
+.story-reader:not(.is-motion-ready) .story-reveal-number {
+  visibility: hidden;
+}
+
+.story-reader.is-motion-ready .story-reveal-copy,
+.story-reader.is-motion-ready .story-reveal-media,
+.story-reader.is-motion-ready .story-reveal-svg,
+.story-reader.is-motion-ready .story-reveal-number {
+  will-change: transform, opacity;
+}
+
 .story-reader__texture {
   position: absolute;
   z-index: -1;
@@ -469,7 +483,7 @@
   font-size: 14px;
 }
 
-.story-animation-4.is-active .story-chapter__decor--stars {
+.story-animation-4.is-motion-active .story-chapter__decor--stars {
   animation: story-particle-drift .72s ease-out both;
 }
 
@@ -620,11 +634,11 @@
 .story-growth__chart svg { display: block; width: 100%; height: auto; overflow: visible; }
 .story-chart__axis { fill: none; stroke: rgb(65 92 81 / 20%); stroke-width: 1; stroke-dasharray: 2 5; }
 .story-chart__line { fill: none; stroke-linecap: round; stroke-width: 4; stroke-dasharray: 1; stroke-dashoffset: 1; }
-.is-active .story-chart__line { animation: story-chart-draw .75s ease forwards; }
+.is-motion-active .story-chart__line { animation: story-chart-draw .75s ease forwards; }
 .story-chart__line--one { stroke: #d79a6a; }
 .story-chart__line--two { stroke: #75a698; animation-delay: .16s !important; }
 .story-chart__point circle { fill: #fffaf0; stroke: #d79a6a; stroke-width: 3; opacity: 0; }
-.is-active .story-chart__point circle { animation: story-point-in .48s ease var(--point-delay) forwards; }
+.is-motion-active .story-chart__point circle { animation: story-point-in .48s ease var(--point-delay) forwards; }
 .story-chart__point { cursor: pointer; outline: none; }
 .story-chart__point:hover circle,
 .story-chart__point:focus circle { fill: #f5dfa4; stroke: #75a698; }
@@ -638,9 +652,9 @@
 .story-timeline { position: relative; margin-top: 30px; padding-left: 19px; }
 .story-timeline__line { position: absolute; top: 0; bottom: 0; left: 4px; width: 18px; height: 100%; overflow: visible; }
 .story-timeline__line path { fill: none; stroke: #79a594; stroke-width: 2; stroke-dasharray: 900; stroke-dashoffset: 900; }
-.is-active .story-timeline__line path { animation: story-chart-draw .8s ease forwards; }
+.is-motion-active .story-timeline__line path { animation: story-chart-draw .8s ease forwards; }
 .story-timeline__item { position: relative; display: grid; padding: 10px 0 18px 20px; grid-template-columns: 76px 1fr; align-items: center; gap: 12px; opacity: 0; transform: translateY(20px); }
-.is-active .story-timeline__item { animation: story-rise .6s ease calc(var(--item-index) * .1s) forwards; }
+.is-motion-active .story-timeline__item { animation: story-rise .6s ease calc(var(--item-index) * .1s) forwards; }
 .story-timeline__node { position: absolute; top: 44px; left: -1px; width: 10px; height: 10px; border: 3px solid #f7f0dc; border-radius: 50%; background: #d79a6a; box-shadow: 0 0 0 2px #79a594; }
 .story-timeline__item > .story-media { width: 76px; height: 76px; min-height: 76px; border: 4px solid #fffaf0; border-radius: 50%; box-shadow: 4px 5px 0 rgb(145 168 151 / 24%); }
 .story-timeline__item time { color: #a17555; }
@@ -650,7 +664,7 @@
 .story-wall__heading { margin-bottom: 25px; }
 .story-wall { display: grid; grid-template-columns: repeat(2, 1fr); align-items: start; gap: 14px 10px; }
 .story-polaroid { padding: 7px 7px 14px; border: 1px solid rgb(75 87 71 / 10%); background: #fffdf4; box-shadow: 3px 8px 13px rgb(74 83 66 / 14%); transform: rotate(var(--tilt)); opacity: 0; }
-.is-active .story-polaroid { animation: story-drop .65s ease calc(var(--wall-index) * .07s) forwards; }
+.is-motion-active .story-polaroid { animation: story-drop .65s ease calc(var(--wall-index) * .07s) forwards; }
 .story-polaroid:nth-child(3n) { margin-top: 20px; }
 .story-polaroid > .story-media { aspect-ratio: 1 / 1.05; min-height: 0; }
 .story-polaroid > span { display: block; padding-top: 8px; color: #718076; font-size: 9px; }

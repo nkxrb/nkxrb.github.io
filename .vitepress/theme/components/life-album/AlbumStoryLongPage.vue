@@ -1,5 +1,5 @@
 <template>
-  <section ref="root" class="story-reader" role="dialog" aria-modal="true" aria-label="成长纪念长页">
+  <section ref="root" class="story-reader" :class="{ 'is-motion-ready': motionReady }" role="dialog" aria-modal="true" aria-label="成长纪念长页">
     <div class="story-reader__texture" aria-hidden="true"></div>
     <header class="story-reader__topbar">
       <button ref="readerCloseButton" class="story-reader__close" type="button" aria-label="关闭成长长页" @click="emit('close')">×</button>
@@ -24,7 +24,7 @@
           :key="chapter.id"
           :ref="element => registerChapter(chapter, element)"
           class="story-chapter"
-          :class="[`story-layout-${chapter.layout}`, `story-animation-${chapter.animation}`, { 'is-active': activeChapter === chapter.index }]"
+          :class="[`story-layout-${chapter.layout}`, `story-animation-${chapter.animation}`, { 'is-motion-active': motionActive.has(chapter.id) }]"
           :data-chapter-index="chapter.index"
         >
           <div class="story-chapter__decor story-chapter__decor--cloud" aria-hidden="true"></div>
@@ -158,9 +158,10 @@ const musicOn = ref(false)
 const lightboxMedia = ref<StoryMediaItem | null>(null)
 const playingVideos = ref(new Set<string>())
 const activeGrowthPoint = ref<number | null>(null)
+const motionReady = ref(false)
+const motionActive = ref(new Set<string>())
 const chapterElements = new Map<string, HTMLElement>()
 let triggers: ScrollTrigger[] = []
-let masterTrigger: ScrollTrigger | null = null
 
 const chapters = computed(() => buildStoryChapters(props.profileName, props.title, props.dedication, props.events))
 const growthPoints = [
@@ -206,81 +207,130 @@ function updateProgress() {
   if (!scrollArea.value) return
   const max = Math.max(1, scrollArea.value.scrollHeight - scrollArea.value.clientHeight)
   progress.value = Math.min(1, Math.max(0, scrollArea.value.scrollTop / max))
+  const scrollRect = scrollArea.value.getBoundingClientRect()
+  activeChapter.value = chapters.value.reduce((selected, chapter) => {
+    const element = chapterElements.get(chapter.id)
+    if (element && element.getBoundingClientRect().top <= scrollRect.top + scrollRect.height * .52) return chapter.index
+    return selected
+  }, 0)
+}
+
+type MotionState = Record<string, any>
+
+function motionState(animation: StoryChapter['animation'], elementIndex: number, isMedia: boolean): { from: MotionState; to: MotionState; delay: number } {
+  const from = animation === 2
+    ? { autoAlpha: 0, scale: .9 }
+    : animation === 3 || animation === 6
+      ? { autoAlpha: 0, clipPath: 'inset(0 100% 0 0)' }
+      : animation === 4
+        ? { autoAlpha: 0, x: elementIndex % 2 ? 18 : -18, scale: .84, filter: 'blur(8px)' }
+        : animation === 5
+          ? { autoAlpha: 0, y: -32, rotate: -4 }
+          : animation === 7
+            ? { autoAlpha: 0, scale: .94, y: 12 }
+            : animation === 8
+              ? { autoAlpha: 0, y: 38, scale: .97 }
+              : { autoAlpha: 0, y: 30 }
+  const to = animation === 3 || animation === 6
+    ? { autoAlpha: 1, clipPath: 'inset(0 0% 0 0)' }
+    : { autoAlpha: 1, x: 0, y: 0, scale: 1, rotate: 0, filter: 'blur(0px)' }
+  const delay = animation === 1
+    ? (elementIndex % 4) * .06
+    : animation === 5
+      ? (elementIndex % 5) * .08
+      : animation === 6 && isMedia
+        ? .34
+        : 0
+  return { from, to, delay }
+}
+
+function resetChapterMotion(chapter: HTMLElement, elements: HTMLElement[], animation: StoryChapter['animation']) {
+  elements.forEach((element, index) => {
+    gsap.killTweensOf(element)
+    const state = motionState(animation, index, element.classList.contains('story-reveal-media'))
+    gsap.set(element, state.from)
+  })
+  const id = chapter.dataset.chapterId
+  if (id) {
+    const next = new Set(motionActive.value)
+    next.delete(id)
+    motionActive.value = next
+  }
+}
+
+function playChapterMotion(chapter: HTMLElement, elements: HTMLElement[], storyChapter: StoryChapter) {
+  const id = storyChapter.id
+  const next = new Set(motionActive.value)
+  next.add(id)
+  motionActive.value = next
+  activeChapter.value = storyChapter.index
+
+  elements.forEach((element, index) => {
+    gsap.killTweensOf(element)
+    const state = motionState(storyChapter.animation, index, element.classList.contains('story-reveal-media'))
+    gsap.fromTo(element, state.from, {
+      ...state.to,
+      delay: state.delay,
+      duration: .68,
+      ease: storyChapter.animation === 2 ? 'back.out(1.7)' : 'power2.out',
+      overwrite: true
+    })
+  })
 }
 
 function setupMotion() {
   if (!scrollArea.value) return
   gsap.registerPlugin(ScrollTrigger)
-  const elements = root.value?.querySelectorAll<HTMLElement>('.story-reveal-copy, .story-reveal-media, .story-reveal-svg, .story-reveal-number') || []
-  elements.forEach((element, elementIndex) => {
-    const chapter = element.closest<HTMLElement>('.story-chapter')
-    const animation = Number(chapter?.className.match(/story-animation-(\d+)/)?.[1] || 1)
-    const isMedia = element.classList.contains('story-reveal-media')
-    const from = animation === 2
-      ? { autoAlpha: 0, scale: .9 }
-      : animation === 3 || animation === 6
-        ? { autoAlpha: 0, clipPath: 'inset(0 100% 0 0)' }
-        : animation === 4
-          ? { autoAlpha: 0, x: elementIndex % 2 ? 18 : -18, scale: .84, filter: 'blur(8px)' }
-          : animation === 5
-            ? { autoAlpha: 0, y: -32, rotate: -4 }
-            : animation === 7
-              ? { autoAlpha: 0, scale: .94, y: 12 }
-              : animation === 8
-                ? { autoAlpha: 0, y: 38, scale: .97 }
-                : { autoAlpha: 0, y: 30 }
-    const to = animation === 3 || animation === 6
-      ? { autoAlpha: 1, clipPath: 'inset(0 0% 0 0)' }
-      : { autoAlpha: 1, x: 0, y: 0, scale: 1, rotate: 0, filter: 'blur(0px)' }
-    const delay = animation === 1
-      ? (elementIndex % 4) * .06
-      : animation === 5
-        ? (elementIndex % 5) * .08
-        : animation === 6 && isMedia
-          ? .34
-          : 0
-    gsap.set(element, from)
+  const chapterNodes = root.value?.querySelectorAll<HTMLElement>('.story-chapter') || []
+  chapterNodes.forEach((chapterNode, nodeIndex) => {
+    const storyChapter = chapters.value[nodeIndex]
+    if (!storyChapter) return
+    chapterNode.dataset.chapterId = storyChapter.id
+    const elements = Array.from(chapterNode.querySelectorAll<HTMLElement>('.story-reveal-copy, .story-reveal-media, .story-reveal-svg, .story-reveal-number'))
+    const animation = storyChapter.animation
+    resetChapterMotion(chapterNode, elements, animation)
+
     const trigger = ScrollTrigger.create({
-      trigger: element,
+      trigger: chapterNode,
       scroller: scrollArea.value,
-      start: 'top 84%',
-      end: 'bottom 16%',
-      onEnter: () => gsap.fromTo(element, from, { ...to, delay, duration: .68, ease: animation === 2 ? 'back.out(1.7)' : 'power2.out', overwrite: true }),
-      onEnterBack: () => gsap.fromTo(element, from, { ...to, delay, duration: .68, ease: animation === 2 ? 'back.out(1.7)' : 'power2.out', overwrite: true }),
-      onLeaveBack: () => gsap.set(element, from),
-      onLeave: () => gsap.set(element, from)
+      // Start when the chapter's content is actually entering the viewport.
+      // Using the chapter as the trigger keeps the whole scene visible until
+      // the scene has really left, instead of resetting each child early.
+      start: 'top 18%',
+      end: 'bottom 18%',
+      invalidateOnRefresh: true,
+      onEnter: () => playChapterMotion(chapterNode, elements, storyChapter),
+      onEnterBack: () => playChapterMotion(chapterNode, elements, storyChapter),
+      onLeave: () => resetChapterMotion(chapterNode, elements, animation),
+      onLeaveBack: () => resetChapterMotion(chapterNode, elements, animation)
     })
     triggers.push(trigger)
-    if (animation === 8 && isMedia) {
-      const parallaxTarget = element.querySelector<HTMLElement>('.story-media') || element
-      const parallaxTrigger = ScrollTrigger.create({
-        trigger: chapter || element,
-        scroller: scrollArea.value,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: true,
-        onUpdate: self => gsap.set(parallaxTarget, { y: (self.progress - .5) * 26 }),
-        onLeaveBack: () => gsap.set(parallaxTarget, { y: -13 }),
-        onLeave: () => gsap.set(parallaxTarget, { y: 13 })
-      })
-      triggers.push(parallaxTrigger)
+
+    if (animation === 8) {
+      const parallaxTarget = chapterNode.querySelector<HTMLElement>('.story-reveal-media .story-media')
+      if (parallaxTarget) {
+        const parallaxTrigger = ScrollTrigger.create({
+          trigger: chapterNode,
+          scroller: scrollArea.value,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+          invalidateOnRefresh: true,
+          onUpdate: self => gsap.set(parallaxTarget, { y: (self.progress - .5) * 26 }),
+          onLeaveBack: () => gsap.set(parallaxTarget, { y: -13 }),
+          onLeave: () => gsap.set(parallaxTarget, { y: 13 })
+        })
+        triggers.push(parallaxTrigger)
+      }
     }
   })
-  masterTrigger = ScrollTrigger.create({
-    scroller: scrollArea.value,
-    start: 0,
-    end: 'max',
-    onUpdate: self => {
-      progress.value = self.progress
-      const current = chapters.value.reduce((selected, chapter) => {
-        const element = chapterElements.get(chapter.id)
-        const scrollRect = scrollArea.value?.getBoundingClientRect()
-        if (element && scrollRect && element.getBoundingClientRect().top < scrollRect.top + scrollRect.height * .52) return chapter.index
-        return selected
-      }, 0)
-      activeChapter.value = current
-    }
-  })
+  const firstChapter = chapters.value[0]
+  const firstNode = chapterNodes[0]
+  if (firstChapter && firstNode) {
+    const firstElements = Array.from(firstNode.querySelectorAll<HTMLElement>('.story-reveal-copy, .story-reveal-media, .story-reveal-svg, .story-reveal-number'))
+    playChapterMotion(firstNode, firstElements, firstChapter)
+  }
+  motionReady.value = true
 }
 
 onMounted(async () => {
@@ -288,13 +338,12 @@ onMounted(async () => {
   readerCloseButton.value?.focus()
   setupMotion()
   ScrollTrigger.refresh()
+  updateProgress()
 })
 
 onBeforeUnmount(() => {
   triggers.forEach(trigger => trigger.kill())
-  masterTrigger?.kill()
   triggers = []
-  masterTrigger = null
 })
 </script>
 
