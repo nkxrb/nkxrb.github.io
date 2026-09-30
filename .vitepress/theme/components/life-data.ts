@@ -145,12 +145,20 @@ export interface LifeAlbumPhoto {
   caption: string
 }
 
+export interface LifeAlbumEvent {
+  id: string
+  date: string
+  title: string
+  caption: string
+  photos: LifeAlbumPhoto[]
+}
+
 export interface LifeAlbumManifest {
   title: string
   dedication: string
   story: string
   avatar_path: string
-  photos: LifeAlbumPhoto[]
+  events: LifeAlbumEvent[]
 }
 
 export interface LifeBodyMeasurement {
@@ -238,6 +246,22 @@ let runtimeTokenSecret = ''
 function siteAssetUrl(path: string) {
   const base = import.meta.env.BASE_URL || '/'
   return `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
+}
+
+const DEFAULT_LIFE_APPLE_TOUCH_ICON = '/life/apple-touch-icon.png'
+
+export function syncLifeAppleTouchIcon(url: string | null) {
+  if (typeof document === 'undefined') return
+  const href = url || siteAssetUrl(DEFAULT_LIFE_APPLE_TOUCH_ICON)
+  const links = [...document.querySelectorAll<HTMLLinkElement>('link[rel~="apple-touch-icon"]')]
+  let dynamicLink = document.head.querySelector<HTMLLinkElement>('link[data-life-apple-touch-icon]')
+  if (!dynamicLink) {
+    dynamicLink = document.createElement('link')
+    dynamicLink.rel = 'apple-touch-icon'
+    dynamicLink.dataset.lifeAppleTouchIcon = 'true'
+    document.head.appendChild(dynamicLink)
+  }
+  for (const link of [...links, dynamicLink]) link.href = href
 }
 
 function encodePath(path: string) {
@@ -708,7 +732,7 @@ const emptyAlbum: LifeAlbumManifest = {
   dedication: '',
   story: '',
   avatar_path: '',
-  photos: []
+  events: []
 }
 
 export async function verifyLifeDataRemoteAccess() {
@@ -718,17 +742,39 @@ export async function verifyLifeDataRemoteAccess() {
 
 export async function loadLifeAlbumFromRemote(): Promise<LifeAlbumManifest> {
   if (!hasLifeDataSecret()) throw new Error('请先连接家庭存储')
-  const data = await fetchOptionalRemoteJson<Partial<LifeAlbumManifest>>(ALBUM_FILE, emptyAlbum)
+  const data = await fetchOptionalRemoteJson<Partial<LifeAlbumManifest> & { photos?: LifeAlbumPhoto[] }>(ALBUM_FILE, emptyAlbum)
+  const validPhoto = (item: unknown): item is LifeAlbumPhoto => {
+    const photo = item as Partial<LifeAlbumPhoto> | null
+    return Boolean(photo) &&
+      typeof photo.id === 'string' &&
+      typeof photo.path === 'string' && validMediaPath(photo.path) &&
+      typeof photo.date === 'string' &&
+      typeof photo.caption === 'string'
+  }
+  const legacyPhotos = Array.isArray(data.photos) ? data.photos.filter(validPhoto) : []
+  const parsedEvents = Array.isArray(data.events)
+    ? data.events.flatMap(item => {
+      const event = item as Partial<LifeAlbumEvent> | null
+      if (!event || typeof event.id !== 'string' || typeof event.date !== 'string' ||
+        typeof event.title !== 'string' || typeof event.caption !== 'string' || !Array.isArray(event.photos)) return []
+      const photos = event.photos.filter(validPhoto)
+      return photos.length ? [{ id: event.id, date: event.date, title: event.title, caption: event.caption, photos }] : []
+    })
+    : []
+  const events = parsedEvents.length ? parsedEvents : legacyPhotos.map(photo => ({
+    id: photo.id,
+    date: photo.date,
+    title: photo.caption,
+    caption: '',
+    photos: [photo]
+  }))
+
   return {
     title: typeof data.title === 'string' ? data.title : '',
     dedication: typeof data.dedication === 'string' ? data.dedication : '',
     story: typeof data.story === 'string' ? data.story : '',
     avatar_path: typeof data.avatar_path === 'string' && validMediaPath(data.avatar_path) ? data.avatar_path : '',
-    photos: Array.isArray(data.photos) ? data.photos.filter(item =>
-      typeof item.id === 'string' &&
-      typeof item.path === 'string' && validMediaPath(item.path) &&
-      typeof item.date === 'string' && typeof item.caption === 'string'
-    ) : []
+    events
   }
 }
 
@@ -781,11 +827,13 @@ export async function loadLifeAlbumImageFromRemote(path: string) {
 export async function refreshLifeAvatarFromRemote() {
   if (!hasLifeDataSecret()) {
     lifeAvatarUrl.value = null
+    syncLifeAppleTouchIcon(null)
     return null
   }
   const album = await loadLifeAlbumFromRemote()
   if (!album.avatar_path) {
     lifeAvatarUrl.value = null
+    syncLifeAppleTouchIcon(null)
     return null
   }
   const image = await loadLifeAlbumImageFromRemote(album.avatar_path)
@@ -793,6 +841,7 @@ export async function refreshLifeAvatarFromRemote() {
   const previous = lifeAvatarUrl.value
   lifeAvatarUrl.value = url
   if (previous?.startsWith('blob:')) URL.revokeObjectURL(previous)
+  syncLifeAppleTouchIcon(url)
   return url
 }
 
@@ -914,6 +963,7 @@ export async function setLifeDataSecret(secret: string) {
   runtimeTokenSecret = secret.trim()
   tokenPromise = null
   lifeAvatarUrl.value = null
+  syncLifeAppleTouchIcon(null)
   lifeDataError.value = ''
   lifeDataSecretRequired.value = false
 
@@ -1105,6 +1155,7 @@ export function clearLifeDataSecret() {
   runtimeTokenSecret = ''
   tokenPromise = null
   lifeAvatarUrl.value = null
+  syncLifeAppleTouchIcon(null)
   lifeDataError.value = ''
   lifeDataSecretRequired.value = false
 
