@@ -1,6 +1,6 @@
 {
   "name": "Kidar TVM MacOS 极速轻量源",
-  "updatedAt": "2026-10-03T18:47:04.725Z",
+  "updatedAt": "2026-10-03T23:58:53.208Z",
   "spider": "",
   "sites": [
     {
@@ -23,13 +23,14 @@
       "changeable": 1
     },
     {
-      "key": "光速资源",
-      "name": "🎀光速┃采集",
+      "key": "电影天堂",
+      "name": "🎞️天堂采集",
       "type": 1,
-      "api": "http://api.guangsuapi.com/api.php/provide/vod/",
+      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/",
       "searchable": 1,
       "quickSearch": 1,
-      "filterable": 0,
+      "filterable": 1,
+      "timeout": 10,
       "changeable": 1
     },
     {
@@ -40,24 +41,6 @@
       "searchable": 1,
       "quickSearch": 0,
       "filterable": 1
-    },
-    {
-      "key": "魔都资源",
-      "name": "🤣魔都┃动漫",
-      "type": 1,
-      "api": "https://caiji.moduapi.cc/api.php/provide/vod/?ac=list",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1
-    },
-    {
-      "key": "虎牙",
-      "name": "🐯虎牙采集",
-      "type": 1,
-      "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0
     },
     {
       "key": "csp_xml_ikun",
@@ -79,6 +62,25 @@
       "filterable": 0
     },
     {
+      "key": "虎牙",
+      "name": "🐯虎牙采集",
+      "type": 1,
+      "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0
+    },
+    {
+      "key": "光速资源",
+      "name": "🎀光速┃采集",
+      "type": 1,
+      "api": "http://api.guangsuapi.com/api.php/provide/vod/",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "changeable": 1
+    },
+    {
       "key": "魔都资源_a7728d",
       "name": "魔都资源",
       "type": 1,
@@ -88,15 +90,13 @@
       "filterable": 0
     },
     {
-      "key": "电影天堂",
-      "name": "🎞️天堂采集",
+      "key": "魔都资源",
+      "name": "🤣魔都┃动漫",
       "type": 1,
-      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/",
+      "api": "https://caiji.moduapi.cc/api.php/provide/vod/?ac=list",
       "searchable": 1,
       "quickSearch": 1,
-      "filterable": 1,
-      "timeout": 10,
-      "changeable": 1
+      "filterable": 1
     },
     {
       "key": "zy_金鹰影视点主页切换源",
@@ -106,6 +106,16 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0
+    },
+    {
+      "key": "a红牛资源",
+      "name": "🐂红牛┃采集",
+      "type": 1,
+      "api": "https://www.hongniuzy2.com/api.php/provide/vod/",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "changeable": 1
     },
     {
       "key": "玉兔",
@@ -118,10 +128,10 @@
       "ext": "proxy"
     },
     {
-      "key": "a红牛资源",
-      "name": "🐂红牛┃采集",
-      "type": 1,
-      "api": "https://www.hongniuzy2.com/api.php/provide/vod/",
+      "key": "裤佬JS聚合",
+      "name": "采集┃聚合",
+      "type": 4,
+      "api": "http://zhangqun1818.serv00.net/cj/cjjh.php?ac=list",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0,
