@@ -4,11 +4,10 @@
     <strong>{{ mediaLabel }}</strong>
     <small>{{ alt }}</small>
   </button>
-  <button v-else-if="media.type === 'video'" type="button" class="story-media story-media--video" @click="emit('open', media)">
-    <video ref="video" :src="media.url" muted loop playsinline preload="none" :autoplay="videoPlaying" :aria-label="alt"></video>
-    <span class="story-media__play" aria-hidden="true">▶</span>
+  <div v-else-if="media.type === 'video'" class="story-media story-media--video">
+    <video ref="video" :src="media.url" controls muted loop playsinline preload="metadata" :autoplay="videoPlaying" :aria-label="alt"></video>
     <small>{{ alt }}</small>
-  </button>
+  </div>
   <button v-else type="button" class="story-media story-media--image" @click="emit('open', media)">
     <img :src="media.url" :alt="alt" loading="lazy" decoding="async">
     <span v-if="media.type === 'gif'" class="story-media__gif">GIF</span>

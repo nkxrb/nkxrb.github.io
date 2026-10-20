@@ -220,6 +220,7 @@
       :dedication="dedication"
       :story="story"
       :events="eventsWithPhotos"
+      :facts="storyFacts"
       @close="closeReader"
     />
 
@@ -230,7 +231,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import profile from '../../../../life/data/profile.json'
 import AlbumStoryLongPage from './AlbumStoryLongPage.vue'
-import type { AlbumEvent, AlbumPhoto } from './album-types'
+import type { AlbumEvent, AlbumPhoto, AlbumStoryFacts, AlbumVideo } from './album-types'
 import milestones from '../../../../life/data/milestones.json'
 import {
   clearLifeDataSecret,
@@ -248,6 +249,7 @@ import {
 
 const MAX_FILE_SIZE = 15 * 1024 * 1024
 const events = ref<AlbumEvent[]>([])
+const storyFacts = ref<AlbumStoryFacts>()
 const activeEventId = ref('')
 const bookTitle = ref(`${profile.name}的成长纪念册`)
 const dedication = ref('愿你带着爱，慢慢长大。')
@@ -264,7 +266,7 @@ const avatarMessage = ref('')
 const isAccessChecked = ref(false)
 
 const allPhotos = computed(() => events.value.flatMap(event => event.photos))
-const eventsWithPhotos = computed(() => events.value.filter(event => event.photos.length))
+const eventsWithPhotos = computed(() => events.value.filter(event => event.photos.length || event.videos?.length))
 const eventCount = computed(() => eventsWithPhotos.value.length)
 const photoCount = computed(() => allPhotos.value.length)
 const firstPhoto = computed(() => allPhotos.value[0] || null)
@@ -401,8 +403,12 @@ function publicAlbumAssetUrl(path: string) {
   return `${base.replace(/\/$/, '')}/${path.replace(/^\/+/, '')}`
 }
 
-function isPublicAlbumMediaPath(value: unknown): value is string {
+function isPublicAlbumImagePath(value: unknown): value is string {
   return typeof value === 'string' && /^life\/media\/[a-z0-9-]+\.jpg$/u.test(value)
+}
+
+function isPublicAlbumVideoPath(value: unknown): value is string {
+  return typeof value === 'string' && /^life\/media\/[a-z0-9-]+\.mp4$/u.test(value)
 }
 
 interface PublicAlbumManifest {
@@ -411,6 +417,35 @@ interface PublicAlbumManifest {
   story: string
   avatarPath: string
   events: AlbumEvent[]
+  facts?: AlbumStoryFacts
+}
+
+function normalizePublicAlbumFacts(value: unknown): AlbumStoryFacts | undefined {
+  if (!value || typeof value !== 'object') return undefined
+  const raw = value as Record<string, unknown>
+  const birth = raw.birth && typeof raw.birth === 'object' ? raw.birth as Record<string, unknown> : null
+  if (!birth || typeof birth.time !== 'string' || typeof birth.weight !== 'string' || typeof birth.height !== 'string') return undefined
+
+  const growthRecords = Array.isArray(raw.growthRecords) ? raw.growthRecords.flatMap(item => {
+    const record = item && typeof item === 'object' ? item as Record<string, unknown> : null
+    return record && typeof record.date === 'string' && typeof record.label === 'string' &&
+      typeof record.weight === 'string' && typeof record.height === 'string'
+      ? [{ date: record.date, label: record.label, weight: record.weight, height: record.height }]
+      : []
+  }) : []
+  const highlights = Array.isArray(raw.highlights) ? raw.highlights.flatMap(item => {
+    const highlight = item && typeof item === 'object' ? item as Record<string, unknown> : null
+    return highlight && typeof highlight.date === 'string' && typeof highlight.title === 'string' &&
+      typeof highlight.detail === 'string' && typeof highlight.mediaId === 'string'
+      ? [{ date: highlight.date, title: highlight.title, detail: highlight.detail, mediaId: highlight.mediaId }]
+      : []
+  }) : []
+
+  return {
+    birth: { time: birth.time, weight: birth.weight, height: birth.height },
+    growthRecords,
+    highlights
+  }
 }
 
 function normalizePublicAlbum(data: unknown): PublicAlbumManifest {
@@ -428,7 +463,7 @@ function normalizePublicAlbum(data: unknown): PublicAlbumManifest {
     const readyPhotos: AlbumPhoto[] = photos.flatMap(photo => {
       const record = photo && typeof photo === 'object' ? photo as Record<string, unknown> : {}
       const path = record.path
-      if (!isPublicAlbumMediaPath(path)) return []
+      if (!isPublicAlbumImagePath(path)) return []
       const id = typeof record.id === 'string' ? record.id : path.split('/').at(-1)?.replace(/\.jpg$/u, '') || makeId('photo')
       return [{
         id,
@@ -438,13 +473,27 @@ function normalizePublicAlbum(data: unknown): PublicAlbumManifest {
         remotePath: path
       }]
     })
-    if (!readyPhotos.length) continue
+    const readyVideos: AlbumVideo[] = Array.isArray(event.videos) ? event.videos.flatMap(video => {
+      const record = video && typeof video === 'object' ? video as Record<string, unknown> : {}
+      const path = record.path
+      if (!isPublicAlbumVideoPath(path)) return []
+      const id = typeof record.id === 'string' ? record.id : path.split('/').at(-1)?.replace(/\.mp4$/u, '') || makeId('video')
+      return [{
+        id,
+        url: publicAlbumAssetUrl(path),
+        date: typeof record.date === 'string' ? record.date : typeof event.date === 'string' ? event.date : '',
+        caption: typeof record.caption === 'string' ? record.caption : '',
+        remotePath: path
+      }]
+    }) : []
+    if (!readyPhotos.length && !readyVideos.length) continue
     normalizedEvents.push({
-      id: typeof event.id === 'string' ? event.id : readyPhotos[0].id,
-      date: typeof event.date === 'string' ? event.date : readyPhotos[0].date,
+      id: typeof event.id === 'string' ? event.id : readyPhotos[0]?.id || readyVideos[0].id,
+      date: typeof event.date === 'string' ? event.date : readyPhotos[0]?.date || readyVideos[0].date,
       title: typeof event.title === 'string' ? event.title : typeof fallbackPhoto?.caption === 'string' ? fallbackPhoto.caption : '',
       caption: typeof event.caption === 'string' ? event.caption : '',
-      photos: readyPhotos
+      photos: readyPhotos,
+      videos: readyVideos
     })
   }
 
@@ -452,8 +501,9 @@ function normalizePublicAlbum(data: unknown): PublicAlbumManifest {
     title: typeof raw.title === 'string' ? raw.title : '',
     dedication: typeof raw.dedication === 'string' ? raw.dedication : '',
     story: typeof raw.story === 'string' ? raw.story : '',
-    avatarPath: isPublicAlbumMediaPath(raw.avatar_path) ? raw.avatar_path : '',
-    events: normalizedEvents
+    avatarPath: isPublicAlbumImagePath(raw.avatar_path) ? raw.avatar_path : '',
+    events: normalizedEvents,
+    facts: normalizePublicAlbumFacts(raw.facts)
   }
 }
 
@@ -467,9 +517,14 @@ async function loadPublicAlbum() {
       photos: event.photos.map(photo => ({
         ...photo,
         url: publicAlbumAssetUrl(photo.remotePath || `life/media/${photo.id}.jpg`)
+      })),
+      videos: (event.videos || []).map(video => ({
+        ...video,
+        url: publicAlbumAssetUrl(video.remotePath || `life/media/${video.id}.mp4`)
       }))
     }))
     events.value = readyEvents
+    storyFacts.value = manifest.facts
     activeEventId.value = readyEvents[0]?.id || ''
     bookTitle.value = manifest.title || `${profile.name}的成长纪念册`
     dedication.value = manifest.dedication || '愿你带着爱，慢慢长大。'
@@ -480,6 +535,7 @@ async function loadPublicAlbum() {
     syncLifeAppleTouchIcon(avatar?.url || null)
   } catch {
     events.value = []
+    storyFacts.value = undefined
     generated.value = false
     syncLifeAppleTouchIcon(null)
   }

@@ -24,7 +24,7 @@
           :key="chapter.id"
           :ref="element => registerChapter(chapter, element)"
           class="story-chapter"
-          :class="[`story-layout-${chapter.layout}`, `story-animation-${chapter.animation}`, { 'is-motion-active': motionActive.has(chapter.id) }]"
+          :class="[`story-layout-${chapter.layout}`, `story-kind-${chapter.kind}`, `story-animation-${chapter.animation}`, { 'is-motion-active': motionActive.has(chapter.id) }]"
           :data-chapter-index="chapter.index"
         >
           <div class="story-chapter__decor story-chapter__decor--cloud" aria-hidden="true"></div>
@@ -64,18 +64,14 @@
                 <p>{{ chapter.body }}</p>
               </div>
               <div class="story-growth__chart story-reveal-svg">
-                <svg viewBox="0 0 360 230" role="img" aria-label="成长曲线占位图">
-                  <path class="story-chart__axis" d="M28 14V202H345" />
-                  <path class="story-chart__line story-chart__line--one" pathLength="1" d="M28 168 C75 153 81 122 124 132 S183 98 220 114 S285 55 340 72" />
-                  <path class="story-chart__line story-chart__line--two" pathLength="1" d="M28 187 C71 173 105 172 141 150 S200 160 229 134 S294 116 340 91" />
-                  <g v-for="(point, index) in growthPoints" :key="index" class="story-chart__point" :style="{ '--point-delay': `${index * .1}s` }" tabindex="0" role="button" :aria-label="`${point.label}的照片`" @mouseenter="activeGrowthPoint = index" @mouseleave="activeGrowthPoint = null" @focus="activeGrowthPoint = index" @blur="activeGrowthPoint = null">
-                    <circle :cx="point.x" :cy="point.y" r="6" />
-                    <text :x="point.x" :y="point.y - 13">{{ point.label }}</text>
-                  </g>
-                </svg>
-                <div class="story-growth__thumbs"><StoryMedia v-for="media in chapter.media.slice(0, 3)" :key="media.id" :media="media" alt="曲线照片占位" @open="openLightbox" /></div>
-                <div v-if="activeGrowthPoint !== null" class="story-growth__peek" aria-live="polite">
-                  <StoryMedia :media="chapter.media[activeGrowthPoint % Math.max(1, chapter.media.length)]" :alt="`${growthPoints[activeGrowthPoint].label}照片`" @open="openLightbox" />
+                <div class="story-growth__measurements">
+                  <article v-for="item in chapter.items" :key="item.title">
+                    <span>{{ item.title }}</span>
+                    <strong>{{ item.text }}</strong>
+                  </article>
+                </div>
+                <div v-if="chapter.media.length" class="story-growth__thumbs">
+                  <StoryMedia v-for="media in chapter.media.slice(0, 3)" :key="media.id" :media="media" :alt="media.caption || '儿保记录照片'" @open="openLightbox" />
                 </div>
               </div>
             </template>
@@ -87,7 +83,7 @@
                 <div v-for="(item, index) in chapter.items" :key="item.title" class="story-timeline__item" :style="{ '--item-index': index }">
                   <span class="story-timeline__node"></span>
                   <StoryMedia :media="item.media" :alt="item.title" @open="openLightbox" />
-                  <div><time>{{ item.text }}</time><h3>{{ item.title }}</h3><p>这一刻的故事占位。</p></div>
+                  <div><time>{{ item.text }}</time><h3>{{ item.title }}</h3><p v-if="item.detail">{{ item.detail }}</p></div>
                 </div>
               </div>
             </template>
@@ -95,7 +91,7 @@
             <template v-else-if="chapter.kind === 'wall'">
               <div class="story-wall__heading story-reveal-copy"><span class="story-eyebrow">{{ chapter.eyebrow }}</span><h2>{{ chapter.title }}</h2><p>{{ chapter.body }}</p></div>
               <div class="story-wall story-reveal-media">
-                <div v-for="(media, index) in chapter.media.slice(0, 8)" :key="media.id" class="story-polaroid" :style="{ '--tilt': `${[-5, 3, -2, 4, -4, 2][index % 6]}deg`, '--wall-index': index }"><StoryMedia :media="media" :alt="`日常照片 ${index + 1}`" @open="openLightbox" /><span>日常碎片 · 00</span></div>
+                <div v-for="(media, index) in chapter.media.slice(0, 8)" :key="media.id" class="story-polaroid" :style="{ '--tilt': `${[-5, 3, -2, 4, -4, 2][index % 6]}deg`, '--wall-index': index }"><StoryMedia :media="media" :alt="media.caption || `日常照片 ${index + 1}`" @open="openLightbox" /><span>{{ media.caption || '日常碎片' }}</span></div>
               </div>
             </template>
 
@@ -113,7 +109,7 @@
             </template>
 
             <template v-else-if="chapter.kind === 'letter'">
-              <div class="story-letter story-reveal-copy"><span class="story-eyebrow">{{ chapter.eyebrow }}</span><div class="story-letter__paper"><span class="story-letter__stamp">♡</span><h2>{{ chapter.title }}</h2><p>{{ chapter.body }}</p><div class="story-letter__sign">爱你的家人<br><small>日期占位</small></div></div></div>
+              <div class="story-letter story-reveal-copy"><span class="story-eyebrow">{{ chapter.eyebrow }}</span><div class="story-letter__paper"><span class="story-letter__stamp">♡</span><h2>{{ chapter.title }}</h2><p>{{ chapter.body }}</p><div class="story-letter__sign">爱你的爸爸妈妈</div></div></div>
             </template>
 
             <template v-else>
@@ -136,7 +132,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, type ComponentPublicInstance } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
-import type { AlbumEvent } from './album-types'
+import type { AlbumEvent, AlbumStoryFacts } from './album-types'
 import { buildStoryChapters, type StoryChapter, type StoryMedia as StoryMediaItem } from './story-chapters'
 import StoryMedia from './StoryMedia.vue'
 
@@ -146,6 +142,7 @@ const props = defineProps<{
   dedication: string
   story: string
   events: AlbumEvent[]
+  facts?: AlbumStoryFacts
 }>()
 
 const emit = defineEmits<{ close: [] }>()
@@ -157,19 +154,19 @@ const activeChapter = ref(0)
 const musicOn = ref(false)
 const lightboxMedia = ref<StoryMediaItem | null>(null)
 const playingVideos = ref(new Set<string>())
-const activeGrowthPoint = ref<number | null>(null)
 const motionReady = ref(false)
 const motionActive = ref(new Set<string>())
 const chapterElements = new Map<string, HTMLElement>()
 let triggers: ScrollTrigger[] = []
 
-const chapters = computed(() => buildStoryChapters(props.profileName, props.title, props.dedication, props.events))
-const growthPoints = [
-  { x: 82, y: 143, label: '出生' },
-  { x: 161, y: 118, label: '满月' },
-  { x: 247, y: 101, label: '百日' },
-  { x: 329, y: 72, label: '现在' }
-]
+const chapters = computed(() => buildStoryChapters(
+  props.profileName,
+  props.title,
+  props.dedication,
+  props.story,
+  props.events,
+  props.facts
+))
 
 function registerChapter(chapter: StoryChapter, element: Element | ComponentPublicInstance | null) {
   if (element instanceof HTMLElement) chapterElements.set(chapter.id, element)
