@@ -1,6 +1,6 @@
 {
   "name": "Kidar TVM Android 极速轻量源",
-  "updatedAt": "2026-10-22T17:29:45.113Z",
+  "updatedAt": "2026-10-22T21:50:48.469Z",
   "spider": "",
   "sites": [
     {
@@ -24,10 +24,31 @@
       "jar": "https://gh-proxy.com/https://github.com/lemonguo121/BoxRes/raw/main/Myuse/lib/fm.jar"
     },
     {
-      "key": "大众资源",
-      "name": "大众资源",
+      "key": "虎牙",
+      "name": "🐯虎牙采集",
+      "type": 1,
+      "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "jar": "https://raw.liucn.cc/box/fty.jar;md5;3d161697458ecbcd2651a749db761ba1"
+    },
+    {
+      "key": "360_28ee5b",
+      "name": "🦚360┃采集",
+      "type": 1,
+      "api": "https://360zy.com/api.php/provide/vod?",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "changeable": 1,
+      "jar": "https://tv.203511.xyz/jar/custom_spider.jar;md5;d888bd0bc144db7fc3dd68c7ab3a70d9"
+    },
+    {
+      "key": "新浪资源",
+      "name": "新浪资源",
       "type": 0,
-      "api": "https://cdn.dzzyapi.com/api.php/provide/vod/at/xml/",
+      "api": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0,
@@ -45,14 +66,34 @@
       "jar": "https://clun.top/pg.jar"
     },
     {
-      "key": "虎牙",
-      "name": "🐯虎牙采集",
+      "key": "火狐",
+      "name": "🦊火狐采集",
       "type": 1,
-      "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
+      "api": "https://hhzyapi.com/api.php/provide/vod/",
+      "searchable": 1,
+      "quickSearch": 0,
+      "filterable": 1,
+      "jar": "https://raw.liucn.cc/box/fty.jar;md5;3d161697458ecbcd2651a749db761ba1"
+    },
+    {
+      "key": "大众资源",
+      "name": "大众资源",
+      "type": 0,
+      "api": "https://cdn.dzzyapi.com/api.php/provide/vod/at/xml/",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0,
-      "jar": "https://raw.liucn.cc/box/fty.jar;md5;3d161697458ecbcd2651a749db761ba1"
+      "jar": "https://gh-proxy.com/https://github.com/lemonguo121/BoxRes/raw/main/Myuse/lib/fm.jar"
+    },
+    {
+      "key": "魔都资源采集网",
+      "name": "魔都资源采集网",
+      "type": 0,
+      "api": "https://www.mdzyapi.com/api.php/provide/vod/at/xml/",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "jar": "https://gh-proxy.com/https://github.com/lemonguo121/BoxRes/raw/main/Myuse/lib/fm.jar"
     },
     {
       "key": "速播",
@@ -66,47 +107,6 @@
       "jar": "https://clun.top/jar/xs.jar"
     },
     {
-      "key": "魔都资源",
-      "name": "🤣魔都┃动漫",
-      "type": 1,
-      "api": "https://caiji.moduapi.cc/api.php/provide/vod/?ac=list",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "jar": "https://play.iptv365.org/%E6%AC%A7%E6%AD%8C/spider.jar"
-    },
-    {
-      "key": "火狐",
-      "name": "🦊火狐采集",
-      "type": 1,
-      "api": "https://hhzyapi.com/api.php/provide/vod/",
-      "searchable": 1,
-      "quickSearch": 0,
-      "filterable": 1,
-      "jar": "https://raw.liucn.cc/box/fty.jar;md5;3d161697458ecbcd2651a749db761ba1"
-    },
-    {
-      "key": "魔都资源采集网",
-      "name": "魔都资源采集网",
-      "type": 0,
-      "api": "https://www.mdzyapi.com/api.php/provide/vod/at/xml/",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0,
-      "jar": "https://gh-proxy.com/https://github.com/lemonguo121/BoxRes/raw/main/Myuse/lib/fm.jar"
-    },
-    {
-      "key": "360_06ad95",
-      "name": "🦚360┃采集",
-      "type": 1,
-      "api": "https://360zy.com/api.php/provide/vod?",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0,
-      "changeable": 1,
-      "jar": "https://tv.203511.xyz/jar/custom_spider.jar;md5;d888bd0bc144db7fc3dd68c7ab3a70d9"
-    },
-    {
       "key": "csp_xml_ikun",
       "name": "🥣爱坤┃影视",
       "type": 1,
@@ -116,6 +116,18 @@
       "filterable": 1,
       "playerType": 2,
       "jar": "http://550.3vcn.work/lib/fan.txt;md5;dc29a25f7393c2c3aa9187a57f708309"
+    },
+    {
+      "key": "电影天堂_4b4f84",
+      "name": "影视 • 电影天堂",
+      "type": 1,
+      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "playerType": 2,
+      "changeable": 1,
+      "jar": "https://qist.wyfc.qzz.io/jar/spider.jar;md5;ea98a70ee6967e433c24e4941ede7fd8"
     },
     {
       "key": "zy_金鹰影视点主页切换源",
@@ -139,18 +151,6 @@
       "jar": "http://550.3vcn.work/lib/fan.txt;md5;dc29a25f7393c2c3aa9187a57f708309"
     },
     {
-      "key": "电影天堂_de0815",
-      "name": "影视 • 电影天堂",
-      "type": 1,
-      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "playerType": 2,
-      "changeable": 1,
-      "jar": "https://qist.wyfc.qzz.io/jar/spider.jar;md5;ea98a70ee6967e433c24e4941ede7fd8"
-    },
-    {
       "key": "aqy",
       "name": "aqy",
       "type": 0,
@@ -159,6 +159,26 @@
       "quickSearch": 1,
       "filterable": 0,
       "jar": "https://gh-proxy.com/https://github.com/lemonguo121/BoxRes/raw/main/Myuse/lib/fm.jar"
+    },
+    {
+      "key": "创享",
+      "name": "创享 | 采集",
+      "type": 1,
+      "api": "https://ys.cxkjg.cn/api/provide/vod/",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "jar": "https://clun.top/jar/xs.jar"
+    },
+    {
+      "key": "采集集合",
+      "name": "采集集合+",
+      "type": 4,
+      "api": "http://zhangqun1818.serv00.net/cj/cjjh.php",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "0"
     },
     {
       "key": "賤賤",
@@ -218,7 +238,7 @@
       "jar": "https://qist.wyfc.qzz.io/jar/fan.txt;md5;654fb7dcb0aeaaea7dba0e662395f38e"
     },
     {
-      "key": "荐片_63ff37",
+      "key": "荐片_d6e938",
       "name": "💡荐片｜影视",
       "type": 3,
       "api": "csp_Jianpian",
@@ -239,7 +259,7 @@
       "changeable": 1
     },
     {
-      "key": "賤賤_1f967a",
+      "key": "賤賤_6fc3ef",
       "name": "💥賤片┃p2p💥",
       "type": 3,
       "api": "csp_WexJianpianGuard",
@@ -257,10 +277,10 @@
       "quickSearch": 1,
       "filterable": 0,
       "ext": "https://www.tjrongze.com,https//y2s52n7.com,https://m.hkybqufgh.com,https://m.sizhengxt.com,https://m.9zhoukj.com,https://m.jiabaide.cn",
-      "jar": "https://qiniu.gongxueyun.com/upload/3061666/2026-10-21/report/617960277_3_1792613661776.jar;md5;c9f60a6db0d8ab4521ef5ab3a87939a8"
+      "jar": "https://qiniu.gongxueyun.com/upload/8589433/2026-10-22/noknow/740826520_1_1792704181267.jar;md5;a63ac4211fd6d23432634a2a7c8240b9"
     },
     {
-      "key": "贱贱_d7d3d1",
+      "key": "贱贱_3f8107",
       "name": "🎬荐片┃影视",
       "type": 3,
       "api": "http://550.3vcn.work/lib/apiv461drpy2.min.js",
