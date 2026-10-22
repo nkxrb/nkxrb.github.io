@@ -1,6 +1,6 @@
 {
   "name": "Kidar TVM MacOS 极速轻量源",
-  "updatedAt": "2026-10-22T05:12:53.696Z",
+  "updatedAt": "2026-10-22T12:15:11.680Z",
   "spider": "",
   "sites": [
     {
@@ -23,6 +23,34 @@
       "changeable": 1
     },
     {
+      "key": "大众资源",
+      "name": "大众资源",
+      "type": 0,
+      "api": "https://cdn.dzzyapi.com/api.php/provide/vod/at/xml/",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0
+    },
+    {
+      "key": "新浪资源",
+      "name": "新浪资源",
+      "type": 0,
+      "api": "https://api.xinlangapi.com/xinlangapi.php/provide/vod/at/xml/",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0
+    },
+    {
+      "key": "玉兔",
+      "name": "玉兔 | 采集",
+      "type": 1,
+      "api": "https://apiyutu.com/api.php/provide/vod/",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": "proxy"
+    },
+    {
       "key": "火狐",
       "name": "🦊火狐采集",
       "type": 1,
@@ -32,10 +60,20 @@
       "filterable": 1
     },
     {
-      "key": "大众资源",
-      "name": "大众资源",
+      "key": "360",
+      "name": "🦚360┃采集",
+      "type": 1,
+      "api": "https://360zy.com/api.php/provide/vod?",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "changeable": 1
+    },
+    {
+      "key": "魔都资源采集网",
+      "name": "魔都资源采集网",
       "type": 0,
-      "api": "https://cdn.dzzyapi.com/api.php/provide/vod/at/xml/",
+      "api": "https://www.mdzyapi.com/api.php/provide/vod/at/xml/",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0
@@ -51,6 +89,15 @@
       "changeable": 1
     },
     {
+      "key": "魔都资源",
+      "name": "🤣魔都┃动漫",
+      "type": 1,
+      "api": "https://caiji.moduapi.cc/api.php/provide/vod/?ac=list",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
       "key": "虎牙",
       "name": "🐯虎牙采集",
       "type": 1,
@@ -60,23 +107,13 @@
       "filterable": 0
     },
     {
-      "key": "电影天堂",
-      "name": "电影天堂",
-      "type": 0,
-      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod/at/xml/",
+      "key": "zy_金鹰影视点主页切换源",
+      "name": "🔰金鹰┃影视",
+      "type": 1,
+      "api": "https://jyzyapi.com/provide/vod/",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0
-    },
-    {
-      "key": "csp_xml_ikun",
-      "name": "🥣爱坤┃影视",
-      "type": 1,
-      "api": "https://ikunzyapi.com/api.php/provide/vod/from/ikm3u8/at/json",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "playerType": 2
     },
     {
       "key": "精品资源站",
@@ -89,25 +126,6 @@
       "ext": "proxy"
     },
     {
-      "key": "360",
-      "name": "🦚360┃采集",
-      "type": 1,
-      "api": "https://360zy.com/api.php/provide/vod?",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0,
-      "changeable": 1
-    },
-    {
-      "key": "zy_金鹰影视点主页切换源",
-      "name": "🔰金鹰┃影视",
-      "type": 1,
-      "api": "https://jyzyapi.com/provide/vod/",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0
-    },
-    {
       "key": "a红牛资源",
       "name": "🐂红牛┃采集",
       "type": 1,
@@ -118,44 +136,33 @@
       "changeable": 1
     },
     {
-      "key": "如意资源网",
-      "name": "如意资源网",
-      "type": 0,
-      "api": "https://cj.rycjapi.com/api.php/provide/vod/at/xml/",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0,
-      "changeable": 1
-    },
-    {
-      "key": "玉兔",
-      "name": "玉兔 | 采集",
+      "key": "电影天堂",
+      "name": "影视 • 电影天堂",
       "type": 1,
-      "api": "https://apiyutu.com/api.php/provide/vod/",
+      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1,
-      "ext": "proxy"
-    },
-    {
-      "key": "裤佬JS聚合",
-      "name": "采集┃聚合",
-      "type": 4,
-      "api": "http://zhangqun1818.serv00.net/cj/cjjh.php?ac=list",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 0,
+      "playerType": 2,
       "changeable": 1
     },
     {
-      "key": "采集集合",
-      "name": "采集集合+",
-      "type": 4,
-      "api": "http://zhangqun1818.serv00.net/cj/cjjh.php",
+      "key": "aqy",
+      "name": "aqy",
+      "type": 0,
+      "api": "https://www.iqiyizyapi.com/api.php/provide/vod/at/xml/",
       "searchable": 1,
       "quickSearch": 1,
-      "filterable": 0,
-      "ext": "0"
+      "filterable": 0
+    },
+    {
+      "key": "创享",
+      "name": "创享 | 采集",
+      "type": 1,
+      "api": "https://ys.cxkjg.cn/api/provide/vod/",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0
     },
     {
       "key": "drpy_js_ddys",
@@ -208,7 +215,7 @@
       "ext": "http://550.3vcn.work/2400.js"
     },
     {
-      "key": "贱贱_d5ba25",
+      "key": "贱贱_b4c834",
       "name": "🎬荐片┃影视",
       "type": 3,
       "api": "http://550.3vcn.work/lib/apiv461drpy2.min.js",
